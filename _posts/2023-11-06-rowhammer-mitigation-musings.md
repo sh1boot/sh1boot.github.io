@@ -185,6 +185,11 @@ into its neighbours.
 This part seems easy to fix.  The data is already latched so you could
 just disconnect the source row, I guess.
 
+## Oh, look, there we go...
+
+It looks like [Cube][] implements at least the row swizzling to maximise
+the error correction efficacy.
+
 [RowHammer talk]: <https://youtu.be/wGcVrKaOvFo>
 [RowHammer slides]: <https://safari.ethz.ch/architecture_seminar/fall2023/lib/exe/fetch.php?media=onur-comparchseminar-fall2023-lecture3-rowhammerstory-afterlecture.pdf>
 [whitening]: <https://en.wikipedia.org/wiki/Whitening_transformation>
@@ -193,4 +198,8 @@ just disconnect the source row, I guess.
 [Shannon limit]: <https://en.wikipedia.org/wiki/Noisy-channel_coding_theorem>
 [RowPress]: <https://arxiv.org/abs/2306.17061>
 [Chipkill]: <https://en.wikipedia.org/wiki/Chipkill>
+[UnityECC]: <https://d1qx31qr3h6wln.cloudfront.net/publications/SC_2023_Unity_ECC.pdf>
 [Parchive]: <https://en.wikipedia.org/wiki/Parchive>
+
+[Cube]: <https://dl.acm.org/doi/fullHtml/10.1145/3613424.3623777>
+[Cube.pdf]: <https://dl.acm.org/doi/pdf/10.1145/3613424.3623777>
