@@ -84,14 +84,24 @@ block which ECC has to salvage; even in the overall damage is large, ECC
 might need only correct small fragments of it at a time if the ECC block
 is properly distributed.
 
+There are various modes of detection and correction in the ECC space.
+What I think makes sense here is something like the [Chipkill][] method
+(also the Usenet [parchive][] method), which allows for a whole device
+to be written off as unusable while still being able to salvage the data
+from parity spread across the remaining devices.  This same model would
+apply to parts of DRAM rows where one part has suffered a successful
+rowhammer attack while the others resisted the attack because of their
+different layouts.
+
 ### Row address permutation
 
-This might be achieved by splitting ECC across several independent chips, and
-(this is important) _permuting_ the row addresses _differently_ for each chip
-so that rows which are adjacent in one chip are _not_ adjacent in any of the
-other chips.  Then, in order to overwhelm ECC one has to attack multiple
-regions on different sets of rows concurrently.  And one also has to be able to
-find those rows (maybe keep that permutation parameter a secret, too).
+Redistribution of ECC chunks might be achieved by splitting ECC across
+several independent chips, and (this is important) _permuting_ the row
+addresses _differently_ for each chip so that rows which are adjacent in
+one chip are _not_ adjacent in any of the other chips.  Then, in order
+to overwhelm ECC one has to attack multiple regions on different sets of
+rows concurrently.  And one also has to be able to find those rows
+(maybe keep that permutation parameter a secret, too).
 
 In fact, it might even be achieved by swizzling the row select lines
 partway across the row.  Or perhaps more practically, using multiple
@@ -182,3 +192,5 @@ just disconnect the source row, I guess.
 [SME]: <Https://en.wikichip.org/wiki/x86/sme>
 [Shannon limit]: <https://en.wikipedia.org/wiki/Noisy-channel_coding_theorem>
 [RowPress]: <https://arxiv.org/abs/2306.17061>
+[Chipkill]: <https://en.wikipedia.org/wiki/Chipkill>
+[Parchive]: <https://en.wikipedia.org/wiki/Parchive>
