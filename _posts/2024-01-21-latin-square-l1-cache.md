@@ -33,7 +33,8 @@ SRAMs.  The usual constraint on a memory is that it can only read or write data
 at one address on a given cycle.  So if you slice your 64-bit word into two
 32-bit words in separate SRAMs you might then be able to read 32-bits from one
 SRAM and 32-bits from another SRAM at a different address in the same clock
-cycle.  But each memory only has half the data.
+cycle.  This means, for example, than you can access a 64-bit chunk at
+an arbitrary 32-bit offset, and not just whole 64-bit offsets.
 
 With a latin square memory, you slice storage into, eg., eight memories so you
 have eight different places you can access at the same time, places which no
@@ -45,7 +46,7 @@ This means that that entire row, _or column_, can be accessed concurrently.  In
 a normal single-SRAM memory only the row can be accessed concurrently -- and
 normally only on an aligned boundary, giving the data alignment constraints of
 the old days.  Even just splitting it into pairs of memories means being able
-to satisfy at least some unaligned accesses.
+to satisfy at least some un-aligned accesses.
 
 Here we'll try splitting it into eight.  Like so:
 <svg width="100%" height="400" viewbox="0 0 400 400">
@@ -106,6 +107,10 @@ means an position at all.  But if you have a 2x4 or 4x2 you can slide
 arbitrarily on the vertical or horizontal axis away from natural
 alignment, but not always both.  Sometimes you get conflicts in the
 corners.
+
+Reading a 2x4 or 4x2 chunk may be meaningful if data is stored in sets
+of RGBA, or for different element widths which are multiples of the SRAM
+width.
 
 Are there better solutions?
 
