@@ -30,19 +30,24 @@ forget everything I thought the first time, but I do remember being
 talked down from a couple of ideas which I seem to have re-invented
 again in this iteration.
 
+One thing I do remember is that my initial mental model worked at a
+cache line granularity, because there are a lot of shortcuts that this
+allows.  The official spec goes down to 16 byte granularity, which means
+I have to think a lot harder about some implications.
+
 ## Memory tagging in brief
 
-Basically every address (at the granularity of a cache line) gets
-embedded within it a tag of around four bits.  If you try to use memory
-with the tag that is not assigned to that memory then you get told off
-at the hardware level.  Data caches already examine addresses in detail
-to see if they have the data, so it's no great stretch to define a hit
-as a "well yes, but actually no" as needed.  You just sacrifice tag
-granularity to achieve it that way.
+Basically every address (at 16 byte granularity) gets embedded within it
+a tag of around four bits.  If you try to use memory with the tag that
+is not assigned to that memory then you get told off at the hardware
+level.  Data caches already examine addresses in detail to see if they
+have the data, so it's no great stretch to define a hit as a "well yes,
+but actually no" as needed.  You just sacrifice tag granularity to
+achieve it that way.
 
-To make this useful, you colour adjacent objects in memory (at the cache
-line resolution) with different tags so that pointers to one thing can't
-encroach on adjacent memory designated for other things.
+To make this useful, you colour adjacent objects in memory with
+different tags so that pointers to one thing can't encroach on adjacent
+memory designated for other things.
 
 When memory is freed you can mark it with a different tag so the old
 pointers with the old tag don't work anymore, and when it's re-allocated
@@ -57,7 +62,7 @@ generic heap colouring.
 
 The first thing that stands out to me is how you change the tag
 assignment of a piece of memory.  If you execute instructions to change
-the tag of each cache line (or backing store for memory not resident in
+the tags of each cache line (or backing store for memory not resident in
 the cache right now) then that's potentially a very tedious operation.
 
 But what if one didn't bother with that?
@@ -65,9 +70,9 @@ But what if one didn't bother with that?
 What if, instead, writes automatically erased the memory whenever the
 tag failed to match (no need to raise a fault just yet), and
 simultaneously updated the tag to its new value?  No need to visit SDRAM
-in that case.  Note that a tag update hits (and erases) the whole cache
-line even though the data will typically be much narrower.  The rest
-needs zeroing.
+in that case.  Note that a tag update hits (and erases) the whole
+16-byte chunk (I _so_ wish this was a cache line) line even though the
+data will typically be narrower.  The rest needs zeroing.
 
 Then it's down to the reads to raise faults when they hit a bad tag.
 That'll be a fault if the wrong pointer is trying to access memory, or
@@ -128,7 +133,7 @@ is not the top concern.  Go get yourself a victim cache if that makes
 you sad.
 
 Overlooking the matter of how to set up the out-of-band part, this does
-mean that the cache can switch efficiently _at least_ in the cases where
+mean that L1 cache can switch efficiently _at least_ in the cases where
 programs follow the write-before-read data model, while still trapping
 faulty behaviour.
 
