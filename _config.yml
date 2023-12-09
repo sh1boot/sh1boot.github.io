@@ -39,6 +39,12 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
+kramdown:
+  math_engine: mathjax
+
+disqus:
+  shortname: actually_utterance
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
