@@ -33,14 +33,11 @@ This introduces the following algorithm:
 ```c++
 static int m = 1, r = 0;
 /* untested code follows: */
-int random_lt_n(int n)
-{
+int random_lt_n(int n) {
     const int N = INT_MAX >> 1;
     int q, d;
-    for (;;)
-    {
-        while (m < N)
-        {
+    for (;;) {
+        while (m < N) {
             r = (r << 1) | random_bit();
             m <<= 1;
         }

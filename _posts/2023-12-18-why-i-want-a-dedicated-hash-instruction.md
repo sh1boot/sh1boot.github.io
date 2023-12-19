@@ -1,4 +1,4 @@
---
+---
 layout: post
 title:  "Why I want a dedicated hash instruction"
 categories: hashing, prng, cpu, pipeline, handwaving

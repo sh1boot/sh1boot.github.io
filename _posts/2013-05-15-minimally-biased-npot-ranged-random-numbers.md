@@ -1,3 +1,6 @@
+---
+title: Minimally biased NPOT-ranged random numbers
+---
 In my previous post
 I described a technique for scaling random numbers to new intervals producing
 extremely small bias but with a constant execution time.
@@ -61,8 +64,8 @@ int random_lt_n(int n)
     const int b = N_BITS + BIAS_BITS;
     int r = n / 2;
     int i;
-    for (i = 0; i &lt; b; i += RAND_BITS)
-        r = (int)(((long long)rand() * n + r) &gt;&gt; RAND_BITS);
+    for (i = 0; i < b; i += RAND_BITS)
+        r = (int)(((long long)rand() * n + r) >> RAND_BITS);
 }
 ```
 
@@ -71,7 +74,7 @@ Where:
 : is the number of bits needed to represent the maximum value of `n`,
 
 `BIAS_BITS`
-: is the size of the tolerable bias (one part in `(1 &lt;&lt; BIAS_BITS)`), and
+: is the size of the tolerable bias (one part in `(1 << BIAS_BITS)`), and
 
 `RAND_BITS`
 : is the number of bits that `rand()` produces (so `RAND_MAX` must be `((1u << RAND_BITS) - 1u)`).
