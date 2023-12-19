@@ -25,7 +25,7 @@ In my view some kind of arbitrary but correlation-resistant bijective transform
 should be a basic CPU operation.  Something which can be completed in a single
 cycle, like addition.
 
-# Why hash?
+## Why hash?
 
 Because lots of reasons.  Lots of probabilistic data structures.  Lots of
 stochastic methods.  Lots of so many things.
@@ -35,7 +35,7 @@ a [splitmix64][] construction.  Splitmix64 uses a simple counter and hashes its
 state to produce a pseudorandom number, and that hash is a variant of the
 finalisation stage used in hashes like murmur and xxhash.
 
-## Why hash with low latency?
+### Why hash with low latency?
 
 Because in things like hash tables the hash is a part of the address
 calculation, and who wants high-latency address calculation paths?  Those can
@@ -65,7 +65,7 @@ even make things worse than a single parameter.  Ideally it would be possible
 to compress the parameter space into fewer bits without unnecessary loss of
 entropy but also without slowing down the program to achieve this.
 
-## Why an instruction?
+### Why an instruction?
 
 Well, why do any arithmetic operation as an instruction?  Because what can be
 done quickly in a teensy bit of silicon takes forever in software, and a
@@ -92,7 +92,7 @@ CSR.
 
 But most importantly: because I don't think it has to cost that much...
 
-# Building a proof of concept
+## Building a proof of concept
 
 To make something that didn't consume too much logic I decided to try a simple
 [substitution-permutation network][].  In one phase, take small groups of bits
@@ -100,7 +100,7 @@ and replace them via a substitution box (a lookup table), and in another phase
 rearrange the individual bits to new positions in the output where they will
 have new neighbours in subsequent rounds.
 
-## substitition
+### substitition
 
 A substitution in this case means that a change in any one bit becomes the
 possibilities of changes in n bits, with the specific outcomes depending on m
@@ -125,7 +125,7 @@ To decide which of the remaining 256 possibilities was best I tried all of them
 in [SMHasher3][], in various configurations, to see which one was hardest to
 break.
 
-## permutation
+### permutation
 
 To spread the effect of the s-boxes as rapidly as possible the permutation
 should take all n bits from one box and distribute them among n different boxes
@@ -169,14 +169,14 @@ available (shared results between adjacent bits, unlike a conventional mux), or
 four layers of binary mux, and the permute is just wires (but maybe fairly long
 wires).  So I think I can call that eight gates deep?
 
-## packaging as an opcode
+### packaging as an opcode
 
 Doing the above in software is clearly absurd.  It achieves nothing that can't
 be done much faster in simpler operations.  But if it were packaged as a
 machine instruction it could (I believe) do in just two or three cycles what
 software currently takes maybe a dozen cycles to achieve.
 
-### what makes a useful opcode
+#### what makes a useful opcode
 
 The function defined so far needs four rounds for influence from one bit to
 reach every bit, but that's a weak connection and a few extra rounds would be
@@ -194,7 +194,7 @@ combination of two inputs in such a way that common collision scenarios don't
 result in cancellation -- where too many different inputs lead to the same
 output.
 
-### a tiny bit of extra mixing
+#### a tiny bit of extra mixing
 
 Ideally, `hash_op(x, 0)`, `hash_op(0, x)`, and `hash_op(x, x)` would all be
 bijective functions of `x` (the last one because cases where the same value
@@ -254,7 +254,7 @@ uint64_t hash_op(uint64_t x, uint64_t y) {
 And I think that's two gates for the premixes, two for the combine, and 16 for
 the rounds.  20 gates deep?
 
-## usage
+### usage
 
 This seemed to work (ie,. pass tests) as a generic hash implementation:
 ```c++
@@ -300,7 +300,7 @@ on the basis that the length may not be known in advance (in a more complex use
 case).  But when the length and seed are constant many of those surrounding
 operations fold down to constants as well.
 
-## results
+### results
 
 The above functions seem to pass all smhasher3 tests, so I guess it's good?
 There are a lot of popular, high-performance hashes which don't pass all these
@@ -319,7 +319,7 @@ In a PRNG configuration:
 * `hash_op(hash_op(hash_op(hash_op(seed++, 0), 0), 0), 0)` completes at least
   16TB (with two anomalies but no failures) and also passes all of BigCrush.
 
-## future work
+### future work
 
 * be more scientific
 * be less hand-wavy
