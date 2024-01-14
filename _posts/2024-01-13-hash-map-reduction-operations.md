@@ -1,7 +1,7 @@
---
+---
 layout: post
 title:  "Hash map reduction operations"
-categories: hashing, hash map, wip
+categories: hashing, hash table, hash map, wip
 ---
 
 I notice that some defaults for things like STL `unordered_map` are a bit
@@ -10,6 +10,11 @@ table is modulo, and the default hash for integers is the identity function.
 
 Yikes.
 
+To be fair, no matter how naive or lazy an algorithm seems, it probably has
+cases where it excels.  Here, if you're making a table of ints distributed
+uniformly over an unspecified range without many gaps it may be almost the best
+thing (just optimise the mod), but that's olmost a vector.
+
 Obivously I, having my blog almost entirely dedicated to the subject, believe
 that the proper way to map a uniformly distributed random bit pattern (as a
 hash should be) into a fixed integer range is with a single multiply.  Not a
@@ -17,9 +22,9 @@ remainder.
 
 But STL has other ideas, with its identity hash functions and the like.
 
-What do do?
+What might I do instead?
 
-## the fundamental operation
+## the esential operation
 
 If we treat our hash as a 64-bit fixed-point random number representing a range
 of values in [0,1).  Then by multiplying it by a constant `k`, we get a random
@@ -35,13 +40,13 @@ hardware there's an instruction to do just this operation.  I'll call it
 `mulh`.  So assume this is presented in the C world like so:
 ```c
 static inline uint64_t mulh(uint64_t x, uint64_t y) {
-  return (uint64_t)((uint128_t)hash * k >> 64);
+  return (uint64_t)((uint128_t)x * y >> 64);
 }
 ```
 and that once that's inlined it's a single machine instruction which is
 probably much less costly than division or remainder.
 
-## mapping
+## range reduction
 
 Supposing, first of all, that the hash function you use gives a properly
 distributed 64-bit number (a reasonable expectation from `size_t` on a 64-bit
@@ -53,7 +58,7 @@ size_t constrain_hash(uint64_t hash, size_t nbuckets) {
   return mulh(hash, nbuckets);
 }
 ```
-Great.  So easy.
+Great!  So easy!  So fast!
 
 Couple of problems, though.
 
@@ -68,8 +73,8 @@ The other problem we'll save for later.
 
 To fix the first problem we need to condition the input to be evenly
 distributed.  Apply some function to it that maps every 64-bit input to a
-64-bit output.  Basically another hash -- because somebody half-arsed ther job
-the first time around.  This hash should be [bijective][] (and
+64-bit output.  Basically a hash of the hash -- because somebody didn't do
+their job right the first time around.  This hash should be [bijective][] (and
 "[perfect][perfect hash]" in hash-speak), because there's no compression
 happening.
 
@@ -89,7 +94,7 @@ static inline uint64_t murmurmix64(uint64_t h) {
 }
 ```
 
-So you might use:
+So you might write:
 
 ```c
 size_t constrain_hash(uint64_t hash, size_t nbuckets) {
@@ -131,16 +136,32 @@ just sprays the low six bits across the whole word in a randomish and bijective
 way.  But six bits isn't a good enough, so I have to make a better function
 than that.
 
-### rehashing
+### reseeding the hash
 
 Fun fact: this whole `mulh` extraction process is kind of like a [range
-coder][].  That means that if you keep the low-order bits (the fraction) after
-extracting your first bucket index, you can repeat the process to get a fully
-independent variable -- in either the same range or a new range if you prefer.
+coder][].  That means that if you keep the low-order bits (the fraction, the
+bit that `mulh()` notionally threw away) after extracting your first bucket
+index, you can repeat the process to get a fully independent variable -- in
+either the same range or a new range if you prefer.
 
 So if you come to a point in algorithm design where you might consider
-re-hashing the data to get a different approach to the table, you don't _have_
-to rehash.  Just do the same thing again on the residual.
+re-seeding the hash and recomputing it to get a different approach to the
+table, you don't _have_ to recalculate the whole thing.  Just repeat the
+`mulh()` operation again on the residual from the last call.
+```c
+static inline uint64_t mull(uint64_t* x, uint64_t y) {
+  uint128_t p = ((uint128_t)*x * y);
+  *x = (uint64_t)p;
+  return (uint64_t)(p >> 64);
+}
+size_t constrain_1st_hash(uint64_t* hash, size_t nbuckets) {
+  *hash = murmurmix64(*hash);
+  return mulh(hash, nbuckets);
+}
+size_t constrain_nth_hash(uint64_t* hash, size_t nbuckets) {
+  return mulh(hash, nbuckets);
+}
+```
 
 Be mindful of the earlier comment, above, about being lazy with the low-order
 bits.  If you mean to consume the whole hash piecemeal then this becomes a
@@ -173,7 +194,8 @@ time to resize the table that operation could be implemented in a more-or-less
 linear way, and the CPU can stream into and out of cache efficiently.
 
 But if we were having a high rate of collisions in a particular area of the
-table then this kind of scaling won't relieve the problem effectively.
+table (ie,. your hash sucks and your input conditioning isn't good enough to
+fix it) then this kind of scaling won't relieve the problem effectively.
 
 Modulo doesn't have this problem, because the values that map to the same
 bucket under modulo are regularly spaced under one modulo won't generally map
@@ -181,30 +203,39 @@ to the same bucket under another modulo used for a larger table if they're
 co-prime -- and in most implementations each modulo is prime.
 
 For this reason one would probably want to tweak the conditioning function to
-take a parameter, and to randomise that parameter every time the table has to
-grow.
+take a parameter -- a seed, or salt -- and to randomise that parameter every
+time the table has to grow.
 
 In fact, if the collision rate sucks but the load factor is low, maybe just
-tweak the conditioning without even growing the table.
+change the conditioning seed without even growing the table.
 
-This tweak should probably also be used if there's a risk that the table might
-come under attack by contrived input.  Just saying.
+This tweak should probably also be in place if there's a risk that the table
+might come under attack by contrived input.  Just saying.
 
+#### maybe modulo isn't so bad after all
+
+OK, sure.  If this isn't for you then you can still optimise the remainder
+operation by hard-coding the constant into a function.  The compiler knows how
+to convert mod-by-constant into a couple of multiplies, shifts, and adds.  Then
+you just need one function for each divisor you might use, and a function
+pointer to the right one to use.
+
+It's not _as_ fast, but it's still better than division.
+
+## great, whatever, but just show me the numbers
+
+That's not how this works.  I'm not here to show how one particular
+implementation wins at one particular benchmark.  This is just a note on some
+techniques for possible consideration when desiging an implementation --
+whether that be generic or application-specific.  There are so many other
+factors in the design of a hash table, and the interaction between these
+methods and others in an existing or prospective implementation need to be
+tested in that context.
 
 [bijective]: https://en.wikipedia.org/wiki/Bijection
 [perfect hash]: https://en.wikipedia.org/wiki/Perfect_hash_function
 [hash instruction]: /why-i-want-a-dedicated-hash-instruction/
+[range coder]: https://en.wikipedia.org/wiki/Range_coding
+[de Bruijn sequence]: https://en.wikipedia.org/wiki/de_Bruijn_sequence
 
 [constrain_hash]: https://github.com/llvm/llvm-project/blob/253d2f931e530f6fbc12bc8646e70ed7090baf20/libcxx/include/__hash_table#L140
-[range coder]: https://en.wikipedia.org/wiki/Range_coding
-
-[correlation immunity]: https://en.wikipedia.org/wiki/Correlation_immunity
-[de Bruijn sequence]: https://en.wikipedia.org/wiki/de_Bruijn_sequence
-[substitution-permutation network]: https://en.wikipedia.org/wiki/Substitution-permutation_network
-[water memory]: https://en.wikipedia.org/wiki/water_memory
-[SMHasher3]: https://gitlab.com/fwojcik/smhasher3
-[SMHasher3 results]: https://gitlab.com/fwojcik/smhasher3/-/blob/main/results/README.md#passing-hashes
-[splitmix64]: https://rosettacode.org/wiki/Pseudo-random_numbers/Splitmix64
-[dieharder]: https://webhome.phy.duke.edu/~rgb/General/dieharder.php
-[TestU01]: http://simul.iro.umontreal.ca/testu01/tu01.html
-[PractRand]: https://pracrand.sourceforge.net/PractRand.txt
