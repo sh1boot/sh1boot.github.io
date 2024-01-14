@@ -24,7 +24,7 @@ But STL has other ideas, with its identity hash functions and the like.
 
 What might I do instead?
 
-## the esential operation
+## the essential operation
 
 If we treat our hash as a 64-bit fixed-point random number representing a range
 of values in [0,1).  Then by multiplying it by a constant `k`, we get a random
