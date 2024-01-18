@@ -6,14 +6,14 @@ categories: hashing, hash table, hash map, wip
 
 I notice that some defaults for things like STL `unordered_map` are a bit
 scary.  The function to reduce the range of the hash down to the size of the
-table is modulo, and the default hash for integers is the identity function.
+table is remainder, and the default hash for integers is the identity function.
 
 Yikes.
 
 To be fair, no matter how naive or lazy an algorithm seems, it probably has
 cases where it excels.  Here, if you're making a table of ints distributed
 uniformly over an unspecified range without many gaps it may be almost the best
-thing (just optimise the mod), but that's olmost a vector.
+thing (just optimise that mod), but that's almost a vector.
 
 Obivously I, having my blog almost entirely dedicated to the subject, believe
 that the proper way to map a uniformly distributed random bit pattern (as a
@@ -24,7 +24,7 @@ But STL has other ideas, with its identity hash functions and the like.
 
 What might I do instead?
 
-## the essential operation
+## The essential operation
 
 If we treat our hash as a 64-bit fixed-point random number representing a range
 of values in [0,1).  Then by multiplying it by a constant `k`, we get a random
@@ -46,13 +46,13 @@ static inline uint64_t mulh(uint64_t x, uint64_t y) {
 and that once that's inlined it's a single machine instruction which is
 probably much less costly than division or remainder.
 
-## range reduction
+## Reducing a hash to a range
 
 Supposing, first of all, that the hash function you use gives a properly
 distributed 64-bit number (a reasonable expectation from `size_t` on a 64-bit
 platform).
 
-In that case, the operation to convert a hash to a bucket is:
+In that case, the operation to convert a hash to a bucket index is:
 ```c
 size_t constrain_hash(uint64_t hash, size_t nbuckets) {
   return mulh(hash, nbuckets);
@@ -69,7 +69,7 @@ hashes of a bunch of 32-bit ints you'll never get anything but the first bucket.
 
 The other problem we'll save for later.
 
-### input conditioning
+### Input conditioning
 
 To fix the first problem we need to condition the input to be evenly
 distributed.  Apply some function to it that maps every 64-bit input to a
@@ -80,7 +80,7 @@ happening.
 
 What's a good conditioning function?  Well, that's a really hard question
 involving trade-offs between performance and quality.  If only we [didn't have
-to compromise][hash instruction].
+to compromise][hash instruction].  If only...
 
 First, the classic:
 ```c
@@ -136,7 +136,7 @@ just sprays the low six bits across the whole word in a randomish and bijective
 way.  But six bits isn't a good enough, so I have to make a better function
 than that.
 
-### reseeding the hash
+### Reseeding the hash
 
 Fun fact: this whole `mulh` extraction process is kind of like a [range
 coder][].  That means that if you keep the low-order bits (the fraction, the
@@ -179,12 +179,12 @@ just carry on hallucinating new keys for you which are no longer independent of
 what you've seen before but are, I think (TBD), a unique sequence for each
 initial hash.
 
-This is because multiplication by an odd number modulo a power of two is a
+This is because multiplication by an odd number mod a power of two is a
 bijective operation and doesn't cause the hash to decay to a predictable value
 or orbit which might be shared with other initial states (though many will be
 at different phases on the same orbit).
 
-### that other problem
+### That other problem
 
 By naively using `mulh`, when we increase the size of the table the order of
 the hashes stays stable and new gaps appear in between existing entries.
@@ -197,10 +197,10 @@ But if we were having a high rate of collisions in a particular area of the
 table (ie,. your hash sucks and your input conditioning isn't good enough to
 fix it) then this kind of scaling won't relieve the problem effectively.
 
-Modulo doesn't have this problem, because the values that map to the same
-bucket under modulo are regularly spaced under one modulo won't generally map
-to the same bucket under another modulo used for a larger table if they're
-co-prime -- and in most implementations each modulo is prime.
+Remainder doesn't have this problem, because the values that map to the same
+bucket under mod are regularly spaced under one modulus won't generally map to
+the same bucket under another modulus used for a larger table if they're
+co-prime -- and in most implementations each modulus is prime.
 
 For this reason one would probably want to tweak the conditioning function to
 take a parameter -- a seed, or salt -- and to randomise that parameter every
@@ -212,17 +212,17 @@ change the conditioning seed without even growing the table.
 This tweak should probably also be in place if there's a risk that the table
 might come under attack by contrived input.  Just saying.
 
-#### maybe modulo isn't so bad after all
+#### Maybe remainder isn't so bad after all
 
-OK, sure.  If this isn't for you then you can still optimise the remainder
-operation by hard-coding the constant into a function.  The compiler knows how
-to convert mod-by-constant into a couple of multiplies, shifts, and adds.  Then
-you just need one function for each divisor you might use, and a function
-pointer to the right one to use.
+If this isn't for you then you can still optimise the remainder operation by
+hard-coding the constant into a function.  The compiler knows how to convert
+mod-by-constant into a couple of multiplies, shifts, and adds.  Then you just
+need one function for each divisor you might use, and a function pointer to the
+right one to use.
 
 It's not _as_ fast, but it's still better than division.
 
-## great, whatever, but just show me the numbers
+## How good is it?  Show me the numbers!
 
 That's not how this works.  I'm not here to show how one particular
 implementation wins at one particular benchmark.  This is just a note on some
