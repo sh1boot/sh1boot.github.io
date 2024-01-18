@@ -31,22 +31,22 @@ but it represents a simpler conceptual model).
 
 <svg width="100%" height="60" viewbox="0 0 660 60">
   <defs>
-    <path id="value0" width="10" height="40" d="M5 44 V50" />
-    <path id="value1" width="10" height="40" d="M5 42 V50" />
-    <path id="value2" width="10" height="40" d="M5 40 V50" />
-    <path id="value3" width="10" height="40" d="M5 38 V50" />
-    <path id="value4" width="10" height="40" d="M5 36 V50" />
-    <path id="value5" width="10" height="40" d="M5 34 V50" />
-    <path id="value6" width="10" height="40" d="M5 32 V50" />
-    <path id="value7" width="10" height="40" d="M5 30 V50" />
-    <path id="value8" width="10" height="40" d="M5 28 V50" />
-    <path id="value9" width="10" height="40" d="M5 28 V50" />
-    <path id="valuea" width="10" height="40" d="M5 26 V50" />
-    <path id="valueb" width="10" height="40" d="M5 24 V50" />
-    <path id="valuec" width="10" height="40" d="M5 22 V50" />
-    <path id="valued" width="10" height="40" d="M5 20 V50" />
-    <path id="valuee" width="10" height="40" d="M5 18 V50" />
-    <path id="valuef" width="10" height="40" d="M5 16 V50" />
+    <path id="value0" width="10" height="40" d="M5 44 V50" stroke-width="6" />
+    <path id="value1" width="10" height="40" d="M5 42 V50" stroke-width="6" />
+    <path id="value2" width="10" height="40" d="M5 40 V50" stroke-width="6" />
+    <path id="value3" width="10" height="40" d="M5 38 V50" stroke-width="6" />
+    <path id="value4" width="10" height="40" d="M5 36 V50" stroke-width="6" />
+    <path id="value5" width="10" height="40" d="M5 34 V50" stroke-width="6" />
+    <path id="value6" width="10" height="40" d="M5 32 V50" stroke-width="6" />
+    <path id="value7" width="10" height="40" d="M5 30 V50" stroke-width="6" />
+    <path id="value8" width="10" height="40" d="M5 28 V50" stroke-width="6" />
+    <path id="value9" width="10" height="40" d="M5 28 V50" stroke-width="6" />
+    <path id="valuea" width="10" height="40" d="M5 26 V50" stroke-width="6" />
+    <path id="valueb" width="10" height="40" d="M5 24 V50" stroke-width="6" />
+    <path id="valuec" width="10" height="40" d="M5 22 V50" stroke-width="6" />
+    <path id="valued" width="10" height="40" d="M5 20 V50" stroke-width="6" />
+    <path id="valuee" width="10" height="40" d="M5 18 V50" stroke-width="6" />
+    <path id="valuef" width="10" height="40" d="M5 16 V50" stroke-width="6" />
     <rect id="element" width="10" height="40" y="10" fill="blue" />
     <rect id="pivot" width="10" height="40" y="10" fill="magenta" />
   </defs>
