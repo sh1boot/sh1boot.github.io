@@ -47,8 +47,8 @@ but it represents a simpler conceptual model).
     <path id="valued" width="10" height="40" d="M5 20 V50" stroke-width="6" />
     <path id="valuee" width="10" height="40" d="M5 18 V50" stroke-width="6" />
     <path id="valuef" width="10" height="40" d="M5 16 V50" stroke-width="6" />
-    <rect id="element" width="10" height="40" y="10" fill="blue" />
-    <rect id="pivot" width="10" height="40" y="10" fill="magenta" />
+    <rect id="element" width="10" height="40" y="10" fill="cornflowerblue" fill-opacity="0.2" />
+    <rect id="pivot" width="10" height="40" y="10" fill="magenta" fill-opacity="0.2" />
   </defs>
   <rect id="array" width="640" height="40" y="10" x="10" />
   <use x="10" href="#valueb" />
@@ -221,7 +221,6 @@ Then partition the data after that prefix in the usual way.
 Then, exchange the top part of the low portion for the top part of the pivot
 list (again, maybe not an efficient way to go about it), and set the start of
 the second partition to start at the part of the prefix that was just moved.
-Exclude the pivot.  We're done with that.
 
 <svg width="100%" height="60" viewbox="0 0 660 60">
   <use href="#array" />
@@ -244,6 +243,7 @@ Exclude the pivot.  We're done with that.
 
 Now we have two partitions, one less than or equal to the pivot, and one
 greater than the pivot; and each partition begins with a sorted prefix.
+Exclude the old pivot.  We're done with that.
 
 <svg width="100%" height="60" viewbox="0 0 660 60">
   <rect x="10" y="10" width="180" height="40" />
