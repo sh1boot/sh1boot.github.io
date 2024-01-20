@@ -28,7 +28,9 @@ cycle, like addition.
 ## Why hash?
 
 Because lots of reasons.  Lots of probabilistic data structures.  Lots of
-stochastic methods.  Lots of so many things.
+stochastic methods.  Lots of so many things.  Even when you already have the
+hash, there are many cases where it's beneficial, or at least prudent, to hash
+it again to get a different or stronger permutation.
 
 An efficient hash can also be used for a trivial PRNG formed in something like
 a [splitmix64][] construction.  Splitmix64 uses a simple counter and hashes its
@@ -40,6 +42,30 @@ finalisation stage used in hashes like murmur and xxhash.
 Because in things like hash tables the hash is a part of the address
 calculation, and who wants high-latency address calculation paths?  Those can
 end up in your loop dependencies!
+
+Yes, if a hash is expensive it's usually cached alongside the data.  However
+that's not memory efficient and for large sets of small objects it's
+especially undesirable.  Also, in too many cases small objects are associated
+with weak hashes (eg., STL's default identity function).
+
+Whether you have a small object or you have its hash already to hand (and
+provided the original collision rate is acceptably low), there are still good
+reasons to want to give it another good mix:
+ * Deriving a table index via bit masking only works if you have a high-quality
+   hash.
+ * Hashes should be rekeyed at appropriate opportunities to mitigate the risk
+   of malicious inputs.
+ * If you have a non-power-of-two hash, it's more efficient to use `mulh` than
+   `mod` to fit that range, but this only works with a well-distributed hash.
+
+All of these can be addressed in a trivial amount of digital logic, but it
+takes a nontrivial amount of software arithmetic to achieve the same.
+
+Algorithms like Bloom filters and probing functions in open-addressed hash
+tables also need additional independent hashes of the same data, and
+independent hashes can be cut from the original hash only if its properly
+mixed (or if the collision rate is sufficiently low, new hashes can be derived
+from permutations of the original hash).
 
 That's the obvious answer at least.  I think that's the reason that we see
 such large gaps between the two best-in-class hashes in the [SMHasher3 results][]
