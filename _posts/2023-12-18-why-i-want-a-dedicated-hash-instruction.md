@@ -8,7 +8,7 @@ of various sorts between subsets of inputs and their hashed outputs in order to
 mitigate the risk of those correlations producing performance aberrations
 (cache collisions, unbalanced structures, etc.) or statistical biases.
 
-But traditional CPU instructions are the opposite of what's useful for hashing,
+But traditional CPU instructions are the *opposite* of what's useful for hashing,
 with strong correlations between input and output which are hard to hide, and
 hash function implementations must combine many such operations to produce
 something worthwhile.  Even cryptographic primitives, designed with similar
@@ -74,22 +74,23 @@ blocks but only four bytes per cycle for bulk data, to `MeowHash.64` at 67
 cycles per byte for short blocks but 12 bytes per cycle on bulk data.  It's
 quite a gap.
 
+Other applications benefit from being able to compress two or three words into
+one, for use as a random key; but the use of other low-cost arithmetic like
+addition and exclusive-or tend to yield low-entropy results, and can end up
+making things worse than the use of a single parameter.
+
+For example:
+ * Generating unique stack canaries on a per-call basis to mitigate the risk of
+   attacker exfiltrating the canary elsewhere.
+ * Providing a tweak parameter for tweakable ciphers (the tweak is not
+   necessarily a secret, but an obfuscating factor against replay attacks).
+
 Also there are techniques involving hashing the parameters of the input to give
 a consistent seed for random values for stochastic methods, so that the random
 values are repeatable.  These shouldn't form loop dependencies but they also
-can't be derived from RNG sequences which run arbitrarily far ahead in the
-pipeline.
-
-Hash-based randomisation, based on properties of the input (eg., pixel
-coordinates) rather than a generic RNG for reproducibility, used for stochastic
-operations
-
-This can also be applied to operations like generating canaries on a
-per-function or per-object basis.  Using simple operations like summation to
-combine multiple parameters is prone to giving low-entropy results, and may
-even make things worse than a single parameter.  Ideally it would be possible
-to compress the parameter space into fewer bits without unnecessary loss of
-entropy but also without slowing down the program to achieve this.
+can't be derived from RNG sequences which can run arbitrarily far ahead in the
+pipeline.  This is used very heavily in shader code, for example, where random
+variables are derived from the hash of the pixel coordinates and time.
 
 ### Why an instruction?
 
