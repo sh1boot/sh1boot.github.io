@@ -41,8 +41,9 @@ the old days.
 Here's a solution:
 <svg width="100%" height="400" viewbox="0 0 400 400">
   <defs>
+    <mask id="mask40"><rect x="0" y="0" width="40" height="40" fill="white" fill-opacity="1.0" /></mask>
     {% for n in (0..7) %}
-      <g id="mem{{n}}"><rect width="40" height="40" /><text x="20" y="20">m{{n}}</text></g>
+      <g id="mem{{n}}"><rect width="40" height="40" /><text x="20" y="20" mask="url(#mask40)">m{{n}}</text></g>
     {% endfor %}
   </defs>
   <g id="bitrev_xor">

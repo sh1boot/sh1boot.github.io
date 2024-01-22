@@ -3,7 +3,7 @@
     stroke:currentColor;
     stroke-width:1.5;
     fill:currentColor;
-    fill-opacity:0.10;
+    fill-opacity:0.1;
   }
   text {
         stroke:none;
@@ -12,8 +12,20 @@
         dominant-baseline:middle;
         text-anchor:middle;
   }
-  {% for n in (0..12) %}
-  .block{{n}} { fill:hsl({{n | times: 223 | modulo: 360}},{{n | times: -2 | plus: 100}}%,{{n | times: -2 | plus: 60}}%); fill-opacity: 0.2; }
-  .block{{n}}:hover { fill:hsl({{n | times: 223 | modulo: 360}},{{n | times: -2 | plus: 100}}%,{{n | times: -2 | plus: 90}}%); fill-opacity: 0.2; font-weight: bold; font-size: large; fill-opacity:0.30; }
+  @-webkit-keyframes highlightbg {
+    0% { fill-opacity: 0.5; }
+    50% {fill-opacity: 0.0; }
+    100% {fill-opacity: 0.5; }
+  }
+  {% for n in (0..12) %} :root { --unique-color{{n}}:hsl({{n | times: 223 | modulo: 360}},{{n | times: -2 | plus: 100}}%,{{n | times: -2 | plus: 60}}%); }
+  {% endfor %}
+  {% for n in (0..12) %} .block{{n}} { fill:var(--unique-color{{n}}); fill-opacity: 0.2; }
+  .block{{n}}:hover { fill:var(--unique-color{{n}}); fill-opacity: 0.50;
+    font-weight: bold;
+    font-size: larger;
+    -webkit-animation-name: highlightbg;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 1.5s;
+  }
   {% endfor %}
 </style>
