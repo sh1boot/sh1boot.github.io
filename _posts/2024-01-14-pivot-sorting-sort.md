@@ -31,91 +31,20 @@ but it represents a simpler conceptual model).
 
 <svg width="100%" height="60" viewbox="0 0 660 60">
   <defs>
-    <path id="value0" width="10" height="40" d="M5 44 V50" stroke-width="6" />
-    <path id="value1" width="10" height="40" d="M5 42 V50" stroke-width="6" />
-    <path id="value2" width="10" height="40" d="M5 40 V50" stroke-width="6" />
-    <path id="value3" width="10" height="40" d="M5 38 V50" stroke-width="6" />
-    <path id="value4" width="10" height="40" d="M5 36 V50" stroke-width="6" />
-    <path id="value5" width="10" height="40" d="M5 34 V50" stroke-width="6" />
-    <path id="value6" width="10" height="40" d="M5 32 V50" stroke-width="6" />
-    <path id="value7" width="10" height="40" d="M5 30 V50" stroke-width="6" />
-    <path id="value8" width="10" height="40" d="M5 28 V50" stroke-width="6" />
-    <path id="value9" width="10" height="40" d="M5 28 V50" stroke-width="6" />
-    <path id="valuea" width="10" height="40" d="M5 26 V50" stroke-width="6" />
-    <path id="valueb" width="10" height="40" d="M5 24 V50" stroke-width="6" />
-    <path id="valuec" width="10" height="40" d="M5 22 V50" stroke-width="6" />
-    <path id="valued" width="10" height="40" d="M5 20 V50" stroke-width="6" />
-    <path id="valuee" width="10" height="40" d="M5 18 V50" stroke-width="6" />
-    <path id="valuef" width="10" height="40" d="M5 16 V50" stroke-width="6" />
-    <rect id="element" width="10" height="40" y="10" fill="cornflowerblue" fill-opacity="0.2" />
-    <rect id="pivot" width="10" height="40" y="10" fill="magenta" fill-opacity="0.2" />
+    {% for v in (0..15) %} <path id="value{{v}}" width="10" height="40"  d="M5 {{v | times:-2 | plus: 44}} V50" stroke-width="6" /> {% endfor %}
+    <rect id="element" width="10" height="40" y="10" class="block1" />
+    <rect id="pivot" width="10" height="40" y="10" class="block0" />
   </defs>
   <rect id="array" width="640" height="40" y="10" x="10" />
-  <use x="10" href="#valueb" />
-  <use x="20" href="#value1" />
-  <use x="30" href="#value7" />
-  <use x="40" href="#value6" />
-  <use x="50" href="#value7" />
-  <use x="60" href="#value9" />
-  <use x="70" href="#value1" />
-  <use x="100" href="#element" /> <use x="100" href="#value7" />
-  <use x="120" href="#element" /> <use x="120" href="#value2" />
-  <use x="200" href="#element" /> <use x="200" href="#value0" />
-  <use x="330" href="#element" /> <use x="330" href="#valuec" />
-  <use x="400" href="#element" /> <use x="400" href="#value3" />
-  <use x="460" href="#element" /> <use x="460" href="#valuee" />
-  <use x="570" href="#element" /> <use x="570" href="#value2" />
-  <g id="unsorted">
-  <use x="80" href="#value1" />
-  <use x="90" href="#value5" />
-  <use x="110" href="#value0" />
-  <use x="130" href="#value8" />
-  <use x="140" href="#value2" />
-  <use x="150" href="#value8" />
-  <use x="160" href="#value4" />
-  <use x="170" href="#value4" />
-  <use x="180" href="#value7" />
-  <use x="190" href="#valuef" />
-  <use x="210" href="#valued" />
-  <use x="220" href="#value8" />
-  <use x="230" href="#valueb" />
-  <use x="240" href="#value6" />
-  <use x="250" href="#valuee" />
-  <use x="260" href="#valuec" />
-  <use x="270" href="#value0" />
-  <use x="280" href="#value4" />
-  <use x="290" href="#value4" />
-  <use x="300" href="#value8" />
-  <use x="310" href="#value8" />
-  <use x="320" href="#value3" />
-  <use x="340" href="#value9" />
-  <use x="350" href="#value0" />
-  <use x="360" href="#value5" />
-  <use x="370" href="#value8" />
-  <use x="380" href="#value5" />
-  <use x="390" href="#value4" />
-  <use x="410" href="#value2" />
-  <use x="420" href="#valuee" />
-  <use x="430" href="#value8" />
-  <use x="440" href="#valuef" />
-  <use x="450" href="#value7" />
-  <use x="470" href="#valuef" />
-  <use x="480" href="#valued" />
-  <use x="490" href="#value5" />
-  <use x="500" href="#valuee" />
-  <use x="510" href="#value3" />
-  <use x="520" href="#valueb" />
-  <use x="530" href="#valueb" />
-  <use x="540" href="#value3" />
-  <use x="550" href="#value1" />
-  <use x="560" href="#value0" />
-  <use x="580" href="#valuef" />
-  <use x="590" href="#value0" />
-  <use x="600" href="#valueb" />
-  <use x="610" href="#value1" />
-  <use x="620" href="#valuee" />
-  <use x="630" href="#value4" />
-  <use x="640" href="#value8" />
+  {% assign array="11 1 7 6 7 9 1 1 5 7 0 2 8 2 8 4 4 7 15 0 13 8 11 6 14 12 0 4 4 8 8 3 12 9 0 5 8 5 4 3 2 14 8 15 7 14 15 13 5 14 3 11 11 3 1 0 2 15 0 11 1 14 4 8" | split: " " %}
+  <use x="100" href="#element" />
+  <use x="120" href="#element" />
+  <use x="200" href="#element" />
+  <use x="330" href="#element" />
+  <use x="400" href="#element" />
+  <use x="460" href="#element" />
+  <use x="570" href="#element" />
+  {% for e in array %}<use x="{{ forloop.index0 | times:10 | plus: 10 }}" href="#value{{e}}" />{% endfor %}
   </g>
 </svg>
 
@@ -125,20 +54,15 @@ and the median picked from the middle of that prefix.
 
 <svg width="100%" height="60" viewbox="0 0 660 60">
   <use href="#array" />
+  {% assign array="0 2 2 3 7 12 14 1 5 11 0 1 8 2 8 4 4 7 15 7 13 8 11 6 14 12 0 4 4 8 8 3 6 9 0 5 8 5 4 7 2 14 8 15 7 9 15 13 5 14 3 11 11 3 1 0 1 15 0 11 1 14 4 8" | split: " " %}
   <use x="10" href="#element" /> <use x="10" href="#value0" />
   <use x="20" href="#element" /> <use x="20" href="#value2" />
   <use x="30" href="#element" /> <use x="30" href="#value2" />
   <use x="40" href="#pivot"   /> <use x="40" href="#value3" />
   <use x="50" href="#element" /> <use x="50" href="#value7" />
-  <use x="60" href="#element" /> <use x="60" href="#valuec" />
-  <use x="70" href="#element" /> <use x="70" href="#valuee" />
-  <use x="100" href="#valueb" />
-  <use x="120" href="#value1" />
-  <use x="200" href="#value7" />
-  <use x="330" href="#value6" />
-  <use x="400" href="#value7" />
-  <use x="460" href="#value9" />
-  <use x="570" href="#value1" />
+  <use x="60" href="#element" /> <use x="60" href="#value12" />
+  <use x="70" href="#element" /> <use x="70" href="#value14" />
+  {% for e in array %}<use x="{{ forloop.index0 | times:10 | plus: 10 }}" href="#value{{e}}" />{% endfor %}
   <use href="#unsorted" />
 </svg>
 
@@ -151,8 +75,8 @@ Then partition the data after that prefix in the usual way.
   <use x="30" href="#element" /> <use x="30" href="#value2" />
   <use x="40" href="#pivot"   /> <use x="40" href="#value3" />
   <use x="50" href="#element" /> <use x="50" href="#value7" />
-  <use x="60" href="#element" /> <use x="60" href="#valuec" />
-  <use x="70" href="#element" /> <use x="70" href="#valuee" />
+  <use x="60" href="#element" /> <use x="60" href="#value12" />
+  <use x="70" href="#element" /> <use x="70" href="#value14" />
 
   <g id="unsorted_lo">
   <use x="80" href="#value1" />
@@ -174,20 +98,20 @@ Then partition the data after that prefix in the usual way.
   <path d="M230 2 V58" />
   <g id="unsorted_hi">
   <use x="230" href="#value5" />
-  <use x="240" href="#valueb" />
+  <use x="240" href="#value11" />
   <use x="250" href="#value8" />
   <use x="260" href="#value8" />
   <use x="270" href="#value4" />
   <use x="280" href="#value4" />
   <use x="290" href="#value7" />
-  <use x="300" href="#valuef" />
+  <use x="300" href="#value15" />
   <use x="310" href="#value7" />
-  <use x="320" href="#valued" />
+  <use x="320" href="#value13" />
   <use x="330" href="#value8" />
-  <use x="340" href="#valueb" />
+  <use x="340" href="#value11" />
   <use x="350" href="#value6" />
-  <use x="360" href="#valuee" />
-  <use x="370" href="#valuec" />
+  <use x="360" href="#value14" />
+  <use x="370" href="#value12" />
   <use x="380" href="#value4" />
   <use x="390" href="#value4" />
   <use x="400" href="#value8" />
@@ -199,20 +123,20 @@ Then partition the data after that prefix in the usual way.
   <use x="460" href="#value5" />
   <use x="470" href="#value4" />
   <use x="480" href="#value7" />
-  <use x="490" href="#valuee" />
+  <use x="490" href="#value14" />
   <use x="500" href="#value8" />
-  <use x="510" href="#valuef" />
+  <use x="510" href="#value15" />
   <use x="520" href="#value7" />
   <use x="530" href="#value9" />
-  <use x="540" href="#valuef" />
-  <use x="550" href="#valued" />
+  <use x="540" href="#value15" />
+  <use x="550" href="#value13" />
   <use x="560" href="#value5" />
-  <use x="570" href="#valuee" />
-  <use x="580" href="#valueb" />
-  <use x="590" href="#valueb" />
-  <use x="600" href="#valuef" />
-  <use x="610" href="#valueb" />
-  <use x="620" href="#valuee" />
+  <use x="570" href="#value14" />
+  <use x="580" href="#value11" />
+  <use x="590" href="#value11" />
+  <use x="600" href="#value15" />
+  <use x="610" href="#value11" />
+  <use x="620" href="#value14" />
   <use x="630" href="#value4" />
   <use x="640" href="#value8" />
   </g>
@@ -236,8 +160,8 @@ the second partition to start at the part of the prefix that was just moved.
   <path d="M190 2 V58" />
   <use x="190" href="#pivot"   /> <use x="190" href="#value3" />
   <use x="200" href="#element" /> <use x="200" href="#value7" />
-  <use x="210" href="#element" /> <use x="210" href="#valuec" />
-  <use x="220" href="#element" /> <use x="220" href="#valuee" />
+  <use x="210" href="#element" /> <use x="210" href="#value12" />
+  <use x="220" href="#element" /> <use x="220" href="#value14" />
   <use href="#unsorted_hi" />
 </svg>
 
@@ -258,8 +182,8 @@ Exclude the old pivot.  We're done with that.
 
   <rect x="200" y="10" width="450" height="40" />
   <use x="200" href="#element" /> <use x="200" href="#value7" />
-  <use x="210" href="#pivot" /> <use x="210" href="#valuec" />
-  <use x="220" href="#element" /> <use x="220" href="#valuee" />
+  <use x="210" href="#pivot" /> <use x="210" href="#value12" />
+  <use x="220" href="#element" /> <use x="220" href="#value14" />
   <use href="#unsorted_hi" />
 </svg>
 

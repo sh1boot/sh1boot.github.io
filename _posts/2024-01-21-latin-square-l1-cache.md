@@ -2,6 +2,7 @@
 layout: post
 title:  "A Latin-Square-based L1 cache layout"
 categories: cache
+draft: true
 ---
 {% include svg.html %}
 
@@ -39,21 +40,12 @@ the old days.
 
 Here's a solution:
 <svg width="100%" height="400" viewbox="0 0 400 400">
-  <style>
-    text {
-        stroke:none;
-        fill:currentColor;
-        fill-opacity:1.0;
-        dominant-baseline:middle;
-        text-anchor:middle;
-    }
-  </style>
   <defs>
     {% for n in (0..7) %}
-      <g id="mem{{n}}"><rect width="40" height="40" fill="hsl({{n | times: 223 | modulo: 360}},{{n | times: -2 | plus: 100}}%,{{n | times: -5 | plus: 60}}%)" /><text x="20" y="20">m{{n}}</text></g>
+      <g id="mem{{n}}"><rect width="40" height="40" /><text x="20" y="20">m{{n}}</text></g>
     {% endfor %}
   </defs>
-  <g id="memory">
+  <g id="bitrev_xor">
     {% assign table = "0 1 2 3 4 5 6 7
                       :4 5 6 7 0 1 2 3
                       :2 3 0 1 6 7 4 5
@@ -62,10 +54,13 @@ Here's a solution:
                       :5 4 7 6 1 0 3 2
                       :3 2 1 0 7 6 5 4
                       :7 6 5 4 3 2 1 0" %}
-    {% assign rows = table | split: ":" %} {% for row in rows %}
-      {% assign cells = row | split: " " %} {% for cell in cells %}
-        <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />
-      {% endfor %}
+    {% assign pass = "0 1 2 3 4 5 6 7" | split: " " %} {% for m in pass %}
+      <g class="block{{m}}">
+      {% assign rows = table | split: ":" %} {% for row in rows %}
+      {% assign cells = row | split: " " %} {% for cell in cells %} {% if cell == m %}
+      <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />
+      {% endif %} {% endfor %} {% endfor %}
+      </g>
     {% endfor %}
   </g>
 </svg>
@@ -93,7 +88,7 @@ Well, there's the diagonal stripe solution, but that gets us no sub-rectangles
 at all!
 
 <svg width="100%" height="400" viewbox="0 0 400 400">
-  <g id="memory">
+  <g id="diagonal">
     {% assign table = "0 1 2 3 4 5 6 7
                       :1 2 3 4 5 6 7 0
                       :2 3 4 5 6 7 0 1
@@ -102,10 +97,13 @@ at all!
                       :5 6 7 0 1 2 3 4
                       :6 7 0 1 2 3 4 5
                       :7 0 1 2 3 4 5 6" %}
-    {% assign rows = table | split: ":" %} {% for row in rows %}
-      {% assign cells = row | split: " " %} {% for cell in cells %}
-        <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />
-      {% endfor %}
+    {% assign pass = "0 1 2 3 4 5 6 7" | split: " " %} {% for m in pass %}
+      <g class="block{{m}}">
+      {% assign rows = table | split: ":" %} {% for row in rows %}
+      {% assign cells = row | split: " " %} {% for cell in cells %} {% if cell == m %}
+      <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />
+      {% endif %} {% endfor %} {% endfor %}
+      </g>
     {% endfor %}
   </g>
 </svg>
@@ -124,7 +122,8 @@ for each of the memories involved.
 And to figure out what the proper permutation is to bring that data back into
 the expected order in a vector register.
 
-TODO: discuss all that
+TODO: discuss all that... but I'm going to upload this now because I've been
+amusing myself with css.
 
 [latin square]: https://en.wikipedia.org/wiki/Latin_square
 [fantasy console]: https://en.wikipedia.org/wiki/Fantasy_console
