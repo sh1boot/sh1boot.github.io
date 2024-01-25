@@ -7,7 +7,7 @@ draft: true
 {% include svg.html %}
 
 If I were going to build some kind of fantasy machine, I would not fuss about
-making it fast.  That's what people do when they don't have any other ideas.
+making it fast.  That's just what people do when they don't have any other ideas.
 Mine would just be quirky.
 
 One of the quirks I thought would be interesting was to arrange the L1 cache as
@@ -28,24 +28,39 @@ at one address on a given cycle.  So if you slice your 64-bit word into two
 SRAM and 32-bits from another SRAM at a different address in the same clock
 cycle.  But each memory only has half the data.
 
-With a latin square memory, you slice storage into, eg., 16 memories, so you
-have 16 different places you can access at the same time, which don't need to
-be contiguous, and you arrange these memories in a two-dimensional grid -- a
-square -- such that no row or column contains more than one instance of that memory.
+With a latin square memory, you slice storage into, eg., eight memories, so you
+have eight different places you can access at the same time, which don't need
+to be contiguous, and you arrange these memories in a two-dimensional grid -- a
+square -- such that no row or column contains more than one instance of that
+memory.
 
 This means that that entire row, _or column_, can be accessed concurrently.  In
-a normal chunky memory only the row can be accessed concurrently -- and
+a normal single-SRAM memory only the row can be accessed concurrently -- and
 normally only on an aligned boundary, giving the data alignment constraints of
-the old days.
+the old days.  Even just splitting it into pairs of memories means being able
+to satisfy at least some unaligned accesses.
 
-Here's a solution:
+Here we'll try splitting it into eight.  Like so:
 <svg width="100%" height="400" viewbox="0 0 400 400">
   <defs>
     <clipPath id="clip40"><rect x="0" y="0" width="40" height="40" /></clipPath>
-    {% for n in (0..7) %}
+    {% for n in (0..15) %}
       <g id="mem{{n}}"><rect width="40" height="40" /><text x="20" y="20" clip-path="url(#clip40)">m{{n}}</text></g>
     {% endfor %}
+    <g id="axes8">
+    {% for n in (0..7) %}
+    <text x="{{forloop.index0 | times: 40 | plus: 60}}" y="20">{{n}}</text>
+    <text x="20" y="{{forloop.index0 | times: 40 | plus: 60}}">{{n}}</text>
+    {% endfor %}
+    </g>
+    <g id="axes9">
+    {% for n in (0..8) %}
+    <text x="{{forloop.index0 | times: 40 | plus: 60}}" y="20">{{n}}</text>
+    <text x="20" y="{{forloop.index0 | times: 40 | plus: 60}}">{{n}}</text>
+    {% endfor %}
+    </g>
   </defs>
+  <use href="#axes8" />
   <g id="bitrev_xor">
     {% assign table = "0 1 2 3 4 5 6 7
                       :4 5 6 7 0 1 2 3
@@ -66,29 +81,30 @@ Here's a solution:
   </g>
 </svg>
 
-Here, if you number the rows 0..7 top to bottom, and the columns 0..7 left to
-right, then the memory number at each position is the column number
+In this configuration the memory number at each position is the column number
 exclusive-ored with the bit-reversed row number.
 
 Observe that each row and each column contains 8 different memories.  Any
-rectangle 1x8 or 8x1 at any whole position touches each memory only once.  This
-also holds for 2x4 and 4x2.  With more memories you can get more rectangle
-options.
+rectangle 1x8 or 8x1 at any whole position touches each memory only once.
+There are also some 2x4 and 4x2 sub-rectangle positions which work, but not all
+of them.  With more memories you can get more rectangle options.
 
-If you extend this square in a repeating pattern in both directions, then the
-property continues at arbitrary offsets _iff_ only one axis is offset from
-natural alignment (product of its length on that axis) at a time.
+Generally you can address any rectangle at its natural alignment on both axes,
+plus one additional axis of freedom on top of that.  In the case of 8x1 and 1x8
+that means anywhere at all.
 
-What stands out is the collision of the corners if you try to straddle four
-tiles at once.  There are many latin square solutions, so Can we do better than
-this?
+But if you have a 2x4 or 4x2 you can slide arbitrarily on the vertical or
+horizontal axis away from natural alignment, but not always both.  Sometimes
+you get conflicts in the corners.
+
+Are there better solutions?
 
 Hmm...
 
 Well, there's the diagonal stripe solution, but that gets us no sub-rectangles
 at all!
-
 <svg width="100%" height="400" viewbox="0 0 400 400">
+  <use href="#axes8" />
   <g id="diagonal">
     {% assign table = "0 1 2 3 4 5 6 7
                       :1 2 3 4 5 6 7 0
@@ -109,10 +125,56 @@ at all!
   </g>
 </svg>
 
-I believe, though I'm not certain, that there's no solution giving
-arbitrary-offset rectangles wider and taller than 1.
+Or exclusive-or without the bit-reverse.  The sub-rectangle situation there
+looks pretty dire, too:
+<svg width="100%" height="400" viewbox="0 0 400 400">
+  <use href="#axes8" />
+  <g id="diagonal">
+    {% assign table = "0 1 2 3 4 5 6 7
+                      :1 0 3 2 5 4 7 6
+                      :2 3 0 1 6 7 4 5
+                      :3 2 1 0 7 6 5 4
+                      :4 5 6 7 0 1 2 3
+                      :5 4 7 6 1 0 3 2
+                      :6 7 4 5 2 3 0 1
+                      :7 6 5 4 3 2 1 0" %}
+    {% assign pass = "0 1 2 3 4 5 6 7" | split: " " %} {% for m in pass %}
+      <g class="block{{m}}">
+      {% assign rows = table | split: ":" %} {% for row in rows %}
+      {% assign cells = row | split: " " %} {% for cell in cells %} {% if cell == m %}
+      <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />
+      {% endif %} {% endfor %} {% endfor %}
+      </g>
+    {% endfor %}
+  </g>
+</svg>
 
-So let's just stick with the first one.
+This one doesn't help in any way, but I wanted to draw a base-3 solution just
+to see:
+<svg width="100%" height="440" viewbox="0 0 440 440">
+  <use href="#axes9" />
+  <g id="diagonal">
+    {% assign table = "0 1 2 3 4 5 6 7 8 
+                      :3 4 5 6 7 8 0 1 2 
+                      :6 7 8 0 1 2 3 4 5 
+                      :1 2 0 4 5 3 7 8 6 
+                      :4 5 3 7 8 6 1 2 0 
+                      :7 8 6 1 2 0 4 5 3 
+                      :2 0 1 5 3 4 8 6 7 
+                      :5 3 4 8 6 7 2 0 1 
+                      :8 6 7 2 0 1 5 3 4" %}
+    {% assign pass = "0 1 2 3 4 5 6 7 8" | split: " " %} {% for m in pass %}
+      <g class="block{{m}}">
+      {% assign rows = table | split: ":" %} {% for row in rows %}
+      {% assign cells = row | split: " " %} {% for cell in cells %} {% if cell == m %}
+      <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />
+      {% endif %} {% endfor %} {% endfor %}
+      </g>
+    {% endfor %}
+  </g>
+</svg>
+
+Trying random stuff isn't helping, so let's just stick with the first one.
 
 Now the trick is to figure out how to map this rectangle into linear memory in
 a way that's useful for handling image data.
@@ -123,8 +185,7 @@ for each of the memories involved.
 And to figure out what the proper permutation is to bring that data back into
 the expected order in a vector register.
 
-TODO: discuss all that... but I'm going to upload this now because I've been
-amusing myself with css.
+TODO: discuss all that...
 
 [latin square]: https://en.wikipedia.org/wiki/Latin_square
 [fantasy console]: https://en.wikipedia.org/wiki/Fantasy_console
