@@ -216,6 +216,11 @@ didn't have a realistic benchmark in which to validate that effort.
   sample?  Or at the very least, does the pivot value also appear at some
   distance threshold from the middle of the prefix (it's sorted so there's no
   scanning involved to figure this out)?
+* Pack a list of samples in the range of the block being partitioned into a
+  SIMD register, and for every value visited increment a counter for each lane
+  where the visited value is less than that register's value.  At the end you
+  can use this to interpolate a much more accurate pivot for the next round.
+  Or even use it to pre-lay bins for an American-flag sort.
 
 But it's an idea.  With a name.
 
