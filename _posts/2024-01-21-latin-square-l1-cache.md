@@ -1,19 +1,19 @@
 ---
 layout: post
 title:  "A Latin-Square-based L1 cache layout"
-categories: cache
+categories: cache, memory, hardware design
 draft: true
 ---
 {% include svg.html %}
 
-If I were going to build some kind of fantasy machine, I would not fuss about
-making it fast.  That's just what people do when they don't have any other ideas.
-Mine would just be quirky.
+If I were ever going to get around to building some kind of fantasy machine or
+console, I wouldn't fuss about trying to make it fast.  I'd really just want it
+to have quirky features to mess about with.
 
-One of the quirks I thought would be interesting was to arrange the L1 cache as
-a solution to a [latin square][] problem, and plumb it in such a way as to
-answer specific constant-stride vector loads in a single operation.  This would
-open up a variety of fast two-dimensional addressing modes.
+One such feature I've ruminated on for years was to arrange the L1 cache as a
+solution to a [latin square][] problem, and plumb it in such a way as to answer
+specific constant-stride vector loads in a single operation.  This would open
+up a variety of fast two-dimensional addressing modes.
 
 Clearly memory DRAM fetches still need to be in somewhat contiguous chunks, and
 this makes contemplating cache eviction strategies uncomfortable in the context
@@ -28,11 +28,11 @@ at one address on a given cycle.  So if you slice your 64-bit word into two
 SRAM and 32-bits from another SRAM at a different address in the same clock
 cycle.  But each memory only has half the data.
 
-With a latin square memory, you slice storage into, eg., eight memories, so you
-have eight different places you can access at the same time, which don't need
-to be contiguous, and you arrange these memories in a two-dimensional grid -- a
-square -- such that no row or column contains more than one instance of that
-memory.
+With a latin square memory, you slice storage into, eg., eight memories so you
+have eight different places you can access at the same time, places which no
+longer need to be contiguous, and you arrange these memories in a
+two-dimensional grid -- a square -- such that no row or column contains more
+than one instance of that memory.
 
 This means that that entire row, _or column_, can be accessed concurrently.  In
 a normal single-SRAM memory only the row can be accessed concurrently -- and
@@ -149,8 +149,8 @@ looks pretty dire, too:
   </g>
 </svg>
 
-This one doesn't help in any way, but I wanted to draw a base-3 solution just
-to see:
+This one doesn't help in any way, but I wanted to try to draw a base-3 solution
+just to see what it looked like:
 <svg width="100%" height="440" viewbox="0 0 440 440">
   <use href="#axes9" />
   <g id="diagonal">
@@ -174,7 +174,9 @@ to see:
   </g>
 </svg>
 
-Trying random stuff isn't helping, so let's just stick with the first one.
+It turns out that a full-sized sub-rectangle at an arbitrary offset is
+impossible.  Changing the constraints might help, but I like the features we
+started with, so I'm sticking with it.
 
 Now the trick is to figure out how to map this rectangle into linear memory in
 a way that's useful for handling image data.
@@ -186,6 +188,22 @@ And to figure out what the proper permutation is to bring that data back into
 the expected order in a vector register.
 
 TODO: discuss all that...
+
+### Physical memory mapping ###
+
+TODO
+
+### Address generation ###
+
+TODO
+
+### Linearising/rasterising the data ###
+
+TODO
+
+### Applications ###
+
+TODO
 
 [latin square]: https://en.wikipedia.org/wiki/Latin_square
 [fantasy console]: https://en.wikipedia.org/wiki/Fantasy_console
