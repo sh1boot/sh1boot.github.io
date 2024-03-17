@@ -6,14 +6,20 @@ draft: true
 ---
 {% include svg.html %}
 
-If I were ever going to get around to building some kind of fantasy machine or
-console, I wouldn't fuss about trying to make it fast.  I'd really just want it
-to have quirky features to mess about with.
+If I were going to build some kind of fantasy machine I would not fuss about
+making it high-performance.  Mine would just be a mash-up of random things I
+found interesting at some point.
 
-One such feature I've ruminated on for years was to arrange the L1 cache as a
-solution to a [latin square][] problem, and plumb it in such a way as to answer
-specific constant-stride vector loads in a single operation.  This would open
-up a variety of fast two-dimensional addressing modes.
+One such random thing which I've worked with in the past and found interesting
+is vector access to data on both axes of a two-dimensional buffer.  This can be
+achieved by arranging independent memories as a solution to a [latin square][]
+problem.
+
+At some point long ago I decided it might be interesting to reason through
+applying this as an L1 cache mapping.  There are reasons why that's not a very
+good idea, but it amuses me and that alone makes it a good-enough idea.  It
+re-frames the problem as answering a family of 2D gather operations much more
+quickly.
 
 Clearly memory DRAM fetches still need to be in somewhat contiguous chunks, and
 this makes contemplating cache eviction strategies uncomfortable in the context
@@ -90,12 +96,12 @@ There are also some 2x4 and 4x2 sub-rectangle positions which work, but not all
 of them.  With more memories you can get more rectangle options.
 
 Generally you can address any rectangle at its natural alignment on both axes,
-plus one additional axis of freedom on top of that.  In the case of 8x1 and 1x8
-that means anywhere at all.
+plus one additional axis of freedom on top of that.
 
-But if you have a 2x4 or 4x2 you can slide arbitrarily on the vertical or
-horizontal axis away from natural alignment, but not always both.  Sometimes
-you get conflicts in the corners.
+In the case of 8x1 and 1x8 that means anywhere at all.  But if you have a 2x4
+or 4x2 you can slide arbitrarily on the vertical or horizontal axis away from
+natural alignment, but not always both.  Sometimes you get conflicts in the
+corners.
 
 Are there better solutions?
 

@@ -23,8 +23,9 @@ Astounding!
 
 ### Drawing SVG with the proper colours
 To respect dark-mode or other CSS overrides from the user it's important to
-avoid black-on-black diagrams, but it's also avoid black-on-**white-rectangle**
-diagrams, which can also be hard to read inside a dark-themed page.
+avoid black-on-black diagrams, but it's also good to avoid
+black-on-**white-rectangle** diagrams, which can also be hard to read inside a
+dark-themed page.
 
 It turns out you can use `currentColor` in SVG to draw lines in the current
 text colour whereever that SVG is embedded.  One assumes the text colour was
