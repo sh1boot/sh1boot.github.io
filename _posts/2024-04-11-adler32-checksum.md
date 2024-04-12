@@ -23,7 +23,8 @@ Here's how.
 
 Supposing you have N-way SIMD accumulators, you can quickly calculate N
 independent Adler-32 checksums by adding incoming bytes to the first
-accumulator and adding that accumulator into the second accumulator.
+accumulator and adding that accumulator into the second accumulator, in
+parallel without mixing anything between lanes.
 
 If the buffer is not a multiple of N long, you can pad it to a multiple of N by
 [notionally] stuffing zero bytes in front, because zeroes at the beginning do
@@ -59,6 +60,11 @@ in my half-baked conversion from C notation to mathematical notation.
 
 (TODO: make sure they're actually right)
 
+Having that reduction operation on hand (assuming I expressed it correctly),
+you can set it aside until you've calculated N parallel checksums and then do
+it as a finalisation step outside of any loops.  Everything else is
+embarrassingly parallel.
+
 Now it might seem like to avoid regular overflow and regular modulo we would
 need to use 32-bit accumulators with periodic resets.  But actually not so
 much.
@@ -72,18 +78,17 @@ while (...) {
 ```
 
 If A and B start at zero, then it takes at least 258 iterations for A to
-overflow a 16-bit counter $(255 \times 257 = 65535)$, but only 23 iterations
-for B to overflow $(255 \times 22 \times (22+1) / 2 = 64515)$.  So using 16-bit
-counters we can do 22 iterations and both A and B will still be less than
-65521.
+overflow a 16-bit counter ($255 \times 257 = 65535$), but only 23 iterations
+for B to overflow ($255 \times {22(22+1) \over 2} = 64515$).  Where $255$ is
+the largest incoming byte value, and $22(22+1) \over 2$ is the 22nd
+[triangular number][].  So starting from zero we can do 22 iterations and both
+A and B will still be less than 65521 and fit in 16-bit counters.
 
 We prefer 16-bit counters because in typical SIMD we get twice the throughput
 of 32-bit counters.
 
-Then we need to fold those 16-bit sums back into larger counters, or do more
-modulo arithmetic.
-
-Like so:
+Then we need to fold those 16-bit sums back into larger counters (and/or do
+more modulo arithmetic).  Like so:
 ```c
 while (...) {
     // In the following loop A would get added into B 22 times, but we're
@@ -118,25 +123,26 @@ A += A16;
 if (A16 >= tmp) A = (A + 65536 - 65521) & 0xffff;
 ```
 
-And if we spend just a couple of extra operations on keeping the A accumulator
-within 16 bits then we have ensured that B only has to handle growing by up to
-$23 \times 65520$ per iteration.  Which means that we can confidently run
-around 2900 outer iterations without worrying about overflow.
+That's more costly than a straight 32-bit sum, _but_ having spent just a couple
+of extra operations on keeping the A accumulator within 16 bits we have ensured
+that B only has to handle growing by up to $23 \times 65520$ per iteration.
+Which means that we can confidently do over 2900 outer iterations without
+worrying about overflow.
 
 Is it also worth reducing B to a 16-bit counter?  Well, no, not really.  The
 supposed benefit would be that we can do twice as many 16-bit adds as 32-bit
 adds, but without the knock-on effects on another accumulator the extra work in
 doing the modulo doesn't justify itself.  And this time we have to deal with 22
-times a 16-bit value, mod 65521; so we're locked in on that 32-bit temporary
-register anyway.
+times a 16-bit value, mod 65521; so we're stuck with that 32-bit temporary
+arithmetic anyway.
 
-There's probably a clever trick to do $(x \times 22) \mod 65521$, in 16-bit
-arithmetic but I don't know what it is (I may try to figure it out for fun, but
-it's still not going to help here).
+There's probably a clever trick to do $x \times 22 \mod 65521$, in 16-bit
+arithmetic but I don't know what it is.  I may try to figure it out for fun,
+but it's still not going to help here.
 
-Also, since we're really only trying to step back from the brink we don't
-necessarily have to get the modulo exactly right.  There's a more expedient
-option:
+Also, since we're really only trying to step back from the brink of overflow we
+don't necessarily have to get the modulo exactly right.  There's a more
+expedient option:
 ```c
 if (periodic_overflow_control) {
   uint16_t top = B >> 16;  // close to division by 65521, but easier
@@ -148,7 +154,12 @@ don't have the necessary instruction available then writing this is much easier
 than writing a manual divide operation.  We just have to use a more
 conservative reset period to stay safe.
 
+If you don't even have a multiplier then note that 65521 is 15 short of 65536,
+and calculating $x \times 15$ is the same as $x \times (16 - 1)$, and you'll
+be able to work out something from that.
+
 Here's what that looks like in practice:
 [adler32_simd.c](https://github.com/chromium/chromium/blob/ca5b63a1c07af201/third_party/zlib/adler32_simd.c#L374-L4540)
 
 [Adler-32]: <https://en.wikipedia.org/wiki/Adler-32>
+[triangular number]: <https://en.wikipedia.org/wiki/triangular_number>
