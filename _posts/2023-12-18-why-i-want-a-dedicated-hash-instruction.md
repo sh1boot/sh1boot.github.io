@@ -131,5 +131,5 @@ is tolerably shallow in the logic that it uses.
 [SMHasher3 results]: https://gitlab.com/fwojcik/smhasher3/-/blob/main/results/README.md#passing-hashes
 [splitmix64]: https://rosettacode.org/wiki/Pseudo-random_numbers/Splitmix64
 [dieharder]: https://webhome.phy.duke.edu/~rgb/General/dieharder.php
-[TestU01]: http://simul.iro.umontreal.ca/testu01/tu01.html
+[TestU01]: https://simul.iro.umontreal.ca/testu01/tu01.html
 [PractRand]: https://pracrand.sourceforge.net/PractRand.txt

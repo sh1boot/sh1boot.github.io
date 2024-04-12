@@ -198,5 +198,5 @@ thinking to confirm that it's right -- either that it implements
 what I meant it to implement, or that what I meant it to implement is entirely
 correct.
 
-[Dr Jacques method]: https://web.archive.org/web/20200213145912/http://mathforum.org/library/drmath/view/65653.html
-[long multipication]: http://en.wikipedia.org/wiki/Long_multiplication
+[Dr Jacques method]: https://web.archive.org/web/20200213145912/https://mathforum.org/library/drmath/view/65653.html
+[long multipication]: https://en.wikipedia.org/wiki/Long_multiplication

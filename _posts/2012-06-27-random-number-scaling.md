@@ -185,7 +185,7 @@ at once, so here you see both options.
 
 [^1]: P.S. Please do not use divide in any real implementation.  `RAND_MAX+1` is almost certainly a power of two.
 
-[Random.org FAQ]: http://random.org/faq
-[Dr Jacques method]: https://web.archive.org/web/20200213145912/http://mathforum.org/library/drmath/view/65653.html
-[Bit recycling for scaling random number generators]: http://arxiv.org/pdf/1012.4290.pdf
-[long multipication]: http://en.wikipedia.org/wiki/Long_multiplication
+[Random.org FAQ]: https://random.org/faq
+[Dr Jacques method]: https://web.archive.org/web/20200213145912/https://mathforum.org/library/drmath/view/65653.html
+[Bit recycling for scaling random number generators]: https://arxiv.org/pdf/1012.4290.pdf
+[long multipication]: https://en.wikipedia.org/wiki/Long_multiplication

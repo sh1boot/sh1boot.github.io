@@ -211,7 +211,7 @@ that range too..
 {: style="text-align: right;" }
 
 
-[splitmix64]: http://xorshift.di.unimi.it/splitmix64.c
-[Fast splittable pseudorandom number generators]: http://dx.doi.org/10.1145/2714064.2660195
-[Improving on MurmurHash3's 64-bit Finalizer]: http://zimbry.blogspot.com/2011/09/better-bit-mixing-improving-on.html
+[splitmix64]: https://xorshift.di.unimi.it/splitmix64.c
+[Fast splittable pseudorandom number generators]: https://dx.doi.org/10.1145/2714064.2660195
+[Improving on MurmurHash3's 64-bit Finalizer]: https://zimbry.blogspot.com/2011/09/better-bit-mixing-improving-on.html
 [MurmurHash3]: https://github.com/aappleby/smhasher/wiki/MurmurHash3
