@@ -77,7 +77,7 @@ Here we'll try splitting it into eight.  Like so:
                       :3 2 1 0 7 6 5 4
                       :7 6 5 4 3 2 1 0" %}
     {% assign pass = "0 1 2 3 4 5 6 7" | split: " " %} {% for m in pass %}
-      <g class="block{{m}}">
+      <g class="blockgroup{{m}}">
       {% assign rows = table | split: ":" %} {% for row in rows %}
       {% assign cells = row | split: " " %} {% for cell in cells %} {% if cell == m %}
       <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />
@@ -121,7 +121,7 @@ at all!
                       :6 7 0 1 2 3 4 5
                       :7 0 1 2 3 4 5 6" %}
     {% assign pass = "0 1 2 3 4 5 6 7" | split: " " %} {% for m in pass %}
-      <g class="block{{m}}">
+      <g class="blockgroup{{m}}">
       {% assign rows = table | split: ":" %} {% for row in rows %}
       {% assign cells = row | split: " " %} {% for cell in cells %} {% if cell == m %}
       <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />
@@ -145,7 +145,7 @@ looks pretty dire, too:
                       :6 7 4 5 2 3 0 1
                       :7 6 5 4 3 2 1 0" %}
     {% assign pass = "0 1 2 3 4 5 6 7" | split: " " %} {% for m in pass %}
-      <g class="block{{m}}">
+      <g class="blockgroup{{m}}">
       {% assign rows = table | split: ":" %} {% for row in rows %}
       {% assign cells = row | split: " " %} {% for cell in cells %} {% if cell == m %}
       <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />
@@ -170,7 +170,7 @@ just to see what it looked like:
                       :5 3 4 8 6 7 2 0 1 
                       :8 6 7 2 0 1 5 3 4" %}
     {% assign pass = "0 1 2 3 4 5 6 7 8" | split: " " %} {% for m in pass %}
-      <g class="block{{m}}">
+      <g class="blockgroup{{m}}">
       {% assign rows = table | split: ":" %} {% for row in rows %}
       {% assign cells = row | split: " " %} {% for cell in cells %} {% if cell == m %}
       <use href="#mem{{cell}}"  x="{{forloop.index0 | times: 40 | plus: 40}}" y="{{forloop.parentloop.index0 | times: 40 | plus: 40}}" />

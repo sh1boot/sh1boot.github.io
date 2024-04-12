@@ -20,7 +20,8 @@
   {% for n in (0..20) %} :root { --unique-color{{n}}:hsl({{n | times: 222.5 | modulo: 360}},{{n | times: 0.20 | floor | times: -20 | plus: 100}}%,{{n | times: -1 | plus: 60}}%); }
   {% endfor %}
   {% for n in (0..20) %} .block{{n}} { fill:var(--unique-color{{n}}); fill-opacity: 0.125; }
-  .block{{n}}:hover { fill:var(--unique-color{{n}}); fill-opacity: 0.50;
+  .blockgroup{{n}} { fill:var(--unique-color{{n}}); fill-opacity: 0.125; }
+  .blockgroup{{n}}:hover { fill:var(--unique-color{{n}}); fill-opacity: 0.50;
     font-weight: bold;
     font-size: larger;
     -webkit-animation-name: highlightbg;

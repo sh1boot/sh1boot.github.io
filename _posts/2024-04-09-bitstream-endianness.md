@@ -40,10 +40,14 @@ little-endian bit string:
       {%- for cell in cells -%}
         <g id="{{cell}}" class="block{{forloop.parentloop.index0}}">
           <rect x="0" y="24" width="22" height="24" />
-          <text x="11" y="37">{{cell}}</text>
+          <text x="11" y="36"><tspan>{{cell | split: "" | first}}<tspan font-size="60%" dy="10%">{{cell | split: "" | last}}</tspan>
+          </tspan></text>
         </g>
       {%- endfor -%}
     {%- endfor -%}
+    <g id="_">
+      <rect x="0" y="24" width="22" height="24" stroke-opacity="20%" />
+    </g>
   </defs>
 
   <use href="#byte" x="0" y="0" />
@@ -86,7 +90,7 @@ on the left:
   {%- endfor -%}
 
   <use href="#byte_le" x="400" y="0" />
-  {%- assign bits = "c6 c7 c8" | split: " " -%}
+  {%- assign bits = "c6 c7 c8 _ _ _ _ _ " | split: " " -%}
   {%- for bit in bits -%}
     <use href="#{{bit}}" x="{{forloop.index0 | times: 22 | plus: 400}}" y="0" />
   {%- endfor -%}
@@ -136,7 +140,7 @@ Here's the same data packed as a big-endian bit stream:
   {%- endfor -%}
 
   <use href="#byte" x="400" y="0" />
-  {%- assign bits = "c2 c1 c0" | split: " " -%}
+  {%- assign bits = "c2 c1 c0 _ _ _ _ _ " | split: " " -%}
   {%- for bit in bits -%}
     <use href="#{{bit}}" x="{{forloop.index0 | times: 22 | plus: 400}}" y="0" />
   {%- endfor -%}
