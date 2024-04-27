@@ -201,11 +201,68 @@ TODO
 
 ### Address generation ###
 
-TODO
+Given `N` banks (assumed to be a power of two), mapped into a grid `M` wide
+(assumed to be a multiple of `N`) we might map the coordinates and banks this
+way:
+
+```c
+inline uint32_t bitrev(uint32_t x, int N) {
+  return __builtin_bitreverse32(x) >> (32 - N);
+}
+
+inline uint8_t bank(int x, int y) {
+  return bitrev(x % N, N) ^ (y % N);
+}
+
+inline size_t addr(int x, int y) {
+  return (y + (x / N)) * M + (x / N);
+}
+```
+
+However, for a SIMD-like access we do not want to calculate `N` different
+addresses and figure out which banks they go to after the fact.
+
+That is to say, this will not do (it will not synthesise nicely):
+
+```c
+void addr(size_t (&addrs)[N], int x, int y, int width) {
+  for (int i = 0; i * width < N; ++i) {
+    for (int j = 0; j < width; ++j) {
+      int xx = x + j, yy = y + i;
+      addrs[bank(xx, yy)] = addr(xx, yy);
+    }
+  }
+}
+```
+
+Rather, we want to calculate directly the appropriate address:
+```c
+void addr(size_t (&addrs)[N], int x, int y, int width) {
+  for (int i = 0; i < N; ++i) {
+    addrs[i] = /* TODO: something here */;
+  }
+}
+```
 
 ### Linearising/rasterising the data ###
 
-TODO
+Given answers from every bank for a vector access, we can calculate which input
+belongs in which SIMD lane like so:
+```c++
+template <typename T>
+void unswizzle(T (&output)[N], T const (&input)[N], int x, int y, int width) {
+  for (int i = 0; (i * width) < N; ++i) {
+    for (int j = 0; j < width; ++j) {
+      int xx = x + j, yy = y + i;
+      output[N] = input[bank(xx, yy)];
+    }
+  }
+}
+```
+This can be simplifed, but we can leave that to the tools to figure out.
+
+This pre-supposes conventional raster order is what's desired.  That's not
+necessarily a given, but the above function can be adapted as needed.
 
 ### Applications ###
 
