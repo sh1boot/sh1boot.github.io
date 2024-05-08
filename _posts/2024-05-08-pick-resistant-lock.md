@@ -1,13 +1,18 @@
 ---
 layout: post
 title:  "A pick-resistant lock design"
-categories: lockpicking, locksport
+categories: lockpicking, locksport, non-circular gears
 draft: true
 ---
 
 There are a fair few attempts at "unpickable" locks out there, and overall I
 don't think I have a great deal to add to the range of pre-existing methods.
 But a couple of years ago I thought I might have a go at my own design anyway.
+
+I'll point out up front that there's not a lot of practical use in making locks
+harder to pick than they already are.  It's only people who need to hide the
+fact that they were there who are going to faff about with picks when they
+could just break something to get in.  That limits the market somewhat.
 
 A [pin tumbler lock][] is a plug with a slot cut along it for the key to enter
 and displace pins which extend into it from outside.  These pins normally
@@ -59,6 +64,12 @@ motion on the second plug, and then this begins to accelerate to make up the
 difference once the first plug is sufficiently off-axis that it can't be picked
 any longer.
 
+I'm not sure how effective this would be against [bumping][].  It changes the
+dynamics somewhat, but not necessarily in a way that would prevent it.  I tried
+bumping a prototype and it caused the thin master pins to turn around and jam
+the lock, and I had to give things a jolly good wiggle to shake it all back
+into place, so maybe that's sufficient.
+
 In my design the pins and springs are standard parts, and the plugs are nearly
 standard parts but modified.  I filled the top one with resin and re-drilled
 the holes, and then stuck some gears around the back.  But gears with a radius
@@ -67,6 +78,10 @@ have to be re-designed a bit.  I had been waiting for the release of [Gearify
 2.0][] in order to be able to design those, but since it was released I haven't
 had the free time to actually get started with it.
 
+So far I haven't been able to fabricate anything durable enough to send to an
+expert for their feedback.  I'm sure the concept _can_ work but my first
+implementation will likely have flaws which result in embarrassing outcomes.
+
 Here's a prototype in action:
 <iframe width="100%" style="aspect-ratio:16/9" src="http://www.youtube.com/embed/6Er67SCnPC8">video goes here</iframe>
 
@@ -74,6 +89,7 @@ Also, I'm putting left-handed digital calipers on my Christmas list.  Just so
 everyone knows.
 
 [pin tumbler lock]: <https://en.wikipedia.org/wiki/Pin_tumbler_lock#Cylinder_locks>
+[bumping]: <https://en.wikipedia.org/wiki/Lock_bumping>
 [Gearify 2.0]: <https://www.gearify.io/>
 
 [Tinkercad design]: <https://www.tinkercad.com/things/9gywpW8cuNV-unpickable-lock>
