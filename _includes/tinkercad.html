@@ -1,0 +1,10 @@
+{%if image != blank%}
+  {%capture thumbnail-%}{{include.image}}{%-endcapture%}
+{%else%}
+  {%capture thumbnail-%}https://csg.tinkercad.com/things/{{include.id}}/t300-15.png{%-endcapture%}
+{%endif%}
+<iframe width="100%" style="aspect-ratio:16/9" srcdoc="
+    <a href='https://www.tinkercad.com/embed/{{include.id}}?editbtn=1'>
+      <img src='{{thumbnail}}' style='max-width:100%' />
+    </a>
+  " allowfullscreen sandbox="allow-scripts allow-same-origin">TinkerCad embed goes here</iframe>
