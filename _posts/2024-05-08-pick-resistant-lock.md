@@ -46,7 +46,9 @@ of arrangement.  Each pin is split at every step so that it will always turn.
 The second is an inversion of the usual binding test, but it shares the pin
 stack with the first plug.
 
+<iframe width="100%" style="aspect-ratio:4/3" src="https://www.tinkercad.com/embed/9gywpW8cuNV?editbtn=1" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
 [![cutaway dual plug pin tumbler lock](/images/dual-plug-pin-tumbler-lock.png)][Tinkercad design]
+</iframe>
 
 The trick is to allow the first plug to turn until it has captured a specific
 set of pin segments ("master pins"), so they can't be adjusted any longer,
