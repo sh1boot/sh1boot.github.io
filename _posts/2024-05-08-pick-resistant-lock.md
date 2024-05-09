@@ -46,9 +46,8 @@ of arrangement.  Each pin is split at every step so that it will always turn.
 The second is an inversion of the usual binding test, but it shares the pin
 stack with the first plug.
 
-<iframe width="100%" style="aspect-ratio:4/3" src="https://www.tinkercad.com/embed/9gywpW8cuNV?editbtn=1" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
-[![cutaway dual plug pin tumbler lock](/images/dual-plug-pin-tumbler-lock.png)][Tinkercad design]
-</iframe>
+<iframe name="dual-plug" width="100%" style="aspect-ratio:4/3" src="/images/dual-plug-pin-tumbler-lock.png" allowfullscreen sandbox>image goes here</iframe>
+<a href="https://www.tinkercad.com/embed/9gywpW8cuNV?editbtn=1" target="dual-plug">(interactive)</a>
 
 The trick is to allow the first plug to turn until it has captured a specific
 set of pin segments ("master pins"), so they can't be adjusted any longer,
@@ -85,7 +84,7 @@ expert for their feedback.  I'm sure the concept _can_ work but my first
 implementation will likely have flaws which result in embarrassing outcomes.
 
 Here's a prototype in action:
-<iframe width="100%" style="aspect-ratio:16/9" src="http://www.youtube.com/embed/6Er67SCnPC8">video goes here</iframe>
+<iframe width="100%" style="aspect-ratio:16/9" src="http://www.youtube.com/embed/6Er67SCnPC8" allowfullscreen sandbox>video goes here</iframe>
 
 Also, I'm putting left-handed digital calipers on my Christmas list.  Just so
 everyone knows.
