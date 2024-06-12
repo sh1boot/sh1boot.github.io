@@ -1,3 +1,9 @@
+---
+layout: post
+title:  Random number scaling
+description: Digging in to the problem of scaling random numbers over a finite range without biasing certain results over others.
+categories: random, number-theory
+---
 I've been doing some messing around with random number generation at
 work, and this inspired me to revisit something which has troubled me
 since my teenage years: Perfectly unbiased random numbers over a range

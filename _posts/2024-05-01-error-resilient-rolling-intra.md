@@ -1,7 +1,8 @@
 ---
 layout: post
-title:  "Error resilience in rolling-intra"
-categories: video coding, error correction, wip
+title:  Error resilience in rolling-intra
+description: Poking around with packet loss mitigation while trying to use rolling intra streams.
+categories: video coding, error-correction, wip
 ---
 
 Rolling intra is where a portion of each coded video frame is encoded without

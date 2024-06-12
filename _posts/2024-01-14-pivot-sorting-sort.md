@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Pivot-sorting quick sort"
-categories: quick sort, pivot, sorting, wip
+title:  Pivot-sorting quick sort
+description: An approach to good pivot selection which reveals other fast-path cases as it goes.
+categories: quick-sort, pivot, sorting
+svg: true
 ---
-{% include svg.html %}
-
 Regarding those quick-sort variants which do things like median-of-k pivot
 selection before subdividing...
 

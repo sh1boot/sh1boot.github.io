@@ -1,6 +1,7 @@
 ---
 layout: post
-title:  "Embedded web content without all that JavaScript cruft"
+title:  Embedded web content without all that JavaScript cruft
+description: A bit of Jekyll hacking to stop other sites' JavaScript running rampant on my blog without the user being forewarned.
 categories: privacy, web, liquid, jekyll, wtf-am-i-doing
 ---
 

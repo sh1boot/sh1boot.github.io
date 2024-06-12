@@ -1,11 +1,10 @@
 ---
 layout: post
-title:  "A pick-resistant lock design"
-description: "A simple design for a pick-resistant pin tumbler lock using non-circular gears."
+title:  A pick-resistant lock design
+description: A simple design for a pick-resistant pin tumbler lock using non-circular gears.
 categories: lockpicking, locksport, non-circular gears
 draft: true
 ---
-
 There are a fair few attempts at "unpickable" locks out there, and overall I
 don't think I have a great deal to add to the range of pre-existing methods.
 But a couple of years ago I thought I might have a go at my own design anyway.

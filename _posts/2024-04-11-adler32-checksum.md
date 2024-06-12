@@ -3,9 +3,8 @@ format: post
 title: Optimising Adler-32 checksum
 description: A rundown of the steps I've taken to improve SIMD throughout of Adler-32 checksum calculation by constraining authentic range.
 categories: checksum
+mathjax: true
 ---
-{% include mathjax.html %}
-
 The [Adler-32][] checksum consists of two 16-bit sums.  One is the sum of all
 the bytes in the data, plus one, and the other is the sum of all those
 intermediate sums, which works out to be the same as the sum of all the bytes

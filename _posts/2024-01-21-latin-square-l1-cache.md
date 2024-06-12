@@ -1,12 +1,11 @@
 ---
 layout: post
-title:  "A Latin-Square-based L1 cache layout"
-description: "Using a solution to the Latin Squares problem as a memory slicing scheme to address convenient access to 2D memory patterns."
+title:  A Latin-Square-based L1 cache layout
+description: Using a solution to the Latin Squares problem as a memory slicing scheme to address convenient access to 2D memory patterns.
 categories: cache, memory, hardware design
+svg: true
 draft: true
 ---
-{% include svg.html %}
-
 If I were going to build some kind of fantasy machine I would not fuss about
 making it high-performance.  Mine would just be a mash-up of random things I
 found interesting at some point.

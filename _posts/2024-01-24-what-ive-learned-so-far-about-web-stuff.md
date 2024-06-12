@@ -1,10 +1,9 @@
 ---
 layout: post
-title:  "What I've learned so far about CSS, SVG, Liquid, and Jekyll"
-description: "Embedded diagrams in Jekyll and GitHub Pages from the point of view of someone who wants to keep web technologies at arm's length."
+title:  What I've learned so far about CSS, SVG, Liquid, and Jekyll
+description: Embedded diagrams in Jekyll and GitHub Pages from the point of view of someone who wants to keep web technologies at arm's length.
 categories: web, css, svg, liquid, jekyll, wtf-am-i-doing
 ---
-
 From the point of view of knowing almost nothing about how any web techology
 works, here's a bunch of stuff I had to pick up to draw a picture in a
 GitHub-powered blog.

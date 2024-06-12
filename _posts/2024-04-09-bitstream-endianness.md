@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "On the endianness of bitstreams"
+title:  On the endianness of bitstreams
+description: Contrasting the benefits of big-endian and little-endian packing in bitstreams and observing that one consequence shows up in Zstandard.
 categories: bitstream, endian, bit parsing, zstd, zlib, deflate
+svg: true
 ---
-{% include svg.html %}
-
 Where I'm from conventional wisdom has always been that while it's an objective
 fact that little endian is the one-true-and-correct endian, bit-streams should
 always be packed as big-endian data.

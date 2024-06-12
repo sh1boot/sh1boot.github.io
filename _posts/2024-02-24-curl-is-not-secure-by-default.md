@@ -65,7 +65,7 @@ Some actions you might consider:
   explicit http:// links)
 * configuring `~/.curlrc` to disable all unencrypted protocols (this might
   cause problems, because HTTP is still useful when used responsibly)
-* configuring your browser to use HTTPS by default
+* configuring your browser to use [HTTPS by default][HTTPS Everywhere]
 * eliminating all unnecessary http:// links from your bookmarks, documents,
   websites, etc..
 * never copy-pasting unsafe command lines into your terminal
