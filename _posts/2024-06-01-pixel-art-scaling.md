@@ -135,7 +135,7 @@ pixel is more interpolation work so that can only be taken so far.
 
 Another challenge of larger interpolation kernels is that to properly smooth
 the diagonals without bumpy edges they can't preserve original pixel values at
-the points at the integer offsets, where they don't need interpolation.  When
+the points at the integer offsets (where there shouldn't be any interpolation).  When
 this happens the image can become washed out.
 
 It's possible to compensate for this washing-out by choosing one of the
@@ -144,7 +144,7 @@ corresponding original colour from the unsmoothed source.
 
 Another challenge created by excess smoothing is that the four-colour local
 palette becomes more likely again to jump to another nearby neighbour as soon
-as it becomes available, producing more squared-off corners.
+as it becomes available, producing more squared-off edges where they're not welcome.
 
 A global palette might fix that, too?
 
@@ -153,7 +153,7 @@ A global palette might fix that, too?
 Given a global, but very finite palette we have to accept that there may be
 colours that don't fall directly onto one specific palette entry, and we have
 the problem of how to carry them through to the output.  In a sense that was
-our original problem with RGB.  We were simply describing every colour in terms
+the original problem with RGB.  We were simply describing every colour in terms
 of how close it was to a red thing, a blue thing, and a green thing.  And the
 resulting interpolation did not give good results.
 
@@ -173,7 +173,7 @@ colour at the same coordinate.
 Will the above "hashing" effect prevent bleed and surprise discontinuities?  I
 don't know, I'd have to test it to see what happens.
 
-Another approach might be to reconstruct the colour from its proximity to the
+Another approach might be to reconstruct the output colour directly from its proximity to the
 palette entries.  Not merely quantising to the nearest palette entry (because
 this would mean the output could never contain a value outside of the palette),
 but by deducing RGB values according to the proximity to each palette entry.
@@ -184,13 +184,13 @@ it implies decisions which rule out consideration of coplanar coordinates, and
 decisions suck and ignoring data also sucks.
 
 Luckily I found an easy solution.  I'm going to ignore the whole concept for
-now and do something else instead.
+now and go do something else instead.
 
 ### Not a global palette
 
 Another approach which I think might work out, but which does involve
 sacrificing Gaussian separability, is to reduce the palette to the four corners
-_plus_ the four extra corners which are nearest to becoming active, with those
+_plus_ the four extra corners which are nearest to becoming active, with those extras
 being down-weighted as they get further away.  Strictly there's a ninth
 neighbour, diagonally across from the nearest corner, but hopefully that won't
 be needed.
