@@ -97,7 +97,7 @@ spirit of COBOL.
       <g id="box{{n}}">
         <rect x="3" y="3" width="34" height="34" />
         <text x="20" y="20" clip-path="url(#clip34)">
-          {{n}}
+          {{-n-}}
         </text>
       </g>
     {%- endfor -%}
@@ -132,7 +132,7 @@ spirit of COBOL.
       <g id="box{{n}}">
         <rect x="3" y="3" width="34" height="34" />
         <text x="20" y="20" clip-path="url(#clip34)">
-          {{n}}
+          {{-n-}}
         </text>
       </g>
     {%- endfor -%}
@@ -176,19 +176,19 @@ arrays with two different delimiter characters:
 {% raw %}
 ```liquid
 <svg width="100%" height="120" viewbox="0 0 320 120">
-  {% assign table = " 0 1 2 3 4 5 6 7
+  {%- assign table = " 0 1 2 3 4 5 6 7
                     : 1 2 3 4 5 6 7 0
                     : 2 3 4 5 6 7 0 1" %}
-  {% assign rows = table | split: ":" %}
-  {% for row in rows %}
-    {% assign cells = row | split: " " %}
-    {% for cell in cells %}
+  {%- assign rows = table | split: ":" %}
+  {%- for row in rows %}
+    {%- assign cells = row | split: " " %}
+    {%- for cell in cells %}
       <use href="#box{{cell}}"
           x="{{forloop.index0 | times: 40 | plus: 2}}"
           y="{{forloop.parentloop.index0 | times: 40 | plus: 2}}"
       />
-    {% endfor %}
-  {% endfor %}
+    {%- endfor %}
+  {%- endfor %}
 </svg>
 ```
 {% endraw %}
@@ -206,44 +206,44 @@ distance between colours:
 ```liquid
 <style>
   svg {
-    {% for n in (0..20) %}
-      --unique-color{{n}}: hsl({{n | times: 222.5 | modulo: 360}},
-                               {{n | times: -3 | plus: 100}}%,
-                               {{n | times: -2 | plus: 50}}%);
-    {% endfor %}
+    {%- for n in (0..20) %}
+      --unique-color{{n}}: hsl({{-n | times: 222.5 | modulo: 360}},
+                               {{-n | times: -3 | plus: 100}}%,
+                               {{-n | times: -2 | plus: 50}}%);
+    {%- endfor %}
   }
-  {% for n in (0..20) %}
+  {%- for n in (0..20) %}
   .tint{{n}} {
     fill: var(--unique-color{{n}});
     fill-opacity: 0.125;
   }
-  {% endfor %}
+  {%- endfor %}
 </style>
 ```
 {% endraw %}
 <style>
   svg {
-    {% for n in (0..18) %}
-      --unique-color{{n}}: hsl({{n | times: 222.5 | modulo: 360}},
-                               {{n | times: -3 | plus: 100}}%,
-                               {{n | times: -2 | plus: 50}}%);
-    {% endfor %}
+    {%- for n in (0..18) %}
+      --unique-color{{n}}: hsl({{-n | times: 222.5 | modulo: 360}},
+                               {{-n | times: -3 | plus: 100}}%,
+                               {{-n | times: -2 | plus: 50}}%);
+    {%- endfor %}
   }
-  {% for n in (0..18) %}
+  {%- for n in (0..18) %}
   .tint{{n}} {
     fill: var(--unique-color{{n}});
     fill-opacity: 0.125;
   }
-  {% endfor %}
+  {%- endfor %}
 </style>
 
 {% raw %}
 ```liquid
 <svg [...] >
   <defs>
-    {% for n in (0..7) %}
+    {%- for n in (0..7) %}
       <g id="cbox{{n}}" class="tint{{n}}"><use href="#box{{n}}" /></g>
-    {% endfor %}
+    {%- endfor %}
   </defs>
   [...]
 </svg>
@@ -251,23 +251,23 @@ distance between colours:
 {% endraw %}
 <svg width="100%" height="120" viewbox="0 0 320 120">
   <defs>
-    {% for n in (0..7) %}
+    {%- for n in (0..7) %}
       <g id="cbox{{n}}" class="tint{{n}}"><use href="#box{{n}}" /></g>
-    {% endfor %}
+    {%- endfor %}
   </defs>
-  {% assign table = " 0 1 2 3 4 5 6 7
+  {%- assign table = " 0 1 2 3 4 5 6 7
                     : 1 2 3 4 5 6 7 0
                     : 2 3 4 5 6 7 0 1" %}
-  {% assign rows = table | split: ":" %}
-  {% for row in rows %}
-    {% assign cells = row | split: " " %}
-    {% for cell in cells %}
+  {%- assign rows = table | split: ":" %}
+  {%- for row in rows %}
+    {%- assign cells = row | split: " " %}
+    {%- for cell in cells %}
       <use href="#cbox{{cell}}"
           x="{{forloop.index0 | times: 40 | plus: 2}}"
           y="{{forloop.parentloop.index0 | times: 40 | plus: 2}}"
       />
-    {% endfor %}
-  {% endfor %}
+    {%- endfor %}
+  {%- endfor %}
 </svg>
 There.  A touch of synaesthesia to emphasise the presence of diagonal stripes
 if the digits didn't already do it for you.
@@ -284,7 +284,7 @@ even be animated without JavaScript.
     50% {fill-opacity: 0.0; }
     100% {fill-opacity: 0.5; }
   }
-  {% for n in (0..20) %}
+  {%- for n in (0..20) %}
   .tint{{n}}:hover {
     fill:var(--unique-color{{n}});
     fill-opacity: 0.50;
@@ -294,7 +294,7 @@ even be animated without JavaScript.
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-duration: 1.5s;
   }
-  {% endfor %}
+  {%- endfor %}
 </style>
 ```
 {% endraw %}
@@ -304,7 +304,7 @@ even be animated without JavaScript.
     50% {fill-opacity: 0.0; }
     100% {fill-opacity: 0.5; }
   }
-  {% for n in (0..20) %}
+  {%- for n in (0..20) %}
   .tint{{n}}:hover {
     fill:var(--unique-color{{n}});
     fill-opacity: 0.50;
@@ -314,7 +314,7 @@ even be animated without JavaScript.
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-duration: 1.5s;
   }
-  {% endfor %}
+  {%- endfor %}
 </style>
 
 If you apply the class to a whole `<g>` group, then (at least as far as I've
@@ -322,78 +322,78 @@ tested) everything inside the group reacts to the `:hover` style in unison:
 {% raw %}
 ```liquid
 <svg width="100%" height="640" viewbox="0 0 640 640">
-  {% assign table = " 0  1  2  3  4  5  6  7   8  9 10 11 12 13 14 15
-                    : 8  9 10 11 12 13 14 15  0  1  2  3  4  5  6  7
-                    : 4  5  6  7  0  1  2  3  12 13 14 15  8  9 10 11
-                    :12 13 14 15  8  9 10 11  4  5  6  7  0  1  2  3
-                    : 2  3  0  1  6  7  4  5  10 11  8  9 14 15 12 13
-                    :10 11  8  9 14 15 12 13   2  3  0  1  6  7  4  5
-                    : 6  7  4  5  2  3  0  1  14 15 12 13 10 11  8  9
-                    :14 15 12 13 10 11  8  9   6  7  4  5  2  3  0  1
-                    : 1  0  3  2  5  4  7  6   9  8 11 12 13 12 15 14
-                    : 9  8 11 12 13 12 15 14   1  0  3  2  5  4  7  6
-                    : 5  4  7  6  1  0  3  2  13 12 15 14  9  8 11 10
-                    :13 12 15 14  9  8 11 10   5  4  7  6  1  0  3  2
-                    : 3  2  1  0  7  6  5  4  11 10  9  8 15 14 13 12
-                    :11 10  9  8 15 14 13 12   3  2  1  0  7  6  5  4
-                    : 7  6  5  4  3  2  1  0  15 14 13 12 11 10  9  8
-                    :15 14 13 12 11 10  9  8   7  6  5  4  3  2  1  0" %}
-  {% assign pass = "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15" | split: " " %}
-  {% for filter in pass %}
+  {%- assign table = " 0  1  2  3  4  5  6  7   8  9 10 11 12 13 14 15
+                     : 8  9 10 11 12 13 14 15  0  1  2  3  4  5  6  7
+                     : 4  5  6  7  0  1  2  3  12 13 14 15  8  9 10 11
+                     :12 13 14 15  8  9 10 11  4  5  6  7  0  1  2  3
+                     : 2  3  0  1  6  7  4  5  10 11  8  9 14 15 12 13
+                     :10 11  8  9 14 15 12 13   2  3  0  1  6  7  4  5
+                     : 6  7  4  5  2  3  0  1  14 15 12 13 10 11  8  9
+                     :14 15 12 13 10 11  8  9   6  7  4  5  2  3  0  1
+                     : 1  0  3  2  5  4  7  6   9  8 11 12 13 12 15 14
+                     : 9  8 11 12 13 12 15 14   1  0  3  2  5  4  7  6
+                     : 5  4  7  6  1  0  3  2  13 12 15 14  9  8 11 10
+                     :13 12 15 14  9  8 11 10   5  4  7  6  1  0  3  2
+                     : 3  2  1  0  7  6  5  4  11 10  9  8 15 14 13 12
+                     :11 10  9  8 15 14 13 12   3  2  1  0  7  6  5  4
+                     : 7  6  5  4  3  2  1  0  15 14 13 12 11 10  9  8
+                     :15 14 13 12 11 10  9  8   7  6  5  4  3  2  1  0" %}
+  {%- assign pass = "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15" | split: " " %}
+  {%- for filter in pass %}
     <g class="tint{{filter}}">
-      {% assign rows = table | split: ":" %}
-      {% for row in rows %}
-        {% assign cells = row | split: " " %}
-        {% for cell in cells %}
-          {% if cell == filter %}
+      {%- assign rows = table | split: ":" %}
+      {%- for row in rows %}
+        {%- assign cells = row | split: " " %}
+        {%- for cell in cells %}
+          {%- if cell == filter %}
             <use href="#box{{cell}}"
                 x="{{forloop.index0 | times: 40 | plus: 2}}"
                 y="{{forloop.parentloop.index0 | times: 40 | plus: 2}}"
             />
-          {% endif %}
-        {% endfor %}
-      {% endfor %}
+          {%- endif %}
+        {%- endfor %}
+      {%- endfor %}
     </g>
-  {% endfor %}
+  {%- endfor %}
 </svg>
 ```
 {% endraw %}
 
 Enjoy these disco lights by waving your mouse over them:
 <svg width="100%" height="640" viewbox="0 0 640 640">
-  {% assign table = " 0  1  2  3  4  5  6  7   8  9 10 11 12 13 14 15
-                    : 8  9 10 11 12 13 14 15  0  1  2  3  4  5  6  7
-                    : 4  5  6  7  0  1  2  3  12 13 14 15  8  9 10 11
-                    :12 13 14 15  8  9 10 11  4  5  6  7  0  1  2  3
-                    : 2  3  0  1  6  7  4  5  10 11  8  9 14 15 12 13
-                    :10 11  8  9 14 15 12 13   2  3  0  1  6  7  4  5
-                    : 6  7  4  5  2  3  0  1  14 15 12 13 10 11  8  9
-                    :14 15 12 13 10 11  8  9   6  7  4  5  2  3  0  1
-                    : 1  0  3  2  5  4  7  6   9  8 11 12 13 12 15 14
-                    : 9  8 11 12 13 12 15 14   1  0  3  2  5  4  7  6
-                    : 5  4  7  6  1  0  3  2  13 12 15 14  9  8 11 10
-                    :13 12 15 14  9  8 11 10   5  4  7  6  1  0  3  2
-                    : 3  2  1  0  7  6  5  4  11 10  9  8 15 14 13 12
-                    :11 10  9  8 15 14 13 12   3  2  1  0  7  6  5  4
-                    : 7  6  5  4  3  2  1  0  15 14 13 12 11 10  9  8
-                    :15 14 13 12 11 10  9  8   7  6  5  4  3  2  1  0" %}
-  {% assign pass = "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15" | split: " " %}
-  {% for filter in pass %}
+  {%- assign table = " 0  1  2  3  4  5  6  7   8  9 10 11 12 13 14 15
+                     : 8  9 10 11 12 13 14 15  0  1  2  3  4  5  6  7
+                     : 4  5  6  7  0  1  2  3  12 13 14 15  8  9 10 11
+                     :12 13 14 15  8  9 10 11  4  5  6  7  0  1  2  3
+                     : 2  3  0  1  6  7  4  5  10 11  8  9 14 15 12 13
+                     :10 11  8  9 14 15 12 13   2  3  0  1  6  7  4  5
+                     : 6  7  4  5  2  3  0  1  14 15 12 13 10 11  8  9
+                     :14 15 12 13 10 11  8  9   6  7  4  5  2  3  0  1
+                     : 1  0  3  2  5  4  7  6   9  8 11 12 13 12 15 14
+                     : 9  8 11 12 13 12 15 14   1  0  3  2  5  4  7  6
+                     : 5  4  7  6  1  0  3  2  13 12 15 14  9  8 11 10
+                     :13 12 15 14  9  8 11 10   5  4  7  6  1  0  3  2
+                     : 3  2  1  0  7  6  5  4  11 10  9  8 15 14 13 12
+                     :11 10  9  8 15 14 13 12   3  2  1  0  7  6  5  4
+                     : 7  6  5  4  3  2  1  0  15 14 13 12 11 10  9  8
+                     :15 14 13 12 11 10  9  8   7  6  5  4  3  2  1  0" %}
+  {%- assign pass = "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15" | split: " " %}
+  {%- for filter in pass %}
     <g class="tint{{filter}}">
-      {% assign rows = table | split: ":" %}
-      {% for row in rows %}
-        {% assign cells = row | split: " " %}
-        {% for cell in cells %}
-          {% if cell == filter %}
+      {%- assign rows = table | split: ":" %}
+      {%- for row in rows %}
+        {%- assign cells = row | split: " " %}
+        {%- for cell in cells %}
+          {%- if cell == filter -%}
             <use href="#box{{cell}}"
-                x="{{forloop.index0 | times: 40 | plus: 2}}"
-                y="{{forloop.parentloop.index0 | times: 40 | plus: 2}}"
-            />
-          {% endif %}
-        {% endfor %}
-      {% endfor %}
+{{-' '-}}       x="{{forloop.index0 | times: 40 | plus: 2}}"
+{{-' '-}}       y="{{forloop.parentloop.index0 | times: 40 | plus: 2}}"
+{{-' '-}}  />
+          {%- endif %}
+        {%- endfor %}
+      {%- endfor %}
     </g>
-  {% endfor %}
+  {%- endfor %}
 </svg>
 
 One might imagine how this could be useful when creating a graph with too many
