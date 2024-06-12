@@ -20,9 +20,7 @@ prevent the plug from turning unless they're all moved to a position where
 breaks in the pins align with the shear line where the plug fits in the body of
 the lock.
 
-Here's a diagram I'm borrowing from Wikipedia while I get around to drawing my
-own:
-![pin tumbler lock with key](https://upload.wikimedia.org/wikipedia/commons/6/6e/Pin_tumbler_with_key.svg)
+{% include tinkercad.liquid id='hHgAIBifrz6' image='/images/pin-tumbler-lock.png' %}
 
 The basic idea of lock-picking is to apply light torque to the plug and then
 poke around with those pins until they get stuck because you've managed to
