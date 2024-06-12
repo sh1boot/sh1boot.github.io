@@ -4,32 +4,28 @@ title:  Embedded web content without all that JavaScript cruft
 description: A bit of Jekyll hacking to stop other sites' JavaScript running rampant on my blog without the user being forewarned.
 categories: privacy, web, liquid, jekyll, wtf-am-i-doing
 ---
-
 In an earlier blog post I wanted to embed some diagrams.  Really I wanted SVG
 for clean scaling between devices, but I don't have that format as an output
 option.
 
 What I did have, it turned out, was an option to embed an interactive 3D model.
 
-Trouble is I'm not a great fan of JavaScript where it's not essential, and I
-try to make things which work without needing the user to enable it on random
-sites they might not have encountered before.  I don't appreciate how a page
-will load, and be laid out in a particular fashion, but then decide that's not
-what it wanted to look like and start moving everything around.  It's slow,
-flickery, and distracting.
+Trouble is, I'm not a great fan of JavaScript where it's not essential.  I
+would prefer that everything works as well as is feasible with JavaScript
+turned off, rather than expecting people to enable it just so a page makes
+sense.  And I dislike how JavaScript has the effect of making page load times
+longer and more jittery as things change their mind about where on the screen
+they want to be.
 
-I also don't think it's good form to invite a bunch of different sites to come
-and run code on other people's computers when they're just trying to read
-something I aspire to keeping as a static site.  Even though everybody does it.
+I also don't think it's good form to invite a bunch of different domains to
+come and run code on other people's computers when they're just trying to read
+something which is notionally just static text.  That may be how the internet
+is, but I still don't like it!
 
-And I also don't think it's good form to open other people's computers up to
-tracking cookies and all that business just because they did me the courtesy of
-visiting my blog.
-
-I do use [utteranc.es][] and [MathJax][], but the site should still make sense
-if you choose to block those, or neglect to enable them.  I should try harder
-to not enable them by default, I guess, but whatever...  I also use GitHub and
-Cloudflare.
+I do use [utteranc.es][] and [MathJax][], but this site should still make sense
+to anyone who chooses to block those, or neglects to enable them.  I should try
+harder to not enable them by default, I guess, but whatever...  I also use
+GitHub and Cloudflare.
 
 So anyway.  Without resorting to JavaScript, what I've done is to create an
 iframe and embed a bit of inline HTML in it, and that inline HTML is just an
@@ -109,6 +105,7 @@ YouTube blocks embedding of every instance of that video that I can find.
 
 ### Future work
 * do CSS correctly, or whatever
+* a stop button
 * turn off other frames when you activate a new one (ie., don't play five youtube videos at once)
 * automatically populate local preview store while the site is being built? (stealing other sites' assets)
 * controls could be nicer, but I resent being forced to make style decisions I would rather be in the hands of the user, and not me
