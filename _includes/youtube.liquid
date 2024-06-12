@@ -1,7 +1,7 @@
 {%- capture preview -%} https://i3.ytimg.com/vi/{{include.id}}/maxresdefault.jpg {%- endcapture %}
-{%- capture embed -%} http://www.youtube.com/embed/{{include.id}}?autoplay=1 {%- endcapture %}
+{%- capture embed -%} https://www.youtube.com/embed/{{include.id}}?autoplay=1 {%- endcapture %}
 {%- capture direct -%} https://youtu.be/{{include.id}} {%- endcapture %}
 {%- assign sandbox="allow-scripts allow-same-origin" %}
-{%- assign alttext="YouTube video {{include.id}} %}
+{%- assign buttontext="click to play YouTube video" %}
 
-{%- include clickable-embed.liquid preview=preview embed=embed direct=direct sandbox=sandbox alttext=alttext %}
+{%- include clickable-embed.liquid preview=preview embed=embed direct=direct sandbox=sandbox buttontext=buttontext %}

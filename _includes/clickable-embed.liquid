@@ -1,7 +1,14 @@
 {% capture inner -%}
+  <style>
+    * {
+    overflow: clip;
+    margin: 0;
+    background-color: transparent;
+  }
+  </style>
   <div style="position:relative;">
-    <img src="{{include.preview}}" title="click to play" style="max-width:100%;max-height:100%" />
-    <a href="{{include.embed}}" style="
+    <img src="{{include.preview}}" style="max-width:100%;max-height:100%;" />
+    <a href="{{include.embed}}"> <div style="
       position:absolute;
       top:5%;
       left:5%;
@@ -11,17 +18,15 @@
       background-color: buttonface;
       font-family: sans-serif;
       text-decoration: none;"
-    >click to activate</a>
+    >{{include.buttontext}}</div></a>
   </div>
 {%- endcapture %}
 
-<iframe width="100%" style="aspect-ratio:16/9"
-  allowfullscreen
-  frameborder="0" marginwidth="0" marginheight="0" scrolling="no"
-  sandbox="{{include.sandbox}}"
-  srcdoc="{{inner | escape}}"
->
+<iframe width="100%"
+    style="background-color:transparent;aspect-ratio:16/9;border-style:none;"
+    scrolling="no" allowfullscreen
+    sandbox="{{sandbox}}" srcdoc="{{inner | escape}}">
   <a href="{{include.direct}}">
-    <img src="{{include.preview}}" alt="{{include.alttext}}" />
+    <img src="{{include.preview}}" />
   </a>
 </iframe>
