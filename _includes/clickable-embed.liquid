@@ -11,15 +11,8 @@
       {%- assign file = site.static_files | where: "path", filename | first %}
       {% if file.path -%}{% break %}{% endif %}
     {%- endfor %}
-    {{file.path}}{% unless file.path -%}
-      {{include.preview_default}}
-    {%- endunless %}
+    {{file.path | default: include.preview_default }}
   {%- endunless %}
-{%- endcapture %}
-{%- capture aspect -%}
-  {{include.aspect}}{% unless include.aspect -%}
-    16/9
-  {%- endunless -%}
 {%- endcapture %}
 
 {%- if page.id != clickable_embed_pageid -%}
@@ -70,7 +63,7 @@
 {%- endcapture %}
 
 <iframe class="click-embed" id="{{frameid}}" name="{{frameid}}"
-    style="aspect-ratio:{{aspect}};"
+    style="aspect-ratio:{{include.aspect | default: '16/9'}};"
     scrolling="no" allowfullscreen
     sandbox="{{sandbox}}" srcdoc="{{inner | escape}}">
   <a href="{{include.direct}}">
