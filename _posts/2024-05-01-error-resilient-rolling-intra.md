@@ -36,6 +36,11 @@ bottom.  These perturbations are too small to provide any coding advantage but
 they _do_ undermine the decoder's ability to handle things in arbitrary order.
 It's a recurring design flaw that nobody seems to care about fixing.
 
+The reality is that the changes are usually too small to propagate anywhere
+near that far, but it's hard (maybe impossible) to _prove_ that they won't, so
+you're still stuck with this theoeretical causality problem restricting your
+ability to reorder.
+
 Let's just ignore that and hope it happens rarely and washes out before anybody
 notices, because if you're not using a codec that has fixed it then the best
 you can do is turn off the loop filter (which creates its own problems).
