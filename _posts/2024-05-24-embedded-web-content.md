@@ -50,7 +50,7 @@ were other problems, too.  So many "why can't I just do this the easy way like
 in the documentation?" moments.
 {%endraw%}
 
-But anyway, here's the template in all its gore:
+But anyway, here's the template in all its bumbling glory:
 
 <https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/clickable-embed.liquid>
 
@@ -61,13 +61,21 @@ slow everything down with more JavaScript and a heap of noisy back-and-forth.
 
 Also, since the user has already clicked the go button in order to load the
 embedded content, it's better to use embed links which auto-start that content.
-This seems to work for YouTube, but no such luck with Scratch so far.
+This seems to work for YouTube, but no such luck with [Scratch][] so far.
 
-Here's an example ShaderToy [embed](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/shadertoy.liquid):
+Here's what's then needed to embed a [Shadertoy][] shader:
+{%- raw %}
+```liquid
+{% include shadertoy.liquid id='clB3RK' %}
+```
+{% endraw %}
+(using: [shadertoy.liquid](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/shadertoy.liquid))
+
+And the result looks like this:
 {% include shadertoy.liquid id='clB3RK' %}
 The default here is to get the preview image from that site.  That's probably fine, right?
 
-A Scratch [embed](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/scratch.liquid):
+An embedded Scratch app:
 {% include scratch.liquid id='782596588' %}
 This frustrates me a little because the embed doesn't contain a link to the
 project, and also because I haven't worked out how to get autoplay working.
@@ -78,13 +86,13 @@ but it's mostly vector graphics so it scales nicely once it's loaded.
 Except for things drawn with the pen extension.  Those stay at 480x360 and get
 ugly scaling.
 
-An example TinkerCad [embed](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/tinkercad.liquid):
+Something from [Tinkercad][]:
 {% include tinkercad.liquid id='hHgAIBifrz6' image='/images/pin-tumbler-lock.png' %}
-TinkerCad embeds don't provide an easy-to-find preview image, so I've had to
+Tinkercad embeds don't provide an easy-to-find preview image, so I've had to
 make my own and store them locally.  Which is fine because I should really
 store all previews locally anyway.
 
-And, of course, YouTube [embed](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/youtube.liquid):
+And, of course, YouTube ([source](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/youtube.liquid)):
 {% include youtube.liquid id='MTIwzKI44Es' %}
 Gets the preview from YouTube by default.  This turns out badly for old videos
 or 4:3 videos or something.  Note that the use of the `youtube-nocookie.com`
@@ -104,3 +112,6 @@ YouTube blocks embedding of every instance of that video that I can find.
 
 [utteranc.es]: <https://utteranc.es/>
 [MathJax]: <https://www.mathjax.org/>
+[Shadertoy]: <https://www.shadertoy.com/>
+[Tinkercad]: <https://www.tinkercad.com/>
+[Scratch]: <https://scratch.mit.edu/>
