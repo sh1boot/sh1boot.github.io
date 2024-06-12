@@ -76,40 +76,10 @@ result which can cause normally-predictable results to become noisy where the
 discontinuity appears (eg., when an SDF value jumps during the transition from
 one letter to another).
 
-#### odd/even neighbour interpolation
-TODO: I should probably cut this out and write a separate post about it with
-better diagrams.
-
+#### neighbourhood interpolation order
 Another, more regular discontinuity is when the set of nearest pixels changes.
-
-```
-   | 0 | 1 | 2 | 3 | …
-   +---+---+---+---+---
- 0 | A | B | C | D |
-   +---+---+---+---+---
- 1 | W | X | Y | Z |
-   +---+---+---+---+---
- ⋮ |   |   |   |   |   
-```
-
-In the rectangle defined by A, B, W, and X those are the four neighbours under
-consideration, but moving a little to the right the list changes to B, C, X, and
-Y.
-
-B and X are still in the list, but in a naive implementation they move to new
-positions in that list, and so each palette entry sees a spike in its
-gradient because they all change even though only two new values have been added.
-
-Consider that when crossing the B-X edge we generally expect the working
-value to be close to B or X, and not so close to A or W or C or Y.  This means
-that B and X are our priority for avoiding discontinuities, and that
-changes in A, W, C, and Y shouldn't (in principle) affect the results.
-
-So to stabilise this we can manage the palette entries as odd and even coordinates,
-rather than left and right or above and below coordinates.  B and X will always
-have odd horizontal addresses and land in the same palette positions before and
-after the transition, and A, W, C, and Y will always be even and will replace
-each other as the output coordinate transits the B-X edge.
+I give a [mitigation for this](/texture-neighbourhood-sampling) in another
+post.
 
 ### Looking at blurrier interpolation ("inblurpolation"?)
 After learning about SDF and its conceptual overlap with what I had already

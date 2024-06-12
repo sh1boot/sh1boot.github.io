@@ -1,0 +1,155 @@
+---
+layout: post
+title:  Neighbourhood sampling order during texture filtering
+description: A workaround to avoid glitches when working with derivative functions around texture interpolation logic.
+categories: glsl, hacks
+svg: true
+---
+During my tinkering with [pixel-art scaling](/pixel-art-scaling) I found a
+source of noise which comes up when trying to use the derivative operations in
+shaders.  It's somewhat my own fault for doing thresholding excessively, but
+still...
+
+When applying a window function to a shader (here I'll use linear interpolation
+for simplicity) it might be reasonable to do something like this:
+```glsl
+ivec2 uv_i = ivec2(floor(uv));
+vec2 weight = uv - vec2(uv_i);
+
+vec4 a = texelFetch(s, uv_i + ivec2(0,0)), b = texelFetch(s, uv_i + ivec2(1,0)),
+     c = texelFetch(s, uv_i + ivec2(0,1)), d = texelFetch(s, uv_i + ivec2(1,1));
+return mix(mix(a, b, weight.x), mix(c, d, weight.x), weight.y);
+```
+
+What I found is that for some uses of those variables it can be problematic if
+they're not smooth functions along the axes of interpolation.  Something that
+especially stands out when the source data is low-resolution pixel art.
+
+Imagine you're sampling along a line spanning from pixels M to R in the example
+below.  Ignore the Y dimension for now.  You'll see `a`, `b`, and `weight` take
+step changes every time an integer boundary is crossed:
+<svg viewbox="0 0 640 340">
+<defs>
+  {%- assign letters = "mnopqrst" | split: '' -%}
+  <g id="pixel"><circle r="12"/></g>
+  {%- for n in (0..7) %}
+  <g id="pixlbl_{{n}}" class="block{{n}}"><text font-variant="small-caps">{{letters[n]}}</text></g>
+  <g id="pixel_{{n}}" class="block{{n}}"><use href="#pixel" /><use href="#pixlbl_{{n}}" /></g>
+  {%- endfor %}
+
+  <g id="narrow"><rect x="0" y="-10" width="50" height="20" /></g>
+  <g id="wide"><rect x="0" y="-10" width="100" height="20" /></g>
+  <g id="down_1x">
+    <polygon points="0,10 0,-10 50,10" stroke="none" />
+    <path d="M0,-10 l50,20" /></g>
+  <g id="up_1x">
+    <polygon points="0,10 50,-10 50,10" stroke="none" />
+    <path d="M0,10 l50,-20" /></g>
+
+  {%- for n in (0..7) %}
+  <g id="narrow{{n}}" class="block{{n}}"><use href="#narrow" /><use href="#pixlbl_{{n}}" x="25" /></g>
+  <g id="wide{{n}}" class="block{{n}}"><use href="#wide" /><use href="#pixlbl_{{n}}" x="50" /></g>
+  {%- endfor %}
+</defs>
+  <g id="illustration">
+  <g stroke-width="0.5">
+  {%- for x in (0..7) %}
+  <path d="M{{x | times: 50 | plus: 150}},{{25 | minus: 12}} v-13" />
+  {%- endfor %}
+  {%- for y in (0..3) %}
+  <path d="M{{150 | minus: 12}},{{y | times: 50 | plus: 25}} h-13" />
+  {%- for x in (0..7) %}
+  <path d="M{{x | times: 50 | plus: 150 | plus: 12}},{{y | times: 50 | plus: 25}} h{%if x < 7%}26{%else%}13{%endif%}"
+  {%- if y == 1 and 0 < x and x < 6 %} stroke-width="3" {%-endif-%}
+ />
+  <path d="M{{x | times: 50 | plus: 150}},{{y | times: 50 | plus: 25 | plus: 12}} v{%if y < 3%}26{%else%}13{%endif%}" />
+  {%- unless y == 1 and 0 < x and x < 7 %}
+  <use href="#pixel" x="{{x | times: 50 | plus: 150}}" y="{{y | times: 50 | plus: 25}}" />
+  {%- endunless %}
+  {%- endfor %} {%- endfor %}
+  </g>
+  {%- for n in (0..5) %}
+  <use href="#pixel_{{n}}" x="{{n | times: 50 | plus: 200}}" y="75" />
+  {%- endfor %}
+  <use href="#pixel_grid" />
+  <text x="120" y="100" style="text-anchor:end;">texture:</text>
+  <g font-family="monospace">
+  <text x="120" y="230" style="text-anchor:end;">a:</text>
+  <text x="120" y="260" style="text-anchor:end;">1-weight.x:</text>
+  <text x="120" y="290" style="text-anchor:end;">b:</text>
+  <text x="120" y="320" style="text-anchor:end;">weight.x:</text>
+  </g>
+</g>
+  {%- for n in (0..5) %}
+  <use href="#narrow{{n}}" x="{{n | times: 50 | plus: 200}}" y="230" />
+  <use href="#down_1x" x="{{n | times: 50 | plus: 200}}" y="260" class="block{{n}}" />
+  <use href="#narrow{{n}}" x="{{n | times: 50 | plus: 150}}" y="290" />
+  <use href="#up_1x" x="{{n | times: 50 | plus: 150}}" y="320" class="block{{n}}" />
+  {%- endfor %}
+</svg>
+
+That's usually OK, unless you do anything that involves derivatives or, I
+guess, maybe if you accidentally leave mipmaps switched on.
+
+Here's an workaround I came up with:
+
+```glsl
+ivec2 uv_i = ivec4((ivec2(floor(uv)) + 1) & -2, ivec2(floor(uv)) | 1);
+vec2 weight = abs(uv - vec2(uv_i.xy));
+
+vec4 a = texelFetch(s, uv_i.xy), b = texelFetch(s, uv_i.zy),
+     c = texelFetch(s, uv_i.xw), d = texelFetch(s, uv_i.zw);
+return mix(mix(a, b, weight.x), mix(c, d, weight.x), weight.y);
+```
+
+This rearranges the offset coordinates so that `a` always gets a pixel from an
+even column and even row index, `d` always gets a pixel from an odd row and odd
+column, etc..
+
+Consequently, variables change like so:
+
+<svg viewbox="0 0 640 340">
+  <use href="#illustration" />
+
+  <use href="#wide0" x="150" y="230" class="block0" />
+  <use href="#wide2" x="250" y="230" class="block2" />
+  <use href="#wide4" x="350" y="230" class="block4" />
+
+  <use href="#up_1x"   x="150" y="260" class="block0" />
+  <use href="#down_1x" x="200" y="260" class="block0" />
+  <use href="#up_1x"   x="250" y="260" class="block2" />
+  <use href="#down_1x" x="300" y="260" class="block2" />
+  <use href="#up_1x"   x="350" y="260" class="block4" />
+  <use href="#down_1x" x="400" y="260" class="block4" />
+
+  <use href="#wide1" x="200" y="290" class="block1" />
+  <use href="#wide3" x="300" y="290" class="block3" />
+  <use href="#wide5" x="400" y="290" class="block5" />
+
+  <use href="#up_1x"   x="200" y="320" class="block1" />
+  <use href="#down_1x" x="250" y="320" class="block1" />
+  <use href="#up_1x"   x="300" y="320" class="block3" />
+  <use href="#down_1x" x="350" y="320" class="block3" />
+  <use href="#up_1x"   x="400" y="320" class="block5" />
+  <use href="#down_1x" x="450" y="320" class="block5" />
+</svg>
+
+While `a` and `b` do still take step changes, they do so when their
+corresponding weights are zero.  Depending on the situation this may take care
+of the problem already, or it may be necessary to rearrange a bit more of the
+arithmetic to ensure the multiplication by the zero-weighting happens earlier
+to force the switch to appear smooth.
+
+This can be extended to a mod-n system for kernels of size n.  Capturing pixels
+into something more like a ring buffer, where only the edge cases (still the
+zero-weighted cases) get updated during a transition.
+
+The ring-buffer analogy is misleading, of course, because the adjacent pixels
+are computed concurrently and they all fill up their own private copies of the
+buffer at the same time without sharing context, so there isn't the bandwidth
+saving of a classical ring buffer.  But the real point is that they all have
+mostly the same values at the same offests and so this mitigates a class of
+glitches in the derivatives.
+
+TODO: give the example code for larger kernels, and a simplified example shader
+exhibiting the problem.
