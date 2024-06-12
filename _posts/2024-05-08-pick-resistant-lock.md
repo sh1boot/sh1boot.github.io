@@ -56,11 +56,22 @@ pins so the key can come out.  And you can't just have the top plug turn slower
 because then you end up turning the bottom plug further than usual, and that
 would be hard to use.
 
-So I decided to couple them with noncircular gears.  At the home position,
-where the cylinders are aligned, rapid motion on the first plug maps to slow
-motion on the second plug, and then this begins to accelerate to make up the
-difference once the first plug is sufficiently off-axis that it can't be picked
-any longer.
+So I decided to couple them with non-circular (or at least non-concentric)
+gears.  At the home position, where the cylinders are aligned, rapid motion on
+the first plug maps to slow motion on the second plug, and then this begins to
+accelerate to make up the difference once the first plug is sufficiently
+off-axis that it can't be picked any longer.
+
+Here's a set of gears which achieves that (and also avoids the screw holes for
+mounting it on a door):
+![rear view](/images/dual-plug-pin-tumbler-lock-gears.png)
+
+Where the bottom plug's gear is close to the centre (marked by the hole) it
+requires the most travel to effect rotation of the outer gear, and this
+corresponds to where the top plug has the opposite arrangement, doubling the
+effect.  By the time the bottom plug has turned 180 degrees the relationship is
+reversed and both plugs will synchronise again.  This corresponds to the point
+where one would normally not need to turn the key any further.
 
 I'm not sure how effective this would be against [bumping][].  It changes the
 dynamics somewhat, but not necessarily in a way that would prevent it.  I tried
