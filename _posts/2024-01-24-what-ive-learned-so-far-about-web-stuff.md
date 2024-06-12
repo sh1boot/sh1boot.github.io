@@ -199,20 +199,21 @@ a bunch of colours and then use those colours to tint solid objects to
 highlight that they share some property, or whatever.  That's just standard CSS
 stuff.
 
-Here's a palette devised by rotating around hue in steps of 360/phi while
-slowly ramping down the brightness and saturation to try to maximise the
-distance between colours:
+Here's a palette defined by a [low-discrepancy sequence][] to meander around
+the OKLCh space picking colours that should be reasonably distinct from each
+other:
 {% raw %}
 ```liquid
 <style>
   svg {
     {%- for n in (0..20) %}
-      --unique-color{{n}}: hsl({{-n | times: 222.5 | modulo: 360}},
-                               {{-n | times: -3 | plus: 100}}%,
-                               {{-n | times: -2 | plus: 50}}%);
+      --unique-color{{n}}: oklch(
+        {{-n | times: 0.6180339887498948482 | modulo: 1 | times: -30 | plus: 80 | round}}{{'% '}}
+        {{-n | times: 0.7548776662466927 | modulo: 1 | times: -50 | plus: 125 | round}}{{'% '}}
+        {{-n | times: 0.5698402909980532 | modulo: 1 | times: 360 | round}}deg);
     {%- endfor %}
   }
-  {%- for n in (0..20) %}
+  {%- for n in (0..18) %}
   .tint{{n}} {
     fill: var(--unique-color{{n}});
     fill-opacity: 0.125;
@@ -220,19 +221,21 @@ distance between colours:
   {%- endfor %}
 </style>
 ```
+
 {% endraw %}
 <style>
   svg {
     {%- for n in (0..18) %}
-      --unique-color{{n}}: hsl({{-n | times: 222.5 | modulo: 360}},
-                               {{-n | times: -3 | plus: 100}}%,
-                               {{-n | times: -2 | plus: 50}}%);
+      --unique-color{{n}}: oklch(
+        {{-n | times: 0.6180339887498948482 | modulo: 1 | times: -30 | plus: 80 | round}}{{'% '}}
+        {{-n | times: 0.7548776662466927 | modulo: 1 | times: -50 | plus: 125 | round}}{{'% '}}
+        {{-n | times: 0.5698402909980532 | modulo: 1 | times: 360 | round}}deg);
     {%- endfor %}
   }
   {%- for n in (0..18) %}
   .tint{{n}} {
     fill: var(--unique-color{{n}});
-    fill-opacity: 0.125;
+    fill-opacity: 0.2;
   }
   {%- endfor %}
 </style>
@@ -427,7 +430,7 @@ the SVG coordinate space (the units the SVG `<rect>` and `<circle>` objects
 use) which will be scaled to fit the minimum of the `width` and `height`
 parameters in the context of whatever contains the SVG.
 
-[CSS]: https://developer.mozilla.org/en-US/docs/Web/CSS
-[SVG]: https://developer.mozilla.org/en-US/docs/Web/SVG
-[Liquid]: https://shopify.github.io/liquid/basics/introduction/
-
+[CSS]: <https://developer.mozilla.org/en-US/docs/Web/CSS>
+[SVG]: <https://developer.mozilla.org/en-US/docs/Web/SVG>
+[Liquid]: <https://shopify.github.io/liquid/basics/introduction/>
+[low-discrepancy sequence]: <https://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/>

@@ -21,10 +21,14 @@
     50% {fill-opacity: 0.0; }
     100% {fill-opacity: 0.5; }
   }
-  {% for n in (0..20) %} :root { --unique-color{{n}}:hsl({{n | times: 222.5 | modulo: 360}},{{n | times: 0.20 | floor | times: -20 | plus: 100}}%,{{n | times: -1 | plus: 60}}%); }
-  {% endfor %}
+  {% for n in (0..20) %} :root {
+      --unique-color{{n}}: oklch(
+        {{-n | times: 0.6180339887498948482 | modulo: 1 | times: -30 | plus: 80 | round}}{{'% '}}
+        {{-n | times: 0.7548776662466927 | modulo: 1 | times: -50 | plus: 125 | round}}{{'% '}}
+        {{-n | times: 0.5698402909980532 | modulo: 1 | times: 360 | round}}deg);
+  } {% endfor %}
   {% for n in (0..20) %} .block{{n}} { fill:var(--unique-color{{n}}); fill-opacity: 0.125; }
-  .blockgroup{{n}} { fill:var(--unique-color{{n}}); fill-opacity: 0.125; }
+  .blockgroup{{n}} { fill:var(--unique-color{{n}}); fill-opacity: 0.2; }
   .blockgroup{{n}}:hover { fill:var(--unique-color{{n}}); fill-opacity: 0.50;
     font-weight: bold;
     font-size: larger;
