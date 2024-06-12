@@ -1,0 +1,27 @@
+{% capture inner -%}
+  <div style="position:relative;">
+    <img src="{{include.preview}}" title="click to play" style="max-width:100%;max-height:100%" />
+    <a href="{{include.embed}}" style="
+      position:absolute;
+      top:5%;
+      left:5%;
+      padding: 6px 6px;
+      border: 1px outset buttonborder;
+      color: buttontext;
+      background-color: buttonface;
+      font-family: sans-serif;
+      text-decoration: none;"
+    >click to activate</a>
+  </div>
+{%- endcapture %}
+
+<iframe width="100%" style="aspect-ratio:16/9"
+  allowfullscreen
+  frameborder="0" marginwidth="0" marginheight="0" scrolling="no"
+  sandbox="{{include.sandbox}}"
+  srcdoc="{{inner | escape}}"
+>
+  <a href="{{include.direct}}">
+    <img src="{{include.preview}}" alt="{{include.alttext}}" />
+  </a>
+</iframe>

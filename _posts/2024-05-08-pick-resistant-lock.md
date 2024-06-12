@@ -46,7 +46,7 @@ of arrangement.  Each pin is split at every step so that it will always turn.
 The second is an inversion of the usual binding test, but it shares the pin
 stack with the first plug.
 
-{% include tinkercad.html id='9gywpW8cuNV' image='/images/dual-plug-pin-tumbler-lock.png' %}
+{% include tinkercad.liquid id='9gywpW8cuNV' image='/images/dual-plug-pin-tumbler-lock.png' %}
 
 The trick is to allow the first plug to turn until it has captured a specific
 set of pin segments ("master pins"), so they can't be adjusted any longer,
@@ -83,7 +83,7 @@ expert for their feedback.  I'm sure the concept _can_ work but my first
 implementation will likely have flaws which result in embarrassing outcomes.
 
 Here's a prototype in action:
-{% include youtube.html id='6Er67SCnPC8' %}
+{% include youtube.liquid id='6Er67SCnPC8' %}
 
 Also, I'm putting left-handed digital calipers on my Christmas list.  Just so
 everyone knows.
