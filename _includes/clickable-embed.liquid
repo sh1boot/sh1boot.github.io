@@ -1,23 +1,36 @@
-{%- capture aspect %}{% if include.aspect -%}
-  {{include.aspect}}
-{%- else -%}
-  16/9
-{%- endif %}{% endcapture %}
-{%- capture frameid %}{% if include.id -%}
-  {{include.id}}
-{%- else -%}
-  clickable-embed-{%- increment clickable_embed_calls %}
-{%- endif %}{%- endcapture %}
+{%- capture frameid -%}
+  {{include.id}}{% unless include.id -%}
+    clickable-embed-{%- increment clickable_embed_calls %}
+  {%- endunless -%}
+{%- endcapture %}
+{%- capture preview -%}
+  {{include.preview}}{% unless include.preview -%}
+    {%- assign extensions = "svg png jpg" | split: " " %}
+    {%- for ext in extensions -%}
+      {%- capture filename %}/images/{{frameid}}.{{ext}}{% endcapture %}
+      {%- assign file = site.static_files | where: "path", filename | first %}
+      {% if file.path -%}{% break %}{% endif %}
+    {%- endfor %}
+    {{file.path}}{% unless file.path -%}
+      {{include.preview_default}}
+    {%- endunless %}
+  {%- endunless %}
+{%- endcapture %}
+{%- capture aspect -%}
+  {{include.aspect}}{% unless include.aspect -%}
+    16/9
+  {%- endunless -%}
+{%- endcapture %}
 
 {%- if page.id != clickable_embed_pageid -%}
 {%- capture clickable_embed_pageid %}{{page.id}}{% endcapture %}
-<style>
-  .click-embed {
-    background-color: transparent;
-    border-style: none;
-    width: 100%;
-  }
-</style>
+  <style>
+    .click-embed {
+      background-color: transparent;
+      border-style: none;
+      width: 100%;
+    }
+  </style>
 {%- endif %}
 
 {%- capture inner -%}
@@ -45,7 +58,7 @@
     font-family: sans-serif;
     text-decoration: none;
   } </style>
-  <img class="maximised-image" src="{{include.preview}}" />
+  <img class="maximised-image" src="{{preview}}" />
   <a href="{{include.embed}}">
     {%- if include.buttontext -%}
       <div class="button">{{include.buttontext}}</div>
@@ -61,6 +74,6 @@
     scrolling="no" allowfullscreen
     sandbox="{{sandbox}}" srcdoc="{{inner | escape}}">
   <a href="{{include.direct}}">
-    <img src="{{include.preview}}" />
+    <img src="{{preview}}" alt="{{include.buttontext}}"/>
   </a>
 </iframe>

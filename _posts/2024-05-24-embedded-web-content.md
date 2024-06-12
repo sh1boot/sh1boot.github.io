@@ -106,7 +106,6 @@ YouTube blocks embedding of every instance of that video that I can find.
 ### Future work
 * do CSS correctly, or whatever
 * turn off other frames when you activate a new one (ie., don't play five youtube videos at once)
-* auto-detect local preview images while the site is being built
 * automatically populate local preview store while the site is being built? (stealing other sites' assets)
 * controls could be nicer, but I resent being forced to make style decisions I would rather be in the hands of the user, and not me
 

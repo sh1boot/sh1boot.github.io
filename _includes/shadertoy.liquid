@@ -5,4 +5,11 @@
 {%- assign buttontext="click to run shader" %}
 {%- capture id -%} shadertoy-{{include.id | slugify}} {%- endcapture %}
 
-{%- include clickable-embed.liquid preview=preview embed=embed direct=direct sandbox=sandbox buttontext=buttontext id=id %}
+{%- include clickable-embed.liquid
+    preview=include.image
+    preview_default=preview
+    embed=embed
+    direct=direct
+    sandbox=sandbox
+    buttontext=buttontext
+    id=id %}
