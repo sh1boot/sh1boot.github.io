@@ -10,9 +10,12 @@ option.
 
 What I did have, it turned out, was an option to embed an interactive 3D model.
 
-Trouble is I'm not a great fan of JavaScript, and I try to make things which
-work without needing the user to enable it on random sites they might not have
-encountered before.
+Trouble is I'm not a great fan of JavaScript where it's not essential, and I
+try to make things which work without needing the user to enable it on random
+sites they might not have encountered before.  I don't appreciate how a page
+will load, and be laid out in a particular fashion, but then decide that's not
+what it wanted to look like and start moving everything around.  It's slow,
+flickery, and distracting.
 
 I also don't think it's good form to invite a bunch of different sites to come
 and run code on other people's computers when they're just trying to read
@@ -25,7 +28,7 @@ visiting my blog.
 I do use [utteranc.es][] and [MathJax][], but the site should still make sense
 if you choose to block those, or neglect to enable them.  I should try harder
 to not enable them by default, I guess, but whatever...  I also use GitHub and
-Cloudflare.  ::shrug::
+Cloudflare.
 
 So anyway.  Without resorting to JavaScript, what I've done is to create an
 iframe and embed a bit of inline HTML in it, and that inline HTML is just an
