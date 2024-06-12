@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "What I've learned so far about CSS, SVG, Liquid, and Jekyll"
+description: "Embedded diagrams in Jekyll and GitHub Pages from the point of view of someone who wants to keep web technologies at arm's length."
 categories: web, css, svg, liquid, jekyll, wtf-am-i-doing
 ---
 
@@ -399,6 +400,15 @@ Enjoy these disco lights by waving your mouse over them:
 One might imagine how this could be useful when creating a graph with too many
 lines to distinguish by colour, but being able to point at the key to highlight
 that line on the graph itself.
+
+### Optimisation
+{% raw %}
+With the last pattern it becomes important to acknowledge the `{%-` and `-%}` I've used in the Liquid code.  the addition of an hyphen on the left or the right deletes any whitespace on that side of the tag.  That's not generally a big deal but it builds up if you're selectively filtering a lot of stuff in needed loops.
+
+I got dinged by some linting tools for generating HTML files which were too big and I got things under the threshold mostly by just adding those hyphens.  I also used `{%-''-%}` and `{%-' '-%}` at the start of lines I wanted to indent to dissolve this indents in the output.
+{% endraw %}
+
+Compression would be the next obvious step.  I suppose it should be possible to gzip SVG data down to a small fraction of the size and to mime64 encode it and inline it with `src="data:image/svgz+xml;mime64,..."` or outboard it as a separate file, but I'm not sure about how thoae options work with CSS and shared definitions and all that.  And I'm not sure that's a plug-in supported by Pages which works so the translation.
 
 
 ### SVG viewbox versus width and height

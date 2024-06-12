@@ -1,6 +1,7 @@
 ---
 format: post
 title: Optimising Adler-32 checksum
+description: A rundown of the steps I've taken to improve SIMD throughout of Adler-32 checksum calculation by constraining authentic range.
 categories: checksum
 ---
 {% include mathjax.html %}

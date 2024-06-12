@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "A Latin-Square-based L1 cache layout"
+description: "Using a solution to the Latin Squares problem as a memory slicing scheme to address convenient access to 2D memory patterns."
 categories: cache, memory, hardware design
 draft: true
 ---

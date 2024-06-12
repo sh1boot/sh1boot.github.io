@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "A reasonably effective hash instruction"
+description: "A 128-to-64 bit hash operation which is cheap to implement in hardware and does most of a decent job in one cycle."
 categories: hashing, prng, cpu, pipeline, handwaving
 ---
 As per [part one][] of this post, I have reasoned through and tested a proof of

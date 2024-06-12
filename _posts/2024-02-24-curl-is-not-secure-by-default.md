@@ -1,7 +1,8 @@
 ---
 layout: post
-title:  "Curl is not secure by default"
-categories: curl, tls, security
+title:  Curl is not secure by default
+description: Why you can't assume that your curl commands are automatically secured just because all modern sites use TLS.
+categories: curl, tls, mitm, security
 ---
 
 I often find that when there's been some debate about a topic on the internet

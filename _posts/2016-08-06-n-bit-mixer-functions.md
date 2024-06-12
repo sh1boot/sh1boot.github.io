@@ -1,3 +1,8 @@
+---
+layout: post
+title: "N-bit Mixer Functions"
+description: "A collection of mixer functions in the style of Murmur hash's finalisation mixer, for 8 <= n <= 128 bits."
+---
 For reasons I intend (hah!) to go into in a longer post I was looking for
 operations with which to construct and whiten (or "finalise" or "mix" or
 "avalanche" or whatever) RNGs with 2<sup>n</sup> periods.  I was looking at

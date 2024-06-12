@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "A pick-resistant lock design"
+description: "A simple design for a pick-resistant pin tumbler lock using non-circular gears."
 categories: lockpicking, locksport, non-circular gears
 draft: true
 ---
