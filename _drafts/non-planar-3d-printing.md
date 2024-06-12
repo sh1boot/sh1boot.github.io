@@ -36,7 +36,7 @@ of the weakness of poor layer adhesion.
 Make an adapter to translate the bed movement axis into rotation of the
 workpiece.  Then slice the object into concentric cylinders rather than planes.
 
-{% include tinkercad.liquid id='8goKar9Xfpy' image='https://csg.tinkercad.com/things/8goKar9Xfpy/t725.png?rev=171501996919230100' %}
+{% include tinkercad.liquid id='8goKar9Xfpy' image='/images/cylindrical-3d-printer.png' %}
 
 This change in coordinate system represents a change in overhang constraints.
 This should make it possible to print christmas-tree-like overhangs.  The
