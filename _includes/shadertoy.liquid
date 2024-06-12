@@ -1,0 +1,8 @@
+{%- capture preview -%} https://shadertoy.com/media/shaders/{{include.id}}.jpg {%- endcapture %}
+{%- capture embed -%} https://www.shadertoy.com/embed/{{include.id}}?paused=false&amp;gui=false {%- endcapture %}
+{%- capture direct -%} https://www.shadertoy.com/view/{{include.id}} {%- endcapture %}
+{%- assign sandbox="allow-scripts allow-same-origin" %}
+{%- assign buttontext="click to run shader" %}
+{%- capture id -%} shadertoy-{{include.id | slugify}} {%- endcapture %}
+
+{%- include clickable-embed.liquid preview=preview embed=embed direct=direct sandbox=sandbox buttontext=buttontext id=id %}

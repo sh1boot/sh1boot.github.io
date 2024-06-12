@@ -1,0 +1,8 @@
+{%- capture preview -%} https://uploads.scratch.mit.edu/get_image/project/{{include.id}}_480x360.png {%- endcapture %}
+{%- capture embed -%} https://scratch.mit.edu/projects/embed/{{include.id}}/?autostart=true {%- endcapture %}
+{%- capture direct -%} https://scratch.mit.edu/projects/{{include.id}}/ {%- endcapture %}
+{%- assign sandbox="allow-scripts allow-same-origin" %}
+{%- assign buttontext="click to run Scratch program" %}
+{%- capture id -%} scratch-{{include.id | slugify}} {%- endcapture %}
+
+{%- include clickable-embed.liquid preview=preview embed=embed direct=direct sandbox=sandbox buttontext=buttontext aspect="5/4" id=id %}

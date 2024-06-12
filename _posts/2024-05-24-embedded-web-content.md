@@ -1,0 +1,106 @@
+---
+layout: post
+title:  "Embedded web content without all that JavaScript cruft"
+categories: privacy, web, liquid, jekyll, wtf-am-i-doing
+---
+
+In an earlier blog post I wanted to embed some diagrams.  Really I wanted SVG
+for clean scaling between devices, but I don't have that format as an output
+option.
+
+What I did have, it turned out, was an option to embed an interactive 3D model.
+
+Trouble is I'm not a great fan of JavaScript, and I try to make things which
+work without needing the user to enable it on random sites they might not have
+encountered before.
+
+I also don't think it's good form to invite a bunch of different sites to come
+and run code on other people's computers when they're just trying to read
+something I aspire to keeping as a static site.  Even though everybody does it.
+
+And I also don't think it's good form to open other people's computers up to
+tracking cookies and all that business just because they did me the courtesy of
+visiting my blog.
+
+I do use [utteranc.es][] and [MathJax][], but the site should still make sense
+if you choose to block those, or neglect to enable them.  I should try harder
+to not enable them by default, I guess, but whatever...  I also use GitHub and
+Cloudflare.  ::shrug::
+
+So anyway.  Without resorting to JavaScript, what I've done is to create an
+iframe and embed a bit of inline HTML in it, and that inline HTML is just an
+image and a link dressed up like a button which you can click to activate the
+control.  The link loads the actual embed in the iframe, but only when you
+click on it.
+
+The user _could_ do these things with their own browser extensions, taking
+responsibility for their own privacy, making their own choices, etc., but I
+just don't want to be too deeply implicated in the horrors of the modern web in
+that way.
+
+Now, I don't presume to have any clue how to do these things correctly.  It's
+web stuff.  It's not my space.  But I have, as is the Gold Standard&trade; in
+modern software development, cobbled together enough fragments from Stack
+Overflow to get something that "seems to work".  At least for me.  Mostly.
+
+{%raw%}
+I had trouble with using `{% render %}` where I thought I should have been able
+to, so I reverted to `{% include %}` which causes its own problems.  And there
+were other problems, too.  So many "why can't I just do this the easy way like
+in the documentation?" moments.
+{%endraw%}
+
+But anyway, here's the template in all its gore:
+
+<https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/clickable-embed.liquid>
+
+There's plenty I haven't bothered to fix.  Like where to get the preview
+images.  Mostly I still use the target site to deliver static thumbnails.  That
+allows some measure of nefarious activity, I'm sure, but at least it doesn't
+slow everything down with more JavaScript and a heap of noisy back-and-forth.
+
+Also, since the user has already clicked the go button in order to load the
+embedded content, it's better to use embed links which auto-start that content.
+This seems to work for YouTube, but no such luck with Scratch so far.
+
+Here's an example ShaderToy [embed](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/shadertoy.liquid):
+{% include shadertoy.liquid id='clB3RK' %}
+The default here is to get the preview image from that site.  That's probably fine, right?
+
+A Scratch [embed](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/scratch.liquid):
+{% include scratch.liquid id='782596588' %}
+This frustrates me a little because the embed doesn't contain a link to the
+project, and also because I haven't worked out how to get autoplay working.
+I'm also getting the preview from their site.  The platform has its own
+internal "native" resolution of 480x360, and that's how it renders the preview,
+but it's mostly vector graphics so it scales nicely once it's loaded.
+
+Except for things drawn with the pen extension.  Those stay at 480x360 and get
+ugly scaling.
+
+An example TinkerCad [embed](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/tinkercad.liquid):
+{% include tinkercad.liquid id='hHgAIBifrz6' image='/images/pin-tumbler-lock.png' %}
+TinkerCad embeds don't provide an easy-to-find preview image, so I've had to
+make my own and store them locally.  Which is fine because I should really
+store all previews locally anyway.
+
+And, of course, YouTube [embed](https://github.com/sh1boot/sh1boot.github.io/blob/master/_includes/youtube.liquid):
+{% include youtube.liquid id='MTIwzKI44Es' %}
+Gets the preview from YouTube by default.  This turns out badly for old videos
+or 4:3 videos or something.  Note that the use of the `youtube-nocookie.com`
+domain probably stops this video appearing in your view history.  I'll have to
+check that some time.
+
+But the greatest frustration of all is that while I do have the option of
+putting a misleading preview image in place, I can't embed a rickroll, because
+YouTube blocks embedding of every instance of that video that I can find.
+
+### Future work
+* do CSS correctly, or whatever
+* turn off other frames when you activate a new one (ie., don't play five youtube videos at once)
+* auto-detect local preview images while the site is being built
+* automatically populate local preview store while the site is being built? (stealing other sites' assets)
+* controls could be nicer, but I resent being forced to make style decisions I would rather be in the hands of the user, and not me
+
+[utteranc.es]: <https://utteranc.es/>
+[MathJax]: <https://www.mathjax.org/>

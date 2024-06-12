@@ -1,7 +1,12 @@
-{%- capture preview -%} https://i3.ytimg.com/vi/{{include.id}}/maxresdefault.jpg {%- endcapture %}
-{%- capture embed -%} https://www.youtube.com/embed/{{include.id}}?autoplay=1 {%- endcapture %}
+{% capture preview %}{% if include.image -%}
+  {{include.image}}
+{%- else -%}
+  https://i3.ytimg.com/vi/{{include.id}}/maxresdefault.jpg
+{%- endif %}{% endcapture %}
+{%- capture embed -%} https://www.youtube-nocookie.com/embed/{{include.id}}?autoplay=1 {%- endcapture %}
 {%- capture direct -%} https://youtu.be/{{include.id}} {%- endcapture %}
 {%- assign sandbox="allow-scripts allow-same-origin" %}
 {%- assign buttontext="click to play YouTube video" %}
+{%- capture id -%} youtube-{{include.id | slugify}} {%- endcapture %}
 
-{%- include clickable-embed.liquid preview=preview embed=embed direct=direct sandbox=sandbox buttontext=buttontext %}
+{%- include clickable-embed.liquid preview=preview embed=embed direct=direct sandbox=sandbox buttontext=buttontext id=id %}

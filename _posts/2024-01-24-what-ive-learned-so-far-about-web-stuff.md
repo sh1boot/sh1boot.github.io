@@ -1,11 +1,16 @@
 ---
 layout: post
 title:  "What I've learned so far about CSS, SVG, Liquid, and Jekyll"
-categories: web, css, svg, liquid, jekyll
+categories: web, css, svg, liquid, jekyll, wtf-am-i-doing
 ---
+
 From the point of view of knowing almost nothing about how any web techology
 works, here's a bunch of stuff I had to pick up to draw a picture in a
-Github-powered blog.  I'm sure it's all very basic stuff for professionals:
+GitHub-powered blog.
+
+I'm sure it's all very basic stuff for professionals, but it's a few things I
+had to grind through as somebody who doesn't really want to get involved in the
+web at all if possible:
 * TOC
 {:toc}
 
@@ -153,6 +158,16 @@ spirit of COBOL.
 </svg>
 That looks a lot like it could use a nested loop, but I can't figure out how to
 add two variables together, so I couldn't make it work that way.
+
+Is it really worth it, trying to generate an SVG file from source,
+programmatically, rather than just using some kind of editor?
+
+Well, no, probably not but I did it anyway.  I change my mind so often that as
+a project grows it gets progressively more tedious to re-arrange all the
+components and update the individual elements.  Something CSS is meant to
+simplify.
+
+So onwards I grind...
 
 ### Iterating over strings, instead
 While arithmetic is painful, you can convert simple ASCII plans for a diagram
