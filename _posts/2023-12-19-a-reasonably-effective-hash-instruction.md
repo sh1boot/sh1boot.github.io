@@ -283,7 +283,7 @@ In a PRNG configuration:
   dispersion properties of a deliberate dispersion function
 * find more applications for this algorithm specifically?
 
-[part one]: /why-i-want-a-dedicated-hash-instruction
+[part one]: /why-i-want-a-dedicated-hash-instruction/
 [correlation immunity]: https://en.wikipedia.org/wiki/Correlation_immunity
 [de Bruijn sequence]: https://en.wikipedia.org/wiki/de_Bruijn_sequence
 [substitution-permutation network]: https://en.wikipedia.org/wiki/Substitution-permutation_network

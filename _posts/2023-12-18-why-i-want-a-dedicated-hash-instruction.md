@@ -123,7 +123,7 @@ But most importantly: because I don't think it has to cost that much...
 In [part two][] I attempt to illustrate something which is not much logic and
 is tolerably shallow in the logic that it uses.
 
-[part two]: /a-reasonably-effective-hash-instruction
+[part two]: /a-reasonably-effective-hash-instruction/
 [correlation immunity]: https://en.wikipedia.org/wiki/Correlation_immunity
 [de Bruijn sequence]: https://en.wikipedia.org/wiki/de_Bruijn_sequence
 [substitution-permutation network]: https://en.wikipedia.org/wiki/Substitution-permutation_network
