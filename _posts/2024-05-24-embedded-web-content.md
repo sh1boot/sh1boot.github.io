@@ -22,6 +22,8 @@ come and run code on other people's computers when they're just trying to read
 something which is notionally just static text.  That may be how the internet
 is, but I still don't like it!
 
+Plus it's another unnecessary entypoint for supply-chain vulnerabilities.
+
 I do use [utteranc.es][] and [MathJax][], but this site should still make sense
 to anyone who chooses to block those, or neglects to enable them.  I should try
 harder to not enable them by default, I guess, but whatever...  I also use
