@@ -1,0 +1,438 @@
+---
+layout: post
+title:  Naturally-aligned compressed opcode encoding
+mathjax: true
+svg: true
+---
+In the world of fixed-length instruction sets, the addition of compressed
+instructions (no-longer fixed-length instructions) is kind of a pain in the
+butt.  Arm dropped them when they went to AArch64.  There was a [proposal to
+remove][] them in RISC-V, but it [didn't fly][RVI BoD decision].
+
+Complaints about compressed instructions which I recall hearing frequently:
+* Instructions can straddle cache lines, and other implementation-dependent
+  boundaries, making implementation complicated and error-prone.
+* Potential number of instruction start points for instructions is large but
+  sparse, leaving a lot of bubbles or other garbage to clean up early in the
+  pipeline for large-scale out-of-order issue.
+* Execution can begin in the middle of an instruction, with unexpected
+  behaviour creating new [gadgets][] that are hard for tooling to discover
+  and mitigate.
+
+One possible compromise is to allow smaller instructions but only at their
+natural alignments.  A 32-bit instruction can only start at a 32-bit boundary,
+a 16-bit instruction can start at any 16-bit boundary, and a 64-bit instruction
+must only start on a 64-bit boundary.
+
+If you need a 32-bit instruction to follow a 16-bit instruction which ends at
+an odd 16-bit boundary, then you replace that 16-bit instruction with a 32-bit
+equivalent to make it end at a 32-bit boundary (or possibly to reorder some
+instructions).  This implies some loss of compression.
+
+But it also opens up a couple of new opportunities for improving coding
+efficiency.
+
+First, if you define up front the largest legal instruction size then you can
+ingest all instructions in packets of that size and break them up based on the
+encoding within that packet.  Depending on how you structure the packet you can
+still have the option of reading instructions in smaller increments, but then
+you can't necessarily protect against branching into the middle of large
+instructions.
+
+Having a fixed-size packet means knowing exactly where to start decoding to
+determine that the packet of instructions is well formed, with minimal overhead
+in defining the coding structure for those instructions.  If you try to make
+the coding length arbitrary, then you may branch to a 1024-bit-aligned offset
+but then have to figure out whether or not the instructions here are the mid
+part of a 2048-bit instruction beginning at a higher alignment.
+
+If everything is bundled in a maximum-chunk-size packet then the number of ways
+to subdivide that into [notionally] power-of-two-sized instructions can be
+calculated as:
+1. A short instruction: $1$ possibility
+1. Two of the above or one long instruction: $1 \times 1 + 1 = 2$ possibilities
+1. Any two of the above, or one longer instruction: $2 \times 2 + 1 = 5$ possibilities
+1. Any two of the above, or one longerer instruction: $5 \times 5 + 1 = 26$ possibilities
+1. Any two of the above, or one longererer instruction: $26 \times 26 + 1 = 677$ possibilities
+1. etc..
+
+This isn't coming out to a nice round number of bits, but it can be expressed
+in various [variable-length code][] arrangements, depending on which cases you
+want to optimise.
+
+For example, start with a trivial system where the most significant bit of the
+smallest instruction size is an end-of-opcode flag.  Then reclaim any bits that
+would signal a non-power-of-two instruction:
+<svg viewbox="-1 0 799 100">
+  <defs>
+    {%- for i in (0..1) -%}
+      <g id="pfx{{i}}">
+        <rect x="0" y="24" width="16" height="24"/>
+        <text x="8" y="36">{{i}}</text>
+      </g>
+    {%- endfor -%}
+    {%- for opc in (0..15) -%}
+      <g id="opc{{opc}}_16" class="block{{opc}}">
+        <rect x="0" y="24" width="96" height="24"/>
+        <text x="48" y="36">Op{{opc}}</text>
+      </g>
+      <g id="opc{{opc}}_15" class="block{{opc}}">
+        <rect x="16" y="24" width="80" height="24"/>
+        <text x="56" y="36">Op{{opc}}</text>
+      </g>
+    {%- endfor -%}
+    {%- for i in (0..15) -%}
+      <g id="hwrd{{i}}">
+        <text x="0" y="14" style="text-anchor:start">{{i|times:16|plus:15}}</text>
+        <text x="96" y="14" style="text-anchor:end">{{i|times:16}}</text>
+      </g>
+    {%- endfor -%}
+  </defs>
+  <use href="#pfx1"    x=  "0" y="0" />
+  <use href="#pfx1"    x="100" y="0" />
+  <use href="#pfx0"    x="200" y="0" />
+  <use href="#pfx1"    x="300" y="0" />
+  <use href="#opc0_15" x=  "0" y="0" />
+  <use href="#opc1_15" x="100" y="0" />
+  <use href="#opc2_15" x="200" y="0" />
+  <use href="#opc2_15" x="300" y="0" />
+  <use href="#hwrd0"   x=  "0" y="0" />
+  <use href="#hwrd0"   x="100" y="0" />
+  <use href="#hwrd0"   x="200" y="0" />
+  <use href="#hwrd1"   x="300" y="0" />
+
+  <use href="#pfx0"    x="400" y="0" />
+  <use href="#pfx0"    x="500" y="0" />
+  <use href="#pfx1"    x="600" y="0" />
+  <use href="#opc3_15" x="400" y="0" />
+  <use href="#opc3_15" x="500" y="0" />
+  <use href="#opc3_15" x="600" y="0" />
+  <use href="#opc3_16" x="700" y="0" />
+  <use href="#hwrd0"   x="400" y="0" />
+  <use href="#hwrd1"   x="500" y="0" />
+  <use href="#hwrd2"   x="600" y="0" />
+  <use href="#hwrd3"   x="700" y="0" />
+
+  <use href="#pfx0"    x=  "0" y="50" />
+  <use href="#pfx0"    x="100" y="50" />
+  <use href="#pfx0"    x="200" y="50" />
+  <use href="#pfx1"    x="300" y="50" />
+  <use href="#opc4_15" x=  "0" y="50" />
+  <use href="#opc4_15" x="100" y="50" />
+  <use href="#opc4_15" x="200" y="50" />
+  <use href="#opc4_15" x="300" y="50" />
+  <use href="#hwrd0"   x=  "0" y="50" />
+  <use href="#hwrd1"   x="100" y="50" />
+  <use href="#hwrd2"   x="200" y="50" />
+  <use href="#hwrd3"   x="300" y="50" />
+  <use href="#opc4_16" x="400" y="50" />
+  <use href="#opc4_16" x="500" y="50" />
+  <use href="#opc4_16" x="600" y="50" />
+  <use href="#opc4_16" x="700" y="50" />
+  <use href="#hwrd4"   x="400" y="50" />
+  <use href="#hwrd5"   x="500" y="50" />
+  <use href="#hwrd6"   x="600" y="50" />
+  <use href="#hwrd7"   x="700" y="50" />
+</svg>
+This saves a few bits where there's no need to express non-power-of-two
+extensions, but it fails to exploit attempts generating instructions at bad
+alignments.  Notice that it makes no sense, for example, for a 0 to follow a 1
+at an odd 16-bit offset, because this would imply an instruction word which
+would not be naturally aligned.
+
+So let's grab that encoding space as well...
+<svg viewbox="-1 0 799 100">
+  <use href="#pfx1"    x="200" y="0" />
+  <use href="#pfx0"    x="300" y="0" />
+  <use href="#opc2_15" x="200" y="0" />
+  <use href="#opc2_15" x="300" y="0" />
+  <use href="#hwrd0"   x="200" y="0" />
+  <use href="#hwrd1"   x="300" y="0" />
+
+  <use href="#pfx1"    x="400" y="0" />
+  <use href="#pfx0"    x="500" y="0" />
+  <use href="#pfx0"    x="600" y="0" />
+  <use href="#pfx1"    x="700" y="0" />
+  <use href="#opc3_15" x="400" y="0" />
+  <use href="#opc3_15" x="500" y="0" />
+  <use href="#opc3_15" x="600" y="0" />
+  <use href="#opc3_15" x="700" y="0" />
+  <use href="#hwrd0"   x="400" y="0" />
+  <use href="#hwrd1"   x="500" y="0" />
+  <use href="#hwrd2"   x="600" y="0" />
+  <use href="#hwrd3"   x="700" y="0" />
+
+  <use href="#pfx1"    x=  "0" y="50" />
+  <use href="#pfx0"    x="100" y="50" />
+  <use href="#pfx0"    x="200" y="50" />
+  <use href="#pfx0"    x="300" y="50" />
+  <use href="#opc4_15" x=  "0" y="50" />
+  <use href="#opc4_15" x="100" y="50" />
+  <use href="#opc4_15" x="200" y="50" />
+  <use href="#opc4_15" x="300" y="50" />
+  <use href="#hwrd0"   x=  "0" y="50" />
+  <use href="#hwrd1"   x="100" y="50" />
+  <use href="#hwrd2"   x="200" y="50" />
+  <use href="#hwrd3"   x="300" y="50" />
+  <use href="#pfx1"    x="400" y="50" />
+  <use href="#opc4_15" x="400" y="50" />
+  <use href="#opc4_16" x="500" y="50" />
+  <use href="#opc4_16" x="600" y="50" />
+  <use href="#opc4_16" x="700" y="50" />
+  <use href="#hwrd4"   x="400" y="50" />
+  <use href="#hwrd5"   x="500" y="50" />
+  <use href="#hwrd6"   x="600" y="50" />
+  <use href="#hwrd7"   x="700" y="50" />
+</svg>
+Icky.  This isn't very regular because while it doubles the size of the 32-bit
+encoding space, extra bits are needed to distinguish between 64 and 128 and
+other instruction lengths, and there are still other unused patterns to be
+reclaimed in a way that isn't going to be regular or cheap.  If you revert to a
+fixed (or known-in-advance) instruction-packet size, then you can make a much
+cleaner opcode encoding model.
+
+As an aside, my inclination is to prohibit branches to odd 16-bit aligned
+destinations because it's so simple to align targets to 32-bits (using the
+promotion rule mentioned earlier), so you get twice the range for the branch
+offset instead.
+
+But that's just an example, and what it does have is that you can follow the
+naive model of a stream of bytes (or pairs of bytes, here) representing
+instructions without looking at the broader context of a fixed-size packet to
+understand how to interpret any given instruction.  This means that a simple,
+in-order instruction parser can _stay_ simple.  But with the caveat that you
+might fail to detect branching into the middle of a larger instruction and
+executing instructions other than those intended (gadgets).
+
+An alternative might be a system similar to [UTF-8][], where extension words are
+all illegal start words; but these are inherently wasteful _and_ don't exploit
+or enforce the alignment constraints for instructions.
+
+<svg viewbox="-1 0 799 100">
+  <use href="#pfx1"    x=  "0" y="0" />
+  <use href="#pfx1"    x="100" y="0" />
+  <use href="#opc0_15" x=  "0" y="0" />
+  <use href="#opc1_15" x="100" y="0" />
+  <use href="#hwrd0"   x=  "0" y="0" />
+  <use href="#hwrd0"   x="100" y="0" />
+  <use href="#pfx1"    x="200" y="0" />
+  <use href="#pfx0"    x="300" y="0" />
+  <use href="#opc2_15" x="200" y="0" />
+  <use href="#opc2_15" x="300" y="0" />
+  <use href="#hwrd0"   x="200" y="0" />
+  <use href="#hwrd1"   x="300" y="0" />
+
+  <use href="#pfx1"    x="400" y="0" />
+  <use href="#pfx0"    x="500" y="0" />
+  <use href="#pfx0"    x="600" y="0" />
+  <use href="#pfx0"    x="700" y="0" />
+  <use href="#opc3_15" x="400" y="0" />
+  <use href="#opc3_15" x="500" y="0" />
+  <use href="#opc3_15" x="600" y="0" />
+  <use href="#opc3_15" x="700" y="0" />
+  <use href="#hwrd0"   x="400" y="0" />
+  <use href="#hwrd1"   x="500" y="0" />
+  <use href="#hwrd2"   x="600" y="0" />
+  <use href="#hwrd3"   x="700" y="0" />
+
+  <use href="#pfx1"    x=  "0" y="50" />
+  <use href="#pfx0"    x="100" y="50" />
+  <use href="#pfx0"    x="200" y="50" />
+  <use href="#pfx0"    x="300" y="50" />
+  <use href="#opc4_15" x=  "0" y="50" />
+  <use href="#opc4_15" x="100" y="50" />
+  <use href="#opc4_15" x="200" y="50" />
+  <use href="#opc4_15" x="300" y="50" />
+  <use href="#hwrd0"   x=  "0" y="50" />
+  <use href="#hwrd1"   x="100" y="50" />
+  <use href="#hwrd2"   x="200" y="50" />
+  <use href="#hwrd3"   x="300" y="50" />
+  <use href="#pfx0"    x="400" y="50" />
+  <use href="#pfx0"    x="500" y="50" />
+  <use href="#pfx0"    x="600" y="50" />
+  <use href="#pfx0"    x="700" y="50" />
+  <use href="#opc4_15" x="400" y="50" />
+  <use href="#opc4_15" x="500" y="50" />
+  <use href="#opc4_15" x="600" y="50" />
+  <use href="#opc4_15" x="700" y="50" />
+  <use href="#hwrd4"   x="400" y="50" />
+  <use href="#hwrd5"   x="500" y="50" />
+  <use href="#hwrd6"   x="600" y="50" />
+  <use href="#hwrd7"   x="700" y="50" />
+</svg>
+There are various rearrangements of that to move the efficient cases to
+different instruction sizes, but that's also not too interesting right now.
+
+The other way to save space in a fixed-size packet is by apportioning
+instructions of different sizes more dynamically.  For example, a 32-bit packet
+might use a two-bit prefix which apportions three quarters of the space to
+31½-bit opcodes and one quarter to pairs of 15-bit compressed opcodes.
+
+But this can go so much further.
+
+Supposing the instruction decoder has to see all 32 bits if it could turn out
+to be a 32-bit instruction, it doesn't strictly have to be limited to the first
+16 bits just because it turns out to be a compressed opcode.  It can decode
+instruction arguments from anywhere in the 32-bit word even if it is marked as
+a 16-bit instruction.  It just has to loop back and do this a second time,
+decoding different bits, if the first instruction was marked as 16-bit.  Or if
+something branched to the odd 16-bit offset of that 32-bit instruction packet,
+or if an exception resumes there.
+
+So why not re-use some of these bits between both instructions?  Probably the
+commonest mode of instruction compression is to re-use the destination register
+bits as one of the source registers within the same instruction:
+<svg viewbox="-1 0 799 150">
+  <defs>
+    {%- for opc in (0..1) -%}
+      <g id="opc{{opc}}_4" class="block{{opc}}">
+        <rect x="0" y="24" width="64" height="24"/>
+        <text x="32" y="36">Op{{opc}} op</text>
+      </g>
+      <g id="rs1_{{opc}}_5" class="block{{opc}}">
+        <rect x="0" y="24" width="80" height="24"/>
+        <text x="40" y="36">Op{{opc}} Rs1</text>
+      </g>
+      <g id="rs2_{{opc}}_5" class="block{{opc}}">
+        <rect x="0" y="24" width="80" height="24"/>
+        <text x="40" y="36">Op{{opc}} Rs2</text>
+      </g>
+      <g id="imm5_{{opc}}" class="block{{opc}}">
+        <rect x="0" y="24" width="80" height="24"/>
+        <text x="40" y="36">Op{{opc}} imm</text>
+      </g>
+      <g id="imm10_{{opc}}" class="block{{opc}}">
+        <rect x="0" y="24" width="160" height="24"/>
+        <text x="80" y="36">Op{{opc}} imm</text>
+      </g>
+      <g id="rd_{{opc}}_5" class="block{{opc}}">
+        <rect x="0" y="24" width="80" height="24"/>
+        <text x="40" y="36">Op{{opc}} Rd</text>
+      </g>
+      <g id="rsd_{{opc}}_5" class="block{{opc}}">
+        <use href="#rs1_{{opc}}_5" x="0" y="-12"/>
+        <use href="#rd_{{opc}}_5" x="0" y="12"/>
+      </g>
+    {%- endfor -%}
+  </defs>
+  <use href="#pfx1"    x=  "0" y="12"/>
+  <use href="#pfx0"    x= "16" y="12"/>
+  <use href="#opc0_4"  x= "32" y="12"/>
+  <use href="#rsd_0_5" x= "96" y="12"/>
+  <use href="#rs2_0_5" x="176" y="12"/>
+  <use href="#pfx1"    x="256" y="12"/>
+  <use href="#pfx0"    x="272" y="12"/>
+  <use href="#opc1_4"  x="288" y="12"/>
+  <use href="#rsd_1_5" x="352" y="12"/>
+  <use href="#rs2_1_5" x="432" y="12"/>
+
+  <use href="#pfx1"    x=  "0" y="87"/>
+  <use href="#pfx0"    x= "16" y="87"/>
+  <use href="#opc0_4"  x= "32" y="87"/>
+  <use href="#rsd_0_5" x= "96" y="87"/>
+  <use href="#rs2_0_5" x="176" y="87"/>
+  <use href="#pfx1"    x="256" y="87"/>
+  <use href="#pfx1"    x="272" y="87"/>
+  <use href="#opc1_4"  x="288" y="87"/>
+  <use href="#rsd_1_5" x="352" y="87"/>
+  <use href="#imm5_1"  x="432" y="87"/>
+</svg>
+Perhaps it's beneficial to have a mode of compression which overlaps the
+destination of the first instruction with a source of the second instruction.
+Applications that spring to mind are array indexing and pre/post increments on
+addressing, and compare/branch instructions.  Eg.,
+<svg viewbox="-1 0 799 162">
+  <use href="#pfx1"    x=  "0" y= "12"/>
+  <use href="#pfx1"    x= "16" y= "12"/>
+  <use href="#opc0_4"  x= "32" y= "12"/>
+  <use href="#rd_0_5"  x="432" y=  "0"/>
+  <use href="#rs1_0_5" x= "96" y= "12"/>
+  <use href="#rs2_0_5" x="176" y= "12"/>
+  <use href="#pfx1"    x="256" y= "12"/>
+  <use href="#pfx0"    x="272" y= "12"/>
+  <use href="#opc1_4"  x="288" y= "12"/>
+  <use href="#rsd_1_5" x="352" y= "12"/>
+  <use href="#rs2_1_5" x="432" y=" 24"/>
+
+  <use href="#pfx1"    x=  "0" y= "87"/>
+  <use href="#pfx1"    x= "16" y= "87"/>
+  <use href="#opc0_4"  x= "32" y= "87"/>
+  <use href="#rsd_0_5" x="432" y= "75"/>
+  <use href="#imm10_0" x= "96" y= "87"/>
+  <use href="#pfx1"    x="256" y= "87"/>
+  <use href="#pfx1"    x="272" y= "87"/>
+  <use href="#opc1_4"  x="288" y= "87"/>
+  <use href="#rs1_1_5" x="352" y= "75"/>
+  <use href="#rd_1_5"  x="352" y= "99"/>
+  <use href="#rs2_1_5" x="432" y="111"/>
+</svg>
+Obviously some pairs of compressed instructions might pass a result from the
+first op to the second and then have no further use for that temporary.  In
+that case using the same destination register operand for both might be
+appropriate (so the second op implicitly destroys the temporary), but that's
+not always appropriate (eg., store operations, and operations where the second
+instruction already uses an overlapped source/destination register).  So
+perhaps a better method might be to use an encoding with a fixed register, or
+small subset of registers as the temporary.
+<svg viewbox="-1 0 799 150">
+  <use href="#pfx1"    x=  "0" y= "12"/>
+  <use href="#pfx1"    x= "16" y= "12"/>
+  <use href="#opc0_4"  x= "32" y= "12"/>
+  <use href="#rs1_0_5" x= "96" y= "12"/>
+  <use href="#rs2_0_5" x="176" y= "12"/>
+  <use href="#pfx1"    x="256" y= "12"/>
+  <use href="#pfx0"    x="272" y= "12"/>
+  <use href="#opc1_4"  x="288" y= "12"/>
+  <use href="#rd_1_5"  x="352" y= "12"/>
+  <use href="#rs1_1_5" x="432" y=" 12"/>
+
+  <use href="#pfx1"    x=  "0" y= "87"/>
+  <use href="#pfx1"    x= "16" y= "87"/>
+  <use href="#opc0_4"  x= "32" y= "87"/>
+  <use href="#rs1_0_5" x="432" y= "87"/>
+  <use href="#imm10_0" x= "96" y= "87"/>
+  <use href="#pfx1"    x="256" y= "87"/>
+  <use href="#pfx1"    x="272" y= "87"/>
+  <use href="#opc1_4"  x="288" y= "87"/>
+  <use href="#rs1_1_5" x="352" y= "75"/>
+  <use href="#rd_1_5"  x="352" y= "99"/>
+
+  <text x="640" y="36">constant</text>
+  <use href="#pfx1"    x="600" y= "24"/>
+  <use href="#pfx1"    x="616" y= "24"/>
+  <use href="#pfx1"    x="632" y= "24"/>
+  <use href="#pfx1"    x="648" y= "24"/>
+  <use href="#pfx1"    x="664" y= "24"/>
+  <use href="#rd_0_5"  x="600" y="48"/>
+  <use href="#rs2_1_5"  x="600" y="72"/>
+</svg>
+
+As a general rule even if the temporary should be discarded after the second
+instruction it does need to be accessible between the instructions in case the
+second raises an exception and the temporary result from the first needs to be
+saved and restored by the handler.
+
+Another benefit, not relating to coding efficiency, might be the possibility of
+taking pairs of 16-bit instructions at 32-bit boundaries and treating them at
+the front end like one 32-bit instruction and then splitting them into relevant
+micro-ops in the pipeline stage where micro-ops get split.
+
+Or, you know... _don't_ microcode them if that also works; treat the pair as a
+single operation.  This leads to an instruction which can have two output
+registers, breaking the two-in-one-out convention, which might complicate some
+implementations, but fusion is optional.  And it could perhaps be left
+undefined whether or not the temporary register is written in cases which do
+not involve exceptions.
+
+[gadgets]: <https://en.wikipedia.org/wiki/Return-oriented_programming#Gadget>
+[UTF-8]: <https://en.wikipedia.org/wiki/UTF-8>
+[Proposal to remove]: <https://lists.riscv.org/g/tech-profiles/topic/101741936#msg297>
+[RVI BoD decision]: <https://lists.riscv.org/g/tech-profiles/topic/102522954#msg434>
+[variable-length code]: <https://en.wikipedia.org/wiki/variable-length_code>
+
+[other]: <https://lists.riscv.org/g/tech-profiles/topic/rva23_versus_rvh23_proposal/102127876>
+[naturally aligned]: <https://lists.riscv.org/g/tech-profiles/topic/would_naturally_aligned_only/102199380>
+[android code compression]: <https://lists.riscv.org/g/tech-profiles/topic/code_compression_in_android/102210164>
+[code size sensitivity]: <https://lists.riscv.org/g/tech-profiles/topic/code_size_sensitivity_in/102127557>
+[qualcomm slides]: <https://lists.riscv.org/g/tech-profiles/topic/qualcomm_slides_on_c/101784675>
+
