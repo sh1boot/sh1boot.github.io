@@ -5,9 +5,9 @@ mathjax: true
 svg: true
 ---
 In the world of fixed-length instruction sets, the addition of compressed
-instructions (no-longer fixed-length instructions) is kind of a pain in the
-butt.  Arm dropped them when they went to AArch64.  There was a [proposal to
-remove][] them in RISC-V, but it [didn't fly][RVI BoD decision].
+instructions (no-longer fixed-length instructions) is kind of a nuisance.  Arm
+dropped them when they went to AArch64.  There was a [proposal to remove][]
+them in RISC-V, but it [didn't fly][RVI BoD decision].
 
 Complaints about compressed instructions which I recall hearing frequently:
 * Instructions can straddle cache lines, and other implementation-dependent
