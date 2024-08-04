@@ -19,7 +19,7 @@ Complaints about compressed instructions which I've heard most frequently:
   behaviour creating new [gadgets][] that are hard for tooling to discover
   and mitigate.
 
-One partial compromise is to allow smaller instructions but only at their
+One partial compromise is to allow smaller instructions but only allowing larger instructions at their
 natural alignments.  A 32-bit instruction can only start at a 32-bit boundary,
 a 16-bit instruction can start at any 16-bit boundary, and a 64-bit instruction
 must only start on a 64-bit boundary.
@@ -34,8 +34,8 @@ me that you can also mitigate the excessive number of instruction start points
 by ingesting aligned pairs of compressed instructions as a single instruction
 at the front end, and then splitting them into their constituents as micro-ops
 later on.  Or if there's a performance benefit and you don't mind deviating
-from 2-in-1-out operand model then you could execute the instruction pair as a
-single op.  That's an implementation detail and probably shouldn't be allowed
+from 2-in-1-out operand model then you could implement the instruction pair as a
+single μop.  But that's an implementation detail and probably shouldn't be allowed
 to steer the design unduly.
 
 If you need a 32-bit instruction to follow a 16-bit instruction which ends at
@@ -64,16 +64,16 @@ having flexibility in how you apportion the coding space.  For example, a
 32-bit packet might use a two-bit prefix which apportions three quarters of the
 space to 31½-bit opcodes and one quarter to pairs of 15-bit compressed opcodes.
 
-But we can also take the first step into exploiting context.
+But more importantly, we can also take the first step into exploiting context.
 
-Supposing the instruction decoder has to see all 32 bits if it could turn out
-to be a 32-bit instruction, it doesn't strictly have to be limited to the first
-16 bits just because it turns out to be a compressed opcode.  It could decode
+Supposing the instruction decoder needs to see all 32 bits if it could turn out
+to be a 32-bit instruction, a compressed instruction doesn't strictly have to be limited to the first
+16 bits just because it's compressed.  It could decode
 instruction arguments from anywhere in the 32-bit word even if it is marked as
 a 16-bit instruction.  It just has to loop back and do this a second time,
-decoding different bits, if the first instruction was compressed.  Or if
+decoding different bits, if the first instruction was compressed (or if
 something branched to the odd 16-bit offset of that 32-bit instruction packet,
-or if an exception has to resume there.
+or if an exception has to resume there).
 
 And if you can jumble the bits up like this, you can also overlap them.  This
 is already fairly typical of instruction compression where the destination and
