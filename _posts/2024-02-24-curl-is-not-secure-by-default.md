@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
 layout: post
 title:  Curl is not secure by default
 description: Why you can't assume that your curl commands are automatically secured just because all modern sites use TLS.

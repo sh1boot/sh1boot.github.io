@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
 layout: post
 title: N-bit Mixer Functions
 description: A collection of mixer functions in the style of Murmur hash's finalisation mixer, for 8 to 128 bits.

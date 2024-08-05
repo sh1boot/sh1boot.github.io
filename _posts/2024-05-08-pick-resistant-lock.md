@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
 layout: post
 title:  A pick-resistant lock design
 description: A simple design for a pick-resistant pin tumbler lock using non-circular gears.

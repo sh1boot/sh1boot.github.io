@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
 layout: post
 title:  Error resilience in rolling-intra
 description: Poking around with packet loss mitigation while trying to use rolling intra streams.

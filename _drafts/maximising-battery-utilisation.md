@@ -1,4 +1,5 @@
 ---
+last_modified_at: Sat, 3 Aug 2024 21:13:35 -0700  # 3fc1ea7 a-handful-of-drafts
 layout: post
 title:  Running all cells of a battery completely flat
 ---

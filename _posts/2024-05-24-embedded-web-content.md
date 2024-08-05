@@ -1,4 +1,5 @@
 ---
+last_modified_at: Sat, 3 Aug 2024 12:36:41 -0700  # 043a0b6 Take-a-swipe-at-recent-supply-chain-vulnerabilities
 layout: post
 title:  Embedded web content without all that JavaScript cruft
 description: A bit of Jekyll hacking to stop other sites' JavaScript running rampant on my blog without the user being forewarned.

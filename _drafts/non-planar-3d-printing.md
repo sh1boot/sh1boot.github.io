@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 1ae3ec2 update-images
 layout: post
 title:  "Non-planar 3D printing"
 categories: daft ideas, 3d printing, non-planar

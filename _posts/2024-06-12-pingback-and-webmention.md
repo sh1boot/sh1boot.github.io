@@ -1,4 +1,5 @@
 ---
+last_modified_at: Wed, 12 Jun 2024 16:05:16 -0700  # e8b02b5 pingback-and-webmention
 layout: post
 title:  Digging in to Pingback and Webmention
 ---

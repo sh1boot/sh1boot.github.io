@@ -1,4 +1,5 @@
 ---
+last_modified_at: Sat, 3 Aug 2024 12:17:06 -0700  # cb2fde2 use-canonical-links-internally
 layout: post
 title:  A reasonably effective hash instruction
 description: A 128-to-64 bit hash operation which is cheap to implement in hardware and does most of a decent job in one cycle.

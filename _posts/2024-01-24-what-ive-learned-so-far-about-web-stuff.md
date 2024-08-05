@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # 0b9ac52 switch-to-OKLab
 layout: post
 title:  What I've learned so far about CSS, SVG, Liquid, and Jekyll
 description: Embedded diagrams in Jekyll and GitHub Pages from the point of view of someone who wants to keep web technologies at arm's length.

@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
 layout: post
 title:  Bit-sliced matrix multiply
 description: A rearrangement of a SIMD multiplication instruction which allows efficient implementation of matrix multiplication of less than eight-bit precision.

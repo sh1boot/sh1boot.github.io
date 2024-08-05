@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
 layout: post
 title:  Hash map reduction operations
 description: Since STL's mapping from a hash to table-index is surprisingly primitive, what are some ways to do it better (and when might those turn out worse)?

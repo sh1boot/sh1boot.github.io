@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
 layout: post
 title:  On the endianness of bitstreams
 description: Contrasting the benefits of big-endian and little-endian packing in bitstreams and observing that one consequence shows up in Zstandard.
