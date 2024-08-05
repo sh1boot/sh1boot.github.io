@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sun, 4 Aug 2024 12:51:00 -0700  # 181dc31 naturally-aligned-instruction-set-rearrangements
+last_modified_at: Sun, 4 Aug 2024 13:55:39 -0700  # 466189f Update-2024-08-03-naturally-aligned-instruction-set.md
 layout: post
 title:  Naturally-aligned compressed opcode encoding
 mathjax: true
