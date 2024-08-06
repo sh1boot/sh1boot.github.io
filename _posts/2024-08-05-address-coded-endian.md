@@ -17,9 +17,12 @@ permutation logic was even cheaper than I'd imagined.  In fact it simplified
 other logic around it for further PPA savings.
 
 My approach is to always take the address as the address of the
-least-significant byte of the word, and to load the adjacent byte into the next
-eight bits of the result (8..15), and to repeat this pattern for chunks of 16
-bits, and 32 bits if needed.
+least-significant byte of the word, and to load the adjacent byte (its peer in
+the same aligned halfword) into the next eight bits of the result (8..15), and
+to repeat this pattern for chunks of 16 bits, and 32 bits if needed.
+
+This makes the address bits which don't correspond to the aligned address into
+swizzle bits describing the endianness of the data.
 
 <svg viewbox="0 0 800 496">
   <defs>
@@ -104,28 +107,43 @@ parsing](/bitstream-endianness/) one).
 What I found a little challenging about the concept was mulling over how to
 manage pointer types and casting as a C language extension.
 
-If you have a data type attribute `__big_endian`, and another
-`__little_endian`, and a default case which is agnostic, the compiler can
-deduce address fiddles associated with at least _some_ casting operations
-between pointers.  If you cast from, say, `__big_endian uint32_t*` to the
-agnostic `void*`, as would happen with a call to `memcpy()` you _must_ clear
-those low-order bits during the cast because that function will act as if it
-were a byte copy starting at the given address, so you want to start at the
-first byte in memory rather than the least significant byte.
+Suppose you have `__big_endian`, `__little_endian`, and the default
+qualification is agnostic.  If you cast a pointer to `__big_endian` or
+`__little_endian` you would rewrite the low address bits to change its swizzle.
 
-But when you cast from `__big_endian uint32_t*` to `uint32_t*` it might be
-better to retain the low-order bits (the swizzle bits) rather than treat it as
-a cast to the default endian so that a single function can take a pointer to
-words (and even arrays of words) of arbitrary byte order.
+If you cast from a specific endian pointer to an agnostic pointer then you
+would leave those bits alone.  Functions receiving such pointers would support
+data in any endianness.
 
-So I think the compiler should clear some bits when casting from a big endian
-type to a _smaller_ agnostic or little-endian type (where `void` is the
-smallest type), and set those bits when casting from agnostic to a big endian
-type.  Casting _to_ a specific-endian pointer modifies the bits, casting to an
-agnostic pointer only modifies bits where the sizes don't match.
+But things get hairy when you change the size of the data type.  If you cast
+from `__big_endian uint32_t*` to `uint8_t*` then you'll end up pointing to the
+last byte of the word -- the least-significant byte -- rather than the first.
+Even a simple `memcpy()` would do the wrong thing.
 
-Does it all fall down at some point, I wonder?  I don't recall.  Casting was
-always dangerous if you didn't know what you were doing, but does this require
-people to know more about what they're doing than before?
+So when you cast from a large type to a smaller type you have to clear any
+swizzle bits which would be promoted to address bits.  You can still retain any
+bits that were swizzle bits.
+
+The real trouble is going the other way.  If you're casting to an agnostic
+pointer then you have to invent a swizzle policy.  You could 'extend' the last
+swizzle bit if there's still one available, but in the case of `uint8_t*` and
+`void*` there is no information.
+
+And then there's `uintptr_t`.  Maybe C has policies for this, but if it doesn't
+then let's just suppose for now that casting to integer types is a cast to
+`void*` and then to the integer type.  And then back the other way also via
+`void*`.  The alternative (keeping the raw bit pattern of the original pointer)
+risks allowing somebody to cast from a big-endian pointer to an int and then to
+a byte pointer starting in the wrong place.
+
+So casting from `uint32_t*` to `void*` and back can lose information, and by
+implication (at least the way I stated it) casting to `uintptr_t` also loses
+information.
+
+Is that a problem?  Casting was always dangerous if you didn't know what you
+were doing, but would this require people to know more about what they're doing
+than before?
+
+Perhaps there's a better way.
 
 [NUXI]: <https://en.wikipedia.org/wiki/Endianness#Middle-endian>
