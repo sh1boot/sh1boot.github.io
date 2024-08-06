@@ -104,18 +104,25 @@ parsing](/bitstream-endianness/) one).
 What I found a little challenging about the concept was mulling over how to
 manage pointer types and casting as a C language extension.
 
-If you have a data type attribute `__big_endian`, the compiler can deduce
-address fiddles associated with at least _some_ casting operations, but if you
-cast from, say, `__big_endian uint32_t*` to `void*`, as would happen with a
-call to `memcpy()` you _must_ clear those low-order bits during the cast
-because that function will perform as if it were a byte copy starting at the
-given address, so you want to start at the first byte in memory rather than the
-least significant byte.
+If you have a data type attribute `__big_endian`, and another
+`__little_endian`, and a default case which is agnostic, the compiler can
+deduce address fiddles associated with at least _some_ casting operations
+between pointers.  If you cast from, say, `__big_endian uint32_t*` to the
+agnostic `void*`, as would happen with a call to `memcpy()` you _must_ clear
+those low-order bits during the cast because that function will act as if it
+were a byte copy starting at the given address, so you want to start at the
+first byte in memory rather than the least significant byte.
 
-But when you cast from `__big_endian uint32_t` to `__little_endian uint32_t` it
-might be better to keep the low-order bits (the swizzle bits) so that a single
-function can take a pointer to words (and even arrays of words) of arbitrary
-byte order.
+But when you cast from `__big_endian uint32_t*` to `uint32_t*` it might be
+better to retain the low-order bits (the swizzle bits) rather than treat it as
+a cast to the default endian so that a single function can take a pointer to
+words (and even arrays of words) of arbitrary byte order.
+
+So I think the compiler should clear some bits when casting from a big endian
+type to a _smaller_ agnostic or little-endian type (where `void` is the
+smallest type), and set those bits when casting from agnostic to a big endian
+type.  Casting _to_ a specific-endian pointer modifies the bits, casting to an
+agnostic pointer only modifies bits where the sizes don't match.
 
 Does it all fall down at some point, I wonder?  I don't recall.  Casting was
 always dangerous if you didn't know what you were doing, but does this require
