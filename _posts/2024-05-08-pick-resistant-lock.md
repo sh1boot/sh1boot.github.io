@@ -92,6 +92,14 @@ So far I haven't been able to fabricate anything durable enough to send to an
 expert for their feedback.  I'm sure the concept _can_ work but my first
 implementation will likely have flaws which result in embarrassing outcomes.
 
+I should also mention that the continuous coupling between the two plugs --
+that is, the lack of a dead zone where the test plug doesn't move while the key
+plug is closing off from adjustment -- represents a security weakness that I'm
+simply _hoping_ won't amount to anything.  Dead zones introduce other
+frustrations, complexity, and ergonomic issues.  I'm going to keep banging that
+'ergonomic' drum, because nothing is weaker than the security which nobody
+uses.
+
 Here's a prototype in action:
 {% include youtube.liquid id='6Er67SCnPC8' %}
 
