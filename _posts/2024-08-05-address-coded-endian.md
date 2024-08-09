@@ -1,5 +1,5 @@
 ---
-last_modified_at: Mon, 5 Aug 2024 16:24:02 -0700  # 784e533 address-coded-endian
+last_modified_at: Tue, 6 Aug 2024 13:40:37 -0700  # 93601d2 address-coded-endian-elaboration
 layout: post
 title:  Address-coded endian
 categories: memory, hardware design, endian
