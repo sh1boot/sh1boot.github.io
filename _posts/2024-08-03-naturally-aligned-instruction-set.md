@@ -7,8 +7,8 @@ svg: true
 ---
 In the world of fixed-length instruction sets, the addition of compressed
 instructions (no-longer fixed-length instructions) is kind of a nuisance.  Arm
-dropped them when they went to AArch64.  There was a [proposal to remove][]
-them in RISC-V, but it [didn't fly][RVI BoD decision].
+dropped them when they went to AArch64, and there was a [proposal][optional C]
+to make them optional in RISC-V but it [didn't fly][RVI BoD decision].
 
 Complaints about compressed instructions which I've heard most frequently:
 * Instructions can straddle cache lines, and other implementation-dependent
@@ -40,7 +40,7 @@ at the front end, and then splitting them into their constituents as micro-ops
 later on.  Or if there's a performance benefit and you don't mind deviating
 from 2-in-1-out operand model then you could implement the instruction pair as a
 single μop.  But that's an implementation detail and probably shouldn't be allowed
-to steer the design unduly, but let me [circle back to that](#macro-op-fusion).
+to steer the design unduly... let me [circle back to that](#macro-op-fusion).
 
 If you need a 32-bit instruction to follow a 16-bit instruction which ends at
 an odd 16-bit boundary, then you replace that 16-bit instruction with a 32-bit
@@ -170,7 +170,7 @@ Eg.,
 </svg>
 Applications which spring to mind are array indexing and pre/post increments on
 load/store addressing, and compare/branch instructions, which I think were part
-of the [Qualcomm proposal][code size reduction instructions].  The advantage,
+of the [Qualcomm proposal][Zics] (later named "Zics").  The advantage,
 here, though, is that the instructions are still logically separate, and if you
 don't like the deviation from 2-in-1-out operand regularity, then you don't
 have to deviate and can just regard the instructions separately.
@@ -456,16 +456,16 @@ different instruction sizes, but that's also not too interesting right now.
 I mentioned earlier that it wasn't good form to let implementation lead design,
 here, but a frustration with RISC-V's purity is the dependence on [macro-op
 fusion][] to meet the performance of less pure architectures.  I see a lot of
-overlap between Qualcomm's proposal and the [proposed list][macro-op list] on
-WikiChip (though some of fused ops already exist in other extensions).
+overlap between Zics and the [proposed list][macro-op list] on WikiChip (though
+some of fused ops already exist in other extensions).
 
 If aligned, contextually-compressed instruction pairs facilitate easier fusion,
 then we gain a kind of compound instruction; maintaining the purity of two
 basic instructions with the performance potential of the fused pair.
 
-Given the compression achievements with Qualcomm's proposal, it seems prudent
-to be conservative in the allocation of compressed opcode pairs.  Allocating
-only what's needed to match existing compression and facilitate known fusion
+Given the compression achievements with Zics, it seems prudent to be
+conservative in the allocation of compressed opcode pairs.  Allocating only
+what's needed to match existing compression and facilitate known fusion
 candidates, and not squandering the rest on the long tail of marginal gains in
 either space.
 
@@ -473,14 +473,14 @@ either space.
 
 Extending an instruction coding scheme out to naturally-aligned 64-bit and
 beyond also allows evolution in the direction either of VLIW or more ambitious
-context-exploiting instruction compression.  I cannot imagine a case for more
+context-exploiting instruction compression.  I cannot imagine a case for
 stronger compression today, but if one wanted to invest so heavily in such an
-instruction decoder, it wouldn't certainly be doable.
+instruction decoder it would certainly be doable.
 
 
 [gadgets]: <https://en.wikipedia.org/wiki/Return-oriented_programming#Gadget>
 [UTF-8]: <https://en.wikipedia.org/wiki/UTF-8>
-[Proposal to remove]: <https://lists.riscv.org/g/tech-profiles/topic/101741936#msg297>
+[optional C]: <https://lists.riscv.org/g/tech-profiles/topic/101741936#msg297>
 [RVI BoD decision]: <https://lists.riscv.org/g/tech-profiles/topic/102522954#msg434>
 [variable-length code]: <https://en.wikipedia.org/wiki/variable-length_code>
 [LEB128]: <https://en.wikipedia.org/wiki/LEB128>
@@ -492,4 +492,4 @@ instruction decoder, it wouldn't certainly be doable.
 [android code compression]: <https://lists.riscv.org/g/tech-profiles/topic/code_compression_in_android/102210164>
 [code size sensitivity]: <https://lists.riscv.org/g/tech-profiles/topic/code_size_sensitivity_in/102127557>
 [qualcomm slides]: <https://lists.riscv.org/g/tech-profiles/topic/qualcomm_slides_on_c/101784675>
-[code size reduction instructions]: <https://lists.riscv.org/g/tech-profiles/attachment/332/0/code_size_extension_rvi_20231006.pdf>
+[Zics]: <https://lists.riscv.org/g/tech-profiles/attachment/332/0/code_size_extension_rvi_20231006.pdf>
