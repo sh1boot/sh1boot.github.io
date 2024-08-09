@@ -20,15 +20,18 @@ Complaints about compressed instructions which I've heard most frequently:
   behaviour creating new [gadgets][] that are hard for tooling to discover
   and mitigate.
 
-One partial compromise is to allow smaller instructions but only allowing larger instructions at their
-natural alignments.  A 32-bit instruction can only start at a 32-bit boundary,
-a 16-bit instruction can start at any 16-bit boundary, and a 64-bit instruction
-must only start on a 64-bit boundary.
+## natural alignment
+
+One partial compromise is to allow smaller instructions but allowing larger
+instructions only at their natural alignments.  A 32-bit instruction can only
+start at a 32-bit boundary, a 16-bit instruction can start at any 16-bit
+boundary, and a 64-bit instruction must only start on a 64-bit boundary.
 
 This ensures that nothing straddles feature boundaries, and it constrains the
 look-back distance to ensure that an entrypoint is not actually the middle
 of a larger instruction: you need only go back to the natural alignment of the
-largest instruction format supported in the architecture.
+largest instruction format supported in the architecture (actually I think it's
+half that, but I haven't yet confirmed).
 
 And I don't know if this makes sense in a real implementation, but it seems to
 me that you can also mitigate the excessive number of instruction start points
@@ -37,7 +40,7 @@ at the front end, and then splitting them into their constituents as micro-ops
 later on.  Or if there's a performance benefit and you don't mind deviating
 from 2-in-1-out operand model then you could implement the instruction pair as a
 single μop.  But that's an implementation detail and probably shouldn't be allowed
-to steer the design unduly.
+to steer the design unduly, but let me [circle back to that](#macro-op-fusion).
 
 If you need a 32-bit instruction to follow a 16-bit instruction which ends at
 an odd 16-bit boundary, then you replace that 16-bit instruction with a 32-bit
@@ -67,9 +70,11 @@ space to 31½-bit opcodes and one quarter to pairs of 15-bit compressed opcodes.
 
 But more importantly, we can also take the first step into exploiting context.
 
+### overlapping opcodes
+
 Supposing the instruction decoder needs to see all 32 bits if it could turn out
-to be a 32-bit instruction, a compressed instruction doesn't strictly have to be limited to the first
-16 bits just because it's compressed.  It could decode
+to be a 32-bit instruction, a compressed instruction doesn't strictly have to
+be limited to the first 16 bits just because it's compressed.  It could decode
 instruction arguments from anywhere in the 32-bit word even if it is marked as
 a 16-bit instruction.  It just has to loop back and do this a second time,
 decoding different bits, if the first instruction was compressed (or if
@@ -222,6 +227,8 @@ targets).
 
 Then there's the matter of how to denote various instruction size combinations
 when they're more constrained by the lack of unaligned cases.
+
+### opcode size encoding
 
 If everything is bundled in a maximum-chunk-size packet then the number of ways
 to subdivide that into [notionally] power-of-two-sized instructions can be
@@ -444,12 +451,41 @@ where extension words are all illegal start words:
 There are various rearrangements of that to move the efficient cases to
 different instruction sizes, but that's also not too interesting right now.
 
+### macro-op fusion
+
+I mentioned earlier that it wasn't good form to let implementation lead design,
+here, but a frustration with RISC-V's purity is the dependence on [macro-op
+fusion][] to meet the performance of less pure architectures.  I see a lot of
+overlap between Qualcomm's proposal and the [proposed list][macro-op list] on
+WikiChip (though some of fused ops already exist in other extensions).
+
+If aligned, contextually-compressed instruction pairs facilitate easier fusion,
+then we gain a kind of compound instruction; maintaining the purity of two
+basic instructions with the performance potential of the fused pair.
+
+Given the compression achievements with Qualcomm's proposal, it seems prudent
+to be conservative in the allocation of compressed opcode pairs.  Allocating
+only what's needed to match existing compression and facilitate known fusion
+candidates, and not squandering the rest on the long tail of marginal gains in
+either space.
+
+### going futher
+
+Extending an instruction coding scheme out to naturally-aligned 64-bit and
+beyond also allows evolution in the direction either of VLIW or more ambitious
+context-exploiting instruction compression.  I cannot imagine a case for more
+stronger compression today, but if one wanted to invest so heavily in such an
+instruction decoder, it wouldn't certainly be doable.
+
+
 [gadgets]: <https://en.wikipedia.org/wiki/Return-oriented_programming#Gadget>
 [UTF-8]: <https://en.wikipedia.org/wiki/UTF-8>
 [Proposal to remove]: <https://lists.riscv.org/g/tech-profiles/topic/101741936#msg297>
 [RVI BoD decision]: <https://lists.riscv.org/g/tech-profiles/topic/102522954#msg434>
 [variable-length code]: <https://en.wikipedia.org/wiki/variable-length_code>
 [LEB128]: <https://en.wikipedia.org/wiki/LEB128>
+[macro-op fusion]: <https://en.wikichip.org/wiki/macro-operation_fusion>
+[macro-op list]: <https://en.wikichip.org/wiki/macro-operation_fusion#Proposed_fusion_operations>
 
 [other]: <https://lists.riscv.org/g/tech-profiles/topic/rva23_versus_rvh23_proposal/102127876>
 [naturally aligned]: <https://lists.riscv.org/g/tech-profiles/topic/would_naturally_aligned_only/102199380>
