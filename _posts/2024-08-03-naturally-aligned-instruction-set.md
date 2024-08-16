@@ -455,9 +455,9 @@ different instruction sizes, but that's also not too interesting right now.
 
 I mentioned earlier that it wasn't good form to let implementation lead design,
 here, but a frustration with RISC-V's purity is the dependence on [macro-op
-fusion][] to meet the performance of less pure architectures.  I see a lot of
-overlap between Zics and the [proposed list][macro-op list] on WikiChip (though
-some of fused ops already exist in other extensions).
+fusion][macro-op paper] to meet the performance of less pure architectures.  I
+see a lot of overlap between Zics and the [proposed list][macro-op list] on
+WikiChip (though some of fused ops already exist in other extensions).
 
 If aligned, contextually-compressed instruction pairs facilitate easier fusion,
 then we gain a kind of compound instruction; maintaining the purity of two
@@ -484,9 +484,9 @@ instruction decoder it would certainly be doable.
 [RVI BoD decision]: <https://lists.riscv.org/g/tech-profiles/topic/102522954#msg434>
 [variable-length code]: <https://en.wikipedia.org/wiki/variable-length_code>
 [LEB128]: <https://en.wikipedia.org/wiki/LEB128>
-[macro-op fusion]: <https://en.wikichip.org/wiki/macro-operation_fusion>
 [macro-op list]: <https://en.wikichip.org/wiki/macro-operation_fusion#Proposed_fusion_operations>
 
+[macro-op paper]: <https://arxiv.org/abs/1607.02318>
 [other]: <https://lists.riscv.org/g/tech-profiles/topic/rva23_versus_rvh23_proposal/102127876>
 [naturally aligned]: <https://lists.riscv.org/g/tech-profiles/topic/would_naturally_aligned_only/102199380>
 [android code compression]: <https://lists.riscv.org/g/tech-profiles/topic/code_compression_in_android/102210164>
