@@ -39,11 +39,10 @@ compressed on disk but at the same time you can mmap those files
 and use them in a demand-paged setting without the need to
 create decompressed temporary files.
 
-For example, shared libraries are loaded by mapping them; and in
-historical Android use case they had to be decompressed to disk
-to temporary files on disk to support this.  More recently it
-became possible to store them within the zip file if they were
-aligned and kept uncompressed.
+For example, shared libraries are loaded by mapping them; and in historical
+Android they had to be decompressed to temporary files on disk to support
+this.  More recently it's become possible to store them within the zip file if
+they were aligned and kept uncompressed.
 
 I'm not sure about the quality of Linux's handling of this
 arrangement, though.  squashfs can be configured with large block
@@ -51,6 +50,23 @@ sizes to improve compression, but a page is typically only 4kB.
 Does Linux just round the mapping out to the squashfs block size
 and hope that the extra data before it after will also get used
 imminently, or what?
+
+If I were going to design my own filesystem for this I would probably try to
+keep the block size small and mitigate the loss of compression by giving every
+disk block its choice of compression window to start with (store those
+dictionaries uncompressed at 4kB alignment within the filesystem for easy and
+efficient paging).  And, I guess, index all the inodes by hash of the full
+path within the system, because when you do it offline you can permute the
+hash parameters until you minimise the collision rate for better packing.  And
+merge tails of files of similar types, which, I guess, is the one use case for
+EROFS's fitblk storage method where I actually understand the benefit (squeeze
+together as many file tails as you can get within a 4kB compressed-but-aligned
+filesystem block so you don't read more than one disk block and that whole
+block is more likely to be re-used to finish other files later on).  And store
+my superblock at the top of the first 4kB of the image with the front left
+free for bootstrap code of various sorts.  And probably not bother with
+esoterica like file permissions and just hard-code them all as root:root
+755/644.  And no device nodes or any of that silliness!  &lt;/rant&gt;
 
 I wish I had time to dig into these things, but I really don't.
 I have a day job, now, and I need to get on with those things.
