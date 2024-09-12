@@ -61,7 +61,7 @@ index all the inodes by hash of the full path within the system, because
 when you do it offline you can permute the hash parameters until you
 minimise the collision rate for better packing.  And merge tails of
 files of similar types, which, I guess, is the one use case for EROFS's
-fitblk storage method where I actually understand the benefit.  And
+[fitblk][] storage method where I actually understand the benefit.  And
 put my superblock at the top of the first 4kB of the image with the
 front left free for bootstrap code of various sorts.  And probably not
 bother with esoterica like file permissions or timestamps and just
@@ -73,3 +73,4 @@ a day job, now, and I need to get on with that.
 
 [squashfs]: <https://docs.kernel.org/filesystems/squashfs.html>
 [EROFS]: <https://docs.kernel.org/filesystems/erofs.html>
+[fitblk]: <https://erofs.docs.kernel.org/en/latest/design.html#block-aligned-fitblk-compression>
