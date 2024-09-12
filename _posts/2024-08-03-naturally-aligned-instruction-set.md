@@ -10,7 +10,8 @@ instructions (no-longer fixed-length instructions) is kind of a nuisance.  Arm
 dropped them when they went to AArch64, and there was a [proposal][optional C]
 to make them optional in RISC-V but it [didn't fly][RVI BoD decision].
 
-Complaints about compressed instructions which I've heard most frequently:
+Complaints about compressed instructions which I've heard most
+frequently include:
 * Instructions can straddle cache lines, and other implementation-dependent
   boundaries, making implementation complicated and error-prone.
 * Potential number of instruction start points for instructions is large but
@@ -27,20 +28,22 @@ instructions only at their natural alignments.  A 32-bit instruction can only
 start at a 32-bit boundary, a 16-bit instruction can start at any 16-bit
 boundary, and a 64-bit instruction must only start on a 64-bit boundary.
 
-This ensures that nothing straddles feature boundaries, and it constrains the
-look-back distance to ensure that an entrypoint is not actually the middle
-of a larger instruction: you need only go back to the natural alignment of the
-largest instruction format supported in the architecture (actually I think it's
-half that, but I haven't yet confirmed).
+This ensures that no instruction straddles feature boundaries, and it
+constrains the look-back distance to ensure that an entrypoint is not
+actually the middle of a larger instruction: you need only go back to
+the natural alignment of the largest instruction format supported in the
+architecture (it might be half that, but I haven't yet confirmed).
 
-And I don't know if this makes sense in a real implementation, but it seems to
-me that you can also mitigate the excessive number of instruction start points
-by ingesting aligned pairs of compressed instructions as a single instruction
-at the front end, and then splitting them into their constituents as micro-ops
-later on.  Or if there's a performance benefit and you don't mind deviating
-from 2-in-1-out operand model then you could implement the instruction pair as a
-single μop.  But that's an implementation detail and probably shouldn't be allowed
-to steer the design unduly... let me [circle back to that](#macro-op-fusion).
+And I don't know if this makes sense in a real implementation, but it
+seems to me that you can also mitigate the excessive number of
+instruction start points by ingesting aligned pairs of compressed
+instructions as a single instruction at the front end, and then
+splitting them into their constituents as micro-ops later on.  Or if
+there's a performance benefit and you don't mind deviating from
+2-in-1-out operand model then you could implement the instruction pair
+as a single μ-op.  But that's an implementation detail and probably
+shouldn't be allowed to steer the design unduly...  let me [circle back
+to that](#macro-op-fusion).
 
 If you need a 32-bit instruction to follow a 16-bit instruction which ends at
 an odd 16-bit boundary, then you replace that 16-bit instruction with a 32-bit
@@ -72,19 +75,20 @@ But more importantly, we can also take the first step into exploiting context.
 
 ### overlapping opcodes
 
-Supposing the instruction decoder needs to see all 32 bits if it could turn out
-to be a 32-bit instruction, a compressed instruction doesn't strictly have to
-be limited to the first 16 bits just because it's compressed.  It could decode
-instruction arguments from anywhere in the 32-bit word even if it is marked as
-a 16-bit instruction.  It just has to loop back and do this a second time,
+Supposing the instruction decoder must see all 32 bits of the current
+instruction in case it turns out to be a 32-bit instruction, a
+16-bit instruction at that position doesn't strictly have to be limited
+to the first 16 bits.  It could decode instruction arguments from
+anywhere in the 32-bit word even if it is marked as a 16-bit
+instruction.  It just has to loop back and do this a second time,
 decoding different bits, if the first instruction was compressed (or if
-something branched to the odd 16-bit offset of that 32-bit instruction packet,
-or if an exception has to resume there).
+something branched to the odd 16-bit offset of that 32-bit instruction
+packet, or if an exception has to resume there).
 
-And if you can jumble the bits up like this, you can also overlap them.  This
-is already fairly typical of instruction compression where the destination and
-the first source register are logically overlapped (sometimes denoted as the
-`Rsd` operand):
+And if you can jumble the bits up like this then you can also overlap
+them.  This is already fairly typical within a single instruction where
+the destination and the first source register are logically overlapped
+and decoded from the same bits (sometimes denoted as the `Rsd` operand):
 <svg viewbox="-1 -1 800 126">
   <defs>
     {%- for opc in (0..1) -%}
@@ -168,12 +172,13 @@ Eg.,
   <use href="#rd_1_5"  x="352" y= "99"/>
   <use href="#rs2_1_5" x="432" y="111"/>
 </svg>
-Applications which spring to mind are array indexing and pre/post increments on
-load/store addressing, and compare/branch instructions, which I think were part
-of the [Qualcomm proposal][Zics] (later named "Zics").  The advantage,
-here, though, is that the instructions are still logically separate, and if you
-don't like the deviation from 2-in-1-out operand regularity, then you don't
-have to deviate and can just regard the instructions separately.
+Operations which spring to mind are array indexing and pre/post
+increments on load/store addressing, and compare/branch instructions,
+which I think were part of the [Qualcomm proposal][Zics] (later named
+"Zics").  The difference here, though, is that the instructions are
+still logically separate, and if you don't like the deviation from
+2-in-1-out operand regularity, then you don't have to deviate and can
+just regard the instructions separately.
 
 Presumably many pairs of compressed instructions would pass a result from the
 first op to the second and then have no further use for that temporary.  In
@@ -225,8 +230,9 @@ that the instruction pair is idempotent and the resume can start at the first
 instruction (consistent with my disinclination for oddly-aligned branch
 targets).
 
-Then there's the matter of how to denote various instruction size combinations
-when they're more constrained by the lack of unaligned cases.
+After that there's the matter of how to denote various instruction size
+combinations when they're more constrained by the lack of unaligned
+cases.
 
 ### opcode size encoding
 
@@ -381,7 +387,7 @@ So let's grab that encoding space as well...
   <use href="#hwrd6"   x="600" y="50" />
   <use href="#hwrd7"   x="700" y="50" />
 </svg>
-Messy.
+Now it's getting messy.
 
 This isn't very regular because while it doubles the size of the 32-bit
 encoding space, extra bits are needed to distinguish between 64 and 128 and

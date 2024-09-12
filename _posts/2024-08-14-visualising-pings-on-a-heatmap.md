@@ -16,13 +16,13 @@ So I thought about heat maps.  The basic idea being that you have a map
 representing the local area, and you colour the map according to the
 probability of the thing you want being at that location.  Then as you collect
 more information you integrate what you're learning into the map.  Strictly
-you multiply the new information into the old map -- the product of
-probabilities based on different measurements -- but you can do all that in the
-log domain and use addition instead.  And it's clearer to plot the log of such
-small numbers anyway.
+you multiply the new information into the map -- the product of probabilities
+based on different measurements -- but you can do all that in the log domain
+and use addition instead.  And it's clearer to plot the log of such small
+numbers anyway.
 
 If you get a signal strength reading then you can deduce that the device is
-somewhere within a practically limited range.  Outside of that range the
+somewhere within a practically-limited range.  Outside of that range the
 probability falls to zero and inside it is higher.  If the strength is low you
 may deduce that it is further away than if it is strong, but that's a less
 confident determination because there are other reasons for weak signal.  So
