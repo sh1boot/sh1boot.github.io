@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 10 Sep 2024 12:01:53 -0700  # f78e9ef publish-a-few-old-things
+last_modified_at: Wed, 11 Sep 2024 21:48:39 -0700  # 0f8b31a clarity
 layout: post
 title: Hybridising zip files with an alternate compression scheme
 ---

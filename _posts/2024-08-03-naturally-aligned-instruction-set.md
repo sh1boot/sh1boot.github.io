@@ -1,5 +1,5 @@
 ---
-last_modified_at: Thu, 15 Aug 2024 19:36:14 -0700  # a400103 naturally-aligned-instructions
+last_modified_at: Wed, 11 Sep 2024 21:48:39 -0700  # 0f8b31a clarity
 layout: post
 title:  Naturally-aligned compressed opcode encoding
 mathjax: true

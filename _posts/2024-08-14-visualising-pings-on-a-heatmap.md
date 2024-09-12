@@ -1,5 +1,5 @@
 ---
-last_modified_at: Wed, 11 Sep 2024 10:33:15 -0700  # 7a2f588 clean-up-heatmap
+last_modified_at: Wed, 11 Sep 2024 21:48:39 -0700  # 0f8b31a clarity
 layout: post
 title: Heatmap-based triangulation
 ---
