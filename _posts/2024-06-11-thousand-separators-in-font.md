@@ -23,6 +23,21 @@ prefer to stick with spaces, because they're a more common convention.  So I
 [hacked around][my version] a bit, tweaking up the spacing support and adding
 hexadecimal support (that is, things starting with `0x` grouping by fours).
 
+Because my emphasis was on adding a gap (and optionally filling it with
+a comma or period [TODO: apostrophe]) but based on a tool which
+emphasised adding markup, I fairly lazily used extra glyphs to implement
+what would usually be in `GPOS` rules.  What I should _really_ do is
+insert thin spaces (or commas or periods or apostrophes or some distinct
+and not-misleading variation on those glyphs) into the string directly,
+and if it's a monospaced font then use `GPOS` to reflow those glyphs
+into their proper cells.
+
+I just have to confirm that terminals actually apply `GPOS` effectively
+when they're trying to do glyph caching and all that.  It might also be
+prudent to squeeze the digits in both directions away from the gap, so
+that they deviate from their character cell less far, and are less
+likely to be clipped.
+
 But also, since I found that most (not all) terminals support it, and [CSS also
 supports it][CSS font features], I decided to rely on so-called "font features"
 to make the digit grouping configurable.
