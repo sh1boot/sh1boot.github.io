@@ -52,24 +52,8 @@ compression, but a memory page is typically only 4kB.  Does Linux just
 round the mapping out to the squashfs block size and hope that the extra
 data before it after will also get used imminently, or what?
 
-If I were going to design my own filesystem for this I would probably
-try to keep the block size small but mitigate the loss of compression by
-giving every disk block its choice of compression window to start with
-(and I would store those dictionaries uncompressed at 4kB alignment
-within the filesystem for easy and efficient paging).  And, I guess,
-index all the inodes by hash of the full path within the system, because
-when you do it offline you can permute the hash parameters until you
-minimise the collision rate for better packing.  And merge tails of
-files of similar types, which, I guess, is the one use case for EROFS's
-[fitblk][] storage method where I actually understand the benefit.  And
-put my superblock at the top of the first 4kB of the image with the
-front left free for bootstrap code of various sorts.  And probably not
-bother with esoterica like file permissions or timestamps and just
-hard-code them all as root:root 755 or 644.  And no device nodes or any
-of that silliness!  &lt;/rant&gt;
-
-I wish I had time to dig into these things, but I really don't.  I have
-a day job, now, and I need to get on with that.
+If I were going to design my own filesystem for this I'm not sure I'd be
+that much in line with either squashfs or EROFS.  But whatever.
 
 [squashfs]: <https://docs.kernel.org/filesystems/squashfs.html>
 [EROFS]: <https://docs.kernel.org/filesystems/erofs.html>
