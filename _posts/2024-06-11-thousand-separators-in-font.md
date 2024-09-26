@@ -5,124 +5,200 @@ title:  Font-based digit grouping
 categories: font, digit grouping, terminals
 draft: true
 ---
-A while back I got frustrated with struggling to read absurdly large numbers in
-terminal windows, and set about thinking how I might apply some logic in the
-terminal to subtly bunch together groups of three digits as a form of thousand
-separator.  Eventually it occurred to me to try doing it in the font with
-ligature rules (initially as a joke, but then I looked into it) and it turns
-out [Numderline][] is a thing which does that.
+A while back I got frustrated with struggling to read absurdly large
+numbers in terminal windows, and set about thinking how I might apply
+some logic in the terminal to subtly bunch together groups of three
+digits as a form of [thousand separator][digit grouping].  Eventually it
+occurred to me to try doing it in the font with ligature rules
+(initially as a joke, but then I looked into it) and it turned out
+[Numderline][] was a thing which already did that.
 
-Well, it does it in terminals which support font ligature rendering, with
-caveats about efficiency, cursor placement, screen edges, and digits which
-dance as you type... but I would suggest these compromises have been worth it.
+However I didn't get along with underlines for digit grouping.  So I
+spent some time [hacking around][my mess] tweaking it and adding
+hexadecimal support (that is, things starting with `0x` grouping by
+fours), and generally making a huge mess and struggling with bugs[^1] I
+couldn't overcome.
 
-You could discover that for yourself, of course, so what am I adding?
+So I [started again][my version].
 
-I didn't really get along with underlines for [digit grouping][].  I would
-prefer to stick with spaces, because they're a more common convention.  So I
-[hacked around][my version] a bit, tweaking up the spacing support and adding
-hexadecimal support (that is, things starting with `0x` grouping by fours).
+### Why in the font?
 
-Because my emphasis was on adding a gap (and optionally filling it with
-a comma or period [TODO: apostrophe]) but based on a tool which
-emphasised adding markup, I fairly lazily used extra glyphs to implement
-what would usually be in `GPOS` rules.  What I should _really_ do is
-insert thin spaces (or commas or periods or apostrophes or some distinct
-and not-misleading variation on those glyphs) into the string directly,
-and if it's a monospaced font then use `GPOS` to reflow those glyphs
-into their proper cells.
+The pragmatic answer is because I can usually insert a font as a
+solution where the software doesn't already do what I want.
 
-I just have to confirm that terminals actually apply `GPOS` effectively
-when they're trying to do glyph caching and all that.  It might also be
-prudent to squeeze the digits in both directions away from the gap, so
-that they deviate from their character cell less far, and are less
-likely to be clipped.
+The more ambitious, abstract answer is that it does better at
+abstracting the problem out to the presentation layer.  The application
+doesn't have to worry about implementation details of presenting
+thousand separators in a way that doesn't interfere with things like
+cut and paste operations.
 
-But also, since I found that most (not all) terminals support it, and [CSS also
-supports it][CSS font features], I decided to rely on so-called "font features"
-to make the digit grouping configurable.
+After reading some documentation my understanding is that the design
+intent of OpenType is that the application _is_ still on the hook for
+signalling all the locale-specific behaviours to the font, but it is not
+directly responsible for implementing them (except in as far as the font
+rendering logic is a part of the application).
 
-The common way of stuffing extra ligature rules into a font is to put them
-under the `calt` feature, which is on by default.  But in various applications
-in various places where you choose your font, you should also have the option
-of specifying a bunch of other features by [FourCC][] or by common names.
-The [Iosevka][] font, for example, offers [extensive customisation][iosevka-cv]
-in this space.
+And I want to reiterate, the underlying text does not have to be
+modified.  There's no confusion between a string with this or that
+thousand separator and a string which is meant to be parsed by another
+tool.  With one caveat about the decimal separator they're the same
+thing.  Even if the application bungles the locale settings, the
+underlying text is _not_ going to get any worse, and is still bare-bones
+copy-pasteable.
 
-So to test this I used the codes `dgsp` ("digit spaces", I guess), `dgco`,
-and `dgdo` (for commas and dots).
+### Why not in the font?
 
-In CSS, for example, if using the patched font then spaces could be enabled
-with:
+- It's not designed for that?
+- It's a solution using made-up codes which are not a part of any
+  standard.
+- Basically no fonts support it so it's rarely going to work, and even
+  if you provide a known-working font the user should have the ability
+  to override that font, and theirs probably won't support it.
+- My feeling (untested) is that the complexity of the tables I've added
+  to achieve this can't be very efficient.
+- In a terminal emulator the cursor placement is a bit off; and the
+  spacing of numbers are interfered with by spurious details like the
+  edge of the screen, the position of the cursor, and their interactions
+  with implementation details of each terminal.
+- In terminals and text entry boxes, the digits can dance around as you
+  type, which can be disconcerting.  Or as I've observed with Chrome,
+  they don't update properly while you're typing except for sometimes
+  when you don't expect it, but even then only partially.
+
+### What I have now
+
+I have a [font patcher][my version] which modifies a font to group sets
+of three digits into thousands (threes digits only; sorry rest of the
+world), four hexadecimal digits into 16-bit words, and five ractional
+digits into whatever unit 10e-5 is.  I don't like that last one but it
+seems to be a convention.
+
+But also, since I found that most (not all) terminals support it, and
+[CSS also supports it][CSS font features], I put everything under the
+control of so-called "font features" to make a few things configurable
+without re-patching the font.
+
+In monospaced mode grouping involves moving digits closer together so
+the group occupies the same space as before even after the addition of
+the digit grouping separator.  In proportional mode the digit grouping
+makes the number a bit wider.
+
+My new version uses `GPOS` rules to move the digits together for
+monospaced applications, rather than inventing new glyphs (mostly) like
+the old one did, and it uses fontforge's rule generation directly
+because that lets me generate a `reversesub` rule without crashing
+(though that interface also has its own bugs).
+
+The process involves inserting a lot of table-based rules into the font;
+first to mark out all the parts of the text containing digits, then more
+rules to replace that markup with spacing glyphs at the proper
+intervals, then more rules to remove all the cruft, then more rules to
+change some of the spacing glyphs into different shapes.  If it's a
+monospaced font then more rules shuffle things around a bit to make them
+occupy the same space as if there were no thousand separator.
+
+These rules are selectively enabled by different features, but always
+run in the same order.  Within a lookup there are bail-out rules to
+enable exclusion of specific patterns (there's no `[^a-z]`, so you need
+a test beforehand which bails out if it matches `[a-z]`), but these
+bail-outs don't reach across features.  Instead you can temporarily
+poison the text to prevent a subsequent rule from picking something up.
+
+What this produces is a font supports grouping decimal integers by
+threes , hexadecimal numbers by fours, and the decimal fraction parts by
+fives (which I hate, but it seems to be the convention).  This is
+enabled with the `dgsp` font feature.
+
+If you want to insert commas instead of spaces then use `dgco` instead,
+`dgap` for apostrophes, and `dgdo` for dots.  That last one doesn't make
+much sense unless you also switch on `dgdc`, to change the behaviour to
+treat comma as the decimal separator instead of period.
+
+For monospaced fonts, which are the ones I most care about, the glyphs
+are shifted sideways to make room for the space without the group taking
+up more space overall.  There are a few possible ways to shift things
+around:
+- move digits around the desired gap outwards
+- move digits surrounded by gaps towards the middle
+- move digits towards the decimal separator
+
+So far I have only implemented the last one.  It's the one that moves
+glyphs the furthest, which can introduce clipping problems on terminals,
+_but_ it's the most reliable in terms of getting the expected spacing.
+Re-spacing around or between separators causes uneven gap sizes or
+uneven spacing within a group of digits, which can be confusing.
+
+### How to use the result
+
+The common way of stuffing extra ligature rules into a font is to put
+them under the `calt` feature, which is on by default and you don't have
+to think about how to enable it.  That's not what I did.  Instead, in
+various applications in various places where you choose your font, you
+should also have the option of specifying a bunch of other features by
+[FourCC][] or by common names.  The [Iosevka][] font, for example,
+offers [extensive customisation][iosevka-cv] in this space.
+
+In CSS, for example, if using the patched font then spaces could be
+enabled with:
 ```css
 font-feature-settings: "dgsp";
 ```
 
-Then I extended on that with `dgcd` and `dgdd` if you want such marks to the
-right of the decimal point as well.  Personally I find that a bit disorienting
-(especially when the dot has to be changed to a comma, which just is a big fat
-lie), so I like to stick with spaces throughout.
+I've also added `dghx`, to force the grouping of hex strings without any
+prefix as hexadecimal, and to group them appropriately.  This only makes
+sense when you have CSS markup on a column of data which is definitely
+hex.  It's not a thing you would want to enable by default in a terminal
+emulator.
 
-But there's so much more that I did not do.  I did not implement Chinese
-spacings (except in hexadecimal, I guess).  I did not do Indian spacing.  I
-didn't do apostrophes as separators.  I did not add the option to group digits
-after the decimal by fives like Wikipedia does.  I didn't do anything at all
-for any numeral system outside of US-ASCII.
+The `dgdc` feature, to interpret comma as the decimal separator, is in a
+similar situation; in most programming languages I can think of trying
+to use a decimal comma would just be chaotic, but if you know the data
+you have is like that, then you can tag it in CSS.
 
-I also didn't do anything about things like git hashes, which have no prefix to
-signal that they're hexadecimal.  They just come out messy.  What I probably
-should do, there, is to disable decimal digit grouping for anything that abuts
-a letter (though this falls down for, eg., currency, like `CAD1000000`).
+The way these are enabled in a terminal emulator varies, but there's
+typically a way to do it in most of the terminals which support
+ligatures.
 
-TODO: all those things
+### Doing it properly
 
-And also I haven't figured out how to do all this without breaking the existing
-ligature rules, because of the specific combination of tools and bug
-workarounds needed to make forward progress (see for example the original
-[Numbderline][Numbderline 2] mention of such).  Somebody helpfully posted [a
-comment](https://github.com/sh1boot/numderline/issues/2#issuecomment-1781467431)
-on my own bug on that matter, but I have not yet followed up.
+Fonts live complicated lives dealing with a lot of different
+expectations from different languages.  Digit grouping doesn't seem to
+be an exception.
 
-TODO: that thing, too
+But I've entirely abandoned any notion of handling various conventions.
+It's much too complex and while I do not enjoy telling anybody to
+conform to a monoculture I really don't have the energy for much beyond
+an international standard.  Although I'm not sure what there is in the
+way of international standards around fraction digit grouping.  I just
+followed Wikipedia but I would prefer sixes or threes myself, to
+continue the pattern of aligning with SI prefixes (in fact, looking at
+the relevant [wikipedia
+page](https://en.wikipedia.org/wiki/Metric_prefix#List_of_SI_prefixes),
+they break from their own convention and use threes on that table!).
 
-Before going any further with extensive configurability, I stopped to ask
-myself what the point of it all would be if I did do that, when I already have
-what _I_ want.
+As far as I can tell, the process would involve reserving a bunch of
+different "[features][OpenType features]" identifying different
+conventions, for which I can (and already did) just go ahead and make up
+my own.  But if a serious effort was worthwhile then things would need
+to be more structured and complete.
 
-In the abstract I think the principal benefit is not having to handle text in
-quite such a locale-specific way (with an outstanding caveat about the decimal
-comma versus dot, etc.).  It becomes a presentation-layer problem.  This means
-you can cut and paste it elsewhere and you won't be foiled by extra glyphs
-causing confusion in other software.  Application settings or CSS can make
-their best effort at internationalised font configuration, but if you
-copy-paste the text it's still in its original bare-bones format.
+So that's where I stopped.  Because I have what I want and I'm not sure
+anybody else in the world cares that much.
 
-So I looked into more documentation on how and when to use font features, and
-what to do with my made-up codes.
+Things I guess _could_ be done:
+- Apply similar logic to different scripts which have their own digits
+  and have their own group separators.
+- Include features to specify different grouping choices for whole
+  numbers, whole hexadecimal numbers, and fractional numbers.
+- Include features that describe independent separator glyphs for whole
+  and fractional parts of numbers.
 
-I found a lot of verbiage about language and script support, which seemed
-sufficient to auto-detect the appropriate configuration.  Thankfully other
-documentation said specifically to not do that (TODO: find that reference).
-The application is meant to make all such decisions and signal what it wants by
-configuring the font appropriately.
 
-After all, this would be complicated by an international userbase who are used
-to dealing with English software which doesn't support their native systems
-properly (and, little by little, a userbase which doesn't even know their own
-native systems any more), meaning that sometimes localisation efforts are seen
-as unhelpful and confusing.  Certainly a strong case for the font not making
-its own deductions.
+[^1]: see for example the original [Numderline][Numderline 2] mention of such).  Somebody helpfully posted [a comment](https://github.com/sh1boot/numderline/issues/2#issuecomment-1781467431) on my own bug on that matter, but I don't need to worry about that anymore.
 
-I think configuring the font among many different conventions means reserving a
-bunch of different "[features][OpenType features]" identifying different
-conventions, for which I can (and already did) just go ahead and make up my
-own.  But if a serious effort was worthwhile then things would need to be more
-structured and complete.
 
-And then I stopped, because I don't know of anybody who actually cares about
-all that.
-
-[my version]: <https://github.com/sh1boot/numderline/>
+[my mess]: <https://github.com/sh1boot/numderline/>
+[my version]: <https://github.com/sh1boot/digitgrouper/>
 [Numderline]: <https://thume.ca/2019/11/02/numderline-grouping-digits-using-opentype-shaping/>
 [Numderline 2]: <https://blog.janestreet.com/commas-in-big-numbers-everywhere/>
 [Iosevka]: <https://typeof.net/Iosevka/>
