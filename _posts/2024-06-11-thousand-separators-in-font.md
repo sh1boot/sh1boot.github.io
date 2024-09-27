@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 3 Aug 2024 12:34:18 -0700  # 29ae209 permissions-fixes
+last_modified_at: Thu, 26 Sep 2024 21:53:09 -0700  # 1d40445 update-digit-grouping
 layout: post
 title:  Font-based digit grouping
 categories: font, digit grouping, terminals

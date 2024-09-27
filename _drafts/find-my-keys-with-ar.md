@@ -1,4 +1,5 @@
 ---
+last_modified_at: Wed, 14 Aug 2024 23:08:51 -0700  # 53d4fff Update-_drafts
 layout: post
 title: finding stuff using AR and AI
 ---

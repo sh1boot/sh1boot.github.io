@@ -1,4 +1,5 @@
 ---
+last_modified_at: Sat, 7 Sep 2024 20:26:42 -0700  # 9e03b05 Update-_drafts
 layout: post
 title: Smoothing textures to avoid aliasing
 ---

@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 17 Sep 2024 23:25:50 -0700  # 07f5de6 separate-out-my-fantasy-fs
 layout: post
 title: My half-baked thoughts on a compressed read-only filesystem
 ---

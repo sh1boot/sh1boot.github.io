@@ -1,4 +1,5 @@
 ---
+last_modified_at: Tue, 10 Sep 2024 23:16:08 -0700  # a38e1fe expand-rvv-intrinsics
 layout: post
 title: Syntactic sugar for RISC-V Vector extensions
 ---

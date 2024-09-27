@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 3 Aug 2024 21:13:35 -0700  # 3fc1ea7 a-handful-of-drafts
+last_modified_at: Thu, 12 Sep 2024 10:18:30 -0700  # 38867e1 more-battery-utilisation
 layout: post
 title:  Running all cells of a battery completely flat
 ---
