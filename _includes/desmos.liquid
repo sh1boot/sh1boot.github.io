@@ -1,0 +1,15 @@
+{%- capture preview -%} https://www.desmos.com/calc_thumbs/production/{{include.id}}.png {%- endcapture %}
+{%- capture embed -%} https://www.desmos.com/calculator/{{include.id}}?embed {%- endcapture %}
+{%- capture direct -%} https://www.desmos.com/calculator/{{include.id}} {%- endcapture %}
+{%- assign sandbox="allow-scripts allow-same-origin" %}
+{%- assign buttontext="Click to view in Desmos" %}
+{%- capture id -%} desmos-{{include.id | slugify}} {%- endcapture %}
+
+{%- include clickable-embed.liquid
+    preview=include.image
+    preview_default=preview
+    embed=embed
+    direct=direct
+    sandbox=sandbox
+    buttontext=buttontext
+    id=id %}

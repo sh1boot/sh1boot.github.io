@@ -1,0 +1,15 @@
+{%- capture preview -%} https://www.geogebra.org/sp-assets/assets/images/ogImage.c3863704.png {%- endcapture %}
+{%- capture embed -%} https://www.geogebra.org/calculator/{{include.id}}?embed {%- endcapture %}
+{%- capture direct -%} https://www.geogebra.org/calculator/{{include.id}} {%- endcapture %}
+{%- assign sandbox="allow-scripts allow-same-origin" %}
+{%- assign buttontext="Click to view in GeoGebra" %}
+{%- capture id -%} geogebra-{{include.id | slugify}} {%- endcapture %}
+
+{%- include clickable-embed.liquid
+    preview=include.image
+    preview_default=preview
+    embed=embed
+    direct=direct
+    sandbox=sandbox
+    buttontext=buttontext
+    id=id %}
