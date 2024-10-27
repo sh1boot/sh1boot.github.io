@@ -7,45 +7,49 @@ is an interesting bodge.  It approximates a dynamic cut-off frequency
 with linear interpolation between adjacent log<sub>2</sub> cut-off
 frequencies.
 
-I was trying to visualise that process in the frequency domain and came
-up with the following plot.  Frequency along the horizontal axis,
-response on the vertical.  The vertical blue line is the cut-off
-frequency needed for the output resolution compared to the texture
-resolution, and the falling platforms are what you get when a higher
-mipmap level is faded out and replaced with the lower mipmap level.
-![idealised mipmap frequency response](/images/naive_mipmap_passband.webp)
+To set a baseline, what we _want_ from the ideal texture unit is to cut
+all the signal content above the cut-off frequency implied by the
+distance between pixels of the output:
+![ideal frequency response](/images/ideal_mipmap_frequency.webp)
 
-What we see here is that for the low-frequency detail (on the left) all
-the mip levels agree, and blending from one to another doesn't affect
-that area.
+What we actually get from mipmapping is a linear blend that produces
+this rising shelf effect as the cut-off transitions between two adjacent
+mipmap levels:
+![typical mipmap frequency response](/images/typical_mipmap_frequency.webp)
 
-Something that stands out visually with mipmap blending is the way this
-blurry version of the texture fades into view as it shrinks and becomes
-less chunky.  That's a thing you can _sort of_ see in this frequency
-response plot above, where the corner of the lower mipmap stands proud
-as the higher level falls down.  And frequencies above that are weaker
-than they should be (consequently the image is blurrier).  Also the
-signal content (red line) extends beyond the cutoff, which produces
-visible aliasing.
+I don't imagine it's usual to go looking at the frequency response of
+one axis of the transfer function of image processing operations.  But
+that's what I'm doing today.
 
-It's got all the bad things at once.  Thankfully it's not altogether
-realistic.
+For those not used to seeing it, that crack between the ideal signal
+and the cut-off frequency is a practical limit of resampling; and for
+the sake of clarity I've used much sharper band-limiting filters than
+are realistic (or prudent), and I've ignored the high-frequency rolloff
+and clipped off what would alias as a consequence of linear
+interpolation.  And I put the vertical frequency cut-off line where I
+wanted it, without regard to the programmability of the LOD bias, or
+whatever its default position would be.
 
-Depending on your LOD bias that vertical line might be to the left or
-right of the one I've drawn there, and I don't promise that the one I've
-drawn is a bias of 0.  It's just the most useful place I could put the
-line.  Moving it just makes one problem or other worse.
+So what we see in these plots is that all the mip levels agree on the
+low-frequency content of the image, but they cut off at regular
+intervals (regular in the log domain), and when blended from one to
+the next the low-frequency content is not affected but high-frequencies
+come out as something not ideal.
 
-And the sharp corners never happen.  That's an idealised model using
-a brick-wall interpolation which isn't real and would look terrible even
-if you could do it.  On the other hand, linear interpolation (which is
-what we have available) droops on the right hand side of the pass band
-but doesn't get very low before bouncing off the Nyquist frequency to
-make an aliasey mess all over the place.
+There are two bad things of note.  One is that the signal extends beyond
+the cut-off frequency.  That's where aliasing comes from.  The other is
+that during much of the transition the high frequencies don't go all the
+way up like they should.
 
-Thinking about mitigations I started experimenting with pre-filtering
-the mipmaps and then fixing them after the blend operation.  Just to
-see.
+But let's not overlook that this is mostly illustrative.
+
+Musing about how to mitigate this I started experimenting with
+pre-filtering the mipmaps and then fixing them after the blend and
+resapmling operation.  In the frame buffer.
+
+This makes it a very limited-use remedy and it would be challenging to
+fit into a generic 3D pipeline.  But if it does work then there are
+situations where it could be used.
 
 My idea is to apply a sharpening post-filter to the result of the
 texture lookups -- to the output samples after they've been mip-mapped
@@ -57,56 +61,59 @@ identical filter.
 
 For that to work we need the above graph to show a frequency rolloff
 which is comparatively smooth and consistent regardless of where the
-cut-off frequency is.  Not these escalator steps.
+cut-off frequency is in relation to the mip levels.  We can't just have
+these elevator steps.
 
-In this naive square model we could replace the steps with ramps; set at
-just the right angle that when you fade from one to another it looks
-exactly like the ramp is just shifting left or right.  Then you could
-apply an inverse transform afterwards to correct the ramp back to flat
-in the passband.
+My first naive thought was to replace the steps with ramps which, when
+blended together, would give the impression of a ramp moving smoothly
+left and right.  A correction filter to fix that that would be simple.
 
-![fanciful mipmap frequency response](/images/sharpened_hopeful_mipmap_passband.webp)
+If that was going to work, and if I used a 1-pole filter to make the
+ramp, it might look a bit like this:
+![wouldbenice mipmap frequency response](/images/unclipped_mipmap_frequency.webp)
+(blue line is the correction filter and green is the recovered passband)
 
-But that's not real.  Most importantly, each mip has to be truncated
-according to its theoretical bandwidth, so those steps aren't going to
-disappear that easily.
-
-It gets a bit hairy at this point.  Linear interpolation will actually
-give a smooth rolloff but the underyling signal becomes aliases and
-should really be filtered out.  But linear interpolation can't do that.
+But it's not going to work because that ignores the fact that the source
+images are band-limited.  So there's going to be some kind of
+unavoidable inflection point in the curve representing that hard stop.
+Sort of.  It'll actually be filled in with aliasing noise from linear
+interpolation, which makes analysis kind of hairy.
 
 There's a bunch of signal processing theory goes here, but for
-expediency I just truncated the passbands at their theoretical limits to
-see what's feasible.  And it _looks like_ this technique could actually
-help:
+expediency I just pressed on with truncated passbands to see what's
+feasible.  And it _looks like_ this technique could actually help:
 
-{% include desmos.liquid id='kfm4ax0mbc' image='/images/sharpened_mipmap_passband.webp' %}
+{% include desmos.liquid id='1cmtylz8ry' image='/images/sharpened_mipmap_frequency.webp' %}
 
-But all of this is a 1D theoretical analysis with perfect band-limiting
-in the mipmap interpolation (because the calculations got too messy).
-It would make more sense at this point to defer to real-world
-implementation and experimentation.
+This could be tuned a lot better with proper models of linear
+interpolation and a filter directly tuned to minimise the error across
+the whole pass band and give a clean roll-off and blah blah blah
+filter-design blah.
 
-I don't have time for that, so here's another one where I tried to
-represent the impact of linear interpolation and mipmaps that had been
-band-limited, etc., and then I tweaked things around aimlessly for a
-bit:
-{% include desmos.liquid id='bmkj68ee7z' %}
+But all of this is a 1D theoretical model with idealised band-limiting
+in the mipmap interpolation.  It would make more sense at this point to
+defer to real-world implementation and experimentation.
 
-And this does _nothing_ to help with mip-mappings' other failure case
-where one axis is compressed differently from the other.
+I don't have time for all that, so here's another one where I just used
+slightly more realistic filters, and then hacked things around a bit
+trying to make the pass band pump a bit less at the expense of a flat
+passband (I'm sure it's fine!):
+{% include desmos.liquid id='gt8jwlswyo' image='/images/hacked_mipmap_frequency.webp'%}
 
-And the involvement of a sharpening filter limits this to niche
-situations, as well.  In a typical 3D scene you have other things going
-on, like the edges of the textures and horizons with unrelated texture
-data.
+Still, let's not forget that all this does _nothing_ to help with
+mip-mapping's other failure case where one axis is compressed
+differently from the other.
 
-_Maybe_ you could do something like oversize your horizons in the
-geometry shader and then use alpha blending around the edges to mimic
-the blur which the sharpening will counteract.  But that would probably
-end up way more expensive than supersampling.
+And, as mentioned, the post-filter makes this for niche application
+only.  In a typical 3D scene one has other things going on, like the
+edges of the textures and horizons with unrelated texture data.
 
-But if you're doing something on a large scale, where an outboard
-post-filter makes sense, then maybe this would work.
+_Maybe_ something like oversizing the geometry would make it possible to
+use alpha blending around the edges to mimic the blur which the
+sharpening will counteract.  But that would probably end up way more
+expensive than supersampling.
+
+But if it's part of a simple image warping pipeline this might be
+practical.
 
 [mipmap]: <https://en.wikipedia.org/wiki/Mipmap>
