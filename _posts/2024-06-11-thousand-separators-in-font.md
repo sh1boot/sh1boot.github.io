@@ -5,18 +5,18 @@ title:  Font-based digit grouping
 categories: font, digit grouping, terminals
 draft: true
 ---
-A while back I got frustrated with struggling to read absurdly large
-numbers in terminal windows, and set about thinking how I might apply
-some logic in the terminal to subtly bunch together groups of three
-digits as a form of [thousand separator][digit grouping].  Eventually it
-occurred to me to try doing it in the font with ligature rules
-(initially as a joke, but then I looked into it) and it turned out
-[Numderline][] was a thing which already did that.
+Struggling to read absurdly large numbers in terminal windows many years
+ago, I wondered how I might apply some logic in the terminal to subtly
+bunch together groups of three digits as a form of [thousand
+separator][digit grouping].  Eventually it occurred to me to try doing
+it in the font with ligature rules (initially as a joke, but then I
+looked into it) and it turned out [Numderline][] was a thing which
+already did that.
 
-However I didn't get along with underlines for digit grouping.  So I
-spent some time [hacking around][my mess] tweaking it and adding
+But I didn't get along with underlines for digit grouping.  So I
+spent some time [hacking around][my mess], tweaking it, and adding
 hexadecimal support (that is, things starting with `0x` grouping by
-fours), and generally making a huge mess and struggling with bugs[^1] I
+fours), and generally making a huge mess, and struggling with bugs[^1] I
 couldn't overcome.
 
 So I [started again][my version].
@@ -26,17 +26,13 @@ So I [started again][my version].
 The pragmatic answer is because I can usually insert a font as a
 solution where the software doesn't already do what I want.
 
-The more ambitious, abstract answer is that it does better at
+The more ambitious answer is that it does better at
 abstracting the problem out to the presentation layer.  The application
 doesn't have to worry about implementation details of presenting
-thousand separators in a way that doesn't interfere with things like
-cut and paste operations.
-
-After reading some documentation my understanding is that the design
-intent of OpenType is that the application _is_ still on the hook for
-signalling all the locale-specific behaviours to the font, but it is not
-directly responsible for implementing them (except in as far as the font
-rendering logic is a part of the application).
+thousand separators and trying to ensure that copy-paste operations
+aren't impeded by the added characters.  It just has to relay the right
+configuration to the font, and then render that font the way it asks to
+be rendered.
 
 And I want to reiterate, the underlying text does not have to be
 modified.  There's no confusion between a string with this or that
@@ -69,7 +65,7 @@ copy-pasteable.
 
 I have a [font patcher][my version] which modifies a font to group sets
 of three digits into thousands (threes digits only; sorry rest of the
-world), four hexadecimal digits into 16-bit words, and five ractional
+world), four hexadecimal digits into 16-bit words, and five fractional
 digits into whatever unit 10e-5 is.  I don't like that last one but it
 seems to be a convention.
 
@@ -83,11 +79,15 @@ the group occupies the same space as before even after the addition of
 the digit grouping separator.  In proportional mode the digit grouping
 makes the number a bit wider.
 
-My new version uses `GPOS` rules to move the digits together for
-monospaced applications, rather than inventing new glyphs (mostly) like
-the old one did, and it uses fontforge's rule generation directly
-because that lets me generate a `reversesub` rule without crashing
-(though that interface also has its own bugs).
+### How it works
+By default my new version uses `GPOS` rules to move the digits together
+for monospaced applications, rather than inventing new glyphs (mostly)
+like the old one did, and it uses [FontForge][]'s rule generation
+directly because that lets me generate a `reversesub` rule without
+crashing (though that interface also has its own bugs).
+
+But it turns out some terminals don't work with `GPOS`, so there's a
+separate mode to duplicate glyphs at different positions instead.
 
 The process involves inserting a lot of table-based rules into the font;
 first to mark out all the parts of the text containing digits, then more
@@ -104,16 +104,6 @@ a test beforehand which bails out if it matches `[a-z]`), but these
 bail-outs don't reach across features.  Instead you can temporarily
 poison the text to prevent a subsequent rule from picking something up.
 
-What this produces is a font supports grouping decimal integers by
-threes , hexadecimal numbers by fours, and the decimal fraction parts by
-fives (which I hate, but it seems to be the convention).  This is
-enabled with the `dgsp` font feature.
-
-If you want to insert commas instead of spaces then use `dgco` instead,
-`dgap` for apostrophes, and `dgdo` for dots.  That last one doesn't make
-much sense unless you also switch on `dgdc`, to change the behaviour to
-treat comma as the decimal separator instead of period.
-
 For monospaced fonts, which are the ones I most care about, the glyphs
 are shifted sideways to make room for the space without the group taking
 up more space overall.  There are a few possible ways to shift things
@@ -122,11 +112,12 @@ around:
 - move digits surrounded by gaps towards the middle
 - move digits towards the decimal separator
 
-So far I have only implemented the last one.  It's the one that moves
-glyphs the furthest, which can introduce clipping problems on terminals,
-_but_ it's the most reliable in terms of getting the expected spacing.
-Re-spacing around or between separators causes uneven gap sizes or
-uneven spacing within a group of digits, which can be confusing.
+So far I have only implemented the last two.  The last one is the one
+that moves glyphs the furthest, which can introduce clipping problems on
+terminals, _but_ it's the most reliable in terms of getting the expected
+spacing.  Re-spacing around or between separators causes uneven gap
+sizes or uneven spacing within a group of digits, which can be
+confusing.
 
 ### How to use the result
 
@@ -143,6 +134,9 @@ enabled with:
 ```css
 font-feature-settings: "dgsp";
 ```
+
+Change that to `dgco` for comma separators, `dgap` for apostrophes,
+`dgdo` for dots.
 
 I've also added `dghx`, to force the grouping of hex strings without any
 prefix as hexadecimal, and to group them appropriately.  This only makes
@@ -165,8 +159,26 @@ Fonts live complicated lives dealing with a lot of different
 expectations from different languages.  Digit grouping doesn't seem to
 be an exception.
 
+After reading some documentation my understanding is that even though
+fonts have the means to tie configuration items to different languages
+and scripts, the design intent of OpenType is that the application _is_
+still on the hook for signalling all the locale-specific behaviours to
+the font, so that the font can then deliver the right tables to the
+shaper.
+
+If one were to make a concerted effort on this there would be a bunch
+more rules for all the different spacing rules around the world, and
+feature names to enable each of them.
+
+As far as I can tell, the process would involve reserving a bunch of
+different "[features][OpenType features]" identifying different
+conventions, for which I can (and already did) just go ahead and make up
+my own.  If a serious effort was worthwhile then things would need
+to be more structured and complete than what I've cobbled together,
+though.
+
 But I've entirely abandoned any notion of handling various conventions.
-It's much too complex and while I do not enjoy telling anybody to
+It's all much too complex and while I do not enjoy telling anybody to
 conform to a monoculture I really don't have the energy for much beyond
 an international standard.  Although I'm not sure what there is in the
 way of international standards around fraction digit grouping.  I just
@@ -175,12 +187,6 @@ continue the pattern of aligning with SI prefixes (in fact, looking at
 the relevant [wikipedia
 page](https://en.wikipedia.org/wiki/Metric_prefix#List_of_SI_prefixes),
 they break from their own convention and use threes on that table!).
-
-As far as I can tell, the process would involve reserving a bunch of
-different "[features][OpenType features]" identifying different
-conventions, for which I can (and already did) just go ahead and make up
-my own.  But if a serious effort was worthwhile then things would need
-to be more structured and complete.
 
 So that's where I stopped.  Because I have what I want and I'm not sure
 anybody else in the world cares that much.
