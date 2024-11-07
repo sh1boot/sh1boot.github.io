@@ -3,13 +3,14 @@ last_modified_at: Wed, 11 Sep 2024 21:48:39 -0700  # 0f8b31a clarity
 layout: post
 title: Heatmap-based triangulation
 ---
-Many years ago these little Bluetooth object tracker gadgets hit the market
-(eg., [Tile][], [TrackR][], [Chipolo][], and eventually [AirTag][]), and I
+About ten years ago a bunch of these little Bluetooth "[key finder][]"
+gadgets hit the market (eg., [Tile][], [TrackR][], [Chipolo][], and
+eventually [AirTag][]), and after thinking about how much use they'd be I
 began to wonder if it could be made easier to find them in a messy room, or
 long grass, or whatever, doing better than the [RSSI][]-based numerical
 distance estimate that you could get on your phone.
 
-Before I give the impression of any kind of endorsement, as handy as these
+Before I give the impression of any kind of endorsement; as handy as these
 devices might seem, there are significant privacy considerations[^1].
 
 So I thought about heat maps.  The basic idea being that you have a map
@@ -85,6 +86,7 @@ But I don't hold it much hope for ever finding time to experiment.
 [radiation pattern]: <[https://en.wikipedia.org/wiki/Radiation_pattern>
 [lights on a Christmas tree]: <https://github.com/standupmaths/xmastree2020>
 
+[Key finder]: <https://en.wikipedia.org/wiki/Key_finder>
 [Chipolo]: <https://chipolo.net/>
 [TrackR]: <https://en.wikipedia.org/wiki/TrackR>
 [Tile]: <https://www.tile.com/>
