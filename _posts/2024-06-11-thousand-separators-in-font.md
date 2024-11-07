@@ -94,15 +94,18 @@ first to mark out all the parts of the text containing digits, then more
 rules to replace that markup with spacing glyphs at the proper
 intervals, then more rules to remove all the cruft, then more rules to
 change some of the spacing glyphs into different shapes.  If it's a
-monospaced font then more rules shuffle things around a bit to make them
-occupy the same space as if there were no thousand separator.
+monospaced font then more rules shuffle things around a bit to make
+numbers occupy the same space as if there were no thousand separators.
 
-These rules are selectively enabled by different features, but always
-run in the same order.  Within a lookup there are bail-out rules to
-enable exclusion of specific patterns (there's no `[^a-z]`, so you need
-a test beforehand which bails out if it matches `[a-z]`), but these
-bail-outs don't reach across features.  Instead you can temporarily
-poison the text to prevent a subsequent rule from picking something up.
+These rules are selectively enabled by different features, but the rules
+must always run in the same order.  Within a lookup there are bail-out
+rules to enable exclusion of specific patterns (there's no `[^a-z]xyz`,
+so you need a test beforehand which bails out if it matches `[a-z]xyz`),
+and these bail-outs don't reach across lookups so you can advance to the
+next logical block that way.  If one block wants to prevent another from
+running it can instead temporarily poison the text to prevent a
+subsequent rule from matching it, and then a block at the end to mop
+that up again.
 
 For monospaced fonts, which are the ones I most care about, the glyphs
 are shifted sideways to make room for the space without the group taking
@@ -110,14 +113,14 @@ up more space overall.  There are a few possible ways to shift things
 around:
 - move digits around the desired gap outwards
 - move digits surrounded by gaps towards the middle
-- move digits towards the decimal separator
+- move digits towards the [implicit] decimal point
 
 So far I have only implemented the last two.  The last one is the one
 that moves glyphs the furthest, which can introduce clipping problems on
 terminals, _but_ it's the most reliable in terms of getting the expected
 spacing.  Re-spacing around or between separators causes uneven gap
-sizes or uneven spacing within a group of digits, which can be
-confusing.
+sizes or uneven spacing within a group of digits, which might look
+a bit weird.
 
 ### How to use the result
 
@@ -139,15 +142,16 @@ Change that to `dgco` for comma separators, `dgap` for apostrophes,
 `dgdo` for dots.
 
 I've also added `dghx`, to force the grouping of hex strings without any
-prefix as hexadecimal, and to group them appropriately.  This only makes
-sense when you have CSS markup on a column of data which is definitely
-hex.  It's not a thing you would want to enable by default in a terminal
-emulator.
+prefix as hexadecimal, and to group them appropriately.  This might be
+useful when you have CSS markup on a column of data which is definitely
+hexadecimal.  It's not a thing you would want to enable by default in a
+terminal emulator.
 
 The `dgdc` feature, to interpret comma as the decimal separator, is in a
 similar situation; in most programming languages I can think of trying
-to use a decimal comma would just be chaotic, but if you know the data
-you have is like that, then you can tag it in CSS.
+to use a decimal comma would be problematic, but if you know the data
+you have is like that then you can tag it as such to get the intended
+spacing.
 
 The way these are enabled in a terminal emulator varies, but there's
 typically a way to do it in most of the terminals which support
@@ -180,7 +184,7 @@ though.
 But I've entirely abandoned any notion of handling various conventions.
 It's all much too complex and while I do not enjoy telling anybody to
 conform to a monoculture I really don't have the energy for much beyond
-an international standard.  Although I'm not sure what there is in the
+one international standard.  Although I'm not sure what there is in the
 way of international standards around fraction digit grouping.  I just
 followed Wikipedia but I would prefer sixes or threes myself, to
 continue the pattern of aligning with SI prefixes (in fact, looking at
@@ -209,6 +213,7 @@ Things I guess _could_ be done:
 [Numderline 2]: <https://blog.janestreet.com/commas-in-big-numbers-everywhere/>
 [Iosevka]: <https://typeof.net/Iosevka/>
 [iosevka-cv]: <https://github.com/be5invis/Iosevka/blob/main/doc/character-variants.md>
+[FontForge]: <https://fontforge.org/en-US/>
 
 [CSS font features]: <https://developer.mozilla.org/en-US/docs/Web/CSS/font-feature-settings>
 [FourCC]: <https://en.wikipedia.org/wiki/FourCC>
