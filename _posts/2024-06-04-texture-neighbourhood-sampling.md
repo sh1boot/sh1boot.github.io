@@ -3,28 +3,34 @@ last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # d3117a6 texture-neighbourho
 layout: post
 title:  Neighbourhood sampling order during texture filtering
 description: A workaround to avoid glitches when working with derivative functions around texture interpolation logic.
-categories: glsl, hacks
+categories: glsl, hacks, fwidth, thresholding, antialiasing
 svg: true
 ---
-During my tinkering with [pixel-art scaling](/pixel-art-scaling) I found a
-source of noise which comes up when trying to use the derivative operations in
-shaders.  It's somewhat my own fault for doing thresholding excessively, but
-still...
+In my [pixel-art scaling](/pixel-art-scaling) tinkering I found a
+source of glitches in anti-aliased threshold operations involving
+derivative functions in shaders.  So I worked out a workaround which
+saves me having to think too hard about a bunch of corner cases.
 
-When applying a window function to a shader (here I'll use linear interpolation
-for simplicity) it might be reasonable to do something like this:
+When applying a window function in a shader (here I'll use linear
+interpolation for simplicity; you would normally let the hardware do
+something like that, but real logic can be more complex) it's perfectly
+reasonable to end up with something like this:
 ```glsl
-ivec2 uv_i = ivec2(floor(uv));
-vec2 weight = uv - vec2(uv_i);
+ivec2 i = ivec2(floor(uv));
+vec2 weight = uv - vec2(i);
 
-vec4 a = texelFetch(s, uv_i + ivec2(0,0)), b = texelFetch(s, uv_i + ivec2(1,0)),
-     c = texelFetch(s, uv_i + ivec2(0,1)), d = texelFetch(s, uv_i + ivec2(1,1));
+vec4 a = texelFetch(s, i + ivec2(0,0)), b = texelFetch(s, i + ivec2(1,0)),
+     c = texelFetch(s, i + ivec2(0,1)), d = texelFetch(s, i + ivec2(1,1));
 return mix(mix(a, b, weight.x), mix(c, d, weight.x), weight.y);
 ```
 
-What I found is that for some uses of those variables it can be problematic if
-they're not smooth functions along the axes of interpolation.  Something that
-especially stands out when the source data is low-resolution pixel art.
+From that you might build things up and apply other filters and whatever
+else; but what I noticed is that when subsequent operations want to use
+the derivative functions (`dFdx()`, `dFdy()`, and `fwidth()`) then
+there can be problems.
+
+Problems like this:
+{% include shadertoy.liquid id='XfKcDK' %}
 
 Imagine you're sampling along a line spanning from pixels M to R in the example
 below.  Ignore the Y dimension for now.  You'll see `a`, `b`, and `weight` take
@@ -89,17 +95,21 @@ step changes every time an integer boundary is crossed:
   {%- endfor %}
 </svg>
 
-That's usually OK, unless you do anything that involves derivatives or, I
-guess, maybe if you accidentally leave mipmaps switched on.
+Those step changes cause `dFdx()` to return much larger values than
+expected at the transitions, even while the output of the function
+itself appears smooth.
+
+This can affect the LOD calculation in mipmapping (though you should
+probably be doing that manually, here) and the small transition band
+used for anti-aliased thresholding becomes an unexpectedly large band.
 
 Here's an workaround I came up with:
-
 ```glsl
-ivec2 uv_i = ivec4((ivec2(floor(uv)) + 1) & -2, ivec2(floor(uv)) | 1);
-vec2 weight = abs(uv - vec2(uv_i.xy));
+ivec4 i = ivec4(floor((uv.xyxy + vec4(1,1,0,0)) / 2.0) * 2.0 + vec4(0,0,1,1));
+vec2 weight = abs(uv - vec2(i.xy));
 
-vec4 a = texelFetch(s, uv_i.xy), b = texelFetch(s, uv_i.zy),
-     c = texelFetch(s, uv_i.xw), d = texelFetch(s, uv_i.zw);
+vec4 a = texelFetch(s, i.xy), b = texelFetch(s, i.zy),
+     c = texelFetch(s, i.xw), d = texelFetch(s, i.zw);
 return mix(mix(a, b, weight.x), mix(c, d, weight.x), weight.y);
 ```
 
@@ -141,9 +151,36 @@ of the problem already, or it may be necessary to rearrange a bit more of the
 arithmetic to ensure the multiplication by the zero-weighting happens earlier
 to force the switch to appear smooth.
 
+Alternatively it's possible to be careful to calculate the derivatives
+on the continuous values earlier in the code.  That's probably better if
+you don't mind doing it, but sometimes that can involve managing a bit
+more data and remembering to do things that you might not otherwise want
+to remember.
+
+Another benefit of doing it this way is that if one input pixel contains
+an outlier which causes a different path to be taken, then all the
+fragments which touch that pixel will see the aberration in the same
+stage in the function so they can all take the same branch in unison;
+rather than each having to branch differently at different stages
+depending on that pixel's relative position to themselves (though
+branching may still cause problems with derivatives).
+
 This can be extended to a mod-n system for kernels of size n.  Capturing pixels
 into something more like a ring buffer, where only the edge cases (still the
 zero-weighted cases) get updated during a transition.
+
+```glsl
+vec4 ix = floor((uv.x + vec4(3,2,1,0)) / 4.0) * 4.0 + vec4(0,1,2,3);
+vec4 iy = floor((uv.y + vec4(3,2,1,0)) / 4.0) * 4.0 + vec4(0,1,2,3);
+vec4 weightx = window(abs(uv.x - ix));
+vec4 weighty = window(abs(uv.y - iy));
+vec4 acc = vec4(0);
+for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+        acc += texelFetch(s, ivec2(ix[j], iy[i])) * weightx[j] * weighty[i];
+    }
+}
+```
 
 The ring-buffer analogy is misleading, of course, because the adjacent pixels
 are computed concurrently and they all fill up their own private copies of the
@@ -151,6 +188,3 @@ buffer at the same time without sharing context, so there isn't the bandwidth
 saving of a classical ring buffer.  But the real point is that they all have
 mostly the same values at the same offests and so this mitigates a class of
 glitches in the derivatives.
-
-TODO: give the example code for larger kernels, and a simplified example shader
-exhibiting the problem.
