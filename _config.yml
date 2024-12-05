@@ -45,8 +45,12 @@ plugins:
 defaults:
   -
     scope:
-      path: 'testing/**'
-      path: 'drafts/**'
+      path: "testing"
+    values:
+      sitemap: false
+  -
+    scope:
+      path: "drafts"
     values:
       sitemap: false
 
