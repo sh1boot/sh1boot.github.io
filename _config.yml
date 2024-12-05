@@ -42,6 +42,14 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
+defaults:
+  -
+    scope:
+      path: 'testing/**'
+      path: 'drafts/**'
+    values:
+      sitemap: false
+
 kramdown:
   math_engine: mathjax
 
