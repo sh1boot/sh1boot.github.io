@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # d3117a6 texture-neighbourhood-problem-solved
+last_modified_at: Mon, 2 Dec 2024 19:12:14 -0800  # 3a9616c Improved-texture-neighbourhood-sampling
 layout: post
 title:  Neighbourhood sampling order during texture filtering
 description: A workaround to avoid glitches when working with derivative functions around texture interpolation logic.

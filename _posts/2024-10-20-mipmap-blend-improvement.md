@@ -1,4 +1,5 @@
 ---
+last_modified_at: Sun, 27 Oct 2024 23:08:06 -0700  # b302ee6 better-images-for-mipmap-stuff
 layout: post
 title: Trying to improve mipmap blending
 ---

@@ -1,5 +1,5 @@
 ---
-last_modified_at: Thu, 26 Sep 2024 21:53:09 -0700  # 1d40445 update-digit-grouping
+last_modified_at: Thu, 7 Nov 2024 09:54:58 -0800  # 7f9e735 digit-grouping-tweaks
 layout: post
 title:  Font-based digit grouping
 categories: font, digit grouping, terminals
