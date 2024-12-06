@@ -3,7 +3,7 @@ layout: post
 title: Casting out bazillions
 mathjax: true
 ---
-So you've done some arithmetic by hand, and now you want to make sure
+So you've done some arithmetic by hand and now you want to make sure
 it's correct.  [Casting out nines][] is the conventional sanity check,
 but that overlooks digit transpositions.  What if you want something
 stronger?  Try this one weird trick.
@@ -13,7 +13,7 @@ identities like $a + b = c + oops$, where $oops$ will be zero if we
 calculated $c$ correctly.  A thing that's generally easier to calculate
 than the original sum is $a + b \equiv c + oops \mod 9$, and $a + b - c
 \equiv oops \mod 9$ which should come out to zero if $oops$ is zero (but
-also if it's any other multiple of nine).  This extends other
+also if it's any other multiple of nine).  This extends to other
 arithmetic.
 
 But a problem with mod 9 is that it's blind to digit transposition.  We
@@ -78,7 +78,7 @@ blind spot.
 
 Next you can try the same thing mod 11.  Now you have a one in 99 chance
 of being wrong.  Digit transpositions only sneak through if they're
-swapped with across an interval of two.
+swapped across an interval of two.
 
 Next you can try mod 101 for a one in 9999 chance of being wrong, and
 digit transpositions must be across an interval of four.
@@ -96,27 +96,23 @@ Or, of course, you could just use a computer like any sensible person.
 Here's where I should provide some tricks for doing mod 73 and mod 137
 arithmetic, but I haven't figured those out, yet.
 
-TODO: that.
+TODO: do that
 
-The holy grail here, I think, would be an expedient remainder function
-which does _not_ rely on repdigits.  Something I assume might help to
-hash out more of those blind spots to the sorts of errors that humans
-make.  What got me thinking about this was a couple of [Stand Up
-Maths][] things.  One showing off a bunch of [divisibility tests][] for
-values up to 30000:
+I think the holy grail here would be an expedient remainder algorithm
+which does _not_ rely on repdigits, which I assume would help to hash
+out more of those blind spots to the sorts of errors that happen in
+decimal.  What got me thinking about this was a couple of [Stand Up
+Maths][] things.  One showing off a bunch of [divisibility tests][]:
 {% include youtube.liquid id='6pLz8wEQYkA' %}
 
-With all that in cast in the context of the [2024 Pi calculation
+With those cast in the context of the [2024 Pi calculation
 effort](https://youtu.be/LIg-6glbLkU), which involved techniques for
 mitigating human error.  I like optimising things so the redundancy
 gets my attention.
 
 Initially I was hopeful of finding some easy divisibility tests which
-were more interesting than [repdigits][repdigit], because this would
-probably yield tests which were more resilient to weird things happening
-with mistakes relating to using a decimal base.
-
-But after a bit of poking around I decided that mod 99999999 was "good
+were more interesting than [repdigits][repdigit],
+but after a bit of poking around I decided that mod 99999999 was "good
 enough".  If I were to go one step further I would look at reducing the
 numbers $mod 10^n - k$ for a small $k$ other than 1, looking for a value
 with some manageable factors.  This is how the [Adler-32][] checksum
@@ -125,7 +121,7 @@ works, except that's in binary.
 Those divisibility rules cut the number down to size by eating away the
 top and the bottom ends with different rules.  Both rules rely on adding
 or subtracting a multiple of the divisor and cutting chunks off of the
-number once they're eliminated.  However, cutting chunks off the bottom
+number once they're eliminated.  But cutting chunks off the bottom
 part involves manipulating them to make the unit digit zero and then
 discarding it by dividing by ten.  Division by ten corrupts the
 remainder but it never changes it between zero and nonzero (provided the
@@ -135,7 +131,7 @@ you divided by ten and then multiplying by ten mod the divisor, but to
 make that useful you'll need more tricks.
 
 
-[Optimising Adler32]: </adler32-checksum/>
+[Adler-32]: </adler32-checksum/>
 [casting out nines]: <https://en.wikipedia.org/wiki/Casting_out_nines>
 [five-second rule]: <https://en.wikipedia.org/wiki/Five-second_rule>
 [check digit]: <https://en.wikipedia.org/wiki/Check_digit>
