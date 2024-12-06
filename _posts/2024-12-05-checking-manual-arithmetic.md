@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Casting out bazillions
+title: Extended checks on manual arithmetic
 mathjax: true
 ---
 So you've done some arithmetic by hand and now you want to make sure
@@ -105,14 +105,14 @@ decimal.  What got me thinking about this was a couple of [Stand Up
 Maths][] things.  One showing off a bunch of [divisibility tests][]:
 {% include youtube.liquid id='6pLz8wEQYkA' %}
 
-With those cast in the context of the [2024 Pi calculation
+And viewing those in the context of the [2024 Pi calculation
 effort](https://youtu.be/LIg-6glbLkU), which involved techniques for
 mitigating human error.  I like optimising things so the redundancy
 gets my attention.
 
 Initially I was hopeful of finding some easy divisibility tests which
-were more interesting than [repdigits][repdigit],
-but after a bit of poking around I decided that mod 99999999 was "good
+were more interesting than [repdigits][repdigit].  My holy grail, above.
+But after a bit of poking around I decided that mod 99999999 was "good
 enough".  If I were to go one step further I would look at reducing the
 numbers $mod 10^n - k$ for a small $k$ other than 1, looking for a value
 with some manageable factors.  This is how the [Adler-32][] checksum
