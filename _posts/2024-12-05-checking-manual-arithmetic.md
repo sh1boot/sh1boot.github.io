@@ -30,9 +30,11 @@ separated by one other digit.  Eg., $318 \equiv 813 \mod 99$
 
 These are realistic human errors so they're not a good place for a
 blind spot.  You'll see this consideration in the design of a lot of
-[check digit][] systems.  Computers don't do that sort of thing so
-you'll see order-insensitive checksums in things like [IPv4][internet
-checksum].
+[check digit][] systems.  Computers don't generally make that sort of
+mistake so you'll often see order-insensitive checksums in things like
+[IPv4][internet checksum].  And remember that in things like UPC, while
+it's normally machine-read humans sometimes have to trascribe them
+manually.
 
 The _easy_ remedy, here, is to just carry on making the test longer
 until n-step-transcription is improbable.  Like so:
@@ -96,7 +98,17 @@ Or, of course, you could just use a computer like any sensible person.
 Here's where I should provide some tricks for doing mod 73 and mod 137
 arithmetic, but I haven't figured those out, yet.
 
-TODO: do that
+<s>TODO: do that</s>
+
+You know what?  It's probably easier to just write up the
+generalisations for mod $10^n-1$ and mod $10^n+1$ arithmetic, and
+develop some shortcuts for doing that efficiently.
+
+TODO: do that instead
+
+This makes me wonder; if you have a lot of mod 137 arithmetic to do,
+could it be easier to do it mod 10001 and defer reducing the final
+result at the end?
 
 I think the holy grail here would be an expedient remainder algorithm
 which does _not_ rely on repdigits, which I assume would help to hash
