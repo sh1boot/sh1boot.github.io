@@ -104,6 +104,10 @@ You know what?  It's probably easier to just write up the
 generalisations for mod $10^n-1$ and mod $10^n+1$ arithmetic, and
 develop some shortcuts for doing that efficiently.
 
+Naïvely it's just a matter of doing the arithmetic and then folding the
+high digits back as described above, but there might be some internal
+optimisations to work out to make things even easier.
+
 TODO: do that instead
 
 This makes me wonder; if you have a lot of mod 137 arithmetic to do,
@@ -123,12 +127,22 @@ mitigating human error.  I like optimising things so the redundancy
 gets my attention.
 
 Initially I was hopeful of finding some easy divisibility tests which
-were more interesting than [repdigits][repdigit].  My holy grail, above.
-But after a bit of poking around I decided that mod 99999999 was "good
-enough".  If I were to go one step further I would look at reducing the
-numbers $mod 10^n - k$ for a small $k$ other than 1, looking for a value
-with some manageable factors.  This is how the [Adler-32][] checksum
-works, except that's in binary.
+were more interesting than [repdigits][repdigit] -- my holy grail above.
+
+After a bit of poking around and contemplation I decided that mod
+99999999 was good enough.  After all, if 10001 is the product of smaller
+numbers with more complicated divisibility tests, then doing the test
+mod 10001 instead of mod 137 validates all the same cases and then some.
+Whatever failings might exist in $10^n+1$ must also exist in its
+factors, and I think every prime outside of 2 and 5 must be a factor of
+$10^n+1$ eventually.
+
+TODO: prove it.
+
+If I were to go one step further I would look at reducing the numbers
+$mod 10^n - k$ for a small $k$ other than 1, looking for a value with
+some manageable factors.  This is how the [Adler-32][] checksum works,
+except that's in binary.
 
 Those divisibility rules cut the number down to size by eating away the
 top and the bottom ends with different rules.  Both rules rely on adding
