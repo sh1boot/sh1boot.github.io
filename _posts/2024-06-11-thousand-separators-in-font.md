@@ -74,6 +74,64 @@ But also, since I found that most (not all) terminals support it, and
 control of so-called "font features" to make a few things configurable
 without re-patching the font.
 
+Like this:
+<div style="border-width:3px; border-style:solid; padding: 1em;">
+  {% assign features = 'dgsp,dgap,dgco,dgdo,dgdc,dghx' | split: ',' %}
+  <script>
+    function sync_features() {
+      var features  = [];
+      {% for feature in features %}
+        if (document.getElementById('{{feature}}-box').checked) features.push('"{{feature}}"');
+      {% endfor %}
+      const style = "font-feature-settings: " + features.join(", ") + ";";
+      document.getElementById('font-test-box').setAttribute("style", style);
+      document.getElementById('font-feature-view').textContent = style;
+    }
+  </script>
+  <style>
+    @font-face {
+      font-family: "test-sans";
+      src: url("/fonts/FiraDGSans-Regular.ttf");
+    }
+    @font-face {
+      font-family: "test-mono";
+      src: url("/fonts/FiraDGMono-Regular.ttf");
+    }
+    table { flex: 1em; }
+    th { text-align: center; }
+    td {
+      font-size: large;
+      text-align: right;
+      width: 50%;
+    }
+  </style>
+  <p>
+  {%- for feature in features -%}
+    <label><input type="checkbox" id="{{feature}}-box" onclick="sync_features()"
+        {%- if feature == 'dgsp' %} checked{% endif %} />{{feature}}  </label>
+  {%- endfor -%}
+  </p>
+  <code id="font-feature-view">font-feature-settings: "dgsp";</code><p/>
+  <div id="font-test-box" style="font-feature-settings: 'dgsp';">
+  <div style="display: flex; flex-flow: row wrap;">
+  <table style="font-family: test-sans;">
+  <tr><th colspan="2"><a href="/fonts/FiraDGSans-Regular.ttf">sans</a></th></tr>
+{% capture testdata %}
+  <tr><td>       1234.12</td> <td>0x1337</td></tr>
+  <tr><td>      12345.12</td> <td>0x12deadbeef</td></tr>
+  <tr><td>    1234567.12</td> <td>code1234</td></tr>
+  <tr><td>   123.1234567</td> <td>1,000000</td></tr>
+{% endcapture %}
+{{testdata}}
+  </table>
+  <table style="font-family: test-mono;">
+  <tr><th colspan="2"><a href="/fonts/FiraDGMono-Regular.ttf">mono</a></th></tr>
+{{testdata}}
+  </table>
+  </div>
+  </div>
+</div>
+
 In monospaced mode grouping involves moving digits closer together so
 the group occupies the same space as before even after the addition of
 the digit grouping separator.  In proportional mode the digit grouping
