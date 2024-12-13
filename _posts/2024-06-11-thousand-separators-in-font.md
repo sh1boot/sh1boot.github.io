@@ -1,5 +1,5 @@
 ---
-last_modified_at: Thu, 7 Nov 2024 09:54:58 -0800  # 7f9e735 digit-grouping-tweaks
+last_modified_at: Fri, 13 Dec 2024 12:45:34 -0800  # ad6fdfb example-fonts-for-thousand-separation
 layout: post
 title:  Font-based digit grouping
 categories: font, digit grouping, terminals
