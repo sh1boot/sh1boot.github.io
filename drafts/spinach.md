@@ -10,7 +10,8 @@ recollection so I went and looked it up and fell into reading about
 "[Academic urban legends][]".
 
 It's a wild ride.  So many twists and turns.  Read the whole thing
-before continuing here because spoilers follow.
+before continuing here because spoilers follow.  Read the whole thing
+even though I'm about to say how unsatisfying the conclusion is.
 
 Now the original article is written on the topic of the quality of
 academic citations, as promised in the abstract, but I'm here to talk
@@ -112,6 +113,8 @@ now the matter goes viral with the effect of drawing public attention to
 the still-relatively-high iron content in Bunge's results.  The values
 aren't _exceptionally_ high by modern estimates, but high enough to
 cause a wave of misplaced enthusiasm around the world.
+
+To reiterate; as far as I can tell, Bunge produced reasonable results which falsified earlier records which showed way too much iron, and the public reaction to this was "that's a lot of iron, spinach is awesome!".
 
 It seems that the resulting public misperception had been called out a
 few times subsequently, but virality had not been attained until Hamblin
