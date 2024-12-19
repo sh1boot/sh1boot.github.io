@@ -1,0 +1,161 @@
+---
+layout: post
+title: Spinach
+keywords: spinach, epistemology
+---
+Yesterday I was reminded of the occasion on which I first learned about
+spinach having not as much iron as commonly believed, and that the idea
+came down to a transcription error.  I wasn't really confident in my
+recollection so I went and looked it up and fell into reading about
+"[Academic urban legends][]".
+
+It's a wild ride.  So many twists and turns.  Read the whole thing
+before continuing here because spoilers follow.  Read the whole thing
+even though I'm about to say how unsatisfying the conclusion is.
+
+Now the original article is written on the topic of the quality of
+academic citations, as promised in the abstract, but I'm here to talk
+about spinach.
+
+For me the story left too many questions unanswered.  Some easy to
+resolve (spinach's iron content is high-middling in its class, and the
+science has been broadly stable on this for well over a century), but
+where did spinach's special status in popular understanding really come
+from if not the origins we now take to be "debunked"?
+
+After finding the original story's [main reference][Sutton, 2010b] for
+declaring closure on the matter I was even _more_ dissatisfied.  I tried
+plugging the names of the scientists mentioned into Google, and I found
+discussion on the matter by a JL Dagg offering suggestions as to where
+[pieces of the misplaced decimal story might have come from][Dagg,
+2015].
+
+I can't help but imagine all this as a long chain of pedantic
+one-upmanship.
+
+[Content Warning: gross oversimplification]
+
+> Spinach is good for you because it contains a lot of iron.
+
+> Well actually, that belief was caused by a decimal place error in the
+> 1930s, causing the iron content to appear ten times greater than it
+> actually was.
+
+> Well actually, that's a popular misquote of what Terence Hamblin
+> wrote.  The actual decimal error occurred in the 1890s and was
+> _discovered_ in the 1930s.
+
+> Well actually, Hamblin gave no references and it looks like they must
+> have just imagined the whole thing.  Also, Popeye ate spinach for its
+> vitamin A content, not iron.
+
+> Well actually, Arnold Bender had published the same assertion several
+> times prior to Hamblin, giving specific names and an example of a
+> textbook perpetuating grossly exaggerated iron content.
+
+> Well actually, those references don't join up and the book in question
+> doesn't contain any decimal place error.  Also, nobody in the UK or US
+> would have been influenced by the findings of these German scientists
+> anyway.
+
+> Well actually, it was a conflation of dry and fresh samples which
+> merely _looked_ like a decimal place error because fresh spinach is
+> roughly 90% water.
+
+> well actually, one of the scientists left a footnote about needing to
+> correct for the fact that the produce they bought from their local
+> grocer was old and wilted.
+
+> Well actually, it was the confusion between iron and iron oxide in the
+> measurements.
+
+> Well actually, it was the result of faulty scientific methods.
+
+> Well actually, faulty recollections may well have synthesised this
+> narrative from a series of actual events, including a decimal place
+> error exaggerating iron content in 1939.  Also, the same flawed
+> methodology was applied to several vegetables and consequently spinach
+> was seen to be unexceptional in that context.
+
+But of course none of this really matters, because iron in spinach is in
+the wrong form for effective absorption, and because spinach contains
+[oxalates][].
+
+> Well actually...
+
+Dagg's tone and approach appeals to me.  Rather than asking "is this
+true?", which is a question I see as ultimately unhelpful and misleading
+given the fractal nature of nuance and context, they ask "why do they
+believe this?".
+
+Is Dagg's hypothesis right?  There's no knowing that, but maybe I'll
+just assume or pretend it's right because I can't do any better.  All
+knowledge is provisional, after all (with apologies to Karl Popper).
+
+But this still doesn't answer my original question.
+
+#### What was the question again?
+
+Why do people believe that spinach is a good source of iron?
+
+[Dagg suggests][Dagg, 2017] a conflation of symptoms and remedies
+relating to tuberculosis and anaemia.
+
+But a much deeper dive into the matter is '[Spinach in Blunderland][]',
+wherein we learn ... _a lot!_  Everything that went before is,
+comparatively, a very narrow and distorted view on a much broader
+picture.
+
+I can't possibly summarise it all, but one thing that stands out to me
+in this narrative is the reappearance of Gustav von Bunge.  In this
+context Bunge's research appears to _debunk_ earlier, unreasonably high
+figures but, importantly, the matter goes viral with the effect of
+drawing public attention to the still-relatively-high iron content in
+Bunge's results.  The values aren't _exceptionally_ high by modern
+estimates, but high enough to cause a wave of misplaced enthusiasm
+around the world.
+
+It seems that the resulting public over-enthusiasm had been called out a
+few times subsequently, but virality had not been attained until Hamblin
+got the matter into BMJ in 1981 and people started digging in to the
+origin of the resulting citations.
+
+Unfortunately the subsequent focus has been on falsifying a specific error
+at a specific point in a specific line of communication in order
+to produce a debunked myth, without due regard to the greater network
+of errors and miscommunications which produced the outcome; and in
+order to achieve that great debunk a lot of truths were overlooked.
+
+Despite all that there's still a final possibility: that the popular
+belief about spinach having high iron content exists simply because it's
+basically true.  It isn't the best, but among commonly recognised and
+available plant sources it seems to still rate fairly highly (with
+caveats and exceptions).  Maybe people don't mean anything more than
+that when they repeat "the myth" that spinach is "high in iron".
+
+
+[Louis Edward Saalmüller]: <>
+[Thomas Richardson]: <>
+[Jacob Moleschott]: <>
+[Jean Baptiste Boussingault]: <>
+[Gustav von Bunge]: <>
+[Emil von Wolff]: <>
+[E. Haensel]: <>
+[C. den Hartog]: <>
+[Werner Schuphan]: <>
+[H.C. Sherman]: <>
+[Arnold Bender]: <>
+[Terence Hamblin]: <>
+
+[Academic urban legends]: <https://pmc.ncbi.nlm.nih.gov/articles/PMC4232290/> "Academic urban legends"
+[Academic urban legends alternate]: <https://journals.sagepub.com/doi/10.1177/0306312714535679> "Academic urban legends"
+[Sutton, 2010b]: <https://dysology.blogspot.com/2017/12/the-spinach-popeye-iron-decimal-error.html> "The Spinach, Popeye, Iron, Decimal Error Myth is Finally Busted"
+[Sutton, 2010b alternate]: <https://archive.is/TzLh5> "The Spinach, Popeye, Iron, Decimal Error Myth is Finally Busted"
+[Dagg, 2015]: <https://historiesofecology.blogspot.com/2015/10/the-real-decimal-point-error-that.html> "The real decimal error that transmogrified into the spinach-iron-decimal-error myth"
+[Dagg, 2017]: <https://historiesofecology.blogspot.com/2017/10/the-deep-roots-of-urban-legends-about.html> "The deep roots of urban legends about the health benefits of spinach"
+
+[Spinach in Blunderland]: <https://www.researchgate.net/publication/331556841_Spinach_in_Blunderland_How_the_myth_that_spinach_is_rich_in_iron_became_an_urban_academic_legend> "Spinach in Blunderland"
+[Hamblin, 2010]: <https://mutated-unmuated.blogspot.com/2010/12/spinach-i-was-right-for-wrong-reason.html>
+[Sutter, 2011]: <https://web.archive.org/web/20180119102354/https://www.bestthinking.com/articles/science/chemistry/biochemistry/spin-ge-usa-beware-of-the-bull-the-united-states-department-of-agriculture-is-spreading-bull-about-spinach-iron-and-vitamin-c-on-the-internet>
+
+[oxalates]: <https://en.wikipedia.org/wiki/Oxalate>
