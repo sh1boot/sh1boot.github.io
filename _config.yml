@@ -53,6 +53,7 @@ defaults:
       path: "drafts"
     values:
       sitemap: false
+      published: false
 
 kramdown:
   math_engine: mathjax
