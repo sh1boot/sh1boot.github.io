@@ -3,7 +3,7 @@ layout: post
 title:  Stupid font tricks
 ---
 I thought I'd try creating an LFSR in font substitution tables to turn a
-string of the same character into a random string of variants of that
+string of the same character into a string of random variants of that
 character to make things appear more organic.
 
 Here's a font feature file which converts a string of capital O into a
@@ -13,16 +13,16 @@ languagesystem DFLT dflt;
 
 @oo=[o O];
 
-lookup STUPIDIDEA {
+lookup stupidfonttrick {
     sub o @oo @oo @oo o @oo @oo @oo' by o;
     sub o @oo @oo @oo O @oo @oo @oo' by O;
     sub O @oo @oo @oo o @oo @oo @oo' by O;
     sub O @oo @oo @oo O @oo @oo @oo' by o;
     sub               O  O   O   O'  by o;
-} STUPIDIDEA;
+} stupidfonttrick;
 
 feature calt {
-    lookup STUPIDIDEA;
+    lookup stupidfonttrick;
 } calt;
 ```
 
@@ -39,8 +39,8 @@ benefit.  Given a uniform-looking string like:
 
 The glyphs could vary between a couple of different flavours; and sets
 of two or three (or alternating sets of twos and threes) could be
-grouped together into a single glyph, with a bit of perspective and
-overlap or other interaction between them to look even more natural.
+grouped together into a single glyph with a bit of perspective and
+overlap or other interaction between them to look more natural.
 
 The same could be done for a zombie horde:
 
@@ -57,7 +57,7 @@ languagesystem DFLT dflt;
 
 @abc=[a b c];
 
-lookup STUPIDIDEA {
+lookup stupidfonttrick {
     sub a @abc @abc @abc @abc a @abc' by a;
     sub a @abc @abc @abc @abc b @abc' by c;
     sub a @abc @abc @abc @abc c @abc' by b;
@@ -69,17 +69,17 @@ lookup STUPIDIDEA {
     sub c @abc @abc @abc @abc c @abc' by a;
 
     sub                    a  a   a'  by b;
-} STUPIDIDEA;
+} stupidfonttrick;
 
 feature calt {
-    lookup STUPIDIDEA;
+    lookup stupidfonttrick;
 } calt;
 ```
 Except that `a`, `b`, and `c` would need to be the names of the three
 zombie glyphs.  Then you could merge some of these into ligatures:
 
 ```
-lookup MERGE {
+lookup stupidligaturetrick {
     sub a' a' a' by Z;
     sub b' b' b' by Y;
     sub c' c' c' by X;
@@ -92,11 +92,11 @@ lookup MERGE {
     sub    c' a' by G;
     sub    c' b' by H;
     sub    c' c' by I;
-} MERGE;
+} stupidligaturetrick;
 
 feature calt {
-    lookup STUPIDIDEA;
-    lookup MERGE;
+    lookup stupidfonttrick;
+    lookup stupidligaturetrick;
 } calt;
 ```
 
