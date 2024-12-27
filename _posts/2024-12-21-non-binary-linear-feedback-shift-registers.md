@@ -19,7 +19,8 @@ mod b, and that's the next digit.
 Remembering the caveat that the all-zeroes pattern cannot occur in the
 sequence, a generator like this can produce a pseudorandom string in any
 alphabet with a period $b^n-1$.  If you consider the whole shift
-register on each step then it's _almost_ a de Bruijn sequence, as well.
+register on each step then it's _almost_ a [de Bruijn sequence][], as
+well.
 
 I've also used it where I wanted a sequence where the new value is the
 previous value multiplied by 3, but with a small perturbation to ensure
@@ -43,8 +44,57 @@ $$
 x_{n+1} = \sum_{i=0}^{l-1} x_{n-i} p_i \mod b
 $$
 
+## Converting to a de Bruijn sequence
+
+The one missing output sequence is the all-zeroes case.  This seems to
+be known as a "punctured" de Bruijn sequence.
+
+If we simply wait until the output is _nearly_ all zeroes, and insert an
+extra zero, then we can fill that gap.  And then to get back on track we
+need to recognise all-zeroes and output something other than another
+zero (which would be the natural consequence).
+
+For base b there are b-1 cases where this run of n-1 zeroes case
+appears.  Pick one (only one) of them, and insert the all-zeroes case in
+the sequence (ie., insert one more zero), and then carry on to what the
+next step would have been before the insertion; which will be the
+product of the last non-zero shifted out by the value of the last tap in
+the feedback polynomial.
+
+It's quite clumsy and not a thing I would want to bother with except
+that it might help further down on this page...
+
+## Extending to $p^n$ bases
+
+One would need to implement linear $\mathrm{GF}(p^n)$ arithmetic and
+either repeat the search, or find some polynomials using mathematics I
+haven't learned.  I haven't got around to doing either of those things.
+
+Also I would need to specify the multiplication and addition operations
+more explicitly because they're not the same as for prime bases.
+
+## Extending to other bases
+
+One can merge de Bruijn sequences of the same size but co-prime bases by
+effectively running them in parallel and splicing the outputs from
+sequences $u$ (base $b_u$) and $v$ (base $b_v$) as ${b_u}{x_v} + x_u$.
+The taps can either be drawn from separate shift registers for each
+base, or derived from the combined output using division and modulo by
+$b_u$.
+
+What _doesn't_ work so well is trying to merge LFSR sequences this way.
+The trouble is that their periods are all in the form $p^n-1$, and that
+minus one makes it difficult to find coprime periods (all maximal
+non-binary periods are even).
+
+Wikipedia links a [reference][shift register generation] for
+constructing de Bruijn sequences for arbitrary bases, but I'm not going
+to read all that.
 
 [LFSR]: <https://en.wikipedia.org/wiki/LFSR>
+[de Bruijn sequence]: <https://en.wikipedia.org/wiki/de_Bruijn_sequence>
+[shift register generation]: <https://books.google.com/books?id=sd9AqHeeHh4C&pg=PA174>
+
 
 <style>
   td:nth-child(-n+3) {
