@@ -1,4 +1,5 @@
 ---
+last_modified_at: Sat, 21 Dec 2024 14:40:14 -0800  # 2da5eea update-stupid-font-trick
 layout: post
 title:  Stupid font tricks
 ---
