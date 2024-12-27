@@ -4,9 +4,9 @@ layout: post
 title:  Invisible, universe-tweaking portals
 ---
 I'm not going to describe the mechanics of the game [Portal][].  You
-probably already know; but I've often wittered on about how I think
-hidden portals would be a great way to tweak the universe and fold a map
-back on itself.
+probably already know; but I've often [wittered on][tessellated
+playfield] about how I think hidden portals would be a great way to
+tweak the universe and fold a map back on itself.
 
 In addition to recursion within a map, you can modify things like the
 scale of the map relative to the player, and in fact somebody has
@@ -76,3 +76,5 @@ breaking the rules I entered an alternate universe, and left it again
 when I came back past the same sign.
 
 This could be gamified in so many ways.
+
+[tessellated playfield]: <https://www.halfbakery.com/idea/Tessellated_2c_20phase-shifted_20playfield>
