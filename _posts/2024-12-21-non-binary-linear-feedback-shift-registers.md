@@ -38,6 +38,7 @@ prefer the potentially more chaotic results from a denser mix.
 In the tables below, the right-most value is the multiplier for the
 oldest output, and the leftmost value is the multiplier for the most
 recent output.  The next result is:
+
 $$
 x_{n+1} = \sum_{i=0}^{l-1} x_{n-i} p_i \mod b
 $$
