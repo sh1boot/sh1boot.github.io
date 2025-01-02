@@ -28,7 +28,8 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://www.xn--tkuka-m3a3v.dev" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  sh1boot
 
-header_pages: "header"
+header_pages:
+  - "header/manifesto.md"
 
 permalink: /:title/
 markdown: kramdown
