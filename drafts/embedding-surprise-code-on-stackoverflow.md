@@ -9,7 +9,7 @@ Users are still publishing HTML and have opportunities to embed
 something malicious or sneaky.
 
 In the case of StackOverflow, you end up being able to do things like
-switch to `<code>` formatting without escaping all of the contained text
+switch to `<pre>` formatting without escaping all of the contained text
 as raw code; so you can embed HTML in the blocks which look like the
 code you would want to copy-paste, but with surprise semantics.
 
@@ -26,6 +26,8 @@ Here is my solution:
 
 It's really good!
 ```
+
+There's a [sandbox][] to test stuff in.
 
 Imagine the possibilities!
 
@@ -102,3 +104,4 @@ become normalised and there's no stopping it anymore.
 
 
 [My PoC]: <https://security.stackexchange.com/a/183377>
+[sandbox]: <https://meta.stackexchange.com/q/3122/227423>
