@@ -2,8 +2,16 @@
 last_modified_at: Sun, 8 Dec 2024 18:57:17 -0800  # a7cd9ad refine-arithmetic-check
 layout: post
 title: Extended checks on manual arithmetic
+excerpt: Performing reduced-complexity checks of manual arithmetic using modular arithmetic.
 mathjax: true
 ---
+<figure style="float:right; width:30%; margin:5px;">
+  <img src="/images/human_error.jpeg" alt="A human errorer" />
+  <figcaption>
+  "Hello human.  Are you, like us, a human who suffers from the
+embarrassing problem of <i>human errors</i>?"
+  </figcaption>
+</figure>
 So you've done some arithmetic by hand and now you want to make sure
 it's correct.  [Casting out nines][] is the conventional sanity check,
 but that overlooks digit transpositions.  What if you want something
