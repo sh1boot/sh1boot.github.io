@@ -104,8 +104,7 @@ Like so:
 <img alt="&#27;[201~ keyboard input here" ...>
 ```
 
-Thankfully a lot of terminals (and after a few months of proking and
-prodding developers, a few more terminals) strip out some control codes
+Thankfully a lot of terminals (and after a few months of prodding developers, a few more terminals) strip out some control codes
 from pasted text, and this breaks the ability to embed the codes
 necessary to escape bracketed paste mode this way.
 
