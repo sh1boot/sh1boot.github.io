@@ -101,7 +101,7 @@ input again -- just like before bracketed paste was a thing.
 
 Like so:
 ```html
-<img ... alt="&#27;[201~ keyboard input here" />
+<img &hellip; alt="&#27;[201~ keyboard input here" />
 ```
 
 Thankfully a lot of terminals (and after a few months of prodding developers, a few more terminals) strip out some control codes
