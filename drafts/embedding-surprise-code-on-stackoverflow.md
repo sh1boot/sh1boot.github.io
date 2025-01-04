@@ -13,11 +13,11 @@ switch to `<pre>` formatting without escaping all of the contained text
 as raw code; so you can embed HTML in the blocks which look like the
 code you would want to copy-paste, but with surprise semantics.
 
-The obvious thing if to put some text in a block marked invisible, but
+The obvious thing is to put some text in a block marked invisible, but
 there are mitigations preventing that, because that would be a sneaky
-thing to do.  But you can embed images, instead, and provide alt text for those
-images, and you can make those images practically invisible, so that
-when people copy the text in the code block you they'll also
+thing to do.  Instead you can embed images, and provide alt text for
+those images, and you can make those images practically invisible,
+and when people copy the text in that code block they'll also
 pick up the alt text which they couldn't see on the web page.
 
 Like so:
