@@ -165,6 +165,8 @@ by pointing out consequential weaknesses behind the door and asking for them all
 to be fixed, but too often the reaction is to just close the
 door.  So what happens when somebody else finds an open window?
 
+Maybe by the time you read this it will have been superficially patched and you'll have to look for an open window.  Good luck!
+
 [bracketed paste]: <https://en.wikipedia.org/wiki/Bracketed-paste>
 [sandbox]: <https://meta.stackexchange.com/q/3122/227423>
 [My PoC]: <https://security.stackexchange.com/a/183377>
