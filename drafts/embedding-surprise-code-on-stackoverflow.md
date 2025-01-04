@@ -53,8 +53,8 @@ modify the text after it's been reviewed (replace an 8 with an &, for
 example).
 
 But those can be detected easily.  Something more nefarious would be to
-target a text editor.  For example I made a proof of concept targeting
-vim.  To maximise the chances that the user will be using vim when they
+target a text editor.  Let's take a crack at vim, for example.
+To maximise the chances that the user will be using vim when they
 paste your text try offering something to be pasted somewhere like
 `~/.vimrc`.  If somebody wants to modify that file what editor do you
 think they're going to use?  Typically not emacs.
@@ -157,6 +157,13 @@ to me, but it's also industry standard and an evergrowing problem as
 people design more systems which function this way.  It's become
 normalised and there's no stopping it anymore.
 
+The other thing that frustrates me about reporting
+vulnerabilities is when they're only superficially addressed.
+Maybe enough to stop me properly exploring the extent of the problem.
+When the front door is open you can make a case for security in depth
+by pointing out consequential weaknesses, and asking for them all
+to be fixed, but too often the reaction is to just close the
+front door.  So what happens when somebody else finds an open window?
 
 [bracketed paste]: <https://en.wikipedia.org/wiki/Bracketed-paste>
 [sandbox]: <https://meta.stackexchange.com/q/3122/227423>
