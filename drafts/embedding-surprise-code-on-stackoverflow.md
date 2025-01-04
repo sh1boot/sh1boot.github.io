@@ -81,8 +81,8 @@ that the drawing and redrawing of a multi-line command buffer will be
 visible to the user, if only in a brief flash which might attract
 unwanted attention.
 
-There we go.  Running arbitrary code on a user's computer already, and
-they can't see us doing it!  What fun!
+There we go.  Running arbitrary code on a random SO user's computer
+already, and they can't see us doing it!  What fun!
 
 Would I be telling you this if it was really so easy?  No.  OK, maybe.
 But it's not.
@@ -114,7 +114,7 @@ way or other.
 
 I can't promise that all terminals are filtering correctly, though.
 
-There's yet another potential weakness, though.  If you can get an
+But of course there's yet another potential weakness.  If you can get an
 incomplete escape sequence sent then the application can be tricked into
 _missing_ the begin-bracketed-paste escape sequence.  To illustrate this
 you can simply hit Escape right before pasting something into the
