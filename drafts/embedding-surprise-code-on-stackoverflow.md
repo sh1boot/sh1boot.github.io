@@ -14,7 +14,7 @@ as raw code; so you can embed HTML in the blocks which look like the
 code you would want to copy-paste, but with surprise semantics.
 
 The obvious thing is to put some text in a block marked invisible, but
-there are mitigations preventing that, because that would be a sneaky
+there are mitigations preventing that because that would be a sneaky
 thing to do.  Instead you can embed images, and provide alt text for
 those images, and you can make those images practically invisible,
 and when people copy the text in that code block they'll also
