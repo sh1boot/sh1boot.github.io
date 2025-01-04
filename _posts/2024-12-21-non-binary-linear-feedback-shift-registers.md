@@ -9,7 +9,7 @@ There's way too much documentation about binary [LFSRs][LFSR], and not a
 whole lot on doing the same with other bases.  Here are some tables for
 other bases so things can be thrown together without too much thought.
 
-In the binary case one have a selection of taps which are either used or
+In the binary case one has a selection of taps which are either used or
 not used, and the next bit (digit) in the sequence is the parity of the
 taps one chose.
 
@@ -19,9 +19,7 @@ mod b, and that's the next digit.
 
 Remembering the caveat that the all-zeroes pattern cannot occur in the
 sequence, a generator like this can produce a pseudorandom string in any
-alphabet with a period $b^n-1$.  If you consider the whole shift
-register on each step then it's _almost_ a [de Bruijn sequence][], as
-well.
+alphabet with a period $b^n-1$.  Such sequences are _almost_ a [de Bruijn sequence][], where every possible length-n string is produced exactly once in the minimum number of steps possible.
 
 I've also used it where I wanted a sequence where the new value is the
 previous value multiplied by 3, but with a small perturbation to ensure
@@ -37,13 +35,6 @@ Depending on the implementation one might want the lightest taps (fewest
 multiplies, fewest additions), or if those costs aren't important then
 one might prefer the potentially more chaotic results from a denser mix.
 
-In the tables below, the right-most value is the multiplier for the
-oldest output, and the leftmost value is the multiplier for the most
-recent output.  The next result is:
-
-$$
-x_{n+1} = \sum_{i=0}^{l-1} x_{n-i} p_i \mod b
-$$
 
 ## Converting to a de Bruijn sequence
 
@@ -99,6 +90,17 @@ to read all that.
 Setting the de Bruijn modification aside because I don't know how to account for that... you should be able to trivially construct a matrix representing the state change of the shift register (now a vector) to the next iteration.  then just raise that matrix to the appropriate power (a series of squaring operations and conditional multiplications according to the bit pattern of the power) to get a matrix which will take you as far as you need to go.
 
 Typically I like to have a solution handy for jumping ahead by the period of the generator times the golden ratio.  You can use that to maximally distribute an arbitrary number of generators.
+
+## Tables
+
+In the tables below, several different polynomials are listed for the given parameters, each enclosed in `{}`.  The right-most value is the multiplier for the
+oldest output, and the leftmost value is the multiplier for the most
+recent output.  The next result is:
+
+$$
+x_{n+1} = \sum_{i=0}^{l-1} x_{n-i} p_i \mod b
+$$
+
 
 [LFSR]: <https://en.wikipedia.org/wiki/LFSR>
 [de Bruijn sequence]: <https://en.wikipedia.org/wiki/de_Bruijn_sequence>
