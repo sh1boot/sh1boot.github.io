@@ -24,7 +24,7 @@ Like so:
 ```markdown
 Here is my solution:
 
-<pre>my<img src="https://example.com/invisible_image.gif" alt=" malicious"/> code</pre>
+<pre>my<img src="https://example.com/invisible_image.gif" alt=" malicious" /> code</pre>
 
 It's really good!
 ```
@@ -101,7 +101,7 @@ input again -- just like before bracketed paste was a thing.
 
 Like so:
 ```html
-<img alt="&#27;[201~ keyboard input here" ...>
+<img ... alt="&#27;[201~ keyboard input here" />
 ```
 
 Thankfully a lot of terminals (and after a few months of prodding developers, a few more terminals) strip out some control codes
