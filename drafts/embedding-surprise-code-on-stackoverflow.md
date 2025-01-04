@@ -72,9 +72,6 @@ The second deletes every history entry containing `evilcode`, so it
 deletes evidence of our malicious act and, conveniently, it deletes
 itself as well.
 
-There we go.  Running arbitrary code on a user's computer already, and
-they can't see us doing it!  What fun!
-
 After that drop back into insert mode and keep adding plausible text to
 the file to clear the status line of the result of the last command.
 
@@ -83,6 +80,9 @@ fit on one line.  If they're longer then there's a much greater risk
 that the drawing and redrawing of a multi-line command buffer will be
 visible to the user, if only in a brief flash which might attract
 unwanted attention.
+
+There we go.  Running arbitrary code on a user's computer already, and
+they can't see us doing it!  What fun!
 
 Would I be telling you this if it was really so easy?  No.  OK, maybe.
 But it's not.
