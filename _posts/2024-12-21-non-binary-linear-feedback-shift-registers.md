@@ -67,7 +67,7 @@ that it might help with the following...
 
 ## Extending to $p^n$ bases
 
-If you need a generator which is some power of a prime then you could use a prime generator which is n times longer and then combine groups of n digits into a single value. However, advancing in steps of one will mean each value shares a lot of information with the one before which may be problematic for some applications.  To fix this you could step the shift register n steps for each output, _provided_ n is coprime with p (since p is prime this just means n is not a multiple of p), and provided you're using the de Bruijn modification above.  When n is a multiple of p just use steps of n + 1 instead.  this is necessary to ensure that the step size is coprime to the period of the sequence to ensure every position is visited.
+If you need a generator which is some power of a prime then you could use a prime generator which is n times longer and then combine groups of n digits into a single value. However, advancing in steps of one will mean each value shares a lot of information with the one before which may be problematic for some applications.  To fix this you could step the shift register n steps for each output, _provided_ n is coprime with p (since p is prime this just means n is not a multiple of p), and provided you're using the de Bruijn modification above.  When n is a multiple of p just use steps of n + 1 instead (TODO: prove this works).  This is necessary to ensure that the step size is coprime to the period of the sequence to ensure every position is visited.
 
 Otherwise, one would need to implement linear $\mathrm{GF}(p^n)$ arithmetic and
 either repeat the search, or find some polynomials using mathematics I
