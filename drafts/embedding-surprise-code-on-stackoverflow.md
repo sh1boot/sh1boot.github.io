@@ -159,11 +159,11 @@ normalised and there's no stopping it anymore.
 
 The other thing that frustrates me about reporting
 vulnerabilities is when they're only superficially addressed.
-Maybe enough to stop me properly exploring the extent of the problem.
+Just enough to stop me digging any deeper.
 When the front door is open you can make a case for security in depth
-by pointing out consequential weaknesses, and asking for them all
+by pointing out consequential weaknesses behind the door and asking for them all
 to be fixed, but too often the reaction is to just close the
-front door.  So what happens when somebody else finds an open window?
+door.  So what happens when somebody else finds an open window?
 
 [bracketed paste]: <https://en.wikipedia.org/wiki/Bracketed-paste>
 [sandbox]: <https://meta.stackexchange.com/q/3122/227423>
