@@ -83,8 +83,8 @@ that the drawing and redrawing of a multi-line command buffer will be
 visible to the user, if only in a brief flash which might attract
 unwanted attention.
 
-There we go.  Running arbitrary code on a random SO user's computer
-already, and they can't see us doing it!  What fun!
+And tere we go.  Running arbitrary code on a random SO user's computer,
+and they can't see us doing it!  What fun!
 
 Would I be telling you this if it was really so easy?  No.  OK, maybe.
 But it's not.
@@ -163,9 +163,9 @@ Just enough to stop me digging any deeper.
 When the front door is open you can make a case for security in depth
 by pointing out consequential weaknesses behind the door and asking for them all
 to be fixed, but too often the reaction is to just close the
-door.  So what happens when somebody else finds an open window?
+door.  What happens when somebody else finds an open window?
 
-Maybe by the time you read this it will have been superficially patched and you'll have to look for an open window.  Good luck!
+Maybe by the time you read this it will have been superficially addressed and you'll have to look for an open window.  Good luck!
 
 [bracketed paste]: <https://en.wikipedia.org/wiki/Bracketed-paste>
 [sandbox]: <https://meta.stackexchange.com/q/3122/227423>
