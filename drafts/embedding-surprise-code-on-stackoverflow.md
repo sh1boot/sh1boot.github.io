@@ -39,7 +39,7 @@ Stack Exchange.  More on that later.
 If you're clever then you might be able to drop in an extra character
 somewhere which has a profound effect on the meaning of the code.
 
-You can alse emulate non-printing keystrokes by sending their escape
+You can also emulate non-printing keystrokes by sending their escape
 sequences or control codes.  This leads applications to take actions
 based on those keystrokes rather than inserting them into an edit buffer
 as plain old text.
@@ -53,9 +53,9 @@ example).
 But those can be detected easily.  Something more nefarious would be to
 target a text editor.  For example I made a proof of concept targeting
 vim.  To maximise the chances that the user will be using vim when they
-paste your text you simply offer a swatch of text to be pasted into
-`~/.vimrc`, and if somebody wants to modify that file what editor do you
-think they're going to use?  Probably not emacs.
+paste your text try offering something to be pasted somewhere like
+`~/.vimrc`.  If somebody wants to modify that file what editor do you
+think they're going to use?  Typically not emacs.
 
 So if you know you're in vim you could embed something like an escape
 character, to enter command mode, and then some commands, like these
@@ -80,8 +80,8 @@ The second deletes every history entry containing `evilcode`, so it
 deletes evidence of our malicious act and, conveniently, it deletes
 itself as well.
 
-There we go.  Running arbitrary code on a user's computer already.  What
-fun!
+There we go.  Running arbitrary code on a user's computer already, and
+they can't see us doing it!  What fun!
 
 Would I be telling you this if it was really so easy?  No.  OK, maybe.
 But it's not.
