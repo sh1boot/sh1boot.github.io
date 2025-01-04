@@ -66,7 +66,7 @@ It's quite clumsy and not a thing I would want to bother with except
 that it might help with the following...
 
 ## Extending to $p^n$ bases
-If you need a generator which is some power of a prime then you could use a prime generator which is n times longer and then combine groups of n digits into a single value. However, advancing in steps of one will mean each value is the previous value times p mod p^n + a small value less than p, which might be a bit too correlated for some applications.  To fix this you could step the shift register n steps for each output, _provided_ n is coprime with p (since p is prime this just means n is not equal to p), and provided your using the de Bruijn modification above.  When p = n just use steps of n + 1 instead.
+If you need a generator which is some power of a prime then you could use a prime generator which is n times longer and then combine groups of n digits into a single value. However, advancing in steps of one will mean each value is the previous value times p mod p^n + a small value less than p, which might be a bit too correlated for some applications.  To fix this you could step the shift register n steps for each output, _provided_ n is coprime with p (since p is prime this just means n is not equal to p), and provided you're using the de Bruijn modification above.  When p = n just use steps of n + 1 instead.
 
 Otherwise, one would need to implement linear $\mathrm{GF}(p^n)$ arithmetic and
 either repeat the search, or find some polynomials using mathematics I
@@ -92,6 +92,11 @@ non-binary periods are even).
 Wikipedia links a [reference][shift register generation] for
 constructing de Bruijn sequences for arbitrary bases, but I'm not going
 to read all that.
+
+## Jumping around
+Setting the de Bruijn modification aside because I don't know how to account for that... you should be able to trivially construct a matrix representing the state change of the shift register (now a vector) to the next iteration.  then just raise that matrix to the appropriate power (a series of squaring operations and conditional multiplications according to the bit pattern of the power) to get a matrix which will take you as far as you need to go.
+
+Typically I like to have a solution handy for jumping ahead by the period of the generator times the golden ratio.  You can use that to maximally distribute an arbitrary number of generators.
 
 [LFSR]: <https://en.wikipedia.org/wiki/LFSR>
 [de Bruijn sequence]: <https://en.wikipedia.org/wiki/de_Bruijn_sequence>
