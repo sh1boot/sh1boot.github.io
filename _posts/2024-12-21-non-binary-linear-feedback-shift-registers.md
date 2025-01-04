@@ -63,11 +63,12 @@ product of the last non-zero shifted out by the value of the last tap in
 the feedback polynomial.
 
 It's quite clumsy and not a thing I would want to bother with except
-that it might help further down on this page...
+that it might help with the following...
 
 ## Extending to $p^n$ bases
+If you need a generator which is some power of a prime then you could use a prime generator which is n times longer and then combine groups of n digits into a single value. However, advancing in steps of one will mean each value is the previous value times p mod p^n + a small value less than p, which might be a bit too correlated for some applications.  To fix this you could step the shift register n steps for each output, _provided_ n is coprime with p (since p is prime this just means n is not equal to p), and provided your using the de Bruijn modification above.  When p = n just use steps of n + 1 instead.
 
-One would need to implement linear $\mathrm{GF}(p^n)$ arithmetic and
+Otherwise, one would need to implement linear $\mathrm{GF}(p^n)$ arithmetic and
 either repeat the search, or find some polynomials using mathematics I
 haven't learned.  I haven't got around to doing either of those things.
 
