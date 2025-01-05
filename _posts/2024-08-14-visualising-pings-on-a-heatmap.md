@@ -83,7 +83,7 @@ But I don't hold it much hope for ever finding time to experiment.
 
 [RSSI]: <https://en.wikipedia.org/wiki/Received_signal_strength_indicator>
 [SLAM]: <https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping>
-[radiation pattern]: <[https://en.wikipedia.org/wiki/Radiation_pattern>
+[radiation pattern]: <https://en.wikipedia.org/wiki/Radiation_pattern>
 [lights on a Christmas tree]: <https://github.com/standupmaths/xmastree2020>
 
 [Key finder]: <https://en.wikipedia.org/wiki/Key_finder>
