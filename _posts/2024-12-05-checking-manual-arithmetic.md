@@ -3,7 +3,7 @@ last_modified_at: Sun, 8 Dec 2024 18:57:17 -0800  # a7cd9ad refine-arithmetic-ch
 layout: post
 title: Extended checks on manual arithmetic
 mathjax: true
-categories: mathematics, number theory
+tags: mathematics number-theory
 opening:
   image: /images/human_error.jpeg
   alt: A human errorer

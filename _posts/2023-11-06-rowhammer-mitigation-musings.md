@@ -2,7 +2,7 @@
 last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # 3657e0a rowhammer-mitigation-thoughts
 layout: post
 title:  Idly musing over RowHammer mitigation strategies
-categories: rowhammer, security, hashing, computer architecture, error correction
+tags: rowhammer security hashing computer-architecture error-correction
 aliases:
   - rowmhammer-mitigation-musings/
 ---

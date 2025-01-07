@@ -2,7 +2,7 @@
 last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
 title: Minimally biased NPOT-ranged random numbers
 description: Digging a little further in to the problem of scaling random numbers over a finite range without biasing certain results over others.
-categories: random, mathematics, number theory
+tags: random mathematics number-theory
 ---
 In my previous post
 I described a technique for scaling random numbers to new intervals producing

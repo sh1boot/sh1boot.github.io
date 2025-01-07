@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Clipboard subversion on StackOverflow
-categories: security, hacking
+tags: security hacking
 ---
 Because Markdown is really a mixture of Markdown syntax and raw HTML to
 fill in gaps where Markdown can't do the job, having user-generated

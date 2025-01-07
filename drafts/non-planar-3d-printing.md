@@ -2,7 +2,7 @@
 last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 1ae3ec2 update-images
 layout: post
 title:  Why I should never buy a 3D printer
-categories: daft ideas, 3d printing, non-planar
+tags: daft-ideas 3d-printing non-planar
 draft: true
 ---
 Materials science and engineering fascinate me, but I know absolutely

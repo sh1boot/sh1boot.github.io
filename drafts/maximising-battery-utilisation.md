@@ -2,7 +2,7 @@
 last_modified_at: Thu, 12 Sep 2024 10:18:30 -0700  # 38867e1 more-battery-utilisation
 layout: post
 title:  Running all cells of a battery completely flat
-categories: efficiency
+tags: efficiency
 ---
 I've long felt like it shouldn't be so hard for electronics to run their
 batteries completely flat before acting weird, and to be able to support

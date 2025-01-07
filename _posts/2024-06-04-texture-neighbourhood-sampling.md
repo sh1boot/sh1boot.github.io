@@ -3,7 +3,7 @@ last_modified_at: Mon, 2 Dec 2024 19:12:14 -0800  # 3a9616c Improved-texture-nei
 layout: post
 title:  Neighbourhood sampling order during texture filtering
 description: A workaround to avoid glitches when working with derivative functions around texture interpolation logic.
-categories: graphics, glsl, hacks, fwidth, thresholding, antialiasing
+tags: graphics glsl hacks fwidth thresholding antialiasing
 svg: true
 ---
 In my [pixel-art scaling](/pixel-art-scaling) tinkering I found a

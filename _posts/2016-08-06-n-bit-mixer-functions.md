@@ -3,7 +3,7 @@ last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add
 layout: post
 title: N-bit Mixer Functions
 description: A collection of mixer functions in the style of Murmur hash's finalisation mixer, for 8 to 128 bits.
-categories: random, hashing, mathematics, number theory
+tags: random hashing mathematics number-theory
 ---
 For reasons I intend (hah!) to go into in a longer post I was looking for
 operations with which to construct and whiten (or "finalise" or "mix" or

@@ -3,7 +3,7 @@ last_modified_at: Fri, 27 Dec 2024 15:48:07 -0800  # 869bb19 reduce-folding-in-n
 layout: post
 title:  Non-binary Linear Feedback Shift Registers
 mathjax: true
-categories: mathematics, number theory
+tags: mathematics number-theory
 ---
 
 There's way too much documentation about binary [LFSRs][LFSR], and not a

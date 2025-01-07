@@ -12,7 +12,22 @@ layout: default
       </time>
       {%- if page.author -%}
         • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
-      {%- endif -%}</p>
+      {%- endif -%}
+      {%- if page.tags.size > 0 -%}
+        • [
+        {%- assign taglist = site.pages | where: "layout", "tagpage" -%}
+        {%- for tagname in page.tags -%}
+          {%- assign tagurl = taglist | where: "tag", tagname | map: "url" | relative_url | first -%}
+          {%- if tagurl -%}
+            <a href="{{tagurl}}"><code>{{tagname}}</code></a>
+          {%- else -%}
+            <code>{{tagname}}</code>
+          {%- endif -%}
+          {%- unless forloop.last -%} &vert; {%- endunless -%}
+        {%- endfor -%}
+        ]
+      {%- endif -%}
+    </p>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">

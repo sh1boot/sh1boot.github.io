@@ -2,7 +2,7 @@
 last_modified_at: Tue, 10 Sep 2024 12:01:53 -0700  # f78e9ef publish-a-few-old-things
 layout: post
 title:  Machine innervation
-categories: artificial intelligence, reliability, wtf-am-i-doing
+tags: artificial-intelligence reliability wtf-am-i-doing
 ---
 Looking at the faults my espresso machine develops over time, I've often
 wondered if fault detection and error messages could be better.  It's probably

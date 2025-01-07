@@ -2,7 +2,7 @@
 last_modified_at: Fri, 12 Apr 2024 12:16:18 -0700  # d11a13c some-drafts
 layout: post
 title:  "Approximate and multiplex"
-categories: RTL, optimisation, wip
+tags: RTL optimisation wip
 draft: true
 ---
 

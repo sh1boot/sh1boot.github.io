@@ -3,7 +3,7 @@ last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add
 format: post
 title: Optimising Adler-32 checksum
 description: A rundown of the steps I've taken to improve SIMD throughout of Adler-32 checksum calculation by constraining authentic range.
-categories: checksum, hashing, mathematics, number theory
+tags: checksum hashing mathematics number-theory
 mathjax: true
 ---
 The [Adler-32][] checksum consists of two 16-bit sums.  One is the sum of all

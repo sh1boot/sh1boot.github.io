@@ -3,7 +3,7 @@ last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add
 layout: post
 title:  Pivot-sorting quick sort
 description: An approach to good pivot selection which reveals other fast-path cases as it goes.
-categories: sorting, quick sort, sorting pivot
+tags: sorting quick-sort sorting-pivot
 svg: true
 ---
 Regarding those quick-sort variants which do things like median-of-k pivot

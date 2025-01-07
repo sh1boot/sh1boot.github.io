@@ -3,7 +3,7 @@ last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add
 layout: post
 title:  Bit-sliced matrix multiply
 description: A rearrangement of a SIMD multiplication instruction which allows efficient implementation of matrix multiplication of less than eight-bit precision.
-categories: matrix multiply, bit slicing, low precision, 8-bit
+tags: matrix-multiply bit-slicing low-precision 8-bit
 ---
 
 There's a matrix multiplication in the middle of a lot of popular things, right

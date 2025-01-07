@@ -2,7 +2,7 @@
 last_modified_at: Thu, 12 Sep 2024 10:18:30 -0700  # 2c4ad94 publish-branch-train-hinting
 layout: post
 title:  Hinting train of branch directions in advance
-categories: computer architecture, branch prediction
+tags: computer-architecture branch-prediction
 draft: true
 ---
 Long ago I had to do a scaling operation which would yield a stream of

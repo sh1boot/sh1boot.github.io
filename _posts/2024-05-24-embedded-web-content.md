@@ -3,7 +3,7 @@ last_modified_at: Sat, 3 Aug 2024 12:36:41 -0700  # 043a0b6 Take-a-swipe-at-rece
 layout: post
 title:  Embedded web content without all that JavaScript cruft
 description: A bit of Jekyll hacking to stop other sites' JavaScript running rampant on my blog without the user being forewarned.
-categories: privacy, web, liquid, jekyll, wtf-am-i-doing
+tags: privacy web liquid jekyll wtf-am-i-doing
 ---
 In an earlier blog post I wanted to embed some diagrams.  Really I wanted SVG
 for clean scaling between devices, but I don't have that format as an output

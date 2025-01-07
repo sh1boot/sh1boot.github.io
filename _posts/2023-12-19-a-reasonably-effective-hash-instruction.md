@@ -3,7 +3,7 @@ last_modified_at: Sat, 3 Aug 2024 12:17:06 -0700  # cb2fde2 use-canonical-links-
 layout: post
 title:  A reasonably effective hash instruction
 description: A 128-to-64 bit hash operation which is cheap to implement in hardware and does most of a decent job in one cycle.
-categories: hashing, random, computer architecture, handwaving
+tags: hashing random computer-architecture handwaving
 ---
 As per [part one][] of this post, I have reasoned through and tested a proof of
 concept for generic CPU instruction which could achieve most of the required

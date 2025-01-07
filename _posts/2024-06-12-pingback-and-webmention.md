@@ -2,7 +2,7 @@
 last_modified_at: Wed, 12 Jun 2024 16:05:16 -0700  # e8b02b5 pingback-and-webmention
 layout: post
 title:  Digging in to Pingback and Webmention
-categories: blogging, social media, wtf-am-i-doing
+tags: blogging social-media wtf-am-i-doing
 ---
 The other day I found out what a "[Pingback][]" was, after I saw a bunch of
 them at the bottom of a widely-cited blog post.  So I set about digging in to
