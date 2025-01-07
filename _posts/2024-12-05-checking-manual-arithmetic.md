@@ -12,16 +12,16 @@ opening:
 ---
 So you've done some arithmetic by hand and now you want to make sure
 it's correct.  [Casting out nines][] is the conventional sanity check,
-but that overlooks digit transpositions.  What if you want something
-stronger?  Try this one weird trick.
+but that has weaknesses.  What if you want something stronger?  Try this
+one weird trick.
 
-First; this whole casting-out-nines thing, in brief, revoles around
-identities like $a + b = c + oops$, where $oops$ will be zero if we
-calculated $c$ correctly.  A thing that's generally easier to calculate
-than the original sum is $a + b \equiv c + oops \mod 9$, and $a + b - c
-\equiv oops \mod 9$ which should come out to zero if $oops$ is zero (but
-also if it's any other multiple of nine).  This extends to other
-arithmetic.
+To start off, this whole casting-out-nines thing, in brief, revolves
+around identities like $a + b = c + oops$, where $oops$ will be zero if
+we managed to calculate $c$ correctly.  Something that's generally
+easier to calculate than the original sum is $a + b \equiv c + oops \mod
+9$, and $a + b - c \equiv oops \mod 9$ which should come out to zero if
+$oops$ is zero (but also if it's any other multiple of nine).  This
+extends to other arithmetic.
 
 But a problem with mod 9 is that it's blind to digit transposition.  We
 know this because we can quickly calculate the remainder mod nine of a
@@ -29,22 +29,36 @@ number by adding up all its digits, which is an operation that comes out
 the same regardless of their order.
 
 The next easiest test is casting out 11s, because mod 11 is calculated
-as alternating addition and subtraction of digits.  This pair of tests
-is equivalent to a mod 99 test.  From this we can infer that it has the
-same blind spot for digit transposition but in base 100 rather than
-base 10.  You can't swap two adjacent digits but you can swap digits
-separated by one other digit.  Eg., $318 \equiv 813 \mod 99$
+as alternating addition and subtraction of digits rather than straight
+addition.
 
-These are realistic human errors so they're not a good place for a
-blind spot.  You'll see this consideration in the design of a lot of
-[check digit][] systems.  Computers don't generally make that sort of
-mistake so you'll often see order-insensitive checksums in things like
-[IPv4][internet checksum].  And remember that in things like UPC, while
-it's normally machine-read humans sometimes have to trascribe them
-manually.
+This pair of tests is equivalent to a mod 99 test.  From this we can
+infer that it has the same blind spot for digit transposition but in
+base 100 rather than base 10.  You can't swap two adjacent digits but
+you can swap digits separated by one other digit.  Eg., $318 \equiv 813
+\mod 99$
 
-The _easy_ remedy, here, is to just carry on making the test longer
-until n-step-transcription is improbable.  Like so:
+Notice that going from mod 9 to mod 99 is taking well-known base 10
+shortcuts and expanding them to base 100 by simply coupling adjacent
+digits.  This can go on forever; not just for powers of two but any
+regular grouping.
+
+Unfortunately digit transposition is a thing humans do often.  You'll
+see this as a consideration in the design of a lot of [check digit][]
+systems.  On the other hand computers don't generally make that sort of
+mistake so it's also common to see order-insensitive checksums in things
+like [IPv4][internet checksum].  If you've ever bought a thing in a
+supermarket you'll know that while bar codes are designed to be read by
+machines, sometimes they still need to be transcribed manually, so that
+uses an order-sensitive check digit as well.
+
+The _simple_ remedy in our case is to just carry on making the test
+longer until n-step-transcription is improbable.  But we don't want to
+make check arithmetic longer or it won't be a labour-saving device
+anymore.
+
+We can moderate its growth a little by breaking each stage in half.
+Like so:
 
 First, calculate the remainder of the inputs and outputs over 99999999
 -- that's eight nines.  To do this, break the number up into groups of
@@ -82,8 +96,8 @@ Now for each value $x$ you should have $x \mod 9$, $x \mod 11$, $x \mod
 101$, and $x \mod 10001$.
 
 Do the casting-out-nines test.  If that goes OK then you have a
-one-in-nine chance of being wrong.  More or less; don't forget that
-blind spot.
+one-in-nine chance of being wrong.  Give or take the comparative risks
+of digit transposition.
 
 Next you can try the same thing mod 11.  Now you have a one in 99 chance
 of being wrong.  Digit transpositions only sneak through if they're
@@ -102,14 +116,44 @@ lengths.
 
 Or, of course, you could just use a computer like any sensible person.
 
-Here's where I should provide some tricks for doing mod 73 and mod 137
-arithmetic, but I haven't figured those out, yet.
+At this point questions come up about arithmetic mod 73 and mod 137.
+How do we do it?  Are there easy shortcuts?  Because they're not one
+away from a power of ten does this mean they have different weaknesses
+from the other tests we've done?
 
-<s>TODO: do that</s>
+Last question first: no.
 
-You know what?  It's probably easier to just write up the
-generalisations for mod $10^n-1$ and mod $10^n+1$ arithmetic, and
-develop some shortcuts for doing that efficiently.
+What got me started on this post was wondering the same thing after
+seeing this [Stand Up Maths][] video showing off a bunch of
+[divisibility tests][]:
+{% include youtube.liquid id='6pLz8wEQYkA' %}
+and thinking about that in relation to their [2024 Pi calculation
+effort](https://youtu.be/LIg-6glbLkU).
+
+But when you note that you can do a 10001 test via its prime factors it
+becomes apparent that those prime factors must have the same weaknesses
+as that product.  You're not making mod 73 weaker by also doing mod 137.
+They just both have that property inherently.
+
+And so it is for any prime (overlooking 2 and 5), because eventually you
+can find a value one off a power of ten which it divides (proof left as
+an exercise for the reader).  It may just be a very big power of ten,
+requiring more digits than you started with so there can't possibly be
+such a transposition.
+
+Those divisibility tests are optimised in such a way that they don't
+give correct remainders (or they do but you'd have to do extra work to
+recover them), so I kind of set that aside.  There may be a magic prime
+that isn't too bug but has an uncommonly long decimal period and isn't
+hard to take the reainder of in decimal arithmetic but I don't know what
+it is.
+
+So to the second and first questions: I don't know, and I don't care.
+It doesn't look promising so I'm not trying to figure it out.
+
+Instead, it's probably easier and more productive to just write up the
+generalisations for mod $10^n+1$ arithmetic, and develop some shortcuts
+for doing that efficiently.
 
 Naïvely it's just a matter of doing the arithmetic and then folding the
 high digits back as described above, but there might be some internal
@@ -117,52 +161,40 @@ optimisations to work out to make things even easier.
 
 TODO: do that instead
 
-This makes me wonder; if you have a lot of mod 137 arithmetic to do,
-could it be easier to do it mod 10001 and defer reducing the final
-result at the end?
+The process of computing mod $10^n - 1$ and mod $10^n + 1$ by batching up
+digits does have useful generalisations.  You can calculate the
+remainder over $(10^g)^n - k$ by taking the $i$th group of $g$ digits
+and multiplying it by $k^i$ before adding them all up.  It's just that
+if $k$ is not on the unit circle then it's going to grow and grow so you
+can't group and add up everything concurrently like you can with $1^i$
+and $(-1)^i$.
 
-I think the holy grail here would be an expedient remainder algorithm
-which does _not_ rely on repdigits, which I assume would help to hash
-out more of those blind spots to the sorts of errors that happen in
-decimal.  What got me thinking about this was a couple of [Stand Up
-Maths][] things.  One showing off a bunch of [divisibility tests][]:
-{% include youtube.liquid id='6pLz8wEQYkA' %}
+This is part of how the [Adler-32][] checksum is calculated efficiently,
+except that's done in binary rather than decimal.
 
-And viewing those in the context of the [2024 Pi calculation
-effort](https://youtu.be/LIg-6glbLkU), which involved techniques for
-mitigating human error.  I like optimising things so the redundancy
-gets my attention.
+But yes, I said unit circle, which means I do want to address the
+possibility that $k$ is complex.  I briefly entertained the idea of
+setting $k$ to 90 degrees in the complex plane, so its integer powers
+would orbit around the four cardinal directions and I could break the
+groups into four sets and add them in different directions.  This meant
+exploring [Gaussian integers][] and it does look like it could really be
+made to work.
 
-Initially I was hopeful of finding some easy divisibility tests which
-were more interesting than [repdigits][repdigit] -- my holy grail above.
+Can this be extended to the unit hypersphere in [quarternions][]?  I
+don't know.  My cursory thoughts on the matter amounted to "why not?",
+and I wonder if hyperdimensional [Chinese Remainder Theorem][] could be
+used to reconstitute the original value after breaking extremely long
+number into many dimensions and doing arithmetic mod smaller numbers.
+This reminded me of how one can use fourier transforms to reduce
+multiplication to a linear problem at the cost having to do the
+transforms before and after (which is a bit less complicated than a very
+long multiplication).  Except here we might be able to do addition and
+multiplication without extra transforms.  Or not.  I don't know.  I'm
+not sure how much crosstalk there is between the dimensions when
+reconciling the overflows after each operation.  That might be
+prohibitive.
 
-After a bit of poking around and contemplation I decided that mod
-99999999 was good enough.  After all, if 10001 is the product of smaller
-numbers with more complicated divisibility tests, then doing the test
-mod 10001 instead of mod 137 validates all the same cases and then some.
-Whatever failings might exist in $10^n+1$ must also exist in its
-factors, and I think every prime outside of 2 and 5 must be a factor of
-$10^n+1$ eventually.
-
-TODO: prove it.
-
-If I were to go one step further I would look at reducing the numbers
-$mod 10^n - k$ for a small $k$ other than 1, looking for a value with
-some manageable factors.  This is how the [Adler-32][] checksum works,
-except that's in binary.
-
-Those divisibility rules cut the number down to size by eating away the
-top and the bottom ends with different rules.  Both rules rely on adding
-or subtracting a multiple of the divisor and cutting chunks off of the
-number once they're eliminated.  But cutting chunks off the bottom
-part involves manipulating them to make the unit digit zero and then
-discarding it by dividing by ten.  Division by ten corrupts the
-remainder but it never changes it between zero and nonzero (provided the
-test is not a multiple of five or two, which you should factor out
-beforehand).  You can unwind those changes by remembering how many times
-you divided by ten and then multiplying by ten mod the divisor, but to
-make that useful you'll need more tricks.
-
+TODO: Figure all that out?  Probably not.
 
 [Adler-32]: </adler32-checksum/>
 [casting out nines]: <https://en.wikipedia.org/wiki/Casting_out_nines>
@@ -172,3 +204,6 @@ make that useful you'll need more tricks.
 [divisibility tests]: <https://www.dropbox.com/scl/fi/zednyqcvd4kfi0zgm8n6t/divisibility_tests_to_30000.txt?rlkey=k7x87cnex6r32cuior6w9kzo5&e=1&dl=0>
 [repdigit]: <https://en.wikipedia.org/wiki/Repdigit>
 [Stand Up Maths]: <https://standupmaths.com/>
+[Gaussian integers]: <https://en.wikipedia.org/wiki/Gaussian_integer>
+[quarternions]: <https://en.wikipedia.org/wiki/Quaternion>
+[Chinese Remainder Theorem]: <https://en.wikipedia.org/wiki/Chinese_Remainder_Theorem>
