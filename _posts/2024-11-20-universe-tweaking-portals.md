@@ -78,6 +78,10 @@ when I came back past the same sign.
 
 This could be gamified in so many ways.
 
-TODO: link that other video I saw.
+There's also this:
+{% include youtube.liquid id='DTcfaHfDCEc' %}
+
+TODO: discuss..
+
 
 [tessellated playfield]: <https://www.halfbakery.com/idea/Tessellated_2c_20phase-shifted_20playfield>
