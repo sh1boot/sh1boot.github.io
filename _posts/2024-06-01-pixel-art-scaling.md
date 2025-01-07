@@ -3,7 +3,7 @@ last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # d3117a6 texture-neighbourho
 layout: post
 title:  Scaling pixel art with SDF
 description: Scaling low-res images and pixel art using signed distance fields, smoothing, and re-quantisation.
-categories: sdf, pixel-art, interpolation, image-processing
+categories: graphics, sdf, 8-bit, pixel art, interpolation, image-processing
 ---
 For a while I've been wondering if giving a fantasy console like [PICO-8][] a
 graphics system defined in terms of more scalable low-memory primitives would

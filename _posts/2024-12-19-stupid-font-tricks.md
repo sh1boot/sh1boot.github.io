@@ -2,6 +2,7 @@
 last_modified_at: Sat, 21 Dec 2024 14:40:14 -0800  # 2da5eea update-stupid-font-trick
 layout: post
 title:  Stupid font tricks
+categories: graphics, fonts
 ---
 I thought I'd try creating an LFSR in font substitution tables to turn a
 string of the same character into a string of random variants of that

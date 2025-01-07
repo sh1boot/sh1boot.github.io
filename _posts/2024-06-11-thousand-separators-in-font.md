@@ -2,7 +2,7 @@
 last_modified_at: Fri, 13 Dec 2024 12:45:34 -0800  # ad6fdfb example-fonts-for-thousand-separation
 layout: post
 title:  Font-based digit grouping
-categories: font, digit grouping, terminals
+categories: graphics, font, digit grouping, terminals
 draft: true
 ---
 Struggling to read absurdly large numbers in terminal windows many years

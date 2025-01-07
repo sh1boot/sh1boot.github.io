@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Shadow stack and physical registers
-categories: cpu
+categories: computer architecture
 ---
 Something I feel the world missed when it adopted shadow stacks for
 security is that if that stack is secreted away in a place the
@@ -41,3 +41,5 @@ Do I remember reading about an architecture which invalidated the tip of
 its stack when returning from functions?  Or is that a thing I invented
 for my own purposes?  Well... that would be a thing, here, anyway.
 Invalidate the tip of your stack and hope it never reaches memory at all.
+
+TODO: also store entropy magic, canaries, etc...

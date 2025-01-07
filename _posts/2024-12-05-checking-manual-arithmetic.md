@@ -3,6 +3,7 @@ last_modified_at: Sun, 8 Dec 2024 18:57:17 -0800  # a7cd9ad refine-arithmetic-ch
 layout: post
 title: Extended checks on manual arithmetic
 mathjax: true
+categories: mathematics, number theory
 opening:
   image: /images/human_error.jpeg
   alt: A human errorer
@@ -144,7 +145,7 @@ such a transposition.
 Those divisibility tests are optimised in such a way that they don't
 give correct remainders (or they do but you'd have to do extra work to
 recover them), so I kind of set that aside.  There may be a magic prime
-that isn't too bug but has an uncommonly long decimal period and isn't
+that isn't too big but has an uncommonly long decimal period and isn't
 hard to take the reainder of in decimal arithmetic but I don't know what
 it is.
 
@@ -159,7 +160,7 @@ Naïvely it's just a matter of doing the arithmetic and then folding the
 high digits back as described above, but there might be some internal
 optimisations to work out to make things even easier.
 
-TODO: do that instead
+TODO: do that
 
 The process of computing mod $10^n - 1$ and mod $10^n + 1$ by batching up
 digits does have useful generalisations.  You can calculate the

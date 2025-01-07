@@ -3,7 +3,7 @@ last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add
 layout: post
 title:  Hash map reduction operations
 description: Since STL's mapping from a hash to table-index is surprisingly primitive, what are some ways to do it better (and when might those turn out worse)?
-categories: hashing, hash-table, hash-map, wip
+categories: hashing, hash table, hash map
 ---
 I notice that some defaults for things like STL `unordered_map` are a bit
 scary.  The function to reduce the range of the hash down to the size of the

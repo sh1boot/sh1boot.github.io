@@ -2,7 +2,7 @@
 last_modified_at: Tue, 6 Aug 2024 13:40:37 -0700  # 93601d2 address-coded-endian-elaboration
 layout: post
 title:  Address-coded endian
-categories: memory, hardware design, endian
+categories: memory, endian, computer architecture
 svg: true
 ---
 Many years ago I found in an old Arm manual a description of the permutation

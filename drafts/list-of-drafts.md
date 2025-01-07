@@ -1,6 +1,7 @@
 ---
 layout: page
-title: Some less-than-half-baked thoughts
+title: Some not-even-half-baked thoughts
+catogeries: index
 sitemap: false
 ---
 {%- assign drafts = site.pages | where_exp: "item", "item.dir contains '/drafts/'" -%}

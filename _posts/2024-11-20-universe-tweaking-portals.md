@@ -2,6 +2,7 @@
 last_modified_at: Fri, 27 Dec 2024 15:37:13 -0800  # 910c804 universe-tweaking-portal-link
 layout: post
 title:  Invisible, universe-tweaking portals
+categories: games, portals
 ---
 I'm not going to describe the mechanics of the game [Portal][].  You
 probably already know; but I've often [wittered on][tessellated
@@ -76,5 +77,7 @@ breaking the rules I entered an alternate universe, and left it again
 when I came back past the same sign.
 
 This could be gamified in so many ways.
+
+TODO: link that other video I saw.
 
 [tessellated playfield]: <https://www.halfbakery.com/idea/Tessellated_2c_20phase-shifted_20playfield>

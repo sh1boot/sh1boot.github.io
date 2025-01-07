@@ -3,7 +3,7 @@ last_modified_at: Sat, 3 Aug 2024 12:17:06 -0700  # cb2fde2 use-canonical-links-
 layout: post
 title:  Why I want a dedicated hash instruction
 description: My thoughts on why a CPU instruction to provide a stronger hash operation in one cycle would benefit software performance.
-categories: hashing, prng, cpu, pipeline, handwaving
+categories: hashing, random, computer architecture, handwaving
 ---
 A good hash function is expected to [remove correlations][correlation immunity]
 of various sorts between subsets of inputs and their hashed outputs in order to
