@@ -14,18 +14,20 @@ layout: default
         • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
       {%- endif -%}
       {%- if page.tags.size > 0 -%}
-        • [
+        • [ <style>.tag-list code { font-size: smaller; }</style> <span class="tag-list">
         {%- assign taglist = site.pages | where: "layout", "tagpage" -%}
         {%- for tagname in page.tags -%}
-          {%- assign tagurl = taglist | where: "tag", tagname | map: "url" | relative_url | first -%}
-          {%- if tagurl -%}
+          {%- capture tagurl -%}
+            {{ taglist | where_exp: "item", "item.tag == tagname" | map: "url" | first | relative_url }}
+          {%- endcapture -%}
+          {%- if tagurl != "" -%}
             <a href="{{tagurl}}"><code>{{tagname}}</code></a>
           {%- else -%}
             <code>{{tagname}}</code>
           {%- endif -%}
           {%- unless forloop.last -%} &vert; {%- endunless -%}
         {%- endfor -%}
-        ]
+        </span> ]
       {%- endif -%}
     </p>
   </header>

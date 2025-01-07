@@ -44,7 +44,7 @@ layout: default
       {%- if tagpage.sitemap != false -%}
       <li>
         <a class="post-link" href="{{ tagpage.url | relative_url }}">
-          {{tagpage.tag}}
+          {{ tagpage.title | default: tagpage.tag }}
         </a>
       </li>
       {%- endif -%}

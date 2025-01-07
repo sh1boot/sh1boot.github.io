@@ -10,3 +10,6 @@ All posts tagged "$tag".
 EOF
 )
 done
+echo -n 'Ignoring single-use tags: '
+sed -ne 's/^tags: \(.*\)/\1/; T; s/ /\n/gp' **/*.md | tr ' ' '\n' | sort | uniq -u | tr '\n' ' '
+echo
