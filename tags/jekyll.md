@@ -1,5 +1,5 @@
 ---
 layout: tagpage
 tag: jekyll
+excerpt: All posts tagged "jekyll"
 ---
-All posts tagged "jekyll".

@@ -1,5 +1,5 @@
 ---
 layout: tagpage
 tag: graphics
+excerpt: All posts tagged "graphics"
 ---
-All posts tagged "graphics".

@@ -1,5 +1,5 @@
 ---
 layout: tagpage
 tag: computer-architecture
+excerpt: All posts tagged "computer-architecture"
 ---
-All posts tagged "computer-architecture".

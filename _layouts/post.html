@@ -15,10 +15,10 @@ layout: default
       {%- endif -%}
       {%- if page.tags.size > 0 -%}
         • [ <style>.tag-list code { font-size: smaller; }</style> <span class="tag-list">
-        {%- assign taglist = site.pages | where: "layout", "tagpage" -%}
+        {%- assign tag_pages = site.pages | where: "layout", "tagpage" -%}
         {%- for tagname in page.tags -%}
           {%- capture tagurl -%}
-            {{ taglist | where_exp: "item", "item.tag == tagname" | map: "url" | first | relative_url }}
+            {{ tag_pages | where_exp: "item", "item.tag == tagname" | map: "url" | first | relative_url }}
           {%- endcapture -%}
           {%- if tagurl != "" -%}
             <a href="{{tagurl}}"><code>{{tagname}}</code></a>

@@ -1,5 +1,5 @@
 ---
 layout: tagpage
 tag: liquid
+excerpt: All posts tagged "liquid"
 ---
-All posts tagged "liquid".

@@ -5,8 +5,8 @@ for tag in $(sed -ne 's/^tags: \(.*\)/\1/; T; s/ /\n/gp' **/*.md | tr ' ' '\n' |
 ---
 layout: tagpage
 tag: $tag
+excerpt: All posts tagged "$tag"
 ---
-All posts tagged "$tag".
 EOF
 )
 done
