@@ -1,5 +1,5 @@
 ---
 layout: tagpage
 tag: fonts
-excerpt: All posts tagged "fonts"
+title: All posts tagged "fonts"
 ---

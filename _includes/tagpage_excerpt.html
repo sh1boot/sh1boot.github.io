@@ -1,0 +1,12 @@
+<ul>
+{%- assign tag_pages = site.pages | where: "layout", "tagpage" -%}
+{%- assign tagged = site.posts | concat: tag_pages | where_exp: "item", "item.tags contains include.tag" -%}
+{% for post in tagged %}
+  {%- capture tag_title -%} Posts tagged {{ post.tag }} {%- endcapture -%}
+  {%- unless include.exclusions contains post.url -%}
+    <li><a href="{{ post.url | relative_url }}">
+      {{ post.title | default: tag_title | escape }}
+    </a></li>
+  {%- endunless -%}
+{%- endfor -%}
+</ul>

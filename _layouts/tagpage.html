@@ -14,8 +14,9 @@ layout: default
 
   {%- assign tag_pages = site.pages | where: "layout", "tagpage" -%}
   {%- assign tagged = site.posts | concat: tag_pages | where_exp: "item", "item.tags contains page.tag" -%}
+  {%- assign tagged_urls = tagged | map: "url" -%}
   {%- if tagged.size > 0 -%}
-    <h2 class="post-list-heading">Tag: {{ page.tag }}</h2>
+    <h2 class="post-list-heading">Posts tagged {{ page.tag }}</h2>
     <ul class="post-list">
       {%- for post in tagged -%}
       {%- if post.sitemap != false -%}
@@ -24,13 +25,18 @@ layout: default
         {%- if post.layout == "post" -%}
           <span class="post-meta">{{ post.date | date: date_format }}</span>
         {%- endif -%}
+        {%- capture tag_title -%} Posts tagged {{ post.tag }} {%- endcapture -%}
         <h3>
           <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | default: post.tag | escape }}
+            {{ post.title | default: tag_title | escape }}
           </a>
         </h3>
         {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
+          {%- if post.layout == "tagpage" -%}
+            {% include tagpage_excerpt.html tag=post.tag exclusions=tagged_urls %}
+          {%- else -%}
+            {{ post.excerpt }}
+          {%- endif -%}
         {%- endif -%}
       </li>
       {%- endif -%}
@@ -40,20 +46,6 @@ layout: default
     <p> unused tag </p>
   {%- endif -%}
   {%- if page.tags.size > 0 -%}
-  <p> See also:
-    <span class="tag-list">
-        {%- for tagname in page.tags -%}
-          {%- capture tagurl -%}
-            {{ tag_pages | where_exp: "item", "item.tag == tagname" | map: "url" | first | relative_url }}
-          {%- endcapture -%}
-          {%- if tagurl != "" -%}
-            <a href="{{tagurl}}"><code>{{tagname}}</code></a>
-          {%- else -%}
-            <code>{{tagname}}</code>
-          {%- endif -%}
-          {%- unless forloop.last %}, {% endunless -%}
-        {%- endfor -%}
-    </span>
-  </p>
+  <p> See also: {% include tag_list.html sep=', ' -%} </p>
   {%- endif -%}
 </div>
