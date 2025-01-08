@@ -3,8 +3,8 @@ last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # 3657e0a rowhammer-mitigatio
 layout: post
 title:  Idly musing over RowHammer mitigation strategies
 tags: rowhammer security hashing computer-architecture error-correction
-aliases:
-  - rowmhammer-mitigation-musings/
+redirect_from:
+  - /rowmhammer-mitigation-musings/
 ---
 Watching a [RowHammer talk][] ([slides][RowHammer slides]) a while back (not
 actually the linked one, but I couldn't find the one I attended) left me with a
