@@ -22,8 +22,8 @@ title: tīkōuka.dev
 author: sh1boot
 #email: sh1boot@tīkōuka.dev
 description: >- # this means to ignore newlines until "baseurl:"
-  Less of a blog and more of a pesonal wiki because I revise old posts continuously.
-  Mostly not about cabbage trees.
+  Less of a blog and more of a pesonal wiki as I continuously revise old posts.
+  Rarely about cabbage trees.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://www.xn--tkuka-m3a3v.dev" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  sh1boot
