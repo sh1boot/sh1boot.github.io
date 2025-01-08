@@ -16,7 +16,6 @@ layout: default
   {%- assign tagged = site.posts | concat: tag_pages | where_exp: "item", "item.tags contains page.tag" -%}
   {%- assign tagged_urls = tagged | map: "url" -%}
   {%- if tagged.size > 0 -%}
-    <h2 class="post-list-heading">Posts tagged {{ page.tag }}</h2>
     <ul class="post-list">
       {%- for post in tagged -%}
       {%- if post.sitemap != false -%}

@@ -2,7 +2,7 @@
 last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # 0b9ac52 switch-to-OKLab
 layout: post
 title:  What I've learned so far about CSS, SVG, Liquid, and Jekyll
-description: Embedded diagrams in Jekyll and GitHub Pages from the point of view of someone who wants to keep web technologies at arm's length.
+description: Embedding diagrams on GitHub Pages from someone trying to keep away from web stuff.
 tags: web css svg liquid jekyll wtf-am-i-doing
 ---
 From the point of view of knowing almost nothing about how any web techology

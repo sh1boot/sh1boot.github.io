@@ -29,7 +29,7 @@ url: "https://www.xn--tkuka-m3a3v.dev" # the base hostname & protocol for your s
 github_username:  sh1boot
 
 header_pages:
-  - "header/manifesto.md"
+  - "top/manifesto.md"
 
 permalink: /:title/
 markdown: kramdown

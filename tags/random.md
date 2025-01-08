@@ -1,5 +1,5 @@
 ---
 layout: tagpage
 tag: random
-excerpt: All posts tagged "random"
+title: All posts tagged "random"
 ---

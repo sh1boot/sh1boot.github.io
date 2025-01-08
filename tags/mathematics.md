@@ -1,5 +1,5 @@
 ---
 layout: tagpage
 tag: mathematics
-excerpt: All posts tagged "mathematics"
+title: All posts tagged "mathematics"
 ---

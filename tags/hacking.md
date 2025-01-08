@@ -1,5 +1,5 @@
 ---
 layout: tagpage
 tag: hacking
-excerpt: All posts tagged "hacking"
+title: All posts tagged "hacking"
 ---

@@ -1,5 +1,5 @@
 ---
 layout: tagpage
 tag: spinach
-excerpt: All posts tagged "spinach"
+title: All posts tagged "spinach"
 ---

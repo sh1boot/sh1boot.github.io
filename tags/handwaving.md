@@ -1,6 +1,6 @@
 ---
 layout: tagpage
 tag: handwaving
-excerpt: All posts tagged "handwaving"
+title: All posts tagged "handwaving"
 tags: wtf-am-i-doing
 ---
