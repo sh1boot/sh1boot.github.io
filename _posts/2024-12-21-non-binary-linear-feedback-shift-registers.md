@@ -92,6 +92,10 @@ Setting the de Bruijn modification aside because I don't know how to account for
 
 Typically I like to have a solution handy for jumping ahead by the period of the generator times the golden ratio.  You can use that to maximally distribute an arbitrary number of generators.
 
+##Example code
+
+[example code][].
+
 ## Tables
 
 In the tables below, several different polynomials are listed for the given parameters, each enclosed in `{}`.  The right-most value is the multiplier for the
@@ -121,4 +125,4 @@ $$
 [LFSR]: <https://en.wikipedia.org/wiki/LFSR>
 [de Bruijn sequence]: <https://en.wikipedia.org/wiki/de_Bruijn_sequence>
 [shift register generation]: <https://books.google.com/books?id=sd9AqHeeHh4C&pg=PA174>
-
+[example code]: <https://github.com/sh1boot/nblfsr/blob/main/generator.py>
