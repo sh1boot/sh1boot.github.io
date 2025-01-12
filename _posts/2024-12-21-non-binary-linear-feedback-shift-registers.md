@@ -92,7 +92,7 @@ Setting the de Bruijn modification aside because I don't know how to account for
 
 Typically I like to have a solution handy for jumping ahead by the period of the generator times the golden ratio.  You can use that to maximally distribute an arbitrary number of generators.
 
-##Example code
+## Example code
 
 [example code][].
 
