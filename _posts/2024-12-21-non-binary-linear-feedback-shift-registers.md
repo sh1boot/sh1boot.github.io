@@ -6,9 +6,10 @@ mathjax: true
 tags: number-theory random
 ---
 
-There's way too much documentation about binary [LFSRs][LFSR], and not a
-whole lot on doing the same with other bases.  Here are some tables for
-other bases so things can be thrown together without too much thought.
+There's way too much documentation about binary [LFSRs][LFSR] out there,
+and not a whole lot on doing the same with other bases.  Here are some
+tables for other bases so things can be thrown together without too much
+thought.
 
 In the binary case one has a selection of taps which are either used or
 not used, and the next bit (digit) in the sequence is the parity of the
@@ -18,9 +19,25 @@ To extend this to base b, one can multiply each tap by an integer
 between 0 and b-1 (zero meaning the tap is unused), and add these up
 mod b, and that's the next digit.
 
+```python
+def nblfsr(punctured=True):
+  base = 3
+  poly = [0, 0, 0, 1, 2]
+  shift = [1, 0, 0, 0, 0]
+
+  while True:
+    yield shift[0]
+    x = sum(map(operator.mul, shift, poly)) % base
+    shift = [x] + shift[:-1]
+    if not punctured and x == 1 and not any(map(bool, shift[1:])):
+      yield 0
+```
+
 Remembering the caveat that the all-zeroes pattern cannot occur in the
 sequence, a generator like this can produce a pseudorandom string in any
-alphabet with a period $b^n-1$.  Such sequences are _almost_ a [de Bruijn sequence][], where every possible length-n string is produced exactly once in the minimum number of steps possible.
+alphabet with a period $b^n-1$.  Such sequences are _almost_ a [de
+Bruijn sequence][], where every possible length-n string is produced
+exactly once in the minimum number of steps possible.
 
 I've also used it where I wanted a sequence where the new value is the
 previous value multiplied by 3, but with a small perturbation to ensure
@@ -59,14 +76,34 @@ that it might help with the following...
 
 ## Extending to $p^n$ bases
 
-If you need a generator which is some power of a prime then you could use a prime generator which is n times longer and then combine groups of n digits into a single value. However, advancing in steps of one will mean each value shares a lot of information with the one before which may be problematic for some applications.  To fix this you could step the shift register n steps for each output, _provided_ n is coprime with p (since p is prime this just means n is not a multiple of p), and provided you're using the de Bruijn modification above.  When n is a multiple of p just use steps of n + 1 instead (TODO: prove this works).  This is necessary to ensure that the step size is coprime to the period of the sequence to ensure every position is visited.
+If you need a generator with a base which is some power of a prime then
+you could use a prime generator which is n times longer and then combine
+groups of n digits into a single value.
 
-Otherwise, one would need to implement linear $\mathrm{GF}(p^n)$ arithmetic and
-either repeat the search, or find some polynomials using mathematics I
-haven't learned.  I haven't got around to doing either of those things.
+However, one must be careful about the way sets of small values are
+mapped to larger values and the way the sequence is stepped.  Either
+step the sequence in groups of n, so that the logical shift register
+structure is maintained, or use single steps and a more convoluted
+mapping which still looks like a shift register afterwards.
 
-Also I would need to specify the multiplication and addition operations
-more explicitly because they're not the same as for prime bases.
+When stepping in ones there's going to be some mathematical relationship
+between nearby values as a single value in the long shift register is
+going to move around and be re-used in the remapped shift register.
+This makes it a weaker PRNG.
+
+When using steps greater than one care must be taken to ensure that the
+step is co-prime with the period of the generator.  Only if it is
+co-prime can the shift register visit every possible state for a
+bijective mapping.
+
+Otherwise, one would need to implement linear $\mathrm{GF}(p^n)$
+arithmetic and either repeat the search, or find some polynomials using
+mathematics I haven't learned.  I haven't got around to doing either of
+those things.
+
+Also if I did the search I wolud then need to specify the multiplication
+and addition operations more explicitly because they're not the same as
+for prime bases.
 
 ## Extending to other bases
 
