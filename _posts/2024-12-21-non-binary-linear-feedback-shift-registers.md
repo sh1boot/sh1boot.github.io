@@ -159,7 +159,14 @@ $$
 |------|--------|--------|-------------|
 {% include nblfsr_table_1.md %}
 
+There's more data [here][allpolys].  The search required factoring some
+big numbers in the form $p^n-1$, and I didn't want to waste that effort,
+so those are [here][factors].
+
 [LFSR]: <https://en.wikipedia.org/wiki/LFSR>
 [de Bruijn sequence]: <https://en.wikipedia.org/wiki/de_Bruijn_sequence>
 [shift register generation]: <https://books.google.com/books?id=sd9AqHeeHh4C&pg=PA174>
 [example code]: <https://github.com/sh1boot/nblfsr/blob/main/generator.py>
+
+[factors]: </blobs/factorlist.txt>
+[allpolys]: </blobs/nblfsr.txt>
