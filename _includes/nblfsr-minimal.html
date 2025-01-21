@@ -1,0 +1,3094 @@
+<table>
+<style>
+  th {
+    text-align: right;
+  }
+  td:nth-child(1) {
+    width: min-content;
+    text-align: right;
+  }
+  td:nth-child(2) {
+    width: 100%;
+    text-align: right;
+  }
+  .col {
+    display: inline-block;
+    width: 6em;
+    float: left;
+  }
+</style>
+<tr><th>base</th><th><span class="col">length</span><span style="text-align: right;">poly</span></th></tr>
+<tr><td>3</td><td>
+  <span class="col">2</span>[2,1]<br />
+  <span class="col">3</span>[0,1,2]<br />
+  <span class="col">4</span>[0,0,2,1]<br />
+  <span class="col">5</span>[0,0,0,1,2]<br />
+  <span class="col">6</span>[0,0,0,0,2,1]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">7</span>[0,0,0,0,1,0,2]<br />
+  <span class="col">8</span>[0,0,0,0,2,0,0,1]<br />
+  <span class="col">9</span>[0,0,0,0,1,0,0,0,2]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,1,1]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,2]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,1,1]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,2]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,2,1]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,2]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,1]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,2]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1]<br />
+  <span class="col">25</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2]<br />
+  </details>
+</td></tr>
+<tr><td>5</td><td>
+  <span class="col">2</span>[1,3]<br />
+  <span class="col">3</span>[0,1,2]<br />
+  <span class="col">4</span>[0,1,1,2]<br />
+  <span class="col">5</span>[0,0,0,1,2]<br />
+  <span class="col">6</span>[0,0,0,0,1,3]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">7</span>[0,0,0,0,0,1,2]<br />
+  <span class="col">8</span>[0,0,0,0,0,1,1,2]<br />
+  <span class="col">9</span>[0,0,0,1,0,0,0,0,2]<br />
+  <span class="col">10</span>[0,0,0,0,0,1,1,0,0,3]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,2]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,1,1,0,2]<br />
+  <span class="col">13</span>[0,0,0,0,0,1,0,0,0,0,0,0,2]<br />
+  <span class="col">14</span>[0,0,0,0,0,1,0,0,1,0,0,0,0,2]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,2]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,2]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,2]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,2]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,3]<br />
+  <span class="col">23</span>[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,2]<br />
+  </details>
+</td></tr>
+<tr><td>7</td><td>
+  <span class="col">2</span>[1,4]<br />
+  <span class="col">3</span>[0,1,5]<br />
+  <span class="col">4</span>[0,1,1,4]<br />
+  <span class="col">5</span>[0,0,0,1,3]<br />
+  <span class="col">6</span>[0,0,1,0,1,2]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">7</span>[0,0,0,0,0,1,3]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,4]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,3]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,1,1,4]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,1,0,1,5]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,1,1,4]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,1,0,3]<br />
+  <span class="col">14</span>[0,0,0,0,1,0,0,0,0,0,0,0,0,4]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,1,3]<br />
+  <span class="col">16</span>[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4]<br />
+  <span class="col">17</span>[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,2]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,3]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,4]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,3]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,4]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,4]<br />
+  </details>
+</td></tr>
+<tr><td>11</td><td>
+  <span class="col">2</span>[1,4]<br />
+  <span class="col">3</span>[0,1,7]<br />
+  <span class="col">4</span>[0,0,1,9]<br />
+  <span class="col">5</span>[0,0,1,0,2]<br />
+  <span class="col">6</span>[0,0,1,1,0,4]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,7]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">8</span>[0,0,0,0,0,1,1,9]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,8]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,1,5]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,7]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,4]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,8]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,1,0,0,1,0,9]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,1,7]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,4]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,7]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,9]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,6]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,5]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,8]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,5]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,6]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,9]<br />
+  </details>
+</td></tr>
+<tr><td>13</td><td>
+  <span class="col">2</span>[1,11]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[1,0,7]<br />
+  <span class="col">4</span>[1,0,1,11]<br />
+  <span class="col">5</span>[0,0,1,1,6]<br />
+  <span class="col">6</span>[0,0,0,1,1,11]<br />
+  <span class="col">7</span>[0,0,1,0,0,0,2]<br />
+  <span class="col">8</span>[0,0,0,0,1,0,1,11]<br />
+  <span class="col">9</span>[0,0,0,0,1,0,0,0,6]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,1,2]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,1,0,0,7]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,1,1,0,0,2]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,7]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,11]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,1,1,0,7]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,7]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,7]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,2]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,7]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,7]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,7]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,11]<br />
+  </details>
+</td></tr>
+<tr><td>17</td><td>
+  <span class="col">2</span>[1,10]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,3]<br />
+  <span class="col">4</span>[0,0,1,6]<br />
+  <span class="col">5</span>[0,0,0,1,10]<br />
+  <span class="col">6</span>[0,0,0,0,1,5]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,3]<br />
+  <span class="col">8</span>[0,0,0,0,1,0,0,12]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,3]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,7]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,11]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,1,0,0,0,14]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,1,1,10]<br />
+  <span class="col">15</span>[1,0,0,0,0,0,0,0,0,0,0,0,0,0,10]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,3]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,14]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,7]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,10]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,14]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,10]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,5]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,3]<br />
+  </details>
+</td></tr>
+<tr><td>19</td><td>
+  <span class="col">2</span>[1,5]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,15]<br />
+  <span class="col">4</span>[1,0,0,17]<br />
+  <span class="col">5</span>[0,0,0,1,10]<br />
+  <span class="col">6</span>[0,0,0,0,1,16]<br />
+  <span class="col">7</span>[0,0,0,0,1,0,13]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,5]<br />
+  <span class="col">9</span>[0,0,0,0,1,0,0,0,10]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,1,1,9]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,2]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,4]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,13]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,1,0,0,0,0,5]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,1,0,1,0,13]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,16]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,16]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,16]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,2]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,17]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,3]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,5]<br />
+  </details>
+</td></tr>
+<tr><td>23</td><td>
+  <span class="col">2</span>[1,9]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,11]<br />
+  <span class="col">4</span>[0,0,1,12]<br />
+  <span class="col">5</span>[0,0,0,1,5]<br />
+  <span class="col">6</span>[0,0,0,0,1,8]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,15]<br />
+  <span class="col">8</span>[0,0,0,0,1,0,0,8]<br />
+  <span class="col">9</span>[0,0,0,0,1,0,0,0,17]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,16]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,12]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,1,0,0,15]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,16]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,1,0,0,0,0,0,0,11]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,18]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,16]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,17]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,12]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,14]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,16]<br />
+  </details>
+</td></tr>
+<tr><td>29</td><td>
+  <span class="col">2</span>[1,26]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,19]<br />
+  <span class="col">4</span>[0,0,1,3]<br />
+  <span class="col">5</span>[0,0,0,1,18]<br />
+  <span class="col">6</span>[0,0,0,0,1,26]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,3]<br />
+  <span class="col">8</span>[0,0,0,0,0,1,1,3]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,2]<br />
+  <span class="col">10</span>[0,0,1,0,0,0,0,0,0,14]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,21]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,14]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,2]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,3]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,8]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,18]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,21]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,19]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,8]<br />
+  <span class="col">21</span>[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,18]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,19]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,8]<br />
+  </details>
+</td></tr>
+<tr><td>31</td><td>
+  <span class="col">2</span>[1,18]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,22]<br />
+  <span class="col">4</span>[1,0,0,18]<br />
+  <span class="col">5</span>[0,0,0,1,21]<br />
+  <span class="col">6</span>[1,0,0,0,0,18]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,13]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,9]<br />
+  <span class="col">9</span>[0,0,0,1,0,0,0,0,12]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,20]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,1,0,0,22]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,1,1,0,9]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,1,0,3]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,9]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,17]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,19]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,22]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,28]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,13]<br />
+  <span class="col">20</span>[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,13]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,9]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,3]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,9]<br />
+  </details>
+</td></tr>
+<tr><td>37</td><td>
+  <span class="col">2</span>[1,22]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,22]<br />
+  <span class="col">4</span>[0,0,1,22]<br />
+  <span class="col">5</span>[0,0,0,1,24]<br />
+  <span class="col">6</span>[0,0,0,0,1,17]<br />
+  <span class="col">7</span>[0,0,0,0,1,0,20]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,19]<br />
+  <span class="col">9</span>[0,0,0,1,0,0,0,0,19]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,0,32]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,1,0,0,22]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,22]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,1,0,22]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,20]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,22]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,15]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,22]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,22]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,20]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,5]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,19]<br />
+  </details>
+</td></tr>
+<tr><td>41</td><td>
+  <span class="col">2</span>[1,7]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,13]<br />
+  <span class="col">4</span>[0,0,1,24]<br />
+  <span class="col">5</span>[0,0,0,1,7]<br />
+  <span class="col">6</span>[0,0,0,0,1,28]<br />
+  <span class="col">7</span>[0,0,0,0,1,0,7]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,29]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,24]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,1,7]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,7]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,1,1,0,22]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,1,0,12]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,28]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,19]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,26]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,35]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,24]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,24]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,7]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,12]<br />
+  </details>
+</td></tr>
+<tr><td>43</td><td>
+  <span class="col">2</span>[1,9]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,33]<br />
+  <span class="col">4</span>[0,0,1,9]<br />
+  <span class="col">5</span>[0,0,0,1,33]<br />
+  <span class="col">6</span>[0,0,0,0,1,17]<br />
+  <span class="col">7</span>[0,0,0,0,1,0,29]<br />
+  <span class="col">8</span>[0,0,0,0,1,0,0,15]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,33]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,0,9]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,26]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,5]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,38]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,19]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,9]<br />
+  <span class="col">17</span>[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,25]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,29]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,25]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,18]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,38]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,20]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,24]<br />
+  </details>
+</td></tr>
+<tr><td>47</td><td>
+  <span class="col">2</span>[1,17]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,30]<br />
+  <span class="col">4</span>[0,0,1,8]<br />
+  <span class="col">5</span>[0,0,0,1,44]<br />
+  <span class="col">6</span>[0,0,0,0,1,36]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,38]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,6]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,13]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,27]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,26]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,3]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,24]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,33]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,6]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,43]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,28]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,30]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,17]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,22]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,9]<br />
+  </details>
+</td></tr>
+<tr><td>53</td><td>
+  <span class="col">2</span>[1,32]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,41]<br />
+  <span class="col">4</span>[0,0,1,19]<br />
+  <span class="col">5</span>[0,0,0,1,41]<br />
+  <span class="col">6</span>[0,0,0,0,1,18]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,18]<br />
+  <span class="col">8</span>[0,0,0,0,1,0,0,20]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,19]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,32]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,27]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,41]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,1,0,48]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,1,0,0,0,0,50]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,48]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,39]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,45]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,19]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,27]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,20]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,39]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,19]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,50]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,21]<br />
+  </details>
+</td></tr>
+<tr><td>59</td><td>
+  <span class="col">2</span>[1,25]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,14]<br />
+  <span class="col">4</span>[0,0,1,28]<br />
+  <span class="col">5</span>[0,0,0,1,13]<br />
+  <span class="col">6</span>[0,0,0,0,1,36]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,39]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,45]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,32]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,0,25]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,13]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,49]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,5]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,56]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,28]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,37]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,20]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,23]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,49]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,13]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,16]<br />
+  </details>
+</td></tr>
+<tr><td>61</td><td>
+  <span class="col">2</span>[1,43]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,44]<br />
+  <span class="col">4</span>[0,0,1,35]<br />
+  <span class="col">5</span>[0,0,0,1,6]<br />
+  <span class="col">6</span>[1,0,0,0,0,26]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,6]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,44]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,26]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,0,43]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,17]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,18]<br />
+  <span class="col">15</span>[0,1,0,0,0,0,0,0,0,0,0,0,0,0,51]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,43]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,18]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,31]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,44]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,7]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,7]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,10]<br />
+  </details>
+</td></tr>
+<tr><td>67</td><td>
+  <span class="col">2</span>[1,17]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,46]<br />
+  <span class="col">4</span>[0,0,1,65]<br />
+  <span class="col">5</span>[0,0,0,1,46]<br />
+  <span class="col">6</span>[0,0,0,1,1,36]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,34]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,4]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,12]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,23]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,1,0,0,41]<br />
+  <span class="col">12</span>[1,0,0,0,0,0,0,0,0,0,0,49]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,57]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,60]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,12]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,36]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,57]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,6]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,7]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,19]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,18]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,19]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,34]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,55]<br />
+  </details>
+</td></tr>
+<tr><td>71</td><td>
+  <span class="col">2</span>[1,60]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,21]<br />
+  <span class="col">4</span>[0,0,1,60]<br />
+  <span class="col">5</span>[0,0,0,1,33]<br />
+  <span class="col">6</span>[1,0,0,0,0,38]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,65]<br />
+  <span class="col">8</span>[0,0,0,0,1,0,0,49]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,44]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,49]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,22]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,1,1,6]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,55]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,56]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,24]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,11]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,18]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,21]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,49]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,68]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,40]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,42]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  </details>
+</td></tr>
+<tr><td>73</td><td>
+  <span class="col">2</span>[1,44]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,15]<br />
+  <span class="col">4</span>[0,0,1,44]<br />
+  <span class="col">5</span>[0,0,0,1,28]<br />
+  <span class="col">6</span>[0,0,0,0,1,11]<br />
+  <span class="col">7</span>[0,0,0,0,1,0,15]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,33]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,26]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,0,59]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,44]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,1,0,34]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,58]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,13]<br />
+  <span class="col">16</span>[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,29]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,42]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,28]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,14]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,5]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,58]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,58]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,68]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,29]<br />
+  </details>
+</td></tr>
+<tr><td>79</td><td>
+  <span class="col">2</span>[1,49]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,34]<br />
+  <span class="col">4</span>[0,0,1,20]<br />
+  <span class="col">5</span>[0,0,0,1,37]<br />
+  <span class="col">6</span>[0,0,0,0,1,36]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,35]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,36]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,34]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,49]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,26]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,48]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,25]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,43]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,20]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,77]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,42]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,6]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,9]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,68]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,72]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,60]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,49]<br />
+  </details>
+</td></tr>
+<tr><td>83</td><td>
+  <span class="col">2</span>[1,33]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,66]<br />
+  <span class="col">4</span>[0,0,1,16]<br />
+  <span class="col">5</span>[0,0,0,1,50]<br />
+  <span class="col">6</span>[0,0,0,0,1,49]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,46]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,27]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,13]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,16]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,39]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,63]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,13]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,42]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,48]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,46]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,25]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,50]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,81]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,52]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,4]<br />
+  </details>
+</td></tr>
+<tr><td>89</td><td>
+  <span class="col">2</span>[1,74]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,19]<br />
+  <span class="col">4</span>[0,0,1,54]<br />
+  <span class="col">5</span>[0,0,0,1,7]<br />
+  <span class="col">6</span>[0,0,0,0,1,19]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,6]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,3]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,3]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,76]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,31]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,1,0,0,38]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,74]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,19]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,43]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,23]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,24]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,58]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,76]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,74]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,19]<br />
+  </details>
+</td></tr>
+<tr><td>97</td><td>
+  <span class="col">2</span>[1,82]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,58]<br />
+  <span class="col">4</span>[0,0,1,74]<br />
+  <span class="col">5</span>[0,0,0,1,60]<br />
+  <span class="col">6</span>[0,0,0,0,1,82]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,59]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,13]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,59]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,0,82]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,7]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,29]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,1,0,82]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,29]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,13]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,92]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,58]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,58]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,7]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,87]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,13]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,58]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,14]<br />
+  </details>
+</td></tr>
+<tr><td>101</td><td>
+  <span class="col">2</span>[1,94]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,67]<br />
+  <span class="col">4</span>[0,0,1,28]<br />
+  <span class="col">5</span>[0,0,0,1,28]<br />
+  <span class="col">6</span>[0,0,0,0,1,94]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,67]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,29]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,72]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,29]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,89]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,89]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,61]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,28]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,67]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,55]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,67]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,72]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,26]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,51]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,89]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,89]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,74]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,73]<br />
+  </details>
+</td></tr>
+<tr><td>103</td><td>
+  <span class="col">2</span>[1,82]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,20]<br />
+  <span class="col">4</span>[0,0,1,98]<br />
+  <span class="col">5</span>[0,0,0,1,62]<br />
+  <span class="col">6</span>[0,0,0,0,1,98]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,20]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,36]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,101]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,82]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,40]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,52]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,67]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,71]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,32]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,35]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,33]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,101]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,55]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,35]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,17]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,54]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,18]<br />
+  </details>
+</td></tr>
+<tr><td>107</td><td>
+  <span class="col">2</span>[1,36]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,46]<br />
+  <span class="col">4</span>[0,0,1,49]<br />
+  <span class="col">5</span>[0,0,0,1,8]<br />
+  <span class="col">6</span>[0,0,0,0,1,101]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,2]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,101]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,105]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,8]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,90]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,104]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,35]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,5]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,81]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,60]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,30]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,43]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,64]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,104]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,12]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,97]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,105]<br />
+  </details>
+</td></tr>
+<tr><td>109</td><td>
+  <span class="col">2</span>[1,50]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,67]<br />
+  <span class="col">4</span>[0,0,1,67]<br />
+  <span class="col">5</span>[0,0,0,1,24]<br />
+  <span class="col">6</span>[0,0,0,0,1,91]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,24]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,70]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,91]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,24]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,103]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,47]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,13]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,10]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,91]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,56]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,14]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,11]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,52]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,103]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,6]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,51]<br />
+  </details>
+</td></tr>
+<tr><td>113</td><td>
+  <span class="col">2</span>[1,70]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,96]<br />
+  <span class="col">4</span>[0,0,1,27]<br />
+  <span class="col">5</span>[0,0,0,1,96]<br />
+  <span class="col">6</span>[0,0,0,0,1,55]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,70]<br />
+  <span class="col">8</span>[0,0,0,0,1,0,0,20]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,45]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,19]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,70]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,76]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,79]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,20]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,96]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,17]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,27]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,89]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,108]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,79]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,54]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,45]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,3]<br />
+  </details>
+</td></tr>
+<tr><td>127</td><td>
+  <span class="col">2</span>[1,74]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,114]<br />
+  <span class="col">4</span>[0,0,1,74]<br />
+  <span class="col">5</span>[0,0,0,1,116]<br />
+  <span class="col">6</span>[0,0,0,0,1,81]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,110]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,9]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,101]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,0,81]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,83]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,1,0,110]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,98]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,101]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,41]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,97]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,81]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,23]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,56]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,36]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,114]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,11]<br />
+  </details>
+</td></tr>
+<tr><td>131</td><td>
+  <span class="col">2</span>[1,21]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,29]<br />
+  <span class="col">4</span>[0,0,1,100]<br />
+  <span class="col">5</span>[0,0,0,1,85]<br />
+  <span class="col">6</span>[1,0,0,0,0,123]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,6]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,34]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,87]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,49]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,9]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,40]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,5]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,23]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,108]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,119]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,5]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,31]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,65]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,57]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,44]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,95]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,108]<br />
+  </details>
+</td></tr>
+<tr><td>137</td><td>
+  <span class="col">2</span>[1,31]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,84]<br />
+  <span class="col">4</span>[0,0,1,92]<br />
+  <span class="col">5</span>[0,0,0,1,75]<br />
+  <span class="col">6</span>[0,0,0,0,1,31]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,114]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,94]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,75]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,84]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,75]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,31]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,89]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,66]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,52]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,6]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,89]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,6]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,52]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,85]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,134]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,132]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,52]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,94]<br />
+  </details>
+</td></tr>
+<tr><td>139</td><td>
+  <span class="col">2</span>[1,118]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,2]<br />
+  <span class="col">4</span>[0,0,1,86]<br />
+  <span class="col">5</span>[0,0,0,1,12]<br />
+  <span class="col">6</span>[0,0,0,0,1,118]<br />
+  <span class="col">7</span>[0,0,0,0,1,0,90]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,120]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,130]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,24]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,115]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,117]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,68]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,99]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,119]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,66]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,108]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,89]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,56]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,49]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,120]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,92]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,16]<br />
+  </details>
+</td></tr>
+<tr><td>149</td><td>
+  <span class="col">2</span>[1,126]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,126]<br />
+  <span class="col">4</span>[0,0,1,12]<br />
+  <span class="col">5</span>[0,0,0,1,136]<br />
+  <span class="col">6</span>[0,0,0,0,1,135]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,79]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,12]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,11]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,78]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,91]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,60]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,32]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,21]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,11]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,23]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,87]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,52]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,147]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,8]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,34]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,51]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,126]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,98]<br />
+  </details>
+</td></tr>
+<tr><td>151</td><td>
+  <span class="col">2</span>[1,97]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,14]<br />
+  <span class="col">4</span>[0,0,1,43]<br />
+  <span class="col">5</span>[0,0,0,1,48]<br />
+  <span class="col">6</span>[0,0,0,0,1,139]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,102]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,90]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,71]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,117]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,90]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,14]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,145]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,48]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,25]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,93]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,43]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,102]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,17]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,129]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,100]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,130]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,25]<br />
+  </details>
+</td></tr>
+<tr><td>157</td><td>
+  <span class="col">2</span>[1,137]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,69]<br />
+  <span class="col">4</span>[0,0,1,70]<br />
+  <span class="col">5</span>[0,0,0,1,97]<br />
+  <span class="col">6</span>[0,0,0,0,1,96]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,96]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,66]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,137]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,137]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,18]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,151]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,15]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,119]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,96]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,97]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,69]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,137]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,43]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,63]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,38]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,63]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,102]<br />
+  </details>
+</td></tr>
+<tr><td>163</td><td>
+  <span class="col">2</span>[1,97]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,130]<br />
+  <span class="col">4</span>[0,0,1,33]<br />
+  <span class="col">5</span>[0,0,0,1,130]<br />
+  <span class="col">6</span>[0,0,0,0,1,97]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,130]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,160]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,129]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,0,160]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,92]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,121]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,112]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,47]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,32]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,93]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,124]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,26]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,63]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,57]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,75]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,161]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,45]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,56]<br />
+  </details>
+</td></tr>
+<tr><td>167</td><td>
+  <span class="col">2</span>[1,87]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,37]<br />
+  <span class="col">4</span>[0,0,1,8]<br />
+  <span class="col">5</span>[0,0,0,1,109]<br />
+  <span class="col">6</span>[0,0,0,0,1,22]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,159]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,14]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,37]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,116]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,45]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,85]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,35]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,130]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,109]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,18]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,149]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,50]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,96]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,143]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,62]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,159]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,147]<br />
+  </details>
+</td></tr>
+<tr><td>173</td><td>
+  <span class="col">2</span>[1,48]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,115]<br />
+  <span class="col">4</span>[0,0,1,48]<br />
+  <span class="col">5</span>[0,0,0,1,115]<br />
+  <span class="col">6</span>[0,0,0,0,1,129]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,115]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,115]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,86]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,120]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,19]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,62]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,131]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,153]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,39]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,170]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,39]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,66]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,53]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,26]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,111]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,26]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,58]<br />
+  </details>
+</td></tr>
+<tr><td>179</td><td>
+  <span class="col">2</span>[1,52]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,92]<br />
+  <span class="col">4</span>[0,0,1,172]<br />
+  <span class="col">5</span>[0,0,0,1,150]<br />
+  <span class="col">6</span>[0,0,0,0,1,81]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,23]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,161]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,154]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,116]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,132]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,9]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,96]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,100]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,84]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,13]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,38]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,89]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,44]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,155]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,92]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,52]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,111]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,46]<br />
+  </details>
+</td></tr>
+<tr><td>181</td><td>
+  <span class="col">2</span>[1,158]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,77]<br />
+  <span class="col">4</span>[0,0,1,21]<br />
+  <span class="col">5</span>[0,0,0,1,158]<br />
+  <span class="col">6</span>[0,0,0,0,1,153]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,96]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,158]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,58]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,1,0,0,58]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,115]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,84]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,54]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,179]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,97]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,18]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,158]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,21]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,18]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,78]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,153]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,54]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,54]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,18]<br />
+  </details>
+</td></tr>
+<tr><td>191</td><td>
+  <span class="col">2</span>[1,118]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,61]<br />
+  <span class="col">4</span>[0,0,1,118]<br />
+  <span class="col">5</span>[0,0,0,1,151]<br />
+  <span class="col">6</span>[0,0,0,0,1,120]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,148]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,133]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,123]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,163]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,62]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,170]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,167]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,163]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,123]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,133]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,119]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,23]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,99]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,104]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,76]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,16]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,181]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,77]<br />
+  </details>
+</td></tr>
+<tr><td>193</td><td>
+  <span class="col">2</span>[1,116]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,153]<br />
+  <span class="col">4</span>[0,0,1,77]<br />
+  <span class="col">5</span>[0,0,0,1,73]<br />
+  <span class="col">6</span>[0,0,0,0,1,141]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,116]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,188]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,115]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,116]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,149]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,77]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,73]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,148]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,38]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,142]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,141]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,38]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,188]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,44]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,148]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,78]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,114]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,141]<br />
+  </details>
+</td></tr>
+<tr><td>197</td><td>
+  <span class="col">2</span>[1,122]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,18]<br />
+  <span class="col">4</span>[0,0,1,166]<br />
+  <span class="col">5</span>[0,0,0,1,149]<br />
+  <span class="col">6</span>[0,0,0,0,1,176]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,139]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,103]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,45]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,139]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,149]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,57]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,67]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,52]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,115]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,66]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,166]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,48]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,122]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,103]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,139]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,152]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,185]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,18]<br />
+  </details>
+</td></tr>
+<tr><td>199</td><td>
+  <span class="col">2</span>[1,160]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,41]<br />
+  <span class="col">4</span>[0,0,1,160]<br />
+  <span class="col">5</span>[0,0,0,1,6]<br />
+  <span class="col">6</span>[0,0,0,0,1,122]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,3]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,165]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,163]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,160]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,99]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,81]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,84]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,81]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,120]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,84]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,160]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,71]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,50]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,166]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,91]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,48]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,128]<br />
+  </details>
+</td></tr>
+<tr><td>211</td><td>
+  <span class="col">2</span>[1,45]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,133]<br />
+  <span class="col">4</span>[0,0,1,182]<br />
+  <span class="col">5</span>[0,0,0,1,207]<br />
+  <span class="col">6</span>[0,0,0,0,1,70]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,158]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,70]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,75]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,95]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,75]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,49]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,187]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,95]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,202]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,37]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,164]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,163]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,91]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,9]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,133]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,93]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,133]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,136]<br />
+  </details>
+</td></tr>
+<tr><td>223</td><td>
+  <span class="col">2</span>[1,124]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,20]<br />
+  <span class="col">4</span>[0,0,1,53]<br />
+  <span class="col">5</span>[0,0,0,1,176]<br />
+  <span class="col">6</span>[0,0,0,0,1,53]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,129]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,172]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,214]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,53]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,92]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,124]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,123]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,181]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,149]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,121]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,77]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,63]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,44]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,148]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,123]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,201]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,35]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,200]<br />
+  </details>
+</td></tr>
+<tr><td>227</td><td>
+  <span class="col">2</span>[1,192]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,18]<br />
+  <span class="col">4</span>[0,0,1,122]<br />
+  <span class="col">5</span>[0,0,0,1,105]<br />
+  <span class="col">6</span>[0,0,0,0,1,103]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,67]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,139]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,140]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,53]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,105]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,139]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,137]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,225]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,140]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,207]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,224]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,92]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,50]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,87]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,140]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,84]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,171]<br />
+  </details>
+</td></tr>
+<tr><td>229</td><td>
+  <span class="col">2</span>[1,190]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,23]<br />
+  <span class="col">4</span>[0,0,1,190]<br />
+  <span class="col">5</span>[0,0,0,1,73]<br />
+  <span class="col">6</span>[0,0,0,0,1,73]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,190]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,24]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,200]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,190]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,72]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,41]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,23]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,219]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,162]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,67]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,116]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,164]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,206]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,190]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,50]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,155]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,72]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,200]<br />
+  </details>
+</td></tr>
+<tr><td>233</td><td>
+  <span class="col">2</span>[1,166]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,198]<br />
+  <span class="col">4</span>[0,0,1,198]<br />
+  <span class="col">5</span>[0,0,0,1,166]<br />
+  <span class="col">6</span>[0,0,0,0,1,166]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,223]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,115]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,150]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,222]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,93]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,67]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,185]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,198]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,185]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,172]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,166]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,206]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,93]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,223]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,73]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,95]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,115]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,134]<br />
+  </details>
+</td></tr>
+<tr><td>239</td><td>
+  <span class="col">2</span>[1,198]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,53]<br />
+  <span class="col">4</span>[0,0,1,12]<br />
+  <span class="col">5</span>[0,0,0,1,86]<br />
+  <span class="col">6</span>[0,0,0,0,1,204]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,146]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,12]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,97]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,64]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,119]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,157]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,86]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,157]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,212]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,125]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,209]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,182]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,212]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,90]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,177]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,220]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,89]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,160]<br />
+  </details>
+</td></tr>
+<tr><td>241</td><td>
+  <span class="col">2</span>[1,190]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,42]<br />
+  <span class="col">4</span>[0,0,1,190]<br />
+  <span class="col">5</span>[0,0,0,1,170]<br />
+  <span class="col">6</span>[0,0,0,0,1,42]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,13]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,190]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,190]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,74]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,1,0,155]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,110]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,186]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,170]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,42]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,42]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,110]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,7]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,170]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,68]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,42]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,227]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,42]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,149]<br />
+  </details>
+</td></tr>
+<tr><td>251</td><td>
+  <span class="col">2</span>[1,225]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,57]<br />
+  <span class="col">4</span>[0,0,1,154]<br />
+  <span class="col">5</span>[0,0,0,1,72]<br />
+  <span class="col">6</span>[1,0,0,0,0,65]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,248]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,106]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,46]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,58]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,6]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,114]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,76]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,147]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,199]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,152]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,184]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,48]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,76]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,152]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,87]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,39]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,57]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,174]<br />
+  </details>
+</td></tr>
+<tr><td>257</td><td>
+  <span class="col">2</span>[1,216]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,250]<br />
+  <span class="col">4</span>[0,0,1,28]<br />
+  <span class="col">5</span>[0,0,0,1,250]<br />
+  <span class="col">6</span>[0,0,0,0,1,216]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,243]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,192]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,192]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,86]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,93]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,106]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,76]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,38]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,174]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,74]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,48]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,171]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,175]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,45]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,28]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,132]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,27]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,151]<br />
+  </details>
+</td></tr>
+<tr><td>277</td><td>
+  <span class="col">2</span>[1,170]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,170]<br />
+  <span class="col">4</span>[0,0,1,97]<br />
+  <span class="col">5</span>[0,0,0,1,114]<br />
+  <span class="col">6</span>[0,0,0,0,1,221]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,170]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,266]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,166]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,98]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,272]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,231]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,97]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,97]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,96]<br />
+  </details>
+</td></tr>
+<tr><td>281</td><td>
+  <span class="col">2</span>[1,174]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,133]<br />
+  <span class="col">4</span>[0,0,1,117]<br />
+  <span class="col">5</span>[0,0,0,1,110]<br />
+  <span class="col">6</span>[0,0,0,0,1,174]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,26]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,12]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,133]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,133]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,226]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,233]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,176]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,26]<br />
+  </details>
+</td></tr>
+<tr><td>283</td><td>
+  <span class="col">2</span>[1,174]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,65]<br />
+  <span class="col">4</span>[0,0,1,174]<br />
+  <span class="col">5</span>[0,0,0,1,65]<br />
+  <span class="col">6</span>[0,0,0,0,1,129]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,65]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,96]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,276]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,11]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,20]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,174]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,153]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,63]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,20]<br />
+  </details>
+</td></tr>
+<tr><td>307</td><td>
+  <span class="col">2</span>[1,65]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,186]<br />
+  <span class="col">4</span>[0,0,1,86]<br />
+  <span class="col">5</span>[0,0,0,1,22]<br />
+  <span class="col">6</span>[0,0,0,0,1,135]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,85]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,276]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,200]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,264]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,142]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,190]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,157]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,293]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,200]<br />
+  </details>
+</td></tr>
+<tr><td>331</td><td>
+  <span class="col">2</span>[1,77]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,152]<br />
+  <span class="col">4</span>[0,0,1,25]<br />
+  <span class="col">5</span>[0,0,0,1,50]<br />
+  <span class="col">6</span>[1,0,0,0,0,127]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,204]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,71]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,254]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,76]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,227]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,302]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,98]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,276]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,204]<br />
+  </details>
+</td></tr>
+<tr><td>353</td><td>
+  <span class="col">2</span>[1,329]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,141]<br />
+  <span class="col">4</span>[0,0,1,300]<br />
+  <span class="col">5</span>[0,0,0,1,300]<br />
+  <span class="col">6</span>[0,0,0,0,1,243]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,276]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,329]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,291]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,117]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,74]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,339]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,320]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,329]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,228]<br />
+  </details>
+</td></tr>
+<tr><td>397</td><td>
+  <span class="col">2</span>[1,242]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,259]<br />
+  <span class="col">4</span>[0,0,1,242]<br />
+  <span class="col">5</span>[0,0,0,1,18]<br />
+  <span class="col">6</span>[0,0,0,0,1,259]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,241]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,204]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,345]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,52]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,51]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,345]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,242]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,204]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,101]<br />
+  </details>
+</td></tr>
+<tr><td>433</td><td>
+  <span class="col">2</span>[1,19]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,30]<br />
+  <span class="col">4</span>[0,0,1,393]<br />
+  <span class="col">5</span>[0,0,0,1,393]<br />
+  <span class="col">6</span>[0,0,0,0,1,371]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,371]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,19]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,1,0,30]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,393]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,87]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,341]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,226]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,188]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,326]<br />
+  </details>
+</td></tr>
+<tr><td>457</td><td>
+  <span class="col">2</span>[1,388]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,388]<br />
+  <span class="col">4</span>[0,0,1,90]<br />
+  <span class="col">5</span>[0,0,0,1,213]<br />
+  <span class="col">6</span>[0,0,0,0,1,319]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,149]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,154]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,159]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,181]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,164]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,154]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,1,0,154]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,122]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,388]<br />
+  </details>
+</td></tr>
+<tr><td>509</td><td>
+  <span class="col">2</span>[1,160]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,119]<br />
+  <span class="col">4</span>[0,0,1,42]<br />
+  <span class="col">5</span>[0,0,0,1,201]<br />
+  <span class="col">6</span>[0,0,0,0,1,206]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,165]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,160]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,437]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,119]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,288]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,360]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,42]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,462]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,119]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,478]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,360]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,501]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,432]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,88]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,165]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,201]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,461]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,377]<br />
+  </details>
+</td></tr>
+<tr><td>521</td><td>
+  <span class="col">2</span>[1,444]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,335]<br />
+  <span class="col">4</span>[0,0,1,303]<br />
+  <span class="col">5</span>[0,0,0,1,367]<br />
+  <span class="col">6</span>[0,0,0,0,1,444]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,412]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,444]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,406]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,406]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,406]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,156]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,239]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,1,0,0,483]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,329]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,425]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,335]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,453]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,303]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,515]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,412]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,387]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,348]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,85]<br />
+  </details>
+</td></tr>
+<tr><td>571</td><td>
+  <span class="col">2</span>[1,478]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,292]<br />
+  <span class="col">4</span>[0,0,1,211]<br />
+  <span class="col">5</span>[0,0,0,1,292]<br />
+  <span class="col">6</span>[0,0,0,0,1,199]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,246]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,199]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,327]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,467]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,292]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,25]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,479]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,525]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,327]<br />
+  </details>
+</td></tr>
+<tr><td>641</td><td>
+  <span class="col">2</span>[1,540]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,394]<br />
+  <span class="col">4</span>[0,0,1,439]<br />
+  <span class="col">5</span>[0,0,0,1,394]<br />
+  <span class="col">6</span>[0,0,0,0,1,147]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,92]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,394]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,563]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,294]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,170]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,238]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,509]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,418]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,540]<br />
+  </details>
+</td></tr>
+<tr><td>673</td><td>
+  <span class="col">2</span>[1,475]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,376]<br />
+  <span class="col">4</span>[0,0,1,60]<br />
+  <span class="col">5</span>[0,0,0,1,119]<br />
+  <span class="col">6</span>[0,0,0,0,1,513]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,475]<br />
+  <span class="col">8</span>[0,0,0,0,1,0,0,119]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,354]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,475]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,435]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,574]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,574]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,629]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,0,574]<br />
+  </details>
+</td></tr>
+<tr><td>683</td><td>
+  <span class="col">2</span>[1,397]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,422]<br />
+  <span class="col">4</span>[0,0,1,10]<br />
+  <span class="col">5</span>[0,0,0,1,279]<br />
+  <span class="col">6</span>[0,0,0,0,1,599]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,540]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,220]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,18]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,10]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,439]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,642]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,338]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,549]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,145]<br />
+  </details>
+</td></tr>
+<tr><td>953</td><td>
+  <span class="col">2</span>[1,539]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,80]<br />
+  <span class="col">4</span>[0,0,1,667]<br />
+  <span class="col">5</span>[0,0,0,1,810]<br />
+  <span class="col">6</span>[0,0,0,0,1,746]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,80]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,174]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,204]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,810]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,588]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,761]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,746]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,102]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,588]<br />
+  </details>
+</td></tr>
+<tr><td>1013</td><td>
+  <span class="col">2</span>[1,357]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,239]<br />
+  <span class="col">4</span>[0,0,1,386]<br />
+  <span class="col">5</span>[0,0,0,1,326]<br />
+  <span class="col">6</span>[0,0,0,0,1,862]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,179]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,922]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,179]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,357]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,1,0,0,0,0,980]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,980]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,179]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,59]<br />
+  </details>
+</td></tr>
+<tr><td>1021</td><td>
+  <span class="col">2</span>[1,337]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,337]<br />
+  <span class="col">4</span>[0,0,1,337]<br />
+  <span class="col">5</span>[0,0,0,1,282]<br />
+  <span class="col">6</span>[0,0,0,0,1,899]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,282]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,734]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,166]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,734]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,50]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,337]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,111]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,429]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,246]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,734]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,160]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,50]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,270]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,270]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,111]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,231]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,160]<br />
+  </details>
+</td></tr>
+<tr><td>1031</td><td>
+  <span class="col">2</span>[1,473]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1020]<br />
+  <span class="col">4</span>[0,0,1,870]<br />
+  <span class="col">5</span>[0,0,0,1,634]<br />
+  <span class="col">6</span>[0,0,0,0,1,473]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,601]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,129]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,301]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,870]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,634]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,621]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,451]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,460]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,301]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,864]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,773]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,138]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,118]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,848]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,237]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,736]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,837]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4]<br />
+  </details>
+</td></tr>
+<tr><td>1321</td><td>
+  <span class="col">2</span>[1,398]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,398]<br />
+  <span class="col">4</span>[0,0,1,1114]<br />
+  <span class="col">5</span>[0,0,0,1,398]<br />
+  <span class="col">6</span>[0,0,0,0,1,493]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,873]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1175]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,883]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,191]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,65]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,191]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,1175]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,1114]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,883]<br />
+  </details>
+</td></tr>
+<tr><td>1429</td><td>
+  <span class="col">2</span>[1,669]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,485]<br />
+  <span class="col">4</span>[0,0,1,848]<br />
+  <span class="col">5</span>[0,0,0,1,485]<br />
+  <span class="col">6</span>[0,0,0,0,1,882]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,882]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,422]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,630]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,1003]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,238]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,485]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,30]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,422]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,940]<br />
+  </details>
+</td></tr>
+<tr><td>1613</td><td>
+  <span class="col">2</span>[1,518]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1374]<br />
+  <span class="col">4</span>[0,0,1,696]<br />
+  <span class="col">5</span>[0,0,0,1,996]<br />
+  <span class="col">6</span>[0,0,0,0,1,518]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1035]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,974]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,318]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,1430]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,396]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,218]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,557]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,657]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,996]<br />
+  </details>
+</td></tr>
+<tr><td>1657</td><td>
+  <span class="col">2</span>[1,1408]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,524]<br />
+  <span class="col">4</span>[0,0,1,624]<br />
+  <span class="col">5</span>[0,0,0,1,275]<br />
+  <span class="col">6</span>[0,0,0,0,1,1321]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1184]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1222]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,524]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,1408]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,848]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,301]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,238]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,275]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,823]<br />
+  </details>
+</td></tr>
+<tr><td>1777</td><td>
+  <span class="col">2</span>[1,158]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1516]<br />
+  <span class="col">4</span>[0,0,1,158]<br />
+  <span class="col">5</span>[0,0,0,1,1255]<br />
+  <span class="col">6</span>[0,0,0,0,1,1255]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,107]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1100]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1047]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,1412]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,1412]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,1255]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,158]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,1428]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1255]<br />
+  </details>
+</td></tr>
+<tr><td>2039</td><td>
+  <span class="col">2</span>[1,961]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1260]<br />
+  <span class="col">4</span>[0,0,1,64]<br />
+  <span class="col">5</span>[0,0,0,1,1622]<br />
+  <span class="col">6</span>[0,0,0,0,1,1441]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,481]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,544]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1504]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,741]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,371]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,725]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,1095]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,851]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1260]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,733]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1504]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1087]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,678]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1441]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1622]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1520]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,505]<br />
+  </details>
+</td></tr>
+<tr><td>2053</td><td>
+  <span class="col">2</span>[1,1447]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,662]<br />
+  <span class="col">4</span>[0,0,1,1736]<br />
+  <span class="col">5</span>[0,0,0,1,896]<br />
+  <span class="col">6</span>[0,0,0,0,1,111]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,111]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,662]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,896]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,579]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,896]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,1915]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,1433]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,1598]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1309]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,744]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1805]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1020]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,662]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,606]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1859]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1568]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1075]<br />
+  </details>
+</td></tr>
+<tr><td>2113</td><td>
+  <span class="col">2</span>[1,989]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1347]<br />
+  <span class="col">4</span>[0,0,1,180]<br />
+  <span class="col">5</span>[0,0,0,1,1347]<br />
+  <span class="col">6</span>[0,0,0,0,1,989]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1977]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,667]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,180]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,1841]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,982]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,1841]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,896]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,989]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,180]<br />
+  </details>
+</td></tr>
+<tr><td>2731</td><td>
+  <span class="col">2</span>[1,14]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1682]<br />
+  <span class="col">4</span>[0,0,1,1076]<br />
+  <span class="col">5</span>[0,0,0,1,2125]<br />
+  <span class="col">6</span>[0,0,0,0,1,861]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,2151]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1662]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1708]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,496]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,1825]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,14]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,509]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,861]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,457]<br />
+  </details>
+</td></tr>
+<tr><td>2833</td><td>
+  <span class="col">2</span>[1,1748]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1748]<br />
+  <span class="col">4</span>[0,0,1,663]<br />
+  <span class="col">5</span>[0,0,0,1,1748]<br />
+  <span class="col">6</span>[0,0,0,0,1,1748]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1380]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,2205]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1748]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,2042]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,295]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,295]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,809]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,2408]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,644]<br />
+  </details>
+</td></tr>
+<tr><td>2857</td><td>
+  <span class="col">2</span>[1,932]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1349]<br />
+  <span class="col">4</span>[0,0,1,966]<br />
+  <span class="col">5</span>[0,0,0,1,1863]<br />
+  <span class="col">6</span>[0,0,0,0,1,869]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1863]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1543]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,869]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,1543]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,1805]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,2828]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,292]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,2765]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,2091]<br />
+  </details>
+</td></tr>
+<tr><td>2971</td><td>
+  <span class="col">2</span>[1,1385]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,246]<br />
+  <span class="col">4</span>[0,0,1,1385]<br />
+  <span class="col">5</span>[0,0,0,1,577]<br />
+  <span class="col">6</span>[0,0,0,0,1,1312]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,2176]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,332]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,2610]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,388]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,1428]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,332]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,762]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,534]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1686]<br />
+  </details>
+</td></tr>
+<tr><td>4051</td><td>
+  <span class="col">2</span>[1,1913]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,3460]<br />
+  <span class="col">4</span>[0,0,1,2869]<br />
+  <span class="col">5</span>[0,0,0,1,2504]<br />
+  <span class="col">6</span>[0,0,0,0,1,2869]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,3877]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,140]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1687]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,957]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,2921]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,366]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,418]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,2869]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,974]<br />
+  </details>
+</td></tr>
+<tr><td>4093</td><td>
+  <span class="col">2</span>[1,2528]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,2528]<br />
+  <span class="col">4</span>[0,0,1,2528]<br />
+  <span class="col">5</span>[0,0,0,1,2528]<br />
+  <span class="col">6</span>[0,0,0,0,1,2643]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,3849]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,3089]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,2528]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,1925]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,1796]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,1437]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,3849]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,1796]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,3577]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3347]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2643]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2528]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2528]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,907]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,102]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1555]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2705]<br />
+  </details>
+</td></tr>
+<tr><td>4099</td><td>
+  <span class="col">2</span>[1,1326]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1687]<br />
+  <span class="col">4</span>[0,0,1,1326]<br />
+  <span class="col">5</span>[0,0,0,1,362]<br />
+  <span class="col">6</span>[0,0,0,0,1,2893]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,3250]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1560]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1441]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,1929]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,4095]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,961]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,1679]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,2651]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,2036]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2651]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3837]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,596]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3837]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2381]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1925]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2988]<br />
+  <span class="col">23</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,719]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2651]<br />
+  </details>
+</td></tr>
+<tr><td>5153</td><td>
+  <span class="col">2</span>[1,919]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,3347]<br />
+  <span class="col">4</span>[0,0,1,919]<br />
+  <span class="col">5</span>[0,0,0,1,919]<br />
+  <span class="col">6</span>[0,0,0,0,1,2429]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,2133]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1082]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,919]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,3171]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,3347]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,4265]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,2296]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,1541]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,4385]<br />
+  </details>
+</td></tr>
+<tr><td>5419</td><td>
+  <span class="col">2</span>[1,1758]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1277]<br />
+  <span class="col">4</span>[0,0,1,1758]<br />
+  <span class="col">5</span>[0,0,0,1,168]<br />
+  <span class="col">6</span>[0,0,0,0,1,3849]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,502]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,4537]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,2720]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,1444]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,542]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,5312]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,1317]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,4537]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,5125]<br />
+  </details>
+</td></tr>
+<tr><td>5581</td><td>
+  <span class="col">2</span>[1,3919]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,3919]<br />
+  <span class="col">4</span>[0,0,1,2732]<br />
+  <span class="col">5</span>[0,0,0,1,3919]<br />
+  <span class="col">6</span>[0,0,0,0,1,2732]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,595]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,4513]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,3919]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,3563]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,5108]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,2020]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,4159]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,4513]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,3919]<br />
+  </details>
+</td></tr>
+<tr><td>6529</td><td>
+  <span class="col">2</span>[1,2701]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,5572]<br />
+  <span class="col">4</span>[0,0,1,1744]<br />
+  <span class="col">5</span>[0,0,0,1,1949]<br />
+  <span class="col">6</span>[0,0,0,0,1,1539]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,787]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1368]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1368]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,3760]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,2154]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,4649]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,1539]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,1368]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,2154]<br />
+  </details>
+</td></tr>
+<tr><td>8101</td><td>
+  <span class="col">2</span>[1,3813]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,3813]<br />
+  <span class="col">4</span>[0,0,1,5004]<br />
+  <span class="col">5</span>[0,0,0,1,3813]<br />
+  <span class="col">6</span>[0,0,0,0,1,4528]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,3813]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1670]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,5484]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,4291]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,5004]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,5265]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,3813]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,2150]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,5008]<br />
+  </details>
+</td></tr>
+<tr><td>8191</td><td>
+  <span class="col">2</span>[1,973]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,6988]<br />
+  <span class="col">4</span>[0,0,1,4845]<br />
+  <span class="col">5</span>[0,0,0,1,726]<br />
+  <span class="col">6</span>[0,0,0,0,1,2654]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1236]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,2654]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,3857]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,527]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,1220]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,2654]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,2439]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,4415]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,5076]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2551]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1220]<br />
+  <span class="col">18</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,5554]<br />
+  <span class="col">19</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,7004]<br />
+  <span class="col">20</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,5554]<br />
+  <span class="col">21</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,264]<br />
+  <span class="col">22</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,527]<br />
+  <span class="col">24</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1730]<br />
+  </details>
+</td></tr>
+<tr><td>8209</td><td>
+  <span class="col">2</span>[1,3869]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,7006]<br />
+  <span class="col">4</span>[0,0,1,7006]<br />
+  <span class="col">5</span>[0,0,0,1,1463]<br />
+  <span class="col">6</span>[0,0,0,0,1,7737]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,5072]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,6246]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1463]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,3397]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,3397]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,991]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,4387]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,5941]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,185]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,7495]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,5072]<br />
+  </details>
+</td></tr>
+<tr><td>8681</td><td>
+  <span class="col">2</span>[1,5362]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,5362]<br />
+  <span class="col">4</span>[0,0,1,7910]<br />
+  <span class="col">5</span>[0,0,0,1,7404]<br />
+  <span class="col">6</span>[0,0,0,0,1,7404]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,2037]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,7910]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,6886]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,3573]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,4326]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,254]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,6127]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,4826]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,3573]<br />
+  </details>
+</td></tr>
+<tr><td>14449</td><td>
+  <span class="col">2</span>[1,3411]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1302]<br />
+  <span class="col">4</span>[0,0,1,8930]<br />
+  <span class="col">5</span>[0,0,0,1,1302]<br />
+  <span class="col">6</span>[0,0,0,0,1,987]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,12340]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,7670]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,3411]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,5068]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,6506]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,8478]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,8930]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,5876]<br />
+  </details>
+</td></tr>
+<tr><td>16381</td><td>
+  <span class="col">2</span>[1,15465]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,15465]<br />
+  <span class="col">4</span>[0,0,1,15465]<br />
+  <span class="col">5</span>[0,0,0,1,8292]<br />
+  <span class="col">6</span>[0,0,0,0,1,9410]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,11599]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,964]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,16024]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,13276]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,15202]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,10420]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,2641]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,9969]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,11599]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,10063]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,8898]<br />
+  </details>
+</td></tr>
+<tr><td>16411</td><td>
+  <span class="col">2</span>[1,4426]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,7745]<br />
+  <span class="col">4</span>[0,0,1,8298]<br />
+  <span class="col">5</span>[0,0,0,1,11248]<br />
+  <span class="col">6</span>[0,0,0,0,1,8298]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,7745]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,5532]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,9957]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,554]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,7745]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,3504]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,8851]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,5347]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1106]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,7929]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1106]<br />
+  </details>
+</td></tr>
+<tr><td>20857</td><td>
+  <span class="col">2</span>[1,14767]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,2587]<br />
+  <span class="col">4</span>[0,0,1,1419]<br />
+  <span class="col">5</span>[0,0,0,1,12890]<br />
+  <span class="col">6</span>[0,0,0,0,1,4923]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,11722]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,18521]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,14767]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,12890]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,11722]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,3296]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,14767]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,9386]<br />
+  </details>
+</td></tr>
+<tr><td>26317</td><td>
+  <span class="col">2</span>[1,6207]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,13278]<br />
+  <span class="col">4</span>[0,0,1,13278]<br />
+  <span class="col">5</span>[0,0,0,1,6207]<br />
+  <span class="col">6</span>[0,0,0,0,1,21928]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,10921]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,10143]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,18468]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,24825]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,8802]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,866]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,11786]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,1104]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,24825]<br />
+  </details>
+</td></tr>
+<tr><td>30269</td><td>
+  <span class="col">2</span>[1,20748]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,26869]<br />
+  <span class="col">4</span>[0,0,1,24148]<br />
+  <span class="col">5</span>[0,0,0,1,14627]<br />
+  <span class="col">6</span>[0,0,0,0,1,2722]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,15306]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,10206]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,2722]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,21095]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,26874]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,22453]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,21427]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,22453]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,29590]<br />
+  </details>
+</td></tr>
+<tr><td>32749</td><td>
+  <span class="col">2</span>[1,15461]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,23191]<br />
+  <span class="col">4</span>[0,0,1,9272]<br />
+  <span class="col">5</span>[0,0,0,1,15461]<br />
+  <span class="col">6</span>[0,0,0,0,1,7731]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,12928]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,9272]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,15461]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,12928]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,11805]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,19092]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,11805]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,8149]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,30765]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,20789]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,7731]<br />
+  </details>
+</td></tr>
+<tr><td>32771</td><td>
+  <span class="col">2</span>[1,27984]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,20252]<br />
+  <span class="col">4</span>[0,0,1,8836]<br />
+  <span class="col">5</span>[0,0,0,1,32032]<br />
+  <span class="col">6</span>[0,0,0,0,1,6994]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,2946]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,16932]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,20616]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,2196]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,16568]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,8461]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,4049]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,17671]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,27609]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,11395]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,16921]<br />
+  </details>
+</td></tr>
+<tr><td>37171</td><td>
+  <span class="col">2</span>[1,31738]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,29640]<br />
+  <span class="col">4</span>[0,0,1,8769]<br />
+  <span class="col">5</span>[0,0,0,1,22970]<br />
+  <span class="col">6</span>[0,0,0,0,1,8769]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,13341]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,8769]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,34212]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,31738]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,20011]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,8769]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,24207]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,17537]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,18774]<br />
+  </details>
+</td></tr>
+<tr><td>38737</td><td>
+  <span class="col">2</span>[1,27427]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,3488]<br />
+  <span class="col">4</span>[0,0,1,27427]<br />
+  <span class="col">5</span>[0,0,0,1,12630]<br />
+  <span class="col">6</span>[0,0,0,0,1,27427]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,3488]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,31005]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,21393]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,9143]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,27427]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,28458]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,10174]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,30065]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,17436]<br />
+  </details>
+</td></tr>
+<tr><td>43691</td><td>
+  <span class="col">2</span>[1,28495]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,37314]<br />
+  <span class="col">4</span>[0,0,1,2987]<br />
+  <span class="col">5</span>[0,0,0,1,7871]<br />
+  <span class="col">6</span>[0,0,0,0,1,37858]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,18183]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,22118]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,42337]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,30937]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,26053]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,4075]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,22257]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,29178]<br />
+  </details>
+</td></tr>
+<tr><td>49477</td><td>
+  <span class="col">2</span>[1,1694]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,26743]<br />
+  <span class="col">4</span>[0,0,1,47957]<br />
+  <span class="col">5</span>[0,0,0,1,1694]<br />
+  <span class="col">6</span>[0,0,0,0,1,16136]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,19522]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1245]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,16758]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,46886]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,47957]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,31822]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,7844]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,44571]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,45642]<br />
+  </details>
+</td></tr>
+<tr><td>61681</td><td>
+  <span class="col">2</span>[1,5556]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,7663]<br />
+  <span class="col">4</span>[0,0,1,34672]<br />
+  <span class="col">5</span>[0,0,0,1,34672]<br />
+  <span class="col">6</span>[0,0,0,0,1,7663]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,49230]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,5556]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,10918]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,7663]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,27776]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,53444]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,11111]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,49996]<br />
+  </details>
+</td></tr>
+<tr><td>65521</td><td>
+  <span class="col">2</span>[1,61865]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,21372]<br />
+  <span class="col">4</span>[0,0,1,21372]<br />
+  <span class="col">5</span>[0,0,0,1,61865]<br />
+  <span class="col">6</span>[0,0,0,0,1,18558]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,7590]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,55960]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,43585]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,19400]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,555]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,18558]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,48648]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,555]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,39929]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,6748]<br />
+  <span class="col">17</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,8432]<br />
+  </details>
+</td></tr>
+<tr><td>65537</td><td>
+  <span class="col">2</span>[1,21378]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,21378]<br />
+  <span class="col">4</span>[0,0,1,8159]<br />
+  <span class="col">5</span>[0,0,0,1,61881]<br />
+  <span class="col">6</span>[0,0,0,0,1,33192]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,21378]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,42196]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,31787]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,17722]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,61881]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,61881]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,61881]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,58225]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,4503]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2252]<br />
+  </details>
+</td></tr>
+<tr><td>86171</td><td>
+  <span class="col">2</span>[1,7756]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,35847]<br />
+  <span class="col">4</span>[0,0,1,2930]<br />
+  <span class="col">5</span>[0,0,0,1,63938]<br />
+  <span class="col">6</span>[0,0,0,0,1,33950]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,18440]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,29124]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,71693]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,53254]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,56183]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,7756]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,63938]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,5161]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,56183]<br />
+  </details>
+</td></tr>
+<tr><td>87211</td><td>
+  <span class="col">2</span>[1,36295]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,61753]<br />
+  <span class="col">4</span>[0,0,1,75570]<br />
+  <span class="col">5</span>[0,0,0,1,15711]<br />
+  <span class="col">6</span>[0,0,0,0,1,56879]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,13013]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,80444]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,45238]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,284]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,56074]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,36295]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,46087]<br />
+  </details>
+</td></tr>
+<tr><td>131071</td><td>
+  <span class="col">2</span>[1,73660]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,89908]<br />
+  <span class="col">4</span>[0,0,1,23591]<br />
+  <span class="col">5</span>[0,0,0,1,120840]<br />
+  <span class="col">6</span>[0,0,0,0,1,73660]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,113498]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,73660]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,11796]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,125293]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,109284]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,16249]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,35386]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,87019]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,97250]<br />
+  <span class="col">16</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,16249]<br />
+  </details>
+</td></tr>
+<tr><td>174763</td><td>
+  <span class="col">2</span>[1,165009]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,129752]<br />
+  <span class="col">4</span>[0,0,1,114003]<br />
+  <span class="col">5</span>[0,0,0,1,82505]<br />
+  <span class="col">6</span>[0,0,0,0,1,165009]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,102726]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,17986]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,145501]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,86977]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,98254]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,149260]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,86977]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,14227]<br />
+  </details>
+</td></tr>
+<tr><td>246241</td><td>
+  <span class="col">2</span>[1,152184]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,152184]<br />
+  <span class="col">4</span>[0,0,1,52850]<br />
+  <span class="col">5</span>[0,0,0,1,182838]<br />
+  <span class="col">6</span>[0,0,0,0,1,155366]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,155366]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,244146]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,52850]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,64491]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,160643]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,38106]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,169102]<br />
+  </details>
+</td></tr>
+<tr><td>268501</td><td>
+  <span class="col">2</span>[1,48411]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,48411]<br />
+  <span class="col">4</span>[0,0,1,135998]<br />
+  <span class="col">5</span>[0,0,0,1,126765]<br />
+  <span class="col">6</span>[0,0,0,0,1,18467]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,57644]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,126765]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,21961]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,150970]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,47415]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,48411]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,139492]<br />
+  </details>
+</td></tr>
+<tr><td>279073</td><td>
+  <span class="col">2</span>[1,156916]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,207234]<br />
+  <span class="col">4</span>[0,0,1,207234]<br />
+  <span class="col">5</span>[0,0,0,1,156916]<br />
+  <span class="col">6</span>[0,0,0,0,1,34759]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,38397]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,119835]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,59918]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,119835]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,238354]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,98314]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,116197]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,38397]<br />
+  </details>
+</td></tr>
+<tr><td>384773</td><td>
+  <span class="col">2</span>[1,328626]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,69359]<br />
+  <span class="col">4</span>[0,0,1,160185]<br />
+  <span class="col">5</span>[0,0,0,1,34680]<br />
+  <span class="col">6</span>[0,0,0,0,1,242754]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,341837]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,61102]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,13212]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,307158]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,186607]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,320369]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,34680]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,381470]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,277433]<br />
+  </details>
+</td></tr>
+<tr><td>525313</td><td>
+  <span class="col">2</span>[1,94719]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,94719]<br />
+  <span class="col">4</span>[0,0,1,101573]<br />
+  <span class="col">5</span>[0,0,0,1,248013]<br />
+  <span class="col">6</span>[0,0,0,0,1,349585]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,248013]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,338368]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,514096]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,248013]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,514096]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,419378]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,101573]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,342731]<br />
+  </details>
+</td></tr>
+<tr><td>858001</td><td>
+  <span class="col">2</span>[1,279912]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,279912]<br />
+  <span class="col">4</span>[0,0,1,4298]<br />
+  <span class="col">5</span>[0,0,0,1,272927]<br />
+  <span class="col">6</span>[0,0,0,0,1,600654]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,534571]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,600654]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,600654]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,4298]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,343307]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,104227]<br />
+  </details>
+</td></tr>
+<tr><td>2796203</td><td>
+  <span class="col">2</span>[1,326229]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1980277]<br />
+  <span class="col">4</span>[0,0,1,1320185]<br />
+  <span class="col">5</span>[0,0,0,1,912222]<br />
+  <span class="col">6</span>[0,0,0,0,1,1320185]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1980277]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,2269162]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,385181]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,1980277]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,1623043]<br />
+  </details>
+</td></tr>
+<tr><td>3033169</td><td>
+  <span class="col">2</span>[1,472131]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1979043]<br />
+  <span class="col">4</span>[0,0,1,1680785]<br />
+  <span class="col">5</span>[0,0,0,1,2968564]<br />
+  <span class="col">6</span>[0,0,0,0,1,104444]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1874600]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,546983]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1874600]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,2123324]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,2864121]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,1133803]<br />
+  </details>
+</td></tr>
+<tr><td>6700417</td><td>
+  <span class="col">2</span>[1,236066]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1812472]<br />
+  <span class="col">4</span>[0,0,1,230726]<br />
+  <span class="col">5</span>[0,0,0,1,6557710]<br />
+  <span class="col">6</span>[0,0,0,0,1,2185904]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,2273922]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,1153626]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,2273922]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,2185904]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,2273922]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,2373909]<br />
+  </details>
+</td></tr>
+<tr><td>15790321</td><td>
+  <span class="col">2</span>[1,652457]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,543830]<br />
+  <span class="col">4</span>[0,0,1,13358075]<br />
+  <span class="col">5</span>[0,0,0,1,3391440]<br />
+  <span class="col">6</span>[0,0,0,0,1,14238051]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,14574198]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,6239050]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,15325709]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,8622048]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,543830]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,6239050]<br />
+  </details>
+</td></tr>
+<tr><td>18837001</td><td>
+  <span class="col">2</span>[1,742620]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,10592110]<br />
+  <span class="col">4</span>[0,0,1,1698506]<br />
+  <span class="col">5</span>[0,0,0,1,12290615]<br />
+  <span class="col">6</span>[0,0,0,0,1,11889536]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,4293358]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,8091447]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,5744229]<br />
+  </details>
+</td></tr>
+<tr><td>22253377</td><td>
+  <span class="col">2</span>[1,326229]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,2299198]<br />
+  <span class="col">4</span>[0,0,1,6019702]<br />
+  <span class="col">5</span>[0,0,0,1,12805802]<br />
+  <span class="col">6</span>[0,0,0,0,1,11273004]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,12805802]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,10032836]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,6019702]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,9851697]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,3539366]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,19118133]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,19410763]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,20832070]<br />
+  </details>
+</td></tr>
+<tr><td>22366891</td><td>
+  <span class="col">2</span>[1,472131]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,13823498]<br />
+  <span class="col">4</span>[0,0,1,10560209]<br />
+  <span class="col">5</span>[0,0,0,1,9313735]<br />
+  <span class="col">6</span>[0,0,0,0,1,16610654]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,7296920]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,3375573]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,14117706]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,14706122]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,5868521]<br />
+  </details>
+</td></tr>
+<tr><td>25781083</td><td>
+  <span class="col">2</span>[1,708196]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,2324670]<br />
+  <span class="col">4</span>[0,0,1,15933584]<br />
+  <span class="col">5</span>[0,0,0,1,6086085]<br />
+  <span class="col">6</span>[0,0,0,0,1,8749854]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,21261122]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,22358768]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,15384761]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,19824376]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,11074523]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,12172169]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,2114947]<br />
+  <span class="col">14</span>[0,0,0,0,0,0,0,0,0,0,0,0,1,4649339]<br />
+  </details>
+</td></tr>
+<tr><td>48912491</td><td>
+  <span class="col">2</span>[1,236066]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,10505504]<br />
+  <span class="col">4</span>[0,0,1,29188413]<br />
+  <span class="col">5</span>[0,0,0,1,7381997]<br />
+  <span class="col">6</span>[0,0,0,0,1,32557679]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,41776254]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,6095069]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,30873046]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,28147244]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,32557679]<br />
+  </details>
+</td></tr>
+<tr><td>107367629</td><td>
+  <span class="col">2</span>[1,326229]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,38725285]<br />
+  <span class="col">4</span>[0,0,1,38725285]<br />
+  <span class="col">5</span>[0,0,0,1,66356842]<br />
+  <span class="col">6</span>[0,0,0,0,1,48406606]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1412407]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,95400805]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,9681322]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,96813211]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,105082126]<br />
+  <span class="col">15</span>[0,0,0,0,0,0,0,0,0,0,0,0,0,1,52104515]<br />
+  </details>
+</td></tr>
+<tr><td>160465489</td><td>
+  <span class="col">2</span>[1,236066]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,90230686]<br />
+  <span class="col">4</span>[0,0,1,66819085]<br />
+  <span class="col">5</span>[0,0,0,1,148107330]<br />
+  <span class="col">6</span>[0,0,0,0,1,148107330]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,75761525]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,28938323]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,113642287]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,104699847]<br />
+  <span class="col">13</span>[0,0,0,0,0,0,0,0,0,0,0,1,66819085]<br />
+  </details>
+</td></tr>
+<tr><td>308761441</td><td>
+  <span class="col">2</span>[1,180327]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,111363941]<br />
+  <span class="col">4</span>[0,0,1,218666047]<br />
+  <span class="col">5</span>[0,0,0,1,263713744]<br />
+  <span class="col">6</span>[0,0,0,0,1,218666047]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,14696108]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,49109532]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,9674898]<br />
+  </details>
+</td></tr>
+<tr><td>536903681</td><td>
+  <span class="col">2</span>[1,854098]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,380237287]<br />
+  <span class="col">4</span>[0,0,1,458570484]<br />
+  <span class="col">5</span>[0,0,0,1,193650261]<br />
+  <span class="col">6</span>[0,0,0,0,1,152300930]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,152300930]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,193650261]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,465633718]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,458570484]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,245790668]<br />
+  </details>
+</td></tr>
+<tr><td>715827883</td><td>
+  <span class="col">2</span>[1,90164]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,611390002]<br />
+  <span class="col">4</span>[0,0,1,168984041]<br />
+  <span class="col">5</span>[0,0,0,1,233530200]<br />
+  <span class="col">6</span>[0,0,0,0,1,347385233]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,611390002]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,402514240]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,531606558]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,387276955]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,639641458]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,504729007]<br />
+  </details>
+</td></tr>
+<tr><td>1824726041</td><td>
+  <span class="col">2</span>[1,90164]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,595294818]<br />
+  <span class="col">4</span>[0,0,1,1723037529]<br />
+  <span class="col">5</span>[0,0,0,1,1723037529]<br />
+  <span class="col">6</span>[0,0,0,0,1,1011217945]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,164535436]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,565622308]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,86852258]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,164535436]<br />
+  </details>
+</td></tr>
+<tr><td>2931542417</td><td>
+  <span class="col">2</span>[1,692043283]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1648423562]<br />
+  <span class="col">4</span>[0,0,1,2441434553]<br />
+  <span class="col">5</span>[0,0,0,1,1648423562]<br />
+  <span class="col">6</span>[0,0,0,0,1,956380280]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1586021983]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,528673995]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,1811792850]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,2705771550]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,2797634491]<br />
+  </details>
+</td></tr>
+<tr><td>4278255361</td><td>
+  <span class="col">2</span>[1,3654066304]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,1781499133]<br />
+  <span class="col">4</span>[0,0,1,2405688190]<br />
+  <span class="col">5</span>[0,0,0,1,3654066304]<br />
+  <span class="col">6</span>[0,0,0,0,1,2314620151]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,4039836329]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,2427186059]<br />
+  <span class="col">11</span>[0,0,0,0,0,0,0,0,0,1,4039836329]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,3233511194]<br />
+  </details>
+</td></tr>
+<tr><td>4562284561</td><td>
+  <span class="col">2</span>[1,1899771157]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,568514455]<br />
+  <span class="col">4</span>[0,0,1,3448181000]<br />
+  <span class="col">5</span>[0,0,0,1,3313972828]<br />
+  <span class="col">6</span>[0,0,0,0,1,725647974]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,979895390]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,725647974]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,3762448038]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,1728468710]<br />
+  </details>
+</td></tr>
+<tr><td>8831418697</td><td>
+  <span class="col">2</span>[1,5458116920]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,2881143650]<br />
+  <span class="col">4</span>[0,0,1,5458116920]<br />
+  <span class="col">5</span>[0,0,0,1,2084815143]<br />
+  <span class="col">6</span>[0,0,0,0,1,8339260569]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,5458116920]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,4777971043]<br />
+  <span class="col">10</span>[0,0,0,0,0,0,0,0,1,7659114692]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,2693155901]<br />
+  </details>
+</td></tr>
+<tr><td>54410972897</td><td>
+  <span class="col">2</span>[1,33627830610]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,38534064967]<br />
+  <span class="col">4</span>[0,0,1,43440299324]<br />
+  <span class="col">5</span>[0,0,0,1,46472518932]<br />
+  <span class="col">6</span>[0,0,0,0,1,48346533681]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,46472518932]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,23372966927]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,33016455593]<br />
+  </details>
+</td></tr>
+<tr><td>165768537521</td><td>
+  <span class="col">2</span>[1,14947339696]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,141583233834]<br />
+  <span class="col">4</span>[0,0,1,54079983078]<br />
+  <span class="col">5</span>[0,0,0,1,102450590452]<br />
+  <span class="col">6</span>[0,0,0,0,1,147292609537]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,44842019086]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,102450590452]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,73388897601]<br />
+  </details>
+</td></tr>
+<tr><td>2932031007403</td><td>
+  <span class="col">2</span>[1,2605238031671]<br />
+  <details><summary>more&hellip;</summary><br />
+  <span class="col">3</span>[0,1,1384317259769]
+  <span class="col">4</span>[0,0,1,2441841543805]<br />
+  <span class="col">5</span>[0,0,0,1,1648698330778]<br />
+  <span class="col">6</span>[0,0,0,0,1,365365654153]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,1648698330778]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,807876665145]<br />
+  </details>
+</td></tr>
+<tr><td>4363953127297</td><td>
+  <span class="col">2</span>[1,4120758354633]<br />
+  <details><summary>more&hellip;</summary><br />
+  <span class="col">3</span>[0,1,3727260946636]
+  <span class="col">4</span>[0,0,1,543800043331]<br />
+  <span class="col">5</span>[0,0,0,1,1423686996656]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,3727260946636]<br />
+  </details>
+</td></tr>
+<tr><td>28059810762433</td><td>
+  <span class="col">2</span>[1,23965939544788]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,17341916769074]<br />
+  <span class="col">4</span>[0,0,1,13248045551429]<br />
+  <span class="col">5</span>[0,0,0,1,17341916769074]<br />
+  <span class="col">6</span>[0,0,0,0,1,19872068327143]<br />
+  <span class="col">7</span>[0,0,0,0,0,1,23965939544788]<br />
+  <span class="col">8</span>[0,0,0,0,0,0,1,10120606232277]<br />
+  <span class="col">9</span>[0,0,0,0,0,0,0,1,17341916769074]<br />
+  <span class="col">12</span>[0,0,0,0,0,0,0,0,0,0,1,18449349181304]<br />
+  </details>
+</td></tr>
+<tr><td>768614336404564651</td><td>
+  <span class="col">2</span>[1,69305911479043286]<br />
+  <details><summary>more&hellip;</summary>
+  <span class="col">3</span>[0,1,458668877788703385]<br />
+  <span class="col">4</span>[0,0,1,148723419172842119]<br />
+  <span class="col">5</span>[0,0,0,1,95778414043642897]<br />
+  <span class="col">6</span>[0,0,0,0,1,703170711005188399]<br />
+  </details>
+</td></tr>
+</table>

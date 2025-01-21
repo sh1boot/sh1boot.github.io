@@ -3,7 +3,7 @@ last_modified_at: Fri, 27 Dec 2024 15:48:07 -0800  # 869bb19 reduce-folding-in-n
 layout: post
 title:  Non-binary Linear Feedback Shift Registers
 mathjax: true
-tags: number-theory random
+tags: number-theory random debruijn
 ---
 
 There's way too much documentation about binary [LFSRs][LFSR] out there,
@@ -53,27 +53,56 @@ So I decided to make some tables of polynomials that work for different bases (a
 
 I did all the primes up to 257, then a handful of primes immediately above and below powers of two (including a couple of Mersennes), and then the prime factors of a few Fermat numbers and the like.  I figured that way one could make a power-of-two generator by discarding the one out-of-range value when it came up.
 
-I also searched for minimal generators using the fewest taps, and generators using only one non-zero tap, for the simplest possible implementations on limited hardware.
+I also searched for minimal generators using the fewest taps and
+generators using only one tap greater than one, for the simplest
+possible implementations on limited hardware.
 
 ## Searching for maximal-period polynomials
 
-I believe there are some ways to figure these things out directly if you know the right mathematics.  I do not know the right mathematics.
+I believe there are some ways to figure these things out directly if you
+know the right mathematics.  I do not know the right mathematics.
 
-What I did instead was to express the candidate LFSR as a matrix.  If I multiply a vector by this then the result will be as if the LFSR has taken one step.  So if I raise the matrix to the nth power then multiply that's like taking n steps.
+What I did instead was to express the candidate LFSR as a matrix.  If I
+multiply a vector by this then the result will be as if the LFSR has
+taken one step.  So if I raise the matrix to the nth power then multiply
+that's like taking n steps.
 
-What I want is for $p^n-1$ steps to land me back where I started.  So if I raise the matrix to that power it has to be the identity matrix.  If not, discard the candidate generator.  It's not maximal period. 
+What is needed is for $p^n-1$ steps to land back where it started.  So
+when raising the matrix to that power the result has to be the identity
+matrix.  If not, discard the candidate generator.  It's not maximal
+period.
 
-But what if it cycles twicw in that period?  That would give me an identity matrix but wouldn't be full cycle.  So raise it to $(p^n-1)/2$.  If that's also identity then chuck it out.  This needs to be repeated for every prime factor.  The actual period could be a non-prime factor but that just means some tests will yield an identity matrix raised to some spurious other factors, which is still an identity matrix so we still catch it.
+But what if it cycles twice in that period?  That would give an identity
+matrix but wouldn't be full cycle.  So raise it to $(p^n-1)/2$.  If
+that's also identity then chuck it out.  This needs to be repeated for
+every prime factor.  The actual period could be a non-prime factor but
+that just means some tests will yield an identity matrix raised to some
+spurious other factors, which is still an identity matrix so we still
+catch it.
 
-This can search very large periods quickly.  So quickly that factoring them becomes problematic in itself.  I thought it best to [keep][factors] these intermediate results in case I needed them later.
+This can search very large periods quickly.  So quickly that factoring
+the period becomes problematic in itself.  I thought it best to
+[keep][factors] these intermediate factorisations in case I needed them
+later.
 
-Something which helps a lot here is knowing that $p^{a\times b}-1$ can be divided by $p^a-1$ and $p^b-1$ (it's not the product of these, but they are both factors).  So we can collect a lot of prime factors of $p^n-1$ by trying all the factors of n in place of n (all factors, not just prime factors).  This is less helpful when n if prime, but in most cases it's good.
+Something which helps a lot here is knowing that $p^{a\times b}-1$ can
+be divided by $p^a-1$ and $p^b-1$ (it's not the product of these, but
+they are both factors)[^p-to-n-minus-1-factors].  So we can collect a
+lot of prime factors of $p^n-1$ by trying all the factors of n in place
+of n (all factors, not just prime factors), which means we can reduce
+the size of the number(s) to be factored.  This is less helpful when n
+if prime, but in most cases it's good.
+
+[^p-to-n-minus-1-factors]: A simple way to understand the $p^{a\times b}-1$ thing is to consider that in decimal $10^n-1$ is 9 repeated n times.  Similarly, in binary, $2^n-1$ is 1 repeated n times.  If n is, for example, divisible by three, then the number of repeated digits is divisible by three, and consequently you can express it the product of 999 and 1001001...1001.  And so it is in any base for any factor of n.
 
 ## Converting to a de Bruijn sequence
 
-The one missing output case is the n-zeroes in a row.  We get n-1 zeros and then it has to be something else, because once the state is all zeros an LFSR stays that way forever.
+A maximal-period LFSR visits every possible state but one in its shift
+register.  The one missing output case is n-zeroes in a row.  We get n-1
+zeros and then it has to be something else, because once the state is
+all zeros an LFSR stays that way forever.
 
-If we simply wait until the output is _nearly_ all zeroes, and insert an
+If we simply wait until the output is _nearly_ all zeroes and insert an
 extra zero, then we can fill that gap.  And then to get back on track we
 need to recognise all-zeroes and output something other than another
 zero (which would be the natural consequence).
@@ -94,9 +123,16 @@ If you need a generator with a base which is some power of a prime then
 you could use a prime generator which is n times longer and then combine
 groups of n digits into a single value.
 
-Multiplying out the generator length of a base p generator by n gives us an equivalent state space as a base $p^n$ generator.  Stepping though this state space and mapping it to the desired base must then be done in such a way as to emulate the shift register in the desired base.
+Multiplying out the generator length of a base p generator by n gives us
+an equivalent state space as a base $p^n$ generator.  Stepping though
+this state space and mapping it to the desired base must then be done in
+such a way as to emulate the shift register shifting normally in the
+desired base.
 
-One solution to this is to cut the shift register into n runs of consecutive values, and to combine each of the resulting vectors using vectorwise multiplication and addition to make a vector of combined values.  Or just combine every (length/n)th value for the next output.
+One way to this is to cut the shift register into n runs of consecutive
+values, and to combine each of the resulting vectors using vectorwise
+multiplication and addition to make a vector of combined values.  Or
+just combine every (length/n)th value for the next output.
 
 ```python
 def lfsr9(punctured=False):
@@ -117,7 +153,10 @@ def lfsr9(punctured=False):
       yield 0
 ```
 
-In some instances it's also possible to advance the generator in steps of n, and combine n conductive belts into one result.  but this only works when n is co-prime to the period of the generator.  The step must be co-prime to ensure that every possible state is visited.
+In some instances it's also possible to advance the generator in steps
+of n, and combine n consecutive outputs into one result.  but this only
+works when n is co-prime to the period of the generator.  The step must
+be co-prime to ensure that every possible state is visited.
 
 Otherwise, one would need to implement linear $\mathrm{GF}(p^n)$
 arithmetic and either repeat the search, or find some polynomials using
@@ -131,11 +170,10 @@ for prime bases.
 ## Extending to other bases
 
 One can merge de Bruijn sequences of the same size but co-prime bases by
-effectively running them in parallel and splicing the outputs from
-sequences $u$ (base $b_u$) and $v$ (base $b_v$) as ${b_u}{x_v} + x_u$.
-The taps can either be drawn from separate shift registers for each
-base, or derived from the combined output using division and modulo by
-$b_u$.
+effectively running them in parallel and splicing the outputs by mapping
+them into a scalar value in a larger range[^merging-de-bruijn].
+
+[^merging-de-bruijn]: This works because if the bases are co-prime then their periods are co-prime and this means that every possible state in one shift register will eventually line up with every possible state in another shift register over the product of their periods.  So the combined remapping as a shift register also visits every possible state over the same period.
 
 ```python
 def lfsr45():
@@ -146,6 +184,15 @@ def lfsr45():
       r = r * b + v
     yield r
 ```
+
+As an implementation detail, the different bases can be maintained in
+different shift registers, as implied above, but they could also be
+re-extracted from a single shift register of historical outputs using
+division and remainder to separate the values for each base before doing
+the arithmetic.  The polynomials could be stored the same way and then
+you've effectively defined some kind of custom arithmetic for
+multiplication and addition.  I don't know what that's called, but you
+can do it.
 
 What _doesn't_ work so well is trying to merge LFSR sequences this way.
 The trouble is that their periods are all in the form $p^n-1$, and that
@@ -158,39 +205,43 @@ to read all that.
 
 ## Jumping around
 
-Setting the de Bruijn modification aside because I don't know how to account for that... you should be able to trivially construct a matrix representing the state change of the shift register (now a vector) to the next iteration.  then just raise that matrix to the appropriate power (a series of squaring operations and conditional multiplications according to the bit pattern of the power) to get a matrix which will take you as far as you need to go.
+As described in the section about searching, you can express an LFSR as
+a matrix representing the change from one shift register state to the
+next (as a multiplication).  That involves a shifted identity matrix
+representing the movement of values from one bucket to the next, with
+the empty column on the edge filled in with the polynomial.
 
-Typically I like to have a solution handy for jumping ahead by the period of the generator times the golden ratio.  You can use that to maximally distribute an arbitrary number of generators.
+Raising this matrix to an integer power represents that many steps
+through the sequence, but can be calculated in $log_2 n$ steps.
+
+Unfortunately I have no idea how to recognise whether such a step would
+pass over the insertion point for the de Bruijn modification.  If it
+does pass over that, then one fewer steps will be needed because the
+insertion will consume one from the formal count without advancing the
+LFSR sequence.
+
+Typically I like to have a solution handy for jumping ahead by the
+period of the generator times the golden ratio.  You can use that to
+maximally distribute an arbitrary number of generators.
 
 ## Example code
 
-[example code][].
+I wrote some code for searching for polynomials and generating sequences
+[here][example code].
 
 ## Tables
 
-In the tables below, several different polynomials are listed for the given parameters, each enclosed in `{}`.  The right-most value is the multiplier for the
-oldest output, and the leftmost value is the multiplier for the most
-recent output.  The next result is:
+In the tables below, several different polynomials are listed for the
+given parameters, each enclosed in `[]`.  The right-most value is the
+multiplier for the oldest output, and the leftmost value is the
+multiplier for the most recent output.  The next result is:
 
 $$
 x_{n+1} = \sum_{i=0}^{l-1} x_{n-i} p_i \mod b
 $$
 
-<style>
-  td:nth-child(-n+3) {
-    width: min-content;
-    text-align: right;
-  }
-  td:nth-child(4) {
-    width: 100%;
-    text-align: left;
-  }
-</style>
-{% capture fold -%}<details markdown="0">{%comment%}<summary>more...</summary>{%endcomment%}{%- endcapture %}
-{% capture endfold -%}</details>{%- endcapture %}
-| base | stages | period | polynomials |
-|------|--------|--------|-------------|
-{% include nblfsr_table_1.md %}
+Here's the minimal set:
+{% include nblfsr-minimal.html %}
 
 There's more data [here][allpolys].  The search required factoring some
 big numbers in the form $p^n-1$, and I didn't want to waste that effort,
