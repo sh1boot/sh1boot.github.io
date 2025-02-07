@@ -95,6 +95,26 @@ if prime, but in most cases it's good.
 
 [^p-to-n-minus-1-factors]: A simple way to understand the $p^{a\times b}-1$ thing is to consider that in decimal $10^n-1$ is 9 repeated n times.  Similarly, in binary, $2^n-1$ is 1 repeated n times.  If n is, for example, divisible by three, then the number of repeated digits is divisible by three, and consequently you can express it the product of 999 and 1001001...1001.  And so it is in any base for any factor of n.
 
+### Observations
+
+I didn't get deep into the mathematics of identifying valid polynomials
+because there are so many valid answers that it's trivial to find
+something meeting reasonably flexible criteria within a few tries.
+Unfortunately one of the patterns I wanted involved a mix of zeroes and
+ones in all but the last tap, for all the different counts of non-zero
+taps, and a random value in that last tap; and this fell down hard for
+base 3.
+
+It seems that if you have an even-length polynomial in base 3, you have
+to put 1 in the last tap regardless of what you do with any of the other
+taps.  If you have an odd-length polynomial then you have to put 2
+there.  And if you have an odd-length polynomial then you cannot have 2
+taps, 5 taps, 8 taps, etc., set to 1.
+
+Maybe this is obvious to somebody who knows the mathematics of it all.
+Maybe if I thought about it I would gain some of that insight as well.
+Maybe I'll get around to that one day.  Maybe not.
+
 ## Converting to a de Bruijn sequence
 
 A maximal-period LFSR visits every possible state but one in its shift
