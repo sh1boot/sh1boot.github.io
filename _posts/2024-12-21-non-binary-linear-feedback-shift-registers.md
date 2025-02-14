@@ -93,6 +93,14 @@ of n (all factors, not just prime factors), which means we can reduce
 the size of the number(s) to be factored.  This is less helpful when n
 if prime, but in most cases it's good.
 
+Also $p^{a}-1$ can always be divided by $p-1$, because the former yields
+a repeated string of $p-1$ in base $p$ (a [repdigit][]), and this digit
+can be divided out to make it a [repunit][].  Repunit factoring is a
+thing, but I haven't found any great insights for better algorithms.
+
+The closest I've found is that [SNFS][] specialises in numbers in this
+form.
+
 [^p-to-n-minus-1-factors]: A simple way to understand the $p^{a\times b}-1$ thing is to consider that in decimal $10^n-1$ is 9 repeated n times.  Similarly, in binary, $2^n-1$ is 1 repeated n times.  If n is, for example, divisible by three, then the number of repeated digits is divisible by three, and consequently you can express it the product of 999 and 1001001...1001.  And so it is in any base for any factor of n.
 
 ### Observations
@@ -268,6 +276,9 @@ big numbers in the form $p^n-1$, and I didn't want to waste that effort,
 so those are [here][factors].
 
 [LFSR]: <https://en.wikipedia.org/wiki/LFSR>
+[SNFS]: <https://en.wikipedia.org/wiki/Special_number_field_sieve>
+[repdigit]: <https://en.wikipedia.org/wiki/Repdigit>
+[repunit]: <https://en.wikipedia.org/wiki/Repunit>
 [de Bruijn sequence]: <https://en.wikipedia.org/wiki/de_Bruijn_sequence>
 [shift register generation]: <https://books.google.com/books?id=sd9AqHeeHh4C&pg=PA174>
 [example code]: <https://github.com/sh1boot/nblfsr/blob/main/generator.py>
