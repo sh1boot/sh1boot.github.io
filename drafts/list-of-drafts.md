@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Some not-even-half-baked thoughts
+tags: hidden-tags
 catogeries: index
 sitemap: false
 ---
@@ -13,3 +14,5 @@ sitemap: false
     {%- endif -%}
   {%- endif -%}
 {%- endfor %}
+
+* See also: [`hidden tags`](/tags/hidden-tags/)

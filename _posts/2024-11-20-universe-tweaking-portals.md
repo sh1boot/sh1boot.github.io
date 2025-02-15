@@ -2,7 +2,7 @@
 last_modified_at: Fri, 27 Dec 2024 15:37:13 -0800  # 910c804 universe-tweaking-portal-link
 layout: post
 title:  Invisible, universe-tweaking portals
-tags: games portals
+tags: games portals needs-work needs-example
 ---
 I'm not going to describe the mechanics of the game [Portal][].  You
 probably already know; but I've often [wittered on][tessellated

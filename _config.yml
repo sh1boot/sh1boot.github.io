@@ -49,6 +49,11 @@ plugins:
 defaults:
   -
     scope:
+      path: "tags"
+    values:
+      layout: tagpage
+  -
+    scope:
       path: "testing"
     values:
       sitemap: false

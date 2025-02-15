@@ -1,15 +1,17 @@
 {%- assign tag_pages = site.pages | where: "layout", "tagpage" -%}
 <span class="tag-list"> <style> .tag-list code { font-size: smaller; } </style>
+  {%- assign separator = '' -%}
   {%- for tagname in page.tags -%}
-    {%- capture tagurl -%}
-      {{ tag_pages | where_exp: "item", "item.tag == tagname" | map: "url" | first | relative_url }}
-    {%- endcapture -%}
-    {%- if tagurl != "" -%}
-      <a href="{{tagurl}}"><code>{{tagname}}</code></a>
-    {%- else -%}
-      <code>{{tagname}}</code>
-    {%- endif -%}
-    {%- unless forloop.last -%}{{include.sep}}{%- endunless -%}
+    {%- assign tag_page = tag_pages | where_exp: "item", "item.tag == tagname" | first -%}
+    {%- unless tag_page.hidden -%}
+      {{- separator -}}
+      {%- if tag_page.url -%}
+        <a href="{{tag_page.url | relative_url}}"><code>{{tag_page.display_name | default: tagname}}</code></a>
+      {%- else -%}
+        <code>{{tagname}}</code>
+      {%- endif -%}
+      {%- capture separator %} {{include.sep}} {% endcapture -%}
+    {%- endunless -%}
   {%- endfor -%}
 </span>
 {{-''-}}

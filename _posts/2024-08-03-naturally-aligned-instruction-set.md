@@ -3,7 +3,7 @@ last_modified_at: Wed, 11 Sep 2024 21:48:39 -0700  # 0f8b31a clarity
 layout: post
 title:  Naturally-aligned compressed opcode encoding
 mathjax: true
-tags: computer-architecture
+tags: computer-architecture needs-example
 svg: true
 ---
 In the world of fixed-length instruction sets, the addition of compressed

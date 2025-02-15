@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Extending range of numpy modular arithmetic
+tags: needs-examples
 ---
 A frustration with numpy is that its pow() implementation doesn't
 support modular arithmetic.

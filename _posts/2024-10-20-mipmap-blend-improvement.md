@@ -2,7 +2,7 @@
 last_modified_at: Sun, 27 Oct 2024 23:08:06 -0700  # b302ee6 better-images-for-mipmap-stuff
 layout: post
 title: Trying to improve mipmap blending
-tags: graphics
+tags: graphics needs-example
 ---
 `LINEAR_MIPMAP_LINEAR`, blending from one [mipmap][] level to the next,
 is an interesting bodge.  It approximates a dynamic cut-off frequency
