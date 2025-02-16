@@ -11,6 +11,8 @@ and not a whole lot on doing the same with other bases.  So I've put
 together some tables and a few notes so everybody can throw something
 together without to much effort.
 
+([Skip to the data](#tables))
+
 In the binary case one has a selection of taps which are either used or
 not used, and the next bit (digit) in the sequence is the parity of the
 taps one chose to use.
@@ -259,21 +261,25 @@ I wrote some code for searching for polynomials and generating sequences
 
 ## Tables
 
-In the tables below, several different polynomials are listed for the
-given parameters, each enclosed in `[]`.  The right-most value is the
-multiplier for the oldest output, and the leftmost value is the
-multiplier for the most recent output.  The next result is:
+The table below gives the simplest polynomial configuration that I found
+for each length for each prime base that I searched.  The right-most
+value in the list is the multiplier for the oldest output, and the
+leftmost value is the multiplier for the most recent output.  The next
+result is calculated as:
 
 $$
 x_{n+1} = \sum_{i=0}^{l-1} x_{n-i} p_i \mod b
 $$
 
-Here's the minimal set:
 {% include nblfsr-minimal.html %}
 
-There's more data [here][allpolys].  The search required factoring some
-big numbers in the form $p^n-1$, and I didn't want to waste that effort,
-so those are [here][factors].
+You can expand the "&hellip;" spinners to expand the list for each base,
+and each row also links to a file containing a larger list of
+configurations, and all the same data is in a single file
+[here][allpolys].  The search required factoring some big numbers in the
+form $p^n-1$, and I didn't want to waste that effort, so those are
+[here][factors].  I also uploaded them all to [FactorDB][] once I
+discovered that that existed.
 
 [LFSR]: <https://en.wikipedia.org/wiki/LFSR>
 [SNFS]: <https://en.wikipedia.org/wiki/Special_number_field_sieve>
@@ -285,3 +291,4 @@ so those are [here][factors].
 
 [factors]: </blobs/factorlist.txt>
 [allpolys]: </blobs/nblfsr.txt>
+[FactorDB]: <https://factordb.com/>
