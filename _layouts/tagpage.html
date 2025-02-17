@@ -1,11 +1,21 @@
 ---
 layout: default
 ---
+{% comment %}
+  Unfortunately we don't get access to page.slug in the Github Pages
+  version of liquid.  So we have to make our own.  It's OK here but
+  ugly in some other places.
+{% endcomment %}
+{%- assign page_slug = page.name | remove: '.md' -%}
 
 <div class="tag-page">
+  <h1 class="page-heading">
   {%- if page.title -%}
-    <h1 class="page-heading">{{ page.title }}</h1>
+    {{ page.title }}
+  {%- else -%}
+    Posts tagged {{ page.display_name | default: page_slug }}
   {%- endif -%}
+  </h1>
 
   {%- if page.opening -%}
     {%- include post_opening.html opening=page.opening -%}
@@ -13,7 +23,7 @@ layout: default
   {{ content }}
 
   {%- assign tag_pages = site.pages | where: "layout", "tagpage" -%}
-  {%- assign tagged = site.posts | concat: tag_pages | where_exp: "item", "item.tags contains page.tag" -%}
+  {%- assign tagged = site.posts | concat: tag_pages | where_exp: "item", "item.tags contains page_slug" -%}
   {%- assign tagged_urls = tagged | map: "url" -%}
   {%- if tagged.size > 0 -%}
     <ul class="post-list">
@@ -24,15 +34,24 @@ layout: default
         {%- if post.layout == "post" -%}
           <span class="post-meta">{{ post.date | date: date_format }}</span>
         {%- endif -%}
-        {%- capture tag_title -%} Posts tagged {{ post.tag }} {%- endcapture -%}
+        {%- capture post_title -%}
+          {%- if post.title -%}
+            {{ post.title }}
+          {%- else -%}
+            {%- if post.layout == "tagpage" -%}
+              {{-'Posts tagged '-}}
+            {%- endif -%}
+            {{ post.name | remove: ".md" -}}
+          {%- endif -%}
+        {%- endcapture -%}
         <h3>
           <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | default: tag_title | escape }}
+            {{ post_title | escape }}
           </a>
         </h3>
         {%- if site.show_excerpts -%}
           {%- if post.layout == "tagpage" -%}
-            {% include tagpage_excerpt.html tag=post.tag exclusions=tagged_urls %}
+            {% include tagpage_excerpt.html tag_page=post exclusions=tagged_urls %}
           {%- else -%}
             {{ post.excerpt }}
           {%- endif -%}
@@ -45,6 +64,6 @@ layout: default
     <p> unused tag </p>
   {%- endif -%}
   {%- if page.tags.size > 0 -%}
-  <p> See also: {% include tag_list.html sep=', ' -%} </p>
+  <p> See also: {% include tag_list.html page=page sep=', ' -%} </p>
   {%- endif -%}
 </div>

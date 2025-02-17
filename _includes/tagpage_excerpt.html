@@ -1,8 +1,9 @@
 <ul>
+{%- assign tag_page_slug = include.tag_page.name | remove: '.md' -%}
 {%- assign tag_pages = site.pages | where: "layout", "tagpage" -%}
-{%- assign tagged = site.posts | concat: tag_pages | where_exp: "item", "item.tags contains include.tag" -%}
+{%- assign tagged = site.posts | concat: tag_pages | where_exp: "item", "item.tags contains tag_page_slug" -%}
 {% for post in tagged %}
-  {%- capture tag_title -%} Posts tagged {{ post.tag }} {%- endcapture -%}
+  {%- capture tag_title -%} Posts tagged {{ post.display_name | default: post.slug }} {%- endcapture -%}
   {%- unless include.exclusions contains post.url -%}
     <li><a href="{{ post.url | relative_url }}">
       {{ post.title | default: tag_title | escape }}

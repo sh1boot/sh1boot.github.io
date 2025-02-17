@@ -1,14 +1,17 @@
-{%- assign tag_pages = site.pages | where: "layout", "tagpage" -%}
+{%- assign page_tags = include.page.tags -%}
+{%- assign tag_filenames = page_tags | join: ".md " | append: ".md" | split: " " %}
+{%- assign tag_pages = site.pages | where: "layout", "tagpage" | where_exp: "item", "tag_filenames contains item.name" -%}
 <span class="tag-list"> <style> .tag-list code { font-size: smaller; } </style>
   {%- assign separator = '' -%}
-  {%- for tagname in page.tags -%}
-    {%- assign tag_page = tag_pages | where_exp: "item", "item.tag == tagname" | first -%}
+  {%- for tag in page_tags -%}
+    {%- assign tag_filename = tag | append: ".md" -%}
+    {%- assign tag_page = tag_pages | where_exp: "item", "item.name == tag_filename" | first -%}
     {%- unless tag_page.hidden -%}
       {{- separator -}}
       {%- if tag_page.url -%}
-        <a href="{{tag_page.url | relative_url}}"><code>{{tag_page.display_name | default: tagname}}</code></a>
+        <a href="{{tag_page.url | relative_url}}"><code>{{tag_page.display_name | default: tag}}</code></a>
       {%- else -%}
-        <code>{{tagname}}</code>
+        <code>{{tag}}</code>
       {%- endif -%}
       {%- capture separator %} {{include.sep}} {% endcapture -%}
     {%- endunless -%}
