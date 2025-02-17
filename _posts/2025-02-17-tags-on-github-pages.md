@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Using tags on Github Pages
-tags: jekyll tags github-pages needs-examples
+tags: github-pages tags jekyll
 ---
 First of all, I do not have any solution for automatically creating tag
 pages automatically when they're referenced.  I'm not sure there's any
@@ -142,7 +142,7 @@ listings.  My approach to this was to make a dedicated
 `_include/tagpage_excerpt.html` file, which behaved similarly to
 `_layouts/tagpage.html` but using a more terse layout.
 
-TODO: demonstration code
+TODO: more code
 
 
 [a solution]: <https://christianspecht.de/2014/10/25/separate-pages-per-tag-category-with-jekyll-without-plugins/>
