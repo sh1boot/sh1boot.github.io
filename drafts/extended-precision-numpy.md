@@ -1,17 +1,18 @@
 ---
 layout: post
 title: Extending range of numpy modular arithmetic
-tags: needs-examples
+tags: numpy
 ---
-A frustration with numpy is that its pow() implementation doesn't
+A frustration with numpy is that its `pow()` implementation doesn't
 support modular arithmetic.
 
-Another frustration is that its integers only go up to 64-bit.  So they
-overflow pretty quickly when calculating powers.
+Another frustration is that its integers only go up to 64-bit, so it
+overflows really quickly if you're calculating `pow()` _without_ using
+modular arithmetic.
 
-You can mitigate the latter by implementing pow() manually, but it's
-still pretty easy to overflow the intermediates, even while you're
-regularly reducing the range of the numbers.
+You can mitigate that a little by implementing `pow()` manually, but for
+large-ish modulo it's still possible to overflow the intermediates even
+while regularly reducing the range between matrix operations.
 
 So there's a basic technique for extending multiplication beyond the
 size of the native data types you have where you slice each input into
@@ -19,21 +20,107 @@ high and low parts and multiply these together the way you learned in
 primary school:
 
 ```python
-def mul(a, b, m):
+def mul(a, b):
   shift = 32
   mask = (1 << shift) - 1
   lo = (a & mask) * (b & mask)
   m0 = (a >> shift) * (b & mask)
   m1 = (a & mask) * (b >> shift)
-  hi = (a >>shift) * (b >> shift)
-  [...]
+  hi = (a >> shift) * (b >> shift)
 
+  c = lo >> shift
+  lo &= mask
+  c += (m0 & mask) + (m1 & mask)
+  lo |= (c & mask) << shift
+  c >>= shift
+  c += (m0 >> shift) + (m1 >> shift)
+  hi += c
+  assert a * b == lo + (hi << (shift * 2))
+  return (lo, hi)
 ```
 
-As it turns out you can do exactly this trick with
-modular matrix arithmetic in almost exactly the same way, so you still
-use whatever accelerated implementation is behind the 64-bit matrix
-multiplication, and mash the results together0 with a bit of careful
-modular arithmetic without overflow.
+And it turns out you can do exactly this trick with modular matrix
+arithmetic in much the same way.  So you can still use whatever
+accelerated implementation is behind the 64-bit numpy matrix
+multiplication in a few extra passes, and then mash the results together
+with a bit of careful modular arithmetic without overflow.
 
-TODO: show the code
+First, if you only want array multiplication rather than matrix, you can
+stick with `shift=32`, because it doesn't have those internal row/column
+sums to make things worse.  For matrix multiplication, however, the
+overflow ceiling is a little lower (because of the row/column sums of
+the products) and `shift=32` will not do...
+
+```python
+def mul(a, b, m, dim=1):
+  # if this isn't true then you know what you have to do
+  assert a < m and b < m
+
+  # largest acceptable value in a matrix of size dim x dim
+  max_value = math.isqrt(0xffffffffffffffff // dim)
+
+  # largest power of two not exceeding that
+  shift = (max_value + 1).bit_length() - 1
+  mask = (1 << shift) - 1
+
+  # number of chunks values must be broken into to avoid overflow
+  stages = (m.bit_length() - 1) // shift + 1
+  # if it's just one chunk we don't need to do anything special
+  if stages == 1:
+    return a * b % m
+  # if it's more than two chunks this code isn't special enough
+  raise NotImplementedError(f"Need {stages=} implementation.")
+
+  # Quick-and-dirty solution to implementing the shift left within the
+  # modular range.
+  def modshl(x, i, m=m, step=(64-m.bit_length())):
+    x %= m
+    while i > 0:
+      step = min(step, i)
+      x <<= step
+      assert x <= 0xffffffffffffffff
+      x %= m
+      i -= step
+    return x
+
+  lo = (a & mask) * (b & mask)
+  m0 = (a >> shift) * (b & mask)
+  m1 = (a & mask) * (b >> shift)
+  hi = (a >> shift) * (b >> shift)
+
+  c = lo >> shift
+  lo &= mask
+  c += (m0 & mask) + (m1 & mask)
+  lo += modshl((c & mask), shift)
+  c >>= shift
+  c += (m0 >> shift) + (m1 >> shift)
+  hi += c
+  return (lo + modshl(hi, shift * 2)) % m
+```
+
+Given an implementation like that, you just need to replace those `*`
+operators with `@`, pass in `dtype=uint64` numpy arrays, and deduce the
+value of `dim` from the shape of those arrays and it should "just work".
+
+This implementation of `modshl()` is questionable, but it'll get the job
+done.  There are ranges of `m` which allow smarter implementations, but
+that's not the general case.  It's not so bad.  Remember that for large
+matrices the bulk of the time is going to be in the matrix
+multiplication operations, rather than all this cruft.
+
+
+Oh, and you might want a `matpow()` to copy-paste.  Let's see if I can
+write it correctly on my first try without checking:
+
+```python
+def matpow(a, i, m):
+  p = numpy.identity(a.shape[0], dtype=uint64)
+  while i > 0:
+    i, z = divmod(i, 2)
+    if z:
+      p = matmul(p, a, m)
+    a = matmul(a, a, m)
+  return p
+```
+
+There.  Bound to work!
