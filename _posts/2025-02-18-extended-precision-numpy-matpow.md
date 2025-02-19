@@ -134,6 +134,6 @@ def matpow(a, i, m):
 There.  Bound to work!
 
 
-Is it actually faster than `dtype=object`?  Yes for large matrices.  how large the matrix has to be to benefit depends on `m`.  if it's very large then the implementation of `modshl()` has to take more steps which allows things down.  I need to think about a better general solution for that part.
+Is it actually faster than `dtype=object`?  Yes for large matrices.  how large the matrix has to be to benefit depends on `m`.  if it's very large then the implementation of `modshl()` has to take more steps which slows things down.  I need to think about a better general solution for that part.
 
 A quick test shows this implementation is about twice the speed of `dtype=object` for `m=28059810762433, dim=12`.
