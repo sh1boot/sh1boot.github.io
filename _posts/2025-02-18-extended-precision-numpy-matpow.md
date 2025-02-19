@@ -48,13 +48,14 @@ with a bit of careful modular arithmetic without overflow.
 First, if you only want array multiplication rather than matrix, you can
 stick with `shift=32`, because it doesn't have those internal row/column
 sums to make things worse.  For matrix multiplication, however, the
-overflow ceiling is a little lower (because of the row/column sums of
-the products) and `shift=32` will not do...
+overflow ceiling is a little lower and `shift=32` will not do...
 
 ```python
-def mul(a, b, m, dim=1):
+def matmul(a, b, m):
+  dim = a.shape[0]
+
   # if this isn't true then you know what you have to do
-  assert a < m and b < m
+  assert (a < m).all() and (b < m).all()
 
   # largest acceptable value in a matrix of size dim x dim
   max_value = math.isqrt(0xffffffffffffffff // dim)
@@ -64,29 +65,34 @@ def mul(a, b, m, dim=1):
   mask = (1 << shift) - 1
 
   # number of chunks values must be broken into to avoid overflow
-  stages = (m.bit_length() - 1) // shift + 1
+  stages = (int(m).bit_length() + shift - 1) // shift
   # if it's just one chunk we don't need to do anything special
   if stages == 1:
-    return a * b % m
+    return a @ b % m
   # if it's more than two chunks this code isn't special enough
-  raise NotImplementedError(f"Need {stages=} implementation.")
+  if stages > 2:
+    raise NotImplementedError(f"Need {stages=} implementation.")
 
   # Quick-and-dirty solution to implementing the shift left within the
   # modular range.
-  def modshl(x, i, m=m, step=(64-m.bit_length())):
-    x %= m
+  def modshl(x, i, m=m, step=64-int(m).bit_length()):
     while i > 0:
       step = min(step, i)
-      x <<= step
-      assert x <= 0xffffffffffffffff
       x %= m
+      x <<= step
       i -= step
     return x
 
-  lo = (a & mask) * (b & mask)
-  m0 = (a >> shift) * (b & mask)
-  m1 = (a & mask) * (b >> shift)
-  hi = (a >> shift) * (b >> shift)
+  alo = (a & mask).astype(numpy.uint64, casting='safe')
+  ahi = (a >> shift).astype(numpy.uint64, casting='safe')
+  blo = (b & mask).astype(numpy.uint64, casting='safe')
+  bhi = (b >> shift).astype(numpy.uint64, casting='safe')
+
+  # the matrix multiply operations:
+  lo = alo @ blo
+  m0 = ahi @ blo
+  m1 = alo @ bhi
+  hi = ahi @ bhi
 
   c = lo >> shift
   lo &= mask
@@ -98,9 +104,11 @@ def mul(a, b, m, dim=1):
   return (lo + modshl(hi, shift * 2)) % m
 ```
 
-Given an implementation like that, you just need to replace those `*`
-operators with `@`, pass in `dtype=uint64` numpy arrays, and deduce the
-value of `dim` from the shape of those arrays and it should "just work".
+And that should "just work" for modular matrix multiplictaion for `m`
+approaching `2**62` or thereabouts, depending on the size of the matrix.
+Not all that different from the scalar multiply above, but this time all
+the operators are vector and matrix operations.  And there's the modular
+reduction of the result.
 
 This implementation of `modshl()` is questionable, but it'll get the job
 done.  There are ranges of `m` which allow smarter implementations, but
