@@ -116,6 +116,22 @@ that's not the general case.  It's not so bad.  Remember that for large
 matrices the bulk of the time is going to be in the matrix
 multiplication operations, rather than all this cruft.
 
+A potentially better way to shift left mod m is:
+
+```python
+mhi = m >> shift
+mlo = m & ((1 << shift) - 1)
+d, x = np.divmod(x, mhi)
+x <<= shift
+x -= d * mlo
+```
+
+But you have to be careful that `d * mlo` doesn't overflow; which
+effectively means ensuring that `mlo` is less than `mhi`, by clamping
+`shift` and doing multiple rounds, _or_ that x starts at a value which
+restricts the maximum result for `d` to a value which can't overflow.
+
+It gets fiddly.
 
 Oh, and you might want a `matpow()` to copy-paste.  Let's see if I can
 write it correctly on my first try without checking:
@@ -133,7 +149,13 @@ def matpow(a, i, m):
 
 There.  Bound to work!
 
+Is it actually faster than `dtype=object`?  Yes for large matrices.  how
+large the matrix has to be to benefit depends on `m`.  if it's very
+large then the implementation of `modshl()` has to take more steps which
+slows things down.  I need to think about a better general solution for
+that part.
 
-Is it actually faster than `dtype=object`?  Yes for large matrices.  how large the matrix has to be to benefit depends on `m`.  if it's very large then the implementation of `modshl()` has to take more steps which slows things down.  I need to think about a better general solution for that part.
+A quick test shows this implementation is about twice the speed of
+`dtype=object` for `m=28059810762433, dim=12`.
 
-A quick test shows this implementation is about twice the speed of `dtype=object` for `m=28059810762433, dim=12`.
+[nblfsr]: <https://github.com/sh1boot/nblfsr/nblfsr.py>
