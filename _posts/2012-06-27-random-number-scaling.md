@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
+last_modified_at: Tue, 7 Jan 2025 20:17:44 -0800  # b55c021 recurse-tag-pages
 layout: post
 title:  Random number scaling
 description: Digging in to the problem of scaling random numbers over a finite range without biasing certain results over others.

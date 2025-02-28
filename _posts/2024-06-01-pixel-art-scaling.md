@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # d3117a6 texture-neighbourhood-problem-solved
+last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
 layout: post
 title:  Scaling pixel art with SDF
 description: Scaling low-res images and pixel art using signed distance fields, smoothing, and re-quantisation.

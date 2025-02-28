@@ -1,5 +1,5 @@
 ---
-last_modified_at: Fri, 27 Dec 2024 15:48:07 -0800  # 869bb19 reduce-folding-in-nblfsr
+last_modified_at: Sun, 16 Feb 2025 16:08:14 -0800  # 5f5a2ea table-updates
 layout: post
 title:  Non-binary Linear Feedback Shift Registers
 mathjax: true

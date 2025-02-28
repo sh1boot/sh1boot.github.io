@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 21 Dec 2024 14:40:14 -0800  # 2da5eea update-stupid-font-trick
+last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
 layout: post
 title:  Stupid font tricks
 tags: graphics fonts needs-example

@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 6 Aug 2024 13:40:37 -0700  # 93601d2 address-coded-endian-elaboration
+last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
 layout: post
 title:  Address-coded endian
 tags: memory endian computer-architecture

@@ -1,5 +1,5 @@
 ---
-last_modified_at: Mon, 2 Dec 2024 19:12:14 -0800  # 3a9616c Improved-texture-neighbourhood-sampling
+last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
 layout: post
 title:  Neighbourhood sampling order during texture filtering
 description: A workaround to avoid glitches when working with derivative functions around texture interpolation logic.

@@ -1,5 +1,5 @@
 ---
-last_modified_at: Fri, 13 Dec 2024 12:45:34 -0800  # ad6fdfb example-fonts-for-thousand-separation
+last_modified_at: Tue, 7 Jan 2025 15:47:20 -0800  # e01b886 fiddle-with-tag-list
 layout: post
 title:  Font-based digit grouping
 tags: graphics fonts digit-grouping terminals

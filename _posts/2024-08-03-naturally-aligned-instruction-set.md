@@ -1,5 +1,5 @@
 ---
-last_modified_at: Wed, 11 Sep 2024 21:48:39 -0700  # 0f8b31a clarity
+last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
 layout: post
 title:  Naturally-aligned compressed opcode encoding
 mathjax: true

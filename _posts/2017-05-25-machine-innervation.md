@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 10 Sep 2024 12:01:53 -0700  # f78e9ef publish-a-few-old-things
+last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
 layout: post
 title:  Machine innervation
 tags: artificial-intelligence reliability wtf-am-i-doing

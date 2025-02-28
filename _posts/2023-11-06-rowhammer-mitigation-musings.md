@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # 3657e0a rowhammer-mitigation-thoughts
+last_modified_at: Tue, 7 Jan 2025 22:48:05 -0800  # 272fdc9 fix-redirect-from-usage
 layout: post
 title:  Idly musing over RowHammer mitigation strategies
 tags: rowhammer security hashing computer-architecture error-correction

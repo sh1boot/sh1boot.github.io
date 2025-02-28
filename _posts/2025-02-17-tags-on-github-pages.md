@@ -1,4 +1,5 @@
 ---
+last_modified_at: Fri, 28 Feb 2025 10:15:55 -0800  # a589ac9 clarity-on-github-pages-tags
 layout: post
 title: Using tags on Github Pages
 tags: github-pages tags jekyll

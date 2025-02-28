@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 3 Aug 2024 12:36:41 -0700  # 043a0b6 Take-a-swipe-at-recent-supply-chain-vulnerabilities
+last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
 layout: post
 title:  Embedded web content without all that JavaScript cruft
 description: A bit of Jekyll hacking to stop other sites' JavaScript running rampant on my blog without the user being forewarned.

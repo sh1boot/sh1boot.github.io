@@ -1,5 +1,5 @@
 ---
-last_modified_at: Wed, 12 Jun 2024 16:05:16 -0700  # e8b02b5 pingback-and-webmention
+last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
 layout: post
 title:  Digging in to Pingback and Webmention
 tags: blogging social-media wtf-am-i-doing

@@ -1,4 +1,5 @@
 ---
+last_modified_at: Sat, 22 Feb 2025 18:03:07 -0800  # a55fae3 improved-modshl
 layout: post
 title: Extending range of numpy modular arithmetic
 tags: numpy

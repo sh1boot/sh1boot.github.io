@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 79f5c7a tidy-up-headers-add-descriptions
+last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
 layout: post
 title:  A Latin-Square-based L1 cache layout
 description: Using a solution to the Latin Squares problem as a memory slicing scheme to address convenient access to 2D memory patterns.

@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sun, 27 Oct 2024 23:08:06 -0700  # b302ee6 better-images-for-mipmap-stuff
+last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
 layout: post
 title: Trying to improve mipmap blending
 tags: graphics needs-example

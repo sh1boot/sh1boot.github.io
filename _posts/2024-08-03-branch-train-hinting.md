@@ -1,5 +1,5 @@
 ---
-last_modified_at: Thu, 12 Sep 2024 10:18:30 -0700  # 2c4ad94 publish-branch-train-hinting
+last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
 layout: post
 title:  Hinting train of branch directions in advance
 tags: computer-architecture branch-prediction

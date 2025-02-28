@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 3 Aug 2024 12:17:06 -0700  # cb2fde2 use-canonical-links-internally
+last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
 layout: post
 title:  A reasonably effective hash instruction
 description: A 128-to-64 bit hash operation which is cheap to implement in hardware and does most of a decent job in one cycle.

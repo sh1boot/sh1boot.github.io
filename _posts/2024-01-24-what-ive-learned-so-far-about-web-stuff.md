@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 11 Jun 2024 17:41:45 -0700  # 0b9ac52 switch-to-OKLab
+last_modified_at: Tue, 7 Jan 2025 21:23:21 -0800  # d54a7de tidy-up-some-bad-metadata
 layout: post
 title:  What I've learned so far about CSS, SVG, Liquid, and Jekyll
 description: Embedding diagrams on GitHub Pages from someone trying to keep away from web stuff.

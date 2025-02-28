@@ -1,5 +1,5 @@
 ---
-last_modified_at: Fri, 9 Aug 2024 10:20:03 -0700  # 8d4aca8 pick-resistant-lock-dead-zone-caveat
+last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
 layout: post
 title:  A pick-resistant lock design
 description: A simple design for a pick-resistant pin tumbler lock using non-circular gears.

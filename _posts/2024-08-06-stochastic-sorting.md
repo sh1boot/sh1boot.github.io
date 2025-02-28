@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 10 Sep 2024 12:01:53 -0700  # f78e9ef publish-a-few-old-things
+last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
 layout: post
 title: stochastically ordering items by frequency
 tags: statistics stochastic-methods needs-example

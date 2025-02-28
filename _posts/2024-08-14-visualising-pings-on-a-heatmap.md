@@ -1,5 +1,5 @@
 ---
-last_modified_at: Thu, 7 Nov 2024 09:31:26 -0800  # 5086daa heatmap-tweak
+last_modified_at: Sun, 5 Jan 2025 21:23:32 -0800  # 0be5051 Update-2024-08-14-visualising-pings-on-a-heatmap.md
 layout: post
 title: Heatmap-based triangulation
 ---
