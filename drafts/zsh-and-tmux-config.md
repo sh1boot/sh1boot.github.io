@@ -33,11 +33,12 @@ function preexec() {
   print -nr "${_ESC}[0m${_ESC}[2K"
 }
 
-SCROLLBACK_PROMPT="%K{17}%* %B%2~$ %b"
+SCROLLBACK_PROMPT="%K{17}%*%v %B%2~$ %b"
 SCROLLBACK_PS2="%K{17}%B${PS2} %b"
 SCROLLBACK_PS3="%K{17}%B${PS3} %b"
 SCROLLBACK_PS4="%K{17}%B${PS4} %b"
 function set-scrollback-prompt() {
+    psvar[1]="$(git log -n1 --pretty='format: %h' 2>/dev/null)"
     PROMPT="$SCROLLBACK_PROMPT" \
             PS2="$SCROLLBACK_PS2" \
             PS3="$SCROLLBACK_PS3" \
@@ -121,11 +122,12 @@ when I'm perusing scrollback I get a clear boundary between output from
 different commands.
 
 ```zsh
-SCROLLBACK_PROMPT="%K{17}%* %B%2~$ %b"
+SCROLLBACK_PROMPT="%K{17}%*%v %B%2~$ %b"
 SCROLLBACK_PS2="%K{17}%B${PS2} %b"
 SCROLLBACK_PS3="%K{17}%B${PS3} %b"
 SCROLLBACK_PS4="%K{17}%B${PS4} %b"
 function set-scrollback-prompt() {
+    psvar[1]="$(git log -n1 --pretty='format: %h' 2>/dev/null)"
     PROMPT="$SCROLLBACK_PROMPT" \
             PS2="$SCROLLBACK_PS2" \
             PS3="$SCROLLBACK_PS3" \
@@ -141,12 +143,19 @@ calling `zle reset-prompt`, which will cause the prompt and text input
 to be redrawn in the styles given by `SCROLLBACK_\*`.  Then it goes on
 to call the standard accept-line function.
 
-This can cause the colour to end as something other than the default.
-This can be fixed up in `preexec()`:
+This can cause the output colour to end up as something other than the
+default, which can be fixed up in `preexec()`:
 
 ```zsh
   print -nr "${_ESC}[0m${_ESC}[2K"
 ```
+
+The `%v` part of the prompt prints what is saved with `psvar[1]="..."`,
+which in this case is the current git commit hash.  It's a _little_ too
+slow to do it this way on my slowest machines, but it's nice to be able
+to figure out why a test worked previously but doesn't any more.  You
+can `git diff` directly to that hash.  Provided you didn't have local
+edits.
 
 ## tmux configuration
 
