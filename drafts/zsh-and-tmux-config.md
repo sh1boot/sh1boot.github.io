@@ -18,7 +18,7 @@ local _BEL=$'\a'
 
 function win_title() {
   local title="$(tr -d '[:cntrl:]' <<< "$1")"
-  print -Pnr "${_ESC}]0;${title}${_BEL}"
+  print -nr "${_ESC}]0;${title}${_BEL}"
 }
 
 function precmd() {
@@ -30,10 +30,10 @@ function preexec() {
   local cmdline="$2"
   [[ "$cmdline" == "fg" ]] && cmdline="${jobtexts[%+]}"
   win_title "$cmdline"
-  print -nr "${_ESC}[0m"
+  print -nr "${_ESC}[0m${_ESC}[2K"
 }
 
-SCROLLBACK_PROMPT="%K{17}%B%2~$ %b"
+SCROLLBACK_PROMPT="%K{17}%* %B%2~$ %b"
 SCROLLBACK_PS2="%K{17}%B${PS2} %b"
 SCROLLBACK_PS3="%K{17}%B${PS3} %b"
 SCROLLBACK_PS4="%K{17}%B${PS4} %b"
@@ -60,22 +60,28 @@ local _BEL=$'\a'
 
 function win_title() {
   local title="$(tr -d '[:cntrl:]' <<< "$1")"
-  print -Pnr "${_ESC}]0;${title}${_BEL}"
+  print -nr "${_ESC}]0;${title}${_BEL}"
 }
 ```
 
-It's hairier than I'd like.  I need to embed the control characters in
-the print string rather than using an escape sequence because parsing
-escape sequences comes after expanding the parameters, and then escapes
-in the command line get parsed as well and everything breaks.
+It's hairier than I'd like.  First I need to put the control
+characters into variables, because if I try to parse them as escape
+sequences then the escape sequences inside the command line also get
+parsed and that causes screen corruption, and if I embed control codes
+in the strings directly then the output of `set` is filled with noise as
+the embedded control codes print unescaped and also cause screen
+corruption.
 
-But it seems stable so far.
+I would think `print` should have an escape sequence to expand
+parameters which is not recursed into at the same time as it's expanding
+escapes for control codes, but whatever it is I have not yet found it.
+
+But what I have seems stable so far, and only slightly unprintable.
 
 So this call goes in `precmd()`:
 
 ```zsh
   win_title $'%~'
-}
 ```
 
 And this call goes in `prexec()`:
@@ -86,8 +92,8 @@ And this call goes in `prexec()`:
   win_title "$cmdline"
 ```
 
-I got tired of all my windows ending up being titled `fg`, so I did a
-fixup for that.
+I got tired of all my windows ending up being titled `fg`, so I included
+a fixup for that.
 
 ### Resetting terminal state after commands
 
@@ -115,7 +121,7 @@ when I'm perusing scrollback I get a clear boundary between output from
 different commands.
 
 ```zsh
-SCROLLBACK_PROMPT="%K{17}%B%2~$ %b"
+SCROLLBACK_PROMPT="%K{17}%* %B%2~$ %b"
 SCROLLBACK_PS2="%K{17}%B${PS2} %b"
 SCROLLBACK_PS3="%K{17}%B${PS3} %b"
 SCROLLBACK_PS4="%K{17}%B${PS4} %b"
@@ -139,11 +145,8 @@ This can cause the colour to end as something other than the default.
 This can be fixed up in `preexec()`:
 
 ```zsh
-  print -nr "${_ESC}[0m"
+  print -nr "${_ESC}[0m${_ESC}[2K"
 ```
-
-Thinking about it now, I should probably add the timestamp to that
-scrollback prompt, so I know when it was started.
 
 ## tmux configuration
 
@@ -157,7 +160,7 @@ set -g @tab_width "18"
 set -g @tab_bg "#{?#{==:#{window_flags},*},cyan,#{?#{E:@shell_idle},blue,green}}"
 set -g @tab_left "#[fg=#{E:@tab_bg},bg=#{@status_bg}]🭮#[fg=#{@status_fg},bg=#{E:@tab_bg}]"
 set -g @tab_prefix "#{p1:window_flags}#I┊"
-set -g @tab_title "#{=/#{?#{E:@shell_idle},-,}#{@tab_width}/…:pane_title}"
+set -g @tab_title "#{=/#{?#{E:@shell_idle},-,}#{@tab_width}/… :pane_title}"
 set -g @tab_right "#[fg=#{@status_bg},reverse]🭬"
 set -g @git_summary "#(~/.config/scripts/gitsummary.sh #{pane_current_path})"
 set -g @git_state "#[bg=red,fg=white]#(~/.config/scripts/gitstate.sh #{pane_current_path})#[default]"
@@ -255,7 +258,7 @@ I don't want long window titles to produce oversized tabs, so I truncate
 them:
 
 ```conf
-set -g @tab_title "#{=/#{?#{E:@shell_idle},-,}#{@tab_width}/…:pane_title}"
+set -g @tab_title "#{=/#{?#{E:@shell_idle},-,}#{@tab_width}/… :pane_title}"
 ```
 
 When zsh is waiting for more input it sets the window title to the
