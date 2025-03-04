@@ -22,7 +22,7 @@ function win_title() {
 }
 
 function precmd() {
-  win_title $'%~'
+  win_title "$(print -P '%~')"
   stty sane ; print -nr "${_ESC}[?1000l${_ESC}[?9l${_ESC}[0m${_ESC}[2K"
 }
 
@@ -82,7 +82,7 @@ But what I have seems stable so far, and only slightly unprintable.
 So this call goes in `precmd()`:
 
 ```zsh
-  win_title $'%~'
+  win_title "$(print -P '%~')"
 ```
 
 And this call goes in `prexec()`:
