@@ -178,8 +178,8 @@ set -g @pts "#[fg=blue,reverse]🭡#[default,bg=blue]#{s|/dev/| |:pane_tty} "
 set -g status-left " #S#[fg=#{@status_bg},reverse]🭐 "
 set -g status-right "#[fg=#{@status_bg},reverse]🭅#[default]#{E:@git_summary}#{E:@git_state}#{E:@pts}"
 set -g status-right-length 50
-set -gF window-status-style "bg=green,fg=#{@status_fg},fill=#{@status_bg}"
-set -gF window-status-current-style "bg=cyan,fg=#{@status_fg},fill=#{@status_bg}"
+set -g window-status-style "bg=green,fg=#{@status_fg},fill=#{@status_bg}"
+set -g window-status-current-style "bg=cyan,fg=#{@status_fg},fill=#{@status_bg}"
 set -g window-status-format "#{E:@tab_left}#{E:@tab_prefix}#{E:@tab_title}#{E:@tab_right}"
 set -g window-status-current-format "#{E:window-status-format}"
 set -g window-status-separator ""
@@ -365,12 +365,14 @@ configuration settings:
 set -g status-left " #S#[fg=#{@status_bg},reverse]🭐 "
 set -g status-right "#[fg=#{@status_bg},reverse]🭅#[default]#{E:@git_summary}#{E:@git_state}#{E:@pts}"
 set -g status-right-length 50
-set -gF window-status-style "bg=green,fg=#{@status_fg},fill=#{@status_bg}"
-set -gF window-status-current-style "bg=cyan,fg=#{@status_fg},fill=#{@status_bg}"
+set -g window-status-style "bg=green,fg=#{@status_fg},fill=#{@status_bg}"
+set -g window-status-current-style "bg=cyan,fg=#{@status_fg},fill=#{@status_bg}"
 set -g window-status-format "#{E:@tab_left}#{E:@tab_prefix}#{E:@tab_title}#{E:@tab_right}"
 set -g window-status-current-format "#{E:window-status-format}"
 set -g window-status-separator ""
 ```
+
+I think in previous versions of tmux I needed to pass `-F` to set those style options, but by not doing that you can update the values dynamically, which is fun. 
 
 And this makes it so that I can click that session name in status-left,
 and get a list of sessions to choose from:
