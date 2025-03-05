@@ -184,8 +184,17 @@ set -g window-status-format "#{E:@tab_left}#{E:@tab_prefix}#{E:@tab_title}#{E:@t
 set -g window-status-current-format "#{E:window-status-format}"
 set -g window-status-separator ""
 
-bind-key -n MouseDown1StatusLeft choose-tree -s
+bind -n MouseDown1StatusLeft choose-tree -s
+
+set-hook -g session-created 'run-shell "tmux set -t #D @status_bg \"##$(echo "#h#S" | sha1sum | cut -c-6)\""'
+
+bind '"' split-window -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"
+bind c new-window -c "#{pane_current_path}"
 ```
+
+Refer to the [tmux format strings][] documentation for details, but what
+follows is a brief description of each part.
 
 ### User options in tmux
 
@@ -230,8 +239,8 @@ tab.
 
 I'm not generally into console bling, but I found that having all the
 separators be rectangular character cell edges made things harder to
-read than if I used different shapes.  Even if the results aren't all
-that pretty I still find it easier to read.
+read than if I used [different shapes][box-drawing characters].  Even if
+the results aren't all that pretty I still find it easier to read.
 
 What I've done here is put some triangles on the edges of the tabs
 matching the background colour of the tab, to turn them from rectangles
@@ -248,13 +257,13 @@ of the tab.
 ### Window status and index
 
 There's a window-flags string showing a few things, like `!` for an
-alarm state, but it's not always the same length, which causes the tabs
-to move around when you switch focus.  I don't like that, so I pad it to
-one character.  Is it ever longer?  I don't know, I've never noticed
-that.
+alarm state.  Apparently I saw need to pad this to one character to
+stabilise the tab size, suggesting that at some point it was dynamic in
+length.  This doesn't seem to be necessary anymore, but there it is.
+Is it ever longer?  I've never noticed that.
 
 Then the window index #I, then a separator character.  I went with the
-lightest box-drawing character I could find which reaches the full
+lightest [box-drawing character][] I could find which reaches the full
 height of the space.
 
 ```conf
@@ -372,13 +381,34 @@ set -g window-status-current-format "#{E:window-status-format}"
 set -g window-status-separator ""
 ```
 
-I think in previous versions of tmux I needed to pass `-F` to set those style options, but by not doing that you can update the values dynamically, which is fun. 
+I think in previous versions of tmux I needed to pass `-F` to set those style options, but by not doing that you can update the values dynamically, which is fun.
 
-And this makes it so that I can click that session name in status-left,
-and get a list of sessions to choose from:
+### A mouse-clickable session selector
 
 ```conf
-bind-key -n MouseDown1StatusLeft choose-tree -s
+bind -n MouseDown1StatusLeft choose-tree -s
+```
+
+This makes it so that I can click that session name in status-left,
+and get a list of sessions to choose from:
+
+### Unique, per-session status bar colours
+
+To take the hash of the host and session names, and cut that down to six
+hex digits to make a random colour on a per-session basis:
+
+```conf
+set-hook -g session-created 'run-shell "tmux set -t #D @status_bg \"##$(echo "#h#S" | sha1sum | cut -c-6)\""'
+```
+
+### Create new windows in current working directory
+
+It generally works better for me to have new shells start out in the
+working directory of the shell I'm looking at:
+```conf
+bind '"' split-window -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"
+bind c new-window -c "#{pane_current_path}"
 ```
 
 ## A couple of other notes
@@ -397,5 +427,9 @@ for piping into and out of the clipboard are:
 tmux saveb - | ...
 ```
 
-[Tmux format strings]: <https://github.com/tmux/tmux/wiki/Formats>
+Other references:
+* [tmux format strings][]
+* [box-drawing characters][]
+
+[tmux format strings]: <https://github.com/tmux/tmux/wiki/Formats>
 [box-drawing characters]: <https://en.wikipedia.org/wiki/Box-drawing_characters>
