@@ -290,5 +290,5 @@ discovered that that existed.
 [example code]: <https://github.com/sh1boot/nblfsr/blob/main/generator.py>
 
 [factors]: </blobs/factorlist.txt>
-[allpolys]: </blobs/nblfsr.txt>
+[allpolys]: </blobs/nblfsr.txt.gz>
 [FactorDB]: <https://factordb.com/>
