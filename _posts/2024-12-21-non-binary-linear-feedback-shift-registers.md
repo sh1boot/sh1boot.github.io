@@ -272,11 +272,11 @@ x_{n+1} = \sum_{i=0}^{l-1} x_{n-i} p_i \mod b
 $$
 
 {% include nblfsr-minimal.html %}
+[lots more...][allpolys]
 
 You can expand the "&hellip;" spinners to expand the list for each base,
 and each row also links to a file containing a larger list of
-configurations, and all the same data is in a single file
-[here][allpolys].  The search required factoring some big numbers in the
+configurations.  The search required factoring some big numbers in the
 form $p^n-1$, and I didn't want to waste that effort, so those are
 [here][factors].  I also uploaded them all to [FactorDB][] once I
 discovered that that existed.
@@ -290,5 +290,5 @@ discovered that that existed.
 [example code]: <https://github.com/sh1boot/nblfsr/blob/main/generator.py>
 
 [factors]: </blobs/factorlist.txt>
-[allpolys]: </blobs/nblfsr.txt.gz>
+[allpolys]: </blobs/nblfsr/index/>
 [FactorDB]: <https://factordb.com/>
