@@ -1,9 +1,11 @@
 ---
 layout: post
 title: My tmux and zsh configuration
+redirect_from:
+    - /drafts/zsh-and-tmux-config/
 ---
-Here's a list of things I have in my tmux and zsh configurations, which
-might offer some inspiration to others.
+Here's a list of things I have in my [tmux][] and [zsh][]
+configurations, which might offer some inspiration to others.
 
 * TOC
 {:toc}
@@ -33,12 +35,34 @@ function preexec() {
   print -nr "${_ESC}[0m${_ESC}[2K"
 }
 
-SCROLLBACK_PROMPT="%K{17}%*%v %B%2~$ %b"
-SCROLLBACK_PS2="%K{17}%B${PS2} %b"
-SCROLLBACK_PS3="%K{17}%B${PS3} %b"
-SCROLLBACK_PS4="%K{17}%B${PS4} %b"
+function githead() {
+  local gitdir="${1:a}"
+  until [[ -e "$gitdir/.git" ]]; do
+    local updir="${gitdir%/*}"
+    [[ "$updir" == "$gitdir" ]] && return 1
+    gitdir="$updir"
+  done
+  gitdir="$gitdir/.git"
+  {
+    local gitdir_link
+    gitdir_link="$(<"$gitdir")" && gitdir="${gitdir_link#gitdir: }"
+    local hash="$(<"$gitdir/HEAD")"
+    if [[ "$hash" == ref:* ]]; then
+      local ref="${hash#* }"
+      local gitdir_relative=$(<"$gitdir/commondir") && gitdir="$gitdir/$gitdir_relative"
+      hash="$(<"$gitdir/$ref")" || hash="$(git rev-parse --short HEAD)"
+    fi
+  } 2> /dev/null
+  print -r "${hash:+ ${hash::12}}"
+  return 0
+}
+
+SCROLLBACK_PROMPT="%K{20}%*%v %2~$ %B%F{white}"
+SCROLLBACK_PS2="%K{20}${PS2} %BF{white}"
+SCROLLBACK_PS3="%K{20}${PS3} %BF{white}"
+SCROLLBACK_PS4="%K{20}${PS4} %BF{white}"
 function set-scrollback-prompt() {
-    psvar[1]="$(git log -n1 --pretty='format: %h' 2>/dev/null)"
+    psvar[1]="$(githead .)"
     PROMPT="$SCROLLBACK_PROMPT" \
             PS2="$SCROLLBACK_PS2" \
             PS3="$SCROLLBACK_PS3" \
@@ -65,19 +89,15 @@ function win_title() {
 }
 ```
 
-It's hairier than I'd like.  First I need to put the control
-characters into variables, because if I try to parse them as escape
-sequences then the escape sequences inside the command line also get
-parsed and that causes screen corruption, and if I embed control codes
-in the strings directly then the output of `set` is filled with noise as
-the embedded control codes print unescaped and also cause screen
-corruption.
+Control code handling is a bit messy.  I put them in variables to stop
+them from being interpreted at the wrong time: either being expanded
+after `${title}` is expanded, so that any escapes inside of `${title}`
+are also expanded, or when the function is defined, so that when I list
+function definitions they send stray escape sequences to the terminal
+(which I don't appreciate).
 
-I would think `print` should have an escape sequence to expand
-parameters which is not recursed into at the same time as it's expanding
-escapes for control codes, but whatever it is I have not yet found it.
-
-But what I have seems stable so far, and only slightly unprintable.
+There might (must!) be a better way, but what I have seems stable so
+far, and only slightly unprintable.
 
 So this call goes in `precmd()`:
 
@@ -107,13 +127,56 @@ This in `precmd()`:
 It restores the terminal to a comparatively usable state after each
 command, in case something crashes in an ugly state.
 
+### get current git hash faster
+
+Putting the output of another command in a shell prompt can be a bit
+laggy on slow machines, and git is no exception.  Performance can be
+improved by implementing the same functionality inside zsh itself,
+despite that implementation being interpreted code:
+
+```zsh
+function githead() {
+  local gitdir="${1:a}"
+  until [[ -e "$gitdir/.git" ]]; do
+    local updir="${gitdir%/*}"
+    [[ "$updir" == "$gitdir" ]] && return 1
+    gitdir="$updir"
+  done
+  gitdir="$gitdir/.git"
+  {
+    local gitdir_link
+    gitdir_link="$(<"$gitdir")" && gitdir="${gitdir_link#gitdir: }"
+    local hash="$(<"$gitdir/HEAD")"
+    if [[ "$hash" == ref:* ]]; then
+      local ref="${hash#* }"
+      local gitdir_relative=$(<"$gitdir/commondir") && gitdir="$gitdir/$gitdir_relative"
+      hash="$(<"$gitdir/$ref")" || hash="$(git rev-parse --short HEAD)"
+    fi
+  } 2> /dev/null
+  print -r "${hash:+ ${hash::12}}"
+  return 0
+}
+```
+
+Here, we iterate up the tree by cutting off directory names until we
+find a `.git` directory (or file).  If it's a file, then the content of
+that file should point inside the actual git directory (these files are
+created by `git worktree`).  Get the content of the file `HEAD`, and if
+that contains `ref:` then go look up the actual hash in the refs folder
+(which is actually in the root of the git directory, not the worktree
+subdirectory).
+
+If the ref is not there then it's probably a packed ref, so just give up
+and hand off to the external command line tool instead, because it's
+probably not going to be efficient parsing packed refs in this function.
+
 ### Changing the appearance of prompts in scrollback
 
 The prompt that makes sense for interactive line editing and current
 status, or whatever, isn't always the best context thing to have filling
 up your scrollback.
 
-But you can ask zsh, just before executing a command, to change the
+So you can ask zsh, just before executing a command, to change the
 prompt settings and have zsh redraw the prompt, and then go ahead and
 execute the command.
 
@@ -127,7 +190,7 @@ SCROLLBACK_PS2="%K{17}%B${PS2} %b"
 SCROLLBACK_PS3="%K{17}%B${PS3} %b"
 SCROLLBACK_PS4="%K{17}%B${PS4} %b"
 function set-scrollback-prompt() {
-    psvar[1]="$(git log -n1 --pretty='format: %h' 2>/dev/null)"
+    psvar[1]="$(githead .)"
     PROMPT="$SCROLLBACK_PROMPT" \
             PS2="$SCROLLBACK_PS2" \
             PS3="$SCROLLBACK_PS3" \
@@ -151,11 +214,13 @@ default, which can be fixed up in `preexec()`:
 ```
 
 The `%v` part of the prompt prints what is saved with `psvar[1]="..."`,
-which in this case is the current git commit hash.  It's a _little_ too
-slow to do it this way on my slowest machines, but it's nice to be able
-to figure out why a test worked previously but doesn't any more.  You
-can `git diff` directly to that hash.  Provided you didn't have local
-edits.
+which in this case is the current git commit hash (as collected in the
+previous section).  This is helpful so that you have a record of what
+commit the tree was at when a test was run, so that you can find it
+again if you want to reproduce that result.  Provided you don't have
+local edits.  The information is collected in `preexec()` to be up to
+date, even if the state was changed in another window while this one
+idled.
 
 ## tmux configuration
 
@@ -431,5 +496,7 @@ Other references:
 * [tmux format strings][]
 * [box-drawing characters][]
 
+[tmux]: <https://github.com/tmux/tmux/wiki>
+[zsh]: <https://www.zsh.org/>
 [tmux format strings]: <https://github.com/tmux/tmux/wiki/Formats>
 [box-drawing characters]: <https://en.wikipedia.org/wiki/Box-drawing_characters>
