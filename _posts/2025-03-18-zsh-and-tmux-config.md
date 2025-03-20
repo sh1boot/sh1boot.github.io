@@ -3,6 +3,10 @@ layout: post
 title: My tmux and zsh configuration
 redirect_from:
     - /drafts/zsh-and-tmux-config/
+opening:
+  image: /images/homer_car.png
+  alt: Me in my pimped-out shell
+  caption: Me in my pimped-out shell
 ---
 Here's a list of things I have in my [tmux][] and [zsh][]
 configurations, which might offer some inspiration to others.
