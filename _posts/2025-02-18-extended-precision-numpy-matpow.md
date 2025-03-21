@@ -15,10 +15,10 @@ You can mitigate that a little by implementing `pow()` manually, but for
 large-ish modulo it's still possible to overflow the intermediates even
 while regularly reducing the range between matrix operations.
 
-So there's a basic technique for extending multiplication beyond the
-size of the native data types you have where you slice each input into
-high and low parts and multiply these together the way you learned in
-primary school:
+So knowing that there's a basic technique for extending multiplication
+beyond the size of the native data types you have, where you slice each
+input into high and low parts and multiply these together the way you
+learned in primary school, and which looks a bit like this:
 
 ```python
 def mul(a, b):
@@ -40,11 +40,18 @@ def mul(a, b):
   return (lo, hi)
 ```
 
-And it turns out you can do exactly this trick with modular matrix
-arithmetic in much the same way.  So you can still use whatever
-accelerated implementation is behind the 64-bit numpy matrix
-multiplication in a few extra passes, and then mash the results together
-with a bit of careful modular arithmetic without overflow.
+It turns out you can do exactly this trick but with modular matrix
+arithmetic in much the same way.  Moreover you can continue to use numpy
+to implement it; you just end up doing the multi-step approach on the
+_outside_ of the iteration through the matrices rather than on the
+inside the way `dtype=object` probably would.
+
+This way you still use whatever accelerated implementation is behind the
+64-bit numpy matrix multiplication; just in a few extra passes, and then
+mash the results together with a bit of careful modular arithmetic
+without overflow -- also vectorised by numpy.
+
+### How?
 
 First, if you only want array multiplication rather than matrix, you can
 stick with `shift=32`, because it doesn't have those internal row/column
@@ -115,7 +122,7 @@ This implementation of `modshl()` is questionable, but it'll get the job
 done.  There are ranges of `m` which allow smarter implementations, but
 that's not the general case.  It's not so bad.  Remember that for large
 matrices the bulk of the time is going to be in the matrix
-multiplication operations, rather than all this cruft.
+multiplication operations, rather than all this support cruft.
 
 A potentially better way to shift left mod m is:
 
@@ -159,4 +166,7 @@ that part.
 A quick test shows this implementation is about twice the speed of
 `dtype=object` for `m=28059810762433, dim=12`.
 
-[nblfsr]: <https://github.com/sh1boot/nblfsr/nblfsr.py>
+I used this in my [nblfsr][] [search code][nblfsr code].
+
+[nblfsr]: </non-binary-linear-feedback-shift-registers/>
+[nblfsr code]: <https://github.com/sh1boot/nblfsr/nblfsr.py>
