@@ -1,3 +1,4 @@
+* [more bases](upto16.txt.gz) for lengths up to 16
 * [3](base-3.txt.gz)
 * [5](base-5.txt.gz)
 * [7](base-7.txt.gz)
