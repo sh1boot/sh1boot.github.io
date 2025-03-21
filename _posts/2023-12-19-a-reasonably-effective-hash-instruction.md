@@ -173,6 +173,81 @@ uint64_t hash_op(uint64_t x, uint64_t y) {
 And I think that's two gates for the premixes, two for the combine, and 16 for
 the rounds.  20 gates deep?
 
+Here's the same thing in Verilog:
+```verilog
+module hash_test;
+    function [3:0] sbox (input [3:0] x);
+            sbox = { 16'h613d, 16'h613d } >> x & 15;
+    endfunction
+    function [63:0] subst (input [63:0] x);
+        begin
+            subst[ 3-:4] = sbox(x[ 3-:4]);
+            subst[ 7-:4] = sbox(x[ 7-:4]);
+            subst[11-:4] = sbox(x[11-:4]);
+            subst[15-:4] = sbox(x[15-:4]);
+            subst[19-:4] = sbox(x[19-:4]);
+            subst[23-:4] = sbox(x[23-:4]);
+            subst[27-:4] = sbox(x[27-:4]);
+            subst[31-:4] = sbox(x[31-:4]);
+            subst[35-:4] = sbox(x[35-:4]);
+            subst[39-:4] = sbox(x[39-:4]);
+            subst[43-:4] = sbox(x[43-:4]);
+            subst[47-:4] = sbox(x[47-:4]);
+            subst[51-:4] = sbox(x[51-:4]);
+            subst[55-:4] = sbox(x[55-:4]);
+            subst[59-:4] = sbox(x[59-:4]);
+            subst[63-:4] = sbox(x[63-:4]);
+        end
+    endfunction
+    function [63:0] perm (input [63:0] x);
+        perm[63:0] = {
+            x[63], x[59], x[55], x[51],
+            x[47], x[43], x[39], x[35],
+            x[31], x[27], x[23], x[19],
+            x[15], x[11], x[ 7], x[ 3],
+            x[62], x[58], x[54], x[50],
+            x[46], x[42], x[38], x[34],
+            x[30], x[26], x[22], x[18],
+            x[14], x[10], x[ 6], x[ 2],
+            x[61], x[57], x[53], x[49],
+            x[45], x[41], x[37], x[33],
+            x[29], x[25], x[21], x[17],
+            x[13], x[ 9], x[ 5], x[ 1],
+            x[60], x[56], x[52], x[48],
+            x[44], x[40], x[36], x[32],
+            x[28], x[24], x[20], x[16],
+            x[12], x[ 8], x[ 4], x[ 0]
+        };
+    endfunction
+    function [63:0] round (input [63:0] x);
+        round = perm(subst(x));
+    endfunction
+    function [63:0] premix0 (input [63:0] x);
+        premix0 = x ^ ({x,x} >> 15 & 64'hfffffffffffffbff);
+    endfunction
+    function [63:0] premix1 (input [63:0] x);
+        reg [63:0] y;
+        begin
+            y = {x,x} >> 32;
+            premix1 = y ^ ({y,y} >> 17 & 64'hfffffffffffdffff);
+        end
+    endfunction
+    function [63:0] hash (input [63:0] x, y);
+            hash = round(round(round(premix0(x) ^ premix1(y))));
+    endfunction
+
+    integer i;
+    initial begin
+        for (i = 0; i < 32; i += 1) begin
+            $display("%016x, %016x, %016x, %016x, %016x",
+                    i, hash(i, 0), hash(0, i),
+                    hash(i, 64'h3141592653589793), hash(64'h3141592653589793, i));
+        end
+        $finish;
+    end
+endmodule
+```
+
 There's something missing from this stage.  `ROTR64()` on its own is a fairly
 uninteresting permutation because neighbours before the operation are mostly
 the same neighbours as after.  There would be more mixing of neighbours
