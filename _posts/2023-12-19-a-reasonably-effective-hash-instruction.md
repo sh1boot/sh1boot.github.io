@@ -179,48 +179,27 @@ module hash_test;
     function [3:0] sbox (input [3:0] x);
             sbox = { 16'h613d, 16'h613d } >> x & 15;
     endfunction
-    function [63:0] subst (input [63:0] x);
-        begin
-            subst[ 3-:4] = sbox(x[ 3-:4]);
-            subst[ 7-:4] = sbox(x[ 7-:4]);
-            subst[11-:4] = sbox(x[11-:4]);
-            subst[15-:4] = sbox(x[15-:4]);
-            subst[19-:4] = sbox(x[19-:4]);
-            subst[23-:4] = sbox(x[23-:4]);
-            subst[27-:4] = sbox(x[27-:4]);
-            subst[31-:4] = sbox(x[31-:4]);
-            subst[35-:4] = sbox(x[35-:4]);
-            subst[39-:4] = sbox(x[39-:4]);
-            subst[43-:4] = sbox(x[43-:4]);
-            subst[47-:4] = sbox(x[47-:4]);
-            subst[51-:4] = sbox(x[51-:4]);
-            subst[55-:4] = sbox(x[55-:4]);
-            subst[59-:4] = sbox(x[59-:4]);
-            subst[63-:4] = sbox(x[63-:4]);
-        end
-    endfunction
-    function [63:0] perm (input [63:0] x);
-        perm[63:0] = {
-            x[63], x[59], x[55], x[51],
-            x[47], x[43], x[39], x[35],
-            x[31], x[27], x[23], x[19],
-            x[15], x[11], x[ 7], x[ 3],
-            x[62], x[58], x[54], x[50],
-            x[46], x[42], x[38], x[34],
-            x[30], x[26], x[22], x[18],
-            x[14], x[10], x[ 6], x[ 2],
-            x[61], x[57], x[53], x[49],
-            x[45], x[41], x[37], x[33],
-            x[29], x[25], x[21], x[17],
-            x[13], x[ 9], x[ 5], x[ 1],
-            x[60], x[56], x[52], x[48],
-            x[44], x[40], x[36], x[32],
-            x[28], x[24], x[20], x[16],
-            x[12], x[ 8], x[ 4], x[ 0]
-        };
-    endfunction
     function [63:0] round (input [63:0] x);
-        round = perm(subst(x));
+        reg [63:0] y;
+        begin
+            { y[48], y[32], y[16], y[ 0] } = sbox(x[ 3-:4]);
+            { y[49], y[33], y[17], y[ 1] } = sbox(x[ 7-:4]);
+            { y[50], y[34], y[18], y[ 2] } = sbox(x[11-:4]);
+            { y[51], y[35], y[19], y[ 3] } = sbox(x[15-:4]);
+            { y[52], y[36], y[20], y[ 4] } = sbox(x[19-:4]);
+            { y[53], y[37], y[21], y[ 5] } = sbox(x[23-:4]);
+            { y[54], y[38], y[22], y[ 6] } = sbox(x[27-:4]);
+            { y[55], y[39], y[23], y[ 7] } = sbox(x[31-:4]);
+            { y[56], y[40], y[24], y[ 8] } = sbox(x[35-:4]);
+            { y[57], y[41], y[25], y[ 9] } = sbox(x[39-:4]);
+            { y[58], y[42], y[26], y[10] } = sbox(x[43-:4]);
+            { y[59], y[43], y[27], y[11] } = sbox(x[47-:4]);
+            { y[60], y[44], y[28], y[12] } = sbox(x[51-:4]);
+            { y[61], y[45], y[29], y[13] } = sbox(x[55-:4]);
+            { y[62], y[46], y[30], y[14] } = sbox(x[59-:4]);
+            { y[63], y[47], y[31], y[15] } = sbox(x[63-:4]);
+            round = y;
+        end
     endfunction
     function [63:0] premix0 (input [63:0] x);
         premix0 = x ^ ({x,x} >> 15 & 64'hfffffffffffffbff);
@@ -233,7 +212,7 @@ module hash_test;
         end
     endfunction
     function [63:0] hash (input [63:0] x, y);
-            hash = round(round(round(premix0(x) ^ premix1(y))));
+            hash = round(round(premix0(x) ^ premix1(y)));
     endfunction
 
     integer i;
@@ -248,11 +227,12 @@ module hash_test;
 endmodule
 ```
 
-There's something missing from this stage.  `ROTR64()` on its own is a fairly
-uninteresting permutation because neighbours before the operation are mostly
-the same neighbours as after.  There would be more mixing of neighbours
-achieved if the permutation were more convoluted.  This has caveats where not
-every permutation leads to a bijective operation.
+There's something missing from this premix stage, though.  `ROTR64()` on
+its own is a fairly uninteresting permutation because neighbours before
+the operation are mostly the same neighbours as after.  There would be
+more mixing of neighbours achieved if the permutation were more
+convoluted.  This has caveats where not every permutation leads to a
+bijective operation.
 
 This is an example of how crypto operations tend to let us down.  They're
 defined on simpler operations, at the cost of slower mixing[^1], and use many
