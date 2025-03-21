@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 22 Feb 2025 18:03:07 -0800  # a55fae3 improved-modshl
+last_modified_at: Fri, 21 Mar 2025 11:54:04 -0700  # 5732185 clarify-extended-numpy-arithmetic
 layout: post
 title: Extending range of numpy modular arithmetic
 tags: numpy

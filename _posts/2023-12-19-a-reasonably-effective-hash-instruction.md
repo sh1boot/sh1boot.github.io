@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: Fri, 21 Mar 2025 16:03:20 -0700  # 097782c verilog
 layout: post
 title:  A reasonably effective hash instruction
 description: A 128-to-64 bit hash operation which is cheap to implement in hardware and does most of a decent job in one cycle.
