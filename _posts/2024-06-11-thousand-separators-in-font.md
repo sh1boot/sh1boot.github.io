@@ -199,6 +199,14 @@ font-feature-settings: "dgsp";
 Change that to `dgco` for comma separators, `dgap` for apostrophes,
 `dgdo` for dots.
 
+The [FiraCode][] wiki show how to [enable stylistic-sets][], and you can
+kind of extrapolate from their documentation where to insert `dgsp` for
+this feature.
+
+Alternatively the `--always-on=dgsp` command line argument would modify
+the font to enable the chosen feature with `calt`, which is on by
+default, so you don't have to fight with configuration files.
+
 I've also added `dghx`, to force the grouping of hex strings without any
 prefix as hexadecimal, and to group them appropriately.  This might be
 useful when you have CSS markup on a column of data which is definitely
@@ -279,4 +287,5 @@ Things I guess _could_ be done:
 [decimal separators]: <https://en.wikipedia.org/wiki/Decimal_separator#Other_numeral_systems>
 
 [OpenType features]: <https://learn.microsoft.com/en-us/typography/opentype/spec/featurelist>
-[enabling stylistic-sets]: <https://github.com/tonsky/FiraCode/wiki/How-to-enable-stylistic-sets>
+[FiraCode]: <https://github.com/tonsky/FiraCode>
+[enable stylistic-sets]: <https://github.com/tonsky/FiraCode/wiki/How-to-enable-stylistic-sets>
