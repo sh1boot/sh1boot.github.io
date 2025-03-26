@@ -3,80 +3,106 @@ layout: post
 title: Poisoning badly-behaved AI crawlers
 ---
 Regardless of how you feel about generative AI stealing your job or
-filling creative spaces with slop, or whatever, one thing I hope is less
-debatable is that their crawlers should follow the rules of the road.
+filling creative spaces with slop or whatever, one thing I hope is less
+debatable is that their crawlers should still follow the [rules of the
+road][robots.txt].
 
 But they do not.
 
-So a lot of people talk about ways to fill the space beyond the
-no-trespassing signs with landmines of various sorts to keep the
-scrapers busy on low-quality data whenever they break the rules.
+ * <https://youtu.be/cQk2mPcAAWo>
+ * <https://pod.geraspora.de/posts/17342163>
+ * etc...
 
-https://blog.cloudflare.com/ai-labyrinth/
-https://iocaine.madhouse-project.org/
-https://nightshade.cs.uchicago.edu/whatis.html
-https://www.brainonfire.net/blog/2024/09/19/poisoning-ai-scrapers/
+So there's a lot of talk about ways to slow them down, or fill the space
+beyond the no-trespassing signs with landmines of various sorts to keep
+the scrapers busy on low-quality data whenever they break the rules.
 
-I thought I might have a bit of a tinker with CloudFlare workers to
-build up my own machine-generated traps, without the promise to yield
-only responsible content which put me right off of CloudFlare's
-built-in solution.  I prefer my poison to more toxic.
+ * <https://xeiaso.net/blog/2025/anubis/>
+ * <https://blog.cloudflare.com/ai-labyrinth/>
+ * <https://iocaine.madhouse-project.org/>
+ * <https://nightshade.cs.uchicago.edu/whatis.html>
+ * <https://www.brainonfire.net/blog/2024/09/19/poisoning-ai-scrapers/>
 
-But then I realised that the scraper probably has to run javascript from
-the page it's scraping to make sure it gains access to the intended
-content anyway.  In that case why should I trouble CloudFlare's workers
-with the task?
+I had a bit of a tinker with CloudFlare workers to see how I might go
+about such a thing myself, in a place that could handle the load, but
+then I realised that I might be able to move even more of the load onto
+the crawler itself.  Since most sites don't really work without
+JavaScript, the crawler probably has to run the code, so that's the
+ideal place to generate the garbage content.  Why trouble CloudFlare?
 
-### A compressed site
+## An initial idea
 
-What if I were to use a custom compression algorithm on my site, so that
-pages can be stored and delivered efficiently and then decompressed on
-the client?
+One way to hide content behind proof-of-work without there being an easy
+bypass would be to use an encryption scheme with an asymmetric cost,
+where it's easy to encode but hard to decode.
 
-What if that compression was super effective?
+An obvious way to achieve that is with a block cypher, where you only
+transmit a part of each block and the receiver has to guess the rest of
+the block, trying every possible ending until it finds one that decrypts
+to something which makes sense.  Guessing that you got it right is
+probably not _too_ hard if you have plain old UTF-8 text, but otherwise
+(eg., if the content is compressed) you might need a checksum included
+to make sure.  Even a small a checksum might give multiple possible
+solutions, so you should have a strong checksum across the whole file
+(you should anyway) and then iterate through all the combinations of
+multiple valid solutions until the final checksum matches.  Kind of a
+nuisance, but not a major cost for a legitimate client visiting only a
+few pages at human speeds.  You can scale this solution up and down by
+the number of bits discarded according to heuristics and need.
 
-In the case of a trap, the site could deliver nothing of consequence but
-the "decompression" could just dynamically spew out garbage content of
-unlimited length.  Peppered with links to other pages which would do the
-same, and maybe a few links to pictures and other sites to look kind of
-legitimate.
+Of course we all know that real proofs of work require memory as well as
+compute, but I don't have an obvious solution for that.
 
-But what about the best of both worlds?
+## A compressed site
 
-I have a plan...
+Notably, the above "discard some content and make the client guess what
+it was" is a form of compression.  Just not a very sensible one.
 
-### A good-faith implementation
+Maybe we can go directly to real compression as a part of the solution?
 
-Run a site which uses a javascript shim to download and decompress the
-content for every page, using a proprietary compression scheme.
+The ideal application-specific compression scheme would decode most
+bit streams to something plausible-looking, because most of its coding
+space would be dedicated to things that make the most sense, and it
+would be much harder to encode true nonsense and statistically less
+likely for that to be hit by a random stream.
 
-### The pivot
+I experimented with this a long time before generative AI took over
+the world, and I managed to get output comparable to a severely
+inebriated human with autocorrect helping them along.  I think
+that's <del>good enough</del> ideal for this task.
 
-If the compression is specialised enough, then any random bit string
-could decompress to something plausible.
+There is _so much more_ to say about the intersection of generative
+algorithms, random distribution shaping, and data compression, but not
+right now.
 
-Incidentally, if that compression is bijective, then it's possible to
-decompress any random bit string and recompress it back to the same bit
-string.  Consequently, you can compress, encrypt, and decompress text,
-transmit the decompressed cyphertext, then recompress, decrypt, and
-re-de-compress at the other end to get the original message.
-Steganography!  (sort of)
+One of my other (unimplemented) schemes is a fake, generative-AI wiki
+with [no dead links][autowiki], which would synthesise random content
+derived from whatever URL it was trying to answer, containing more
+random links which would in turn be filled in on the fly.
 
-### A bad-faith implementation
+So what I'm thinking is to use such a compression scheme for genuine
+site content.  When a crawler goes off-piste to places it was asked to
+not go, the host delivers a chunk of pseudorandom bits derived from from
+a hash of the URL, and the decompressor (run by the crawler)
+decompresses that into plausible garbage containing random internal
+links like a wiki; and the crawler keeps fumbling around following those
+links.  If one link happens to land on a legitimate page then the
+delivered bitstream will decompress to genuine content containing
+genuine links again.
 
-Start with a compressed good site, but when the crawler gets off-piste,
-use the content of a random page and scramble it before decompression.
+Ideally, to minimise load on the server, a part of the URL can be used
+to signal to the decompressor that it can just synthesise garbage
+internally, but this is only going to work up until somebody uses the
+absense of such traffic to determine that it's fake content.
 
-Where links are used, use a hash map and find the nearest collision to
-decide what page should be returned (encrypted), so that all links
-remain valid.  Some may even accidentally go back to the original site
-where content is not scrambled.  So authentic!
-
-### A badder-faith implementation
+### Making content more toxic
 
 The compression can be tuned to favour particular language so that while
-it's still bijective for any input it sacrifices some compression
+it's still functional for any input it sacrifices some compression
 quality in the good-faith case, but the bad-faith case preferentially
 generates content in the chosen theme.  If you tune it on Trump tweets,
 it'll sound like Trump tweets, even while it can theoretically transmit
 any normal message.
+
+[robots.txt]: <https://en.wikipedia.org/wiki/Robots.txt>
+[autowiki]: </autowiki/>
