@@ -66,10 +66,12 @@ space would be dedicated to things that make the most sense, and it
 would be much harder to encode true nonsense and statistically less
 likely for that to be hit by a random stream.
 
-I experimented with this a long time before generative AI took over
-the world, and I managed to get output comparable to a severely
-inebriated human with autocorrect helping them along.  I think
-that's <del>good enough</del> ideal for this task.
+I have [experimented with this](/generative-entropy-coding/) a long time
+before generative AI took over the world, and I managed to get an
+entropy coding system which would decode random bit strings into text
+which would pass for human if you accepted that they were quite drunk
+but had the benefit of autocorrect to fix their typing.  I think that's
+<del>good enough</del> ideal for this task.
 
 There is _so much more_ to say about the intersection of generative
 algorithms, random distribution shaping, and data compression, but not
