@@ -36,22 +36,15 @@ string, and the decryption step will not work as intended.
 Unfortunately decompressing encrypted data would typically yield
 nonsense.
 
-But it is possible to design a compression scheme which is highly
-application-specific, and allocates the bulk of its coding space to
-highly plausible messages, and requires very long, specific (and
-consequently improbable) bit strings to produce nonsense output.
+But it's not entirely impossible to make an application-specific
+compression system which converts random bit strings into plausible
+text.  This is what LLMs do, and I have [done something exceedingly
+primitive](/generative-entropy-coding/) myself.
 
 Essentially you have to carefully model the language you want to
 compress so that it's very efficient at coding plausible text and very
 inefficient at coding nonsense.  Then most random bitstrings will fall
 close to the plausible end of the spectrum.
-
-This is how entropy coding works.  It gives short codes to things that
-are likely and very long codes (or no codes at all) to things that
-aren't at all likely.  Here we use likelihood as a surrogate for "making
-sense", because we assume it's most likely that a message will contain
-familiar words in familiar grammatical structure, rather than a random
-jumble of letters and punctuation.
 
 And then you have to make that encoding strictly bijective.
 
