@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Entropy coding as a text generator
+tags: compression
 ---
 The compression gains of entropy coding revolves around making likely symbols short and unlikely symbols long.
 In principle you have some pre-arranged model of the string you want to compress and decompress,

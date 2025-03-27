@@ -1,6 +1,7 @@
 ---
 layout: post
 title: On bijective compression
+tags: compression
 ---
 Most compression schemes are not bijective.  That is to say, there is
 not a one-to-one mapping between input and output bit patterns.  While
