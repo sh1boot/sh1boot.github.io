@@ -36,7 +36,7 @@ One way to hide content behind proof-of-work without there being an easy
 bypass would be to use an encryption scheme with an asymmetric cost,
 where it's easy to encode but hard to decode.
 
-An obvious way to achieve that is with a block cypher, where you only
+A simple way to achieve that is by using a block cypher where you only
 transmit a part of each block and the receiver has to guess the rest of
 the block, trying every possible ending until it finds one that decrypts
 to something which makes sense.  Guessing that you got it right is
