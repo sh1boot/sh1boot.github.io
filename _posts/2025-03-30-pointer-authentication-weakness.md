@@ -1,7 +1,9 @@
 ---
 layout: post
-title: Pointer authentication vulnerability and mitigations
-tags: security computer-architecture needs-work needs-example
+title: Pointer authentication weakness and mitigations
+redirect_from:
+ - /drafts/pointer-authentication-vulnerability/
+tags: security computer-architecture
 ---
 [Pointer authentication][] involves taking things like the return address
 and inserting an authentication tag into unused bits -- a cryptographic
