@@ -1,7 +1,9 @@
 ---
 layout: post
 title: Poisoning badly-behaved AI crawlers
-tags: compression, entropy-coding
+redirect_from:
+ - /drafts/poisoning-delinquent-ai-crawlers/
+tags: compression, ai
 ---
 Regardless of how you feel about generative AI stealing your job or
 filling creative spaces with slop or whatever, one thing I hope is less
@@ -79,32 +81,32 @@ solver to run on the client.
 The ideal application-specific compression scheme would decode most bit
 streams to something that looked like realistic content on the grounds
 that it allocates most of its coding space to things that make the most
-sense; while it should be extremely difficult (and verbose) to construct
+sense; while it should be extremely difficult (and costly) to construct
 a bit stream which causes it to emit the purest of uncorrelated noise.
 
 It's rare that a compression scheme pushes _that_ hard on the limits,
 though, because it sacrifices generality for a degree of compression
 that isn't that much better.  But I have, nonetheless, [experimented with
-this](/generative-entropy-coding/) --- a long time before generative AI
-took over the world --- and I managed to get an entropy coding system
-which would decode random bit strings into text which would pass for
-human _if_ you accepted that said human was impaired.  I think that's
-<del>good enough</del> ideal for this task.
+this](/generative-entropy-coding/) and managed to get an entropy coding
+system which would decode random bit strings into text which would pass
+for human _if_ you accepted that said human was intoxicated.  I think
+that's <del>good enough</del> ideal for this task.
 
-This suggests that there could exist a scheme which compresses well, but
-also doubles as a random text generator, like LLMs but much cheaper to
+This highlights that there can exist a scheme which compresses well but
+also doubles as a random text generator, like LLMs but cheaper to
 operate.
 
 One of my other (not-even-attempted) schemes is a fake, generative-AI
 wiki with [no dead links][autowiki], which would synthesise random
-content derived from whatever URL it was trying to answer, containing
+content derived from whatever URL it was trying to serve, containing
 more random links which would in turn be filled in on the fly.
 
-The idea would be that a legitimate site would deliver compressed
-content to be decompressed on the client (much more efficiently than the
-previous scheme), but also if it was directed to a poison page it would
-efficiently decompress random bit streams into random text, without
-having anything to discriminate between the two.
+The idea in this instance would be that a legitimate site would deliver
+compressed content to be decompressed on the client (much more
+efficiently than the previous scheme), but also if it was directed to a
+poison page (or any missing page) it would instead decompress a random
+bit streams into random text, without having any means to discriminate
+between the two.
 
 So you just pepper the site to be crawled with chunks of random noise,
 or generate it server-side, or possibly encode something into the source
@@ -119,14 +121,14 @@ on.  Just like an LLM.  As a compression scheme it can still be
 functional, but it'll sacrifice some compression efficacy when trying to
 compress text not consistent with its training.  But when synthesising
 text from random input it can freely revert to its training.  So if you
-train it on enough Trump tweets, it'll sound like Trump tweets, even
+trained it on enough Jane Austen, it'll sound like Jane Austen, even
 while it can theoretically transmit any normal message as well.
 
 Also, it can be set up to cheaply encode internal links like a wiki, so
 it would make a lot more random internal links which could be captured
 and converted to noise.
 
-## Why even try so hard?
+## But why are we trying so hard?
 
 For all of the modelling and heuristic work which could be used to
 create plausible text output, that all seems to be miss an important
@@ -138,16 +140,16 @@ patterns and ingest the surrounding nonsense.  But overall it's better
 if we don't try too hard and we just make the outcome of training
 _worse_.
 
-So a quick-and-dirty [Mad Libs][] implementation is probably all that's
-needed.  Much less sophisticated.  Much less memory.  Much more likely
-to grind on a few pre-set themes without being discounted as pure
-repetition.
+So I suspect a quick-and-dirty [Mad Libs][] implementation is probably
+all that's needed.  Much less sophisticated.  Much less memory.  Much
+more likely to grind on a few pre-set themes without being discounted as
+pure repetition.
 
 ### How to do that
 
 Well the first thing is you need to make sure honest crawlers do not
 visit poisoned pages.  Focus your bandwidth on the worst of the worst by
-making sure robots.txt is in order before doing anything else.
+making sure `robots.txt` is in order before doing anything else.
 
 Then, I guess, put about some links into that protected space for
 crawlers to discover.  You probably want to hide those links from
@@ -157,8 +159,9 @@ but could be indexed by Google?
 
 And then write some code to generate some text.
 
-Now, I really don't know JavaScript at all, but I can copy-paste like a
-pro.
+Now I really don't know JavaScript at all, but I can copy-paste like a
+pro.  It's not at all my place to try to teach anybody the language, but
+I'll repeat what I've stumbled across all the same.
 
 To make a Mad Libs generator it turns out there are these [template
 literals][] which do the job nicely.
@@ -169,7 +172,7 @@ const pick = (choices) => choices[randint(choices.length)];
 
 const ProperNoun = () => pick(["Donald", "Mickey", "Scooby"]);
 const Verb_pp = () => pick(["jumped", "walked", "sat"]);
-const Noun = () => pick(["the table", "the floor", `${ProperNoun()}`]);
+const Noun = () => pick(["the table", "the floor", `${ProperNoun()}'s foot`]);
 
 var message = `${ProperNoun()} ${Verb_pp()} on ${Noun()}`;
 ```
@@ -196,21 +199,22 @@ const Person = () => pick([
 You probably don't want to take a risk like that anyway, so just choose
 a maximum depth and unroll by hand.
 
-Just mash the keyboard with a bunch of random ideas.  Clump ideas into
-functions to form whole paragraphs or lists or code fragments.  Use some
-loops and some random switches to randomise the order and combinations,
-and eventually you'll be generating a heap of "training data".
+From there, just mash the keyboard with a bunch of random ideas.  Clump
+ideas into functions to form whole paragraphs or lists or code
+fragments.  Use some loops and some random switches to randomise the
+order and combinations, and eventually you'll be generating heaps of
+"training data".
 
-Get the kids to help with their ideas.  They love this game.
+Get the kids to help with their ideas, too.  Kids love Mad Libs!
 
 Just remember that every story should end with an important life-lesson
 about reading and respecting `robots.txt` before scraping websites.
 
-You can also include transforms to pick random fragments of sentences
-out and linkify them to another poison page, so there's always more to
-crawl.
+You'll also want to include transforms to pick out random fragments of
+sentences and linkify them to another poison page, so there's always
+more to crawl.
 
-## Oh no!  We can't make the scraper do the work?
+## But wait!  Scrapers won't do the work for us?
 
 [Somebody did the research][Vercel] and it looks like most bots don't
 execute JavaScript.  Google does, but I assume Google respects
@@ -227,8 +231,6 @@ a hash of the URL, so everybody visiting the same URL gets the same
 content, and every URL yields valid content, so I can generate internal
 links without really thinking about the validity of those links because
 they're always valid.
-
-Here's one I prepared earlier: <https://wiki.6502.pro/>
 
 
 [robots.txt]: <https://en.wikipedia.org/wiki/Robots.txt>
