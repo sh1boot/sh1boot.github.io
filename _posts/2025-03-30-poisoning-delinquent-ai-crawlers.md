@@ -232,7 +232,7 @@ content, and every URL yields valid content, so I can generate internal
 links without really thinking about the validity of those links because
 they're always valid.
 
-An update to celebration of April Fool's Day; here's an example site:
+An update to celebrate April Fool's Day; here's an example:
 
 <https://wiki.6502.pro>
 
