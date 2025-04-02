@@ -232,6 +232,9 @@ content, and every URL yields valid content, so I can generate internal
 links without really thinking about the validity of those links because
 they're always valid.
 
+An update to celebration of April Fool's Day; here's an example site:
+
+<https://wiki.6502.pro>
 
 [robots.txt]: <https://en.wikipedia.org/wiki/Robots.txt>
 [autowiki]: </autowiki/>
