@@ -42,7 +42,19 @@ all the hard work, so that the crawler pays all the costs.
 [Spoiler alert, I eventually found out I was wrong about that and had to
 pivot.]
 
-## Asymmetric-cost encryption
+And another thing I haven't bothered to consider is what the attacker's
+motivations are, and what their costs are.  When I hear talk of doing
+distributed scrapes from domestic IP addresses I wonder if they could be
+using machines whose compute costs aren't valued by the attacker.  And
+when I search for "AI scraping" I get articles about how to use AI to
+collect structured data from other websites in order to re-present it in
+a useful way, which would quickly dismiss unstuctured generated garbage
+I discuss here.
+
+But still, it's fun to speculate.
+
+## My ideas
+### Asymmetric-cost encryption
 
 Hiding the content behind proof of work, like [Anubis][], involves
 charging a small compute tax on every visitor, so that crawlers pay in
@@ -51,11 +63,12 @@ human visitors, ideally, only have a negligible time delay added to
 their own actions.  Ideally they can bypass it by being logged in to the
 service with an account in good standing.
 
-One way to achieve this, with no risk of reverse assembly and bypass, is
-if the work comes in the form of an asymmetric encryption scheme which
-costs much more to decrypt than it does to encrypt.  And a simple way to
-achieve that is to use a block cypher where you omit some bits from each
-block and leave it to the client to guess what those missing bits were.
+One way to achieve this, without risk of reverse engineering and bypass,
+is if the work comes in the form of an asymmetric encryption scheme
+which costs much more to decrypt than it does to encrypt.  And a simple
+way to achieve that is to use a block cypher where you omit some bits
+from each block and leave it to the client to guess what those missing
+bits were.
 
 If the client has a good idea what valid cleartext looks like (eg., if
 it's mostly ASCII) they'll have to try on average 1/2 the possible bit
@@ -76,7 +89,7 @@ until you get a bigger checksum (eg., the whole-file digest).
 There are many factors to tune, here, if you were willing to write the
 solver to run on the client.
 
-## Using data compression as a content generator
+### Using data compression as a content generator
 
 The ideal application-specific compression scheme would decode most bit
 streams to something that looked like realistic content on the grounds
@@ -105,7 +118,7 @@ The idea in this instance would be that a legitimate site would deliver
 compressed content to be decompressed on the client (much more
 efficiently than the previous scheme), but also if it was directed to a
 poison page (or any missing page) it would instead decompress a random
-bit streams into random text, without having any means to discriminate
+bit stream into random text, without having any means to discriminate
 between the two.
 
 So you just pepper the site to be crawled with chunks of random noise,
@@ -113,7 +126,7 @@ or generate it server-side, or possibly encode something into the source
 URL to signal that the JavaScript can skip the fetch and just generate
 its own internally.
 
-### Making content more toxic
+#### Making "decompressed" content more disruptive
 
 This model-based entropy compression can be tuned to model any kind of
 language, with any kind of slant, depending on what corpus it's trained
@@ -125,10 +138,10 @@ trained it on enough Jane Austen, it'll sound like Jane Austen, even
 while it can theoretically transmit any normal message as well.
 
 Also, it can be set up to cheaply encode internal links like a wiki, so
-it would make a lot more random internal links which could be captured
+it would habitually make random internal links which could be captured
 and converted to noise.
 
-## But why are we trying so hard?
+## Trying less hard
 
 For all of the modelling and heuristic work which could be used to
 create plausible text output, that all seems to be miss an important
@@ -161,7 +174,7 @@ And then write some code to generate some text.
 
 Now I really don't know JavaScript at all, but I can copy-paste like a
 pro.  It's not at all my place to try to teach anybody the language, but
-I'll repeat what I've stumbled across all the same.
+nevertheless I'll repeat what I've stumbled across as I went along...
 
 To make a Mad Libs generator it turns out there are these [template
 literals][] which do the job nicely.
@@ -199,22 +212,34 @@ const Person = () => pick([
 You probably don't want to take a risk like that anyway, so just choose
 a maximum depth and unroll by hand.
 
-From there, just mash the keyboard with a bunch of random ideas.  Clump
-ideas into functions to form whole paragraphs or lists or code
-fragments.  Use some loops and some random switches to randomise the
-order and combinations, and eventually you'll be generating heaps of
-"training data".
+With those basics in place it's pretty easy to just mash the keyboard
+with a bunch of random ideas.  Clump ideas together to form whole
+paragraphs or lists or code fragments.  Use some loops and some random
+switches to randomise the order and combinations, and eventually you'll
+be generating plenty of output.
 
 Get the kids to help with their ideas, too.  Kids love Mad Libs!
 
-Just remember that every story should end with an important life-lesson
-about reading and respecting `robots.txt` before scraping websites.
+If there's any chance that the human behind the scraper eventually has a
+look at what they're scraping, then it might also be helpful to arrange
+that every story to end with an important life-lesson about reading and
+respecting `robots.txt` before scraping websites.
 
 You'll also want to include transforms to pick out random fragments of
 sentences and linkify them to another poison page, so there's always
 more to crawl.
 
+The way I like to do things is to use a predictable RNG which is seeded
+from a hash of the URL, so everybody visiting the same URL gets the same
+content, and every URL yields valid content, so I can generate internal
+links without really thinking about the validity of those links because
+they're always valid.
+
 ## But wait!  Scrapers won't do the work for us?
+
+Crap.
+
+Crap crap crapitty crap.
 
 [Somebody did the research][Vercel] and it looks like most bots don't
 execute JavaScript.  Google does, but I assume Google respects
@@ -224,17 +249,118 @@ Well, OK.  So it has to be server-side generation, then.  But services
 like [CloudFlare][CloudFlare Workers] let you run workers which can do a
 modest amount of this for free, or do more of it for a bit of money.
 
-Handily, you can write that in JavaScript too.  You pretty much just
-have to write an HTML page and deliver it in response to a request.  The
-way I like to do things is to use a predictable RNG which is seeded from
-a hash of the URL, so everybody visiting the same URL gets the same
-content, and every URL yields valid content, so I can generate internal
-links without really thinking about the validity of those links because
-they're always valid.
+Conveniently, you can write that in JavaScript too.  You pretty much
+just have to slap together an HTML page and send it off in response to
+any request.
+
+But this is where performance really starts to matter.
+
+CloudFlare has a quota system, allowing 100000 requests to be serviced
+every day, and each of those being allowed to run for up to 10ms (with a
+lot of leniency).
+
+The result of my current fumbling about with JavaScript can squeeze out
+200kB in about 13ms[^1] (1.5MB/s).  I think that's pretty poor.  All the
+code really needs to do is follow a programme of pasting short strings
+together.  It's a task comparable in complexity to Lempel-Ziv
+decompression, which can run around 1000-3000MB/s (10-30MB per 10ms); so
+it's off by a factor of 1000.  It probably _should_ be possible to
+deliver somewthing in the range of 3-10MB in 10ms, for a daily quota of
+up to one terabyte of "training data".
+
+[^1]: Getting from 33ms down to 13ms required turning off outbound
+    compression.  That doesn't feel like a compromise.  Why should I
+    save scrapers' bandwidth?
+
+It's easy to shrug and say JavaScript sucks (and it does), but it's also
+commonly understood that if you use it right then it can do a decent
+job of getting close to plain old C.  I'm probably just not using it
+right.  But I haven't the foggiest how to benchmark it to learn what
+the real problems are.
+
+I made a few guesses and optimised them blindly.  My first thought was
+that I probably didn't want to composite a lot of strings piecemeal.
+That seems to be conventional wisdom.  Save it all up in an array and
+use `.join()` to concatenate everytihng at once.  Otherwise you end up
+doing many redundant copies concatenating pieces of strings to other
+pieces of strings and then concatenating those to other concatenated
+pieces.
+
+Trouble is, the average string length in my experiments was something
+like 12 bytes.  I don't know how references to strings are stored, but
+it's easy to imagine they're at least 8 bytes long, so building the
+array of references is not shunting that much less data around.  That
+probably has the benefit of fixed-size allocations and an array `push()`
+method which understands that it should probably pre-allocate extra
+space for more pushes to avoid moving things too frequently.
+
+Still, to be sure it doesn't get moved around halfway through I should
+probably pre-allocate my own buffer and edit it in-place without needing
+to grow it.  And if I'm doing to do that, maybe I just pre-allocate the
+string buffer itself, rather than a buffer of pointers which will still
+need another pass to form a contiguous string.
+
+Something that stood out is that Javascript uses UTF-16, not UTF-8, so
+all those `TextEncoder().encode()` calls have to actually do work.
+
+At least that's what the internet told me.  It is possible that a
+runtime could optimise this into storing UTF-8 internally and just
+pretend to be using UTF-16 to the application in the hope that the
+conversion savings outweigh the complexity of the fakery.
+
+Since all I want to do is paste strings together over and over in
+different arrangements, it seems silly to re-run the encoding logic over
+and over to get the same answers over and over.  So a bit of a hack to
+transcode the strings at start-up is in order.  That should be easy,
+except for those template literals mentioned earlier.
+
+Oh, and scope.  While you might want to keep some definitions local to a
+function for clarity, you get taxed on that by having to re-create the
+object every time the function is entered.  I couldn't find a `static
+const` to fix that.
+
+You can memoise it, but you're quickly burning up good will with your
+CPU cache on table lookups.  At best you might hope to minimise the
+table by leaving all the globals _out_ of the table since they've
+already been replaced once and once is enough for them, and you're just
+optimising locals.  But "don't do it at all" is still the best
+optimisation.
+
+Hoisting the tables also proves to be a little tricky.  It turns out
+those template literals can't refer to variables which aren't defined
+when they're defined.  That seems fair.  But if you have a function
+which has some useful dynamic context (eg., the content of the URL that
+triggered the generation) it has to be put somewhere, and ideally not in
+a global variable.
+
+In the end I went with a decoder object whith a method to expand things
+recursively; handling several types of object as it goes.
+
+First, template literals are tagged with `ml` and the function to handle
+those just converts (memoised, perhaps unnecessarily) the literal
+strings to UTF-8 and stores those and the argument values in an object.
+
+Then in the main compositing function, if it's an array then pick a
+random entry from said array and carry on.  If it's a UTF-8 string then
+copy it in, if it's one of the above `ml` objects then expand that into
+alternating runs of UTF-8 strings and other argument types.  If it's a
+link object then emit some HTML and emit the argument twice -- once as
+the link target, then again as the linked text, then go back and clean
+the dangerous characters out of the link (use a size-preserving squash
+rather than %-encoding to avoid complexity).  Etc...
+
+But as I say, overall this still misses by three orders of magnitude.
+It's not ideal.
+
+I already know the code that is there today has no hope of meeting the
+target.  There's plenty that should be rewritten more efficiently, but
+that's probably not worth the effort because I don't know where the
+ceiling is going to turn out to be until I learn how to profile
+JavaScript.
 
 An update to celebrate April Fool's Day; here's an example:
 
-<https://wiki.6502.pro>
+<https://wiki.6502.pro> (with [source](https://github.com/sh1boot/madlib123))
 
 [robots.txt]: <https://en.wikipedia.org/wiki/Robots.txt>
 [autowiki]: </autowiki/>
@@ -253,4 +379,3 @@ An update to celebrate April Fool's Day; here's an example:
 [Iocaine]: <https://iocaine.madhouse-project.org/>
 [Nightshade]: <https://nightshade.cs.uchicago.edu/whatis.html>
 [Brain on Fire]: <https://www.brainonfire.net/blog/2024/09/19/poisoning-ai-scrapers/>
-
