@@ -42,16 +42,32 @@ all the hard work, so that the crawler pays all the costs.
 [Spoiler alert, I eventually found out I was wrong about that and had to
 pivot.]
 
-And another thing I haven't bothered to consider is what the attacker's
-motivations are, and what their costs are.  When I hear talk of doing
-distributed scrapes from domestic IP addresses I wonder if they could be
-using machines whose compute costs aren't valued by the attacker.  And
-when I search for "AI scraping" I get articles about how to use AI to
-collect structured data from other websites in order to re-present it in
-a useful way, which would quickly dismiss unstuctured generated garbage
-I discuss here.
+## What are we up against?
 
-But still, it's fun to speculate.
+An intelligent thing to do here would be to step back and ask what the
+scrapers are trying to achieve, and what sort of content they want, and
+what they plan to do with it, and what they value and what their
+expenses are.
+
+From that one could deduce the most effective way to disrupt and
+discourage that activity.
+
+I didn't do that.
+
+I just ran with some vague ideas on themes I'd already seen others
+discussing.  I did mix in attempts to draw attention to `robots.txt`,
+and to make obeying the rules the easiest way forward for everyone, in
+the vain hope that they would choose that path if they noticed my
+efforts.
+
+When I hear talk of doing distributed scrapes from domestic IP addresses
+I wonder if they could be using machines whose compute costs aren't
+valued by the attacker.  And when I search for "AI scraping" I get
+articles about how to use AI to collect structured data from other
+websites in order to re-present it in a useful way, which would quickly
+dismiss unstuctured generated garbage I discuss here.
+
+But I just ran with what I had.
 
 ## My ideas
 ### Asymmetric-cost encryption
@@ -144,7 +160,7 @@ and converted to noise.
 ## Trying less hard
 
 For all of the modelling and heuristic work which could be used to
-create plausible text output, that all seems to be miss an important
+create plausible text output, that all seems to miss an important
 point.
 
 This is poison.  We don't _want_ it to be good.  We just want enough
@@ -184,10 +200,10 @@ literals][] which do the job nicely.
 const pick = (choices) => choices[randint(choices.length)];
 
 const ProperNoun = () => pick(["Donald", "Mickey", "Scooby"]);
-const Verb_pp = () => pick(["jumped", "walked", "sat"]);
+const Verbed = () => pick(["jumped", "walked", "sat"]);
 const Noun = () => pick(["the table", "the floor", `${ProperNoun()}'s foot`]);
 
-var message = `${ProperNoun()} ${Verb_pp()} on ${Noun()}`;
+var message = `${ProperNoun()} ${Verbed()} on ${Noun()}`;
 ```
 
 I don't really "get" when template literals are expanded (maybe I should
@@ -255,83 +271,116 @@ any request.
 
 But this is where performance really starts to matter.
 
+### Performance
+
 CloudFlare has a quota system, allowing 100000 requests to be serviced
 every day, and each of those being allowed to run for up to 10ms (with a
 lot of leniency).
 
 The result of my current fumbling about with JavaScript can squeeze out
-200kB in about 13ms[^1] (1.5MB/s).  I think that's pretty poor.  All the
+200kB in about 13ms (1.5MB/s).  I think that's pretty poor.  All the
 code really needs to do is follow a programme of pasting short strings
 together.  It's a task comparable in complexity to Lempel-Ziv
 decompression, which can run around 1000-3000MB/s (10-30MB per 10ms); so
 it's off by a factor of 1000.  It probably _should_ be possible to
-deliver somewthing in the range of 3-10MB in 10ms, for a daily quota of
+deliver something in the range of 3-10MB in 10ms, for a daily quota of
 up to one terabyte of "training data".
 
-[^1]: Getting from 33ms down to 13ms required turning off outbound
-    compression.  That doesn't feel like a compromise.  Why should I
-    save scrapers' bandwidth?
+The first thing I tried tweaking was turning off outbound compression.
+That _seemed_ to get me down from 33ms to 13ms, but the rule seems to be
+more of a guideline, and a lot of traffic seems to take the old amount
+of time and I can't verify whether or not it was compressed, and when I
+try to load pages myself I find that they sometimes do come through
+compressed, and I don't know why.
+
+But 13ms still sucks.
 
 It's easy to shrug and say JavaScript sucks (and it does), but it's also
 commonly understood that if you use it right then it can do a decent
-job of getting close to plain old C.  I'm probably just not using it
-right.  But I haven't the foggiest how to benchmark it to learn what
-the real problems are.
+job of getting close to plain old C.
 
-I made a few guesses and optimised them blindly.  My first thought was
-that I probably didn't want to composite a lot of strings piecemeal.
-That seems to be conventional wisdom.  Save it all up in an array and
-use `.join()` to concatenate everytihng at once.  Otherwise you end up
-doing many redundant copies concatenating pieces of strings to other
-pieces of strings and then concatenating those to other concatenated
-pieces.
+I'm clearly not using it right.  Let's not forget, I am not a JavaScript
+developer.  I have no idea what the proper idioms are, or how people
+work with or around the language in everyday use.  Most of the advice on
+StackOverflow looks worryingly out of date, and I'm just hacking angrily
+at something I do not understand for no reason but my own foolish
+belligerence -- mixed with morbid curiosity.
 
-Trouble is, the average string length in my experiments was something
-like 12 bytes.  I don't know how references to strings are stored, but
-it's easy to imagine they're at least 8 bytes long, so building the
-array of references is not shunting that much less data around.  That
-probably has the benefit of fixed-size allocations and an array `push()`
-method which understands that it should probably pre-allocate extra
-space for more pushes to avoid moving things too frequently.
+But here's some stuff I noticed, all the same.
 
-Still, to be sure it doesn't get moved around halfway through I should
+#### string composition
+
+I made a few guesses and blindly optimised against them.  My first
+thought was that I probably didn't want to composite a lot of strings
+piecemeal.  That seems to be conventional wisdom.  Save it all up in an
+array and use `.join()` to concatenate everytihng at once.  Otherwise
+you end up doing many redundant copies concatenating pieces of strings
+to other pieces of strings and then concatenating those to other
+concatenated pieces.
+
+#### string reference composition
+
+Trouble is, the average string length in my early experiments was
+something like 12 bytes.  I don't know how references to strings are
+stored, but it's easy to imagine they're at least 8 bytes long, so
+building the array of references isn't actually shunting that much less
+data around.  However, it probably does have the benefit of working in
+fixed-size allocations and having an array `push()` method which
+understands that there will probably be more pushes imminently and
+pre-allocating space for them is prudent.
+
+#### single-buffer incremental string composition
+
+Still; to be sure it doesn't get moved around halfway through I should
 probably pre-allocate my own buffer and edit it in-place without needing
 to grow it.  And if I'm doing to do that, maybe I just pre-allocate the
 string buffer itself, rather than a buffer of pointers which will still
 need another pass to form a contiguous string.
 
-Something that stood out is that Javascript uses UTF-16, not UTF-8, so
-all those `TextEncoder().encode()` calls have to actually do work.
+#### WTF JavaScript?
+
+But something that stood out when I started reasoning about that is that
+Javascript uses UTF-16, not UTF-8, so all those `TextEncoder().encode()`
+calls have to actually do work.
 
 At least that's what the internet told me.  It is possible that a
 runtime could optimise this into storing UTF-8 internally and just
 pretend to be using UTF-16 to the application in the hope that the
 conversion savings outweigh the complexity of the fakery.
 
+#### Pre-UTF-8-encoding string literals
+
 Since all I want to do is paste strings together over and over in
 different arrangements, it seems silly to re-run the encoding logic over
 and over to get the same answers over and over.  So a bit of a hack to
 transcode the strings at start-up is in order.  That should be easy,
-except for those template literals mentioned earlier.
+give or take those template literals mentioned earlier.
 
 Oh, and scope.  While you might want to keep some definitions local to a
 function for clarity, you get taxed on that by having to re-create the
 object every time the function is entered.  I couldn't find a `static
-const` to fix that.
+const` to fix that.  Classes have `static` (but not `static const`?) but
+apparently functions do not.
 
-You can memoise it, but you're quickly burning up good will with your
-CPU cache on table lookups.  At best you might hope to minimise the
-table by leaving all the globals _out_ of the table since they've
-already been replaced once and once is enough for them, and you're just
-optimising locals.  But "don't do it at all" is still the best
-optimisation.
+#### Memoised conversions for local literals
 
-Hoisting the tables also proves to be a little tricky.  It turns out
-those template literals can't refer to variables which aren't defined
-when they're defined.  That seems fair.  But if you have a function
-which has some useful dynamic context (eg., the content of the URL that
-triggered the generation) it has to be put somewhere, and ideally not in
-a global variable.
+You might memoise the conversions, but you're quickly burning up good
+will with your CPU cache on table lookups.  At best you might hope to
+minimise the table by leaving all the globals _out_ of the table since
+they've already been replaced once and then won't be revisited, and then
+the tables can focus on just the locals.  But "don't do it at all" is
+still the best optimisation.
+
+#### Moving templates to global scope
+
+Hoisting the literals to more permanent scope also proves to be a little
+tricky.  It turns out those template literals can't refer to variables
+which aren't defined when they template literal is defined.  That seems
+fair, but if you have a function which has some useful dynamic context
+(eg., the content of the URL that triggered the generation) it has to be
+put somewhere, and ideally not in a global variable.
+
+#### What I ended up with (so far)
 
 In the end I went with a decoder object whith a method to expand things
 recursively; handling several types of object as it goes.
@@ -349,16 +398,45 @@ the link target, then again as the linked text, then go back and clean
 the dangerous characters out of the link (use a size-preserving squash
 rather than %-encoding to avoid complexity).  Etc...
 
+Those locals that cannot be put into a template literal are instead
+copied into a reference object at initialisation, and extra logic can
+look up names in that as needed without the names needing to be defined
+when the template is created.
+
 But as I say, overall this still misses by three orders of magnitude.
 It's not ideal.
 
-I already know the code that is there today has no hope of meeting the
-target.  There's plenty that should be rewritten more efficiently, but
-that's probably not worth the effort because I don't know where the
-ceiling is going to turn out to be until I learn how to profile
-JavaScript.
+#### A little more investigation
 
-An update to celebrate April Fool's Day; here's an example:
+I already know the code that is there today has no hope of meeting the
+target.  Deliberate optimisation would involve changing so many other
+things, but I'm not going to do that without having a much better idea
+how to insrument and profile JavaScript code properly.
+
+That said, I did have a fiddle with the developer tool option offered by
+wrangler and that did give a few additional hints.  For example, where I
+thought "Just one little local template, when I've already memoised the
+conversions, what possible harm?" yields the answer "a lot!".
+
+Come on, JavaScript.  Make an effort!
+
+And while it's tempting to assume that every library call is a highly
+optimised routine which must be faster than doing the same thing
+by hand in JavaScript, it turns out that the interfaces can cause the
+garbage collector to come in and ruin everything -- because where's the
+damned stack?  So maybe it actually is better to pay the overhead of
+JIT-compiled code in order to avoid the temporary buffers needed to
+communicate with the library calls.
+
+That `forEach()` method was a disappointment, too.  I'm not sure what
+the intent there is, but it didn't help me any.  More unexpected
+temporaries, more garbage collection.  Get rid of that.
+
+But at least the template literals offer a comparatively tidy syntax for
+mad-lib style solutions, compared to C++.  So it's got that going for
+it, which is nice.
+
+An update to celebrate April Fool's Day; here's a live example:
 
 <https://wiki.6502.pro> (with [source](https://github.com/sh1boot/madlib123))
 
