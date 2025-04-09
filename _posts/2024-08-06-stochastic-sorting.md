@@ -5,12 +5,12 @@ title: stochastically ordering items by frequency
 tags: statistics stochastic-methods needs-example
 ---
 
-If you believe your data will fit a curve, then, like stochastic
-counters which conditionally increment based on a probability
-suitable to the conditions, you could perform stochastic swaps to
-conditionally promote items up the list based on a probability.
-I guess the theory includes a flat probability but I don't see
-the point in that.
+If you believe your histogram, when sorted, will fit a particular curve,
+then, like stochastic counters which conditionally increment based on a
+probability suitable to the conditions, you could perform stochastic
+swaps to conditionally promote items up the list based on a probability.
+I guess the theory includes a flat probability but I don't see the point
+in that.
 
 This allows you to keep a much more dense representation of the
 histogram of your data (one assumes storing counts would be very
