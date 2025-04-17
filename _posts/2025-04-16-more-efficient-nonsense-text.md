@@ -15,9 +15,9 @@ picking randomly from them.
 Well-optimised LZ decoders with low-complexity input decoders advertise
 rates as high as a couple of GB/s on top-end machines.  After a bit of
 tweaking I got my JavaScript-based generator up to 20MB in around 200ms,
-or 100MB/s.  Just one order of magnitude; which is probably OK.
+or 100MB/s.  Just one order of magnitude less; which is probably OK.
 
-But this only needed heavy optimisation because I cannot get crawlers to
+This only needed heavy optimisation because I cannot get crawlers to
 execute javascript on their end.
 
 But actually there _is_ a programmable client-side mechanism I might be
@@ -28,7 +28,7 @@ compressed bitstream directly.
 
 Doing that isn't entirely silly, since a gzip decompressor is just using
 a Huffman decoder to unpack a schedule of bytes and string copies.  We
-mostly just want the block copies.  We need only send enough raw text to
+mostly just want the string copies.  We need only send enough raw text to
 get things rolling, and then because our vocabulary is so limited it can
 be all string copies from that point on.
 
