@@ -348,6 +348,6 @@ already a recurring concatenation of a small set of repeated strings.
 [adler32]: </adler32-checksum/>
 
 [RFC1951]: <https://datatracker.ietf.org/doc/html/rfc1951>
-[Lemoel-Ziv]: <https://en.wikipedia.org/wiki/Lempel-Ziv>
+[Lempel-Ziv]: <https://en.wikipedia.org/wiki/Lempel-Ziv>
 [Canonical Huffman]: <https://en.wikipedia.org/wiki/Canonical_Huffman_code>
 [Mad-Libs]: <https://en.wikipedia.org/wiki/Mad_Libs>
