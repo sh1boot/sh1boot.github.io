@@ -176,7 +176,8 @@ incomplete.
 In order to be able to write out literals, those literals are going to
 have to be exactly 8 bits long.  There's not going to be enough space
 for all of them alongside the already-allocated encoding for length
-codes, so sacrifices must be made.
+codes, growing the leftovers to 16-bit codes isn't legal, and so
+sacrifices must be made.
 
 ### Control characters
 
@@ -239,6 +240,11 @@ to use 9-bit extension codes (64 of those), requiring 30 prefixes of
 length 7, 16 prefixes of length 6, and 8 prefixes of length 5, and then
 stripping the ASCII alphabet down to the bare minimum to support HTML,
 but it's a tight fit and may still not be possible.
+
+It might be tempting to code the control codes with no explicit coding
+as non-canonical UTF-8, but those codes aren't legal and the behaviour
+is associated with security attacks which means it'll raise alarms.  So
+don't bother with that.
 
 ### The result
 
@@ -344,6 +350,9 @@ This would all make much less less sense if the intended output was not
 already a recurring concatenation of a small set of repeated strings.
 
 
+And now to put the whole thing out of my head and get on with my life.
+[Or not][implementation].  Oh well.
+
 [previous post]: </poisoning-delinquent-ai-crawlers/>
 [adler32]: </adler32-checksum/>
 
@@ -351,3 +360,4 @@ already a recurring concatenation of a small set of repeated strings.
 [Lempel-Ziv]: <https://en.wikipedia.org/wiki/Lempel-Ziv>
 [Canonical Huffman]: <https://en.wikipedia.org/wiki/Canonical_Huffman_code>
 [Mad-Libs]: <https://en.wikipedia.org/wiki/Mad_Libs>
+[implementation]: <https://github.com/sh1boot/defl-8bit>
