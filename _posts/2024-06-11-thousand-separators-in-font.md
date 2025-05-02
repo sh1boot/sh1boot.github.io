@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 15:47:20 -0800  # e01b886 fiddle-with-tag-list
+last_modified_at: Fri, 21 Mar 2025 17:03:27 -0700  # 2e93572 digitgrouper-link-to-FiraCode-wiki
 layout: post
 title:  Font-based digit grouping
 tags: graphics fonts digit-grouping terminals

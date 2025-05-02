@@ -1,4 +1,5 @@
 ---
+last_modified_at: Sun, 30 Mar 2025 21:47:59 -0700  # d854e5e publish-pointer-authentication
 layout: post
 title: Pointer authentication weakness and mitigations
 redirect_from:

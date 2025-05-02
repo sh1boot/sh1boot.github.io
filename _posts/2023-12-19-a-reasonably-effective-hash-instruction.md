@@ -1,5 +1,5 @@
 ---
-last_modified_at: Fri, 21 Mar 2025 16:03:20 -0700  # 097782c verilog
+last_modified_at: Fri, 21 Mar 2025 16:48:51 -0700  # 0419f48 smaller-verilog
 layout: post
 title:  A reasonably effective hash instruction
 description: A 128-to-64 bit hash operation which is cheap to implement in hardware and does most of a decent job in one cycle.
