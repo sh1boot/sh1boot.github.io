@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
+last_modified_at: Sat, 10 May 2025 14:36:26 -0700  # b6e4134 update-bit-sliced-matmul
 layout: post
 title:  Bit-sliced matrix multiply
 description: A rearrangement of a SIMD multiplication instruction which allows efficient implementation of matrix multiplication of less than eight-bit precision.
