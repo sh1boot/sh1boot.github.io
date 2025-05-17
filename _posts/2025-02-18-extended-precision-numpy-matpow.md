@@ -169,4 +169,4 @@ A quick test shows this implementation is about twice the speed of
 I used this in my [nblfsr][] [search code][nblfsr code].
 
 [nblfsr]: </non-binary-linear-feedback-shift-registers/>
-[nblfsr code]: <https://github.com/sh1boot/nblfsr/nblfsr.py>
+[nblfsr code]: <https://github.com/sh1boot/nblfsr/blob/main/nblfsr.py>
