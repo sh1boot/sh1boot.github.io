@@ -94,6 +94,23 @@ can't be derived from RNG sequences which can run arbitrarily far ahead in the
 pipeline.  This is used very heavily in shader code, for example, where random
 variables are derived from the hash of the pixel coordinates and time.
 
+### What's wrong with existing SIMD techniques?
+
+As with many such "what's wrong with SIMD?" questions, it reflects the
+mistaken assumption that bandwidth benchmarks are the only thing that
+matter.
+
+SIMD demands a lot of set up and tear-down costs to handle edges, but in
+the case of hashing that's frequently the whole operation, and the
+operations to make it work in SIMD are counterproductive to getting an
+answer quickly and getting the answer as quickly as possible.  SIMD is
+inherently _bad at this_.
+
+Because hashing occurs so much in data addressing, it's just absurd to
+try to put the high-latency costs of SIMD into that pipeline.  And
+because it's a randomisation function it's also incompatible with data
+prediction techniques.
+
 ### Why an instruction?
 
 Well, why do any arithmetic operation as an instruction?  Because what can be
