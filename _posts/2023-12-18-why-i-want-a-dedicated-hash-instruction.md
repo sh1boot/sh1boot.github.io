@@ -102,7 +102,7 @@ matter.
 
 SIMD demands a lot of set up and tear-down costs to handle edges and to mix across the width of the vector, but in
 the case of hashing that's frequently the whole operation, and the extra
-operations to fit the problem into SIMD ops are entity counterproductive to getting an
+operations to fit the problem into SIMD instructions are entirely counterproductive to getting an
 answer the quickly as possible.  SIMD is
 inherently _bad at this_.
 
