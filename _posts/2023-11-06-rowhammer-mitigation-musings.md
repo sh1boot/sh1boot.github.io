@@ -10,6 +10,8 @@ Watching a [RowHammer talk][] ([slides][RowHammer slides]) a while back (not
 actually the linked one, but I couldn't find the one I attended) left me with a
 couple of thoughts about possible mitigations which I didn't see discussed.
 
+### My uneducated mental model
+
 It's mentioned that RowHammer appears to be most effective at inducing
 corruption when it places structured patterns around the bits under attack.
 That's a fairly intuitive observation; that a bit might be more likely to flip
@@ -27,6 +29,8 @@ But it seems to me that under such conditions (and maybe under a variety of
 similar, more realistic conditions) one should reversibly hash the data before
 storing it.  So that the in-capacitor representation is different from what it
 accepts and presents on the data bus.
+
+## Whitening the stored data
 
 Hashing, or [whitening][], could reduce the risk that the local average of
 stored bits will be something extreme and instead make it more likely to be
@@ -47,6 +51,8 @@ there's a lot less scope (literally, fewer bits) to mediate their effect.
 Anyway, I don't have the first clue about modern DRAM design.  This is idle
 speculation, and I don't have the means to perform the relevant experiments.
 
+### As a pre-existing CPU feature
+
 Clearly if an attacker can get the parameters to the hash operation then they
 can just synthesise data which hashes to the hostile patterns.  So those
 parameters need to be kept a secret.  That's a thing which normal memory
@@ -56,15 +62,19 @@ secrets is never a solved problem).
 That also highlights that modern CPUs have the means to compare the RowHammer
 sensitivity of hashed versus unhashed storage.  Which is handy.
 
-This mitigation doesn't exactly solve anything, though.  It would just move the
-problem around and hopefully makes the failure case less likely and with
-smaller effect.  Ideally sufficiently small an effect that ECC could do its job
-effictively.
+## Allowing ECC to do its job more effectively
+
+The above mitigation doesn't exactly solve anything, though.  It would just
+move the problem around and hopefully makes the failure case less likely and
+with smaller effect.  Ideally sufficiently small an effect that ECC could do
+its job effectively.
 
 The greater mitigation would be to spread what ECC considers in a block across
 different physical regions of storage; so that an attack focused on one part of
-the chip is effective only against a small portion of the block ECC has to
-salvage.
+the chip is effective only against a small portion of the block which ECC has
+to salvage.
+
+### Row address permutation
 
 This might be achieved by splitting ECC across several independent chips, and
 (this is important) _permuting_ the row addresses _differently_ for each chip
@@ -79,19 +89,23 @@ couldn't guess, but it does arrange the addresses such that neighbours will
 only be neighbours for one specific device.
 
 What this means is that if a conventional RowHammer attack is mounted, then
-that might successfully corrupt a row in n different regions, but ECC only has
-to deal with 1/n of that corruption at a time with the support of (n-1)/n
-un-corrupted regions to help it correct each of those corrupted rows, one at a
-time as they come up.
+that might successfully corrupt a row in n different regions (where n is the
+number of devices in an ECC block), but ECC only has to deal with 1/n of that
+corruption at a time with the support of (n-1)/n un-corrupted regions to help
+it correct each of those corrupted rows; one at a time as they come up.
 
 Maybe one could secretly hash the row address itself, and then rotate it for
 different devices, so that the effect of the rotation is harder to guess?
 That's really a crypto question which needs more careful thought than I'm
 going to give it.
 
+## Putting ECC in-loop with DRAM refresh
+
 It would be nice if refresh and ECC worked in harmony, here, correcting errors
 before they could reach a fatal threshold; but I'm pretty sure that's
 unrealistic for a variety of reasons.
+
+## Learning from other analogue communication fields
 
 I think that's all I've got on the matter.  But as a general observation data
 communications has pushed up against the [Shannon limit][] with generous
