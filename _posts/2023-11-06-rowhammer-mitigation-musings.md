@@ -61,9 +61,10 @@ problem around and hopefully makes the failure case less likely and with
 smaller effect.  Ideally sufficiently small an effect that ECC could do its job
 effictively.
 
-The greater mitigation would be to spread what ECC considers across different
-physical regions of storage; so that an attack focused on one part of the chip
-is effective only against a small portion of what ECC has to salvage.
+The greater mitigation would be to spread what ECC considers in a block across
+different physical regions of storage; so that an attack focused on one part of
+the chip is effective only against a small portion of the block ECC has to
+salvage.
 
 This might be achieved by splitting ECC across several independent chips, and
 (this is important) _permuting_ the row addresses _differently_ for each chip
@@ -72,15 +73,21 @@ other chips.  Then, in order to overwhelm ECC one has to attack multiple
 regions on different sets of rows concurrently.  And one also has to be able to
 find those rows (maybe keep that permutation parameter a secret, too).
 
-A trivial address permutation is just to rotate the bits.  Not great as a
-secret, but it arranges the addresses such that neighbours will only be
-neighbours for one specific device.
+A trivial address permutation is just to rotate the bits differently on each
+chip.  This permutation isn't much use as a secret operation which the attacker
+couldn't guess, but it does arrange the addresses such that neighbours will
+only be neighbours for one specific device.
 
 What this means is that if a conventional RowHammer attack is mounted, then
 that might successfully corrupt a row in n different regions, but ECC only has
 to deal with 1/n of that corruption at a time with the support of (n-1)/n
 un-corrupted regions to help it correct each of those corrupted rows, one at a
 time as they come up.
+
+Maybe one could secretly hash the row address itself, and then rotate it for
+different devices, so that the effect of the rotation is harder to guess?
+That's really a crypto question which needs more careful thought than I'm
+going to give it.
 
 It would be nice if refresh and ECC worked in harmony, here, correcting errors
 before they could reach a fatal threshold; but I'm pretty sure that's
