@@ -100,10 +100,10 @@ As with many such "what's wrong with SIMD?" questions, it reflects the
 mistaken assumption that bandwidth benchmarks are the only thing that
 matter.
 
-SIMD demands a lot of set up and tear-down costs to handle edges, but in
-the case of hashing that's frequently the whole operation, and the
-operations to make it work in SIMD are counterproductive to getting an
-answer quickly and getting the answer as quickly as possible.  SIMD is
+SIMD demands a lot of set up and tear-down costs to handle edges and to mix across the width of the vector, but in
+the case of hashing that's frequently the whole operation, and the extra
+operations to fit the problem into SIMD ops are entity counterproductive to getting an
+answer the quickly as possible.  SIMD is
 inherently _bad at this_.
 
 Because hashing occurs so much in data addressing, it's just absurd to
