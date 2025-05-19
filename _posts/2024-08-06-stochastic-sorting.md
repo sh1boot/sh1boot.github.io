@@ -7,10 +7,10 @@ tags: statistics stochastic-methods needs-example
 
 If you believe your histogram, when sorted, will fit a particular curve,
 then, like stochastic counters which conditionally increment based on a
-probability suitable to the conditions, you could perform stochastic
-swaps to conditionally promote items up the list based on a probability.
-I guess the theory includes a flat probability but I don't see the point
-in that.
+probability suitable to the conditions, you could perform stochastically
+filtered swaps to conditionally promote items up the list based on a
+probability.  I guess the theory includes a flat probability but I don't
+see the point in that.
 
 This allows you to keep a much more dense representation of the
 histogram of your data (one assumes storing counts would be very
@@ -29,3 +29,10 @@ indices.
 
 Or you can do the same thing in a doubly-linked list, if that
 works better (it depends on your data representations).
+
+
+I think there's probably a generalisation in here for performing other
+operations predicated on a statistical model of how often they're
+expected to happen with a view to coming out with a data structure in
+the same approximate shape as would be given by a more rigorous but
+costly analysis, but I can't think of any other good examples right now.
