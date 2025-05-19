@@ -26,7 +26,7 @@ separated by 180° end up pointing in the same direction, but now there's
 no discontinuity half way around.
 
 Here's an example of that technique in action:
-{%- include 'shadertoy.liquid' id='mdsfzn' -%}
+{%- include shadertoy.liquid id='mdsfzn' -%}
 
 What I find interesting about this is the side-effect of squaring the
 length.  This makes the operation analoguous to RMS, or quadratic mean,
