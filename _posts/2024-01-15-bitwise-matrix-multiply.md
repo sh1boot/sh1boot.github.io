@@ -134,6 +134,28 @@ into that detail when I have more time for it.
 
 TODO: fill all this in.
 
+### Widening, narrowing, and overflow
+
+A general frustration with SIMD multiplication is that the results are
+wider than the operands and so you typically need to issue the
+instruction twice to get a complete result.  Either by issuing two
+widening operations for each half of the input vectors, or by issuing
+separate high and low operations with results the same width as the
+inputs.
+
+In this instance the needed precision may be so low that it avoids
+overflow even without widening.  If the input is only five bits wide
+then the sum will fit in an eight-bit result; although if it's an
+accumulating sum then that won't quite work.
+
+I wonder if separate high and low operations taking the top or bottom
+four bits of the eight-bit operand would be the best way to go.  This
+saves an extra bit of headroom for an accumulation without overflow (but
+just the one; is that actually useful?), and the two separate sums can
+be fused together with another weighted shift and addition at the end of
+the loop.
+
+
 ### Beyond 64-bit
 
 The instruction illustrated above distributes eight eight-bit values
