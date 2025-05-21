@@ -5,6 +5,7 @@ title:  Idly musing over RowHammer mitigation strategies
 tags: rowhammer security hashing computer-architecture error-correction
 redirect_from:
   - /rowmhammer-mitigation-musings/
+svg: true
 ---
 Watching a [RowHammer talk][] ([slides][RowHammer slides]) a while back (not
 actually the linked one, but I couldn't find the one I attended) left me with a
@@ -87,6 +88,32 @@ A trivial address permutation is just to rotate the bits differently on each
 chip.  This permutation isn't much use as a secret operation which the attacker
 couldn't guess, but it does arrange the addresses such that neighbours will
 only be neighbours for one specific device.
+
+<svg width="100%" viewbox="0 0 800 465">
+  <defs>
+    {% for n in (0..15) -%}
+    <g id="row{{n}}"><rect x="0" y="0" width="140" height="30" /><text x="70" y="15">row {{n}}</text></g>
+    {% endfor -%}
+  </defs>
+  <text x="80" y="25">logical address</text><text x="80" y="445">&hellip;</text>
+  <rect x="165" y="5" width="150" height="460" /><text x="240" y="25">chip 0</text><text x="240" y="445">&hellip;</text>
+  <rect x="325" y="5" width="150" height="460" /><text x="400" y="25">chip 1</text><text x="400" y="445">&hellip;</text>
+  <rect x="485" y="5" width="150" height="460" /><text x="560" y="25">chip 2</text><text x="560" y="445">&hellip;</text>
+  <rect x="645" y="5" width="150" height="460" /><text x="720" y="25">chip 3</text><text x="720" y="445">&hellip;</text>
+  {% for n in (0..15) -%}
+    <g class="blockgroup{{n}}">
+    {% if n < 10 %}<text x="80" y="{{n | times: 40 | plus: 60}}">row {{n}}</text>{%endif%}
+    {% assign m = n | times: 4369 | divided_by: 1 | modulo: 16 %}
+    {% if m < 10 %}<use href="#row{{n}}" x="170" y="{{m | times: 40 | plus: 40 }}" />{%endif%}
+    {% assign m = n | times: 4369 | divided_by: 2 | modulo: 16 %}
+    {% if m < 10 %}<use href="#row{{n}}" x="330" y="{{m | times: 40 | plus: 40 }}" />{%endif%}
+    {% assign m = n | times: 4369 | divided_by: 4 | modulo: 16 %}
+    {% if m < 10 %}<use href="#row{{n}}" x="490" y="{{m | times: 40 | plus: 40 }}" />{%endif%}
+    {% assign m = n | times: 4369 | divided_by: 8 | modulo: 16 %}
+    {% if m < 10 %}<use href="#row{{n}}" x="650" y="{{m | times: 40 | plus: 40 }}" />{%endif%}
+    </g>
+  {% endfor -%}
+</svg>
 
 What this means is that if a conventional RowHammer attack is mounted, then
 that might successfully corrupt a row in n different regions (where n is the
