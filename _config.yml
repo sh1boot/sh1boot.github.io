@@ -30,6 +30,8 @@ github_username:  sh1boot
 
 header_pages:
   - "top/manifesto.md"
+  - "top/todo.md"
+  - "top/links.md"
 
 permalink: /:title/
 markdown: kramdown

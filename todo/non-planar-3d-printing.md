@@ -1,7 +1,7 @@
 ---
 last_modified_at: Tue, 11 Jun 2024 17:41:44 -0700  # 1ae3ec2 update-images
 layout: post
-title:  Why I should never buy a 3D printer
+title:  Daft ideas for 3D printing experiments
 tags: daft-ideas 3d-printing non-planar
 draft: true
 ---
@@ -11,7 +11,7 @@ much YouTube content on 3D printing, it's inevitable that I'm going to
 end up watching some of it; and one thing that's stuck with me (so to
 speak) is the problem of getting better adhesion between layers.
 
-So I thought about it.  Inside my own entirely unqualified head.  And
+So I thought about it.  Inside my own entirely-unqualified head.  And
 it's left me with so many things I want to try that I'm now too afraid
 to buy a 3D printer because I can see how it would absorb my entire life
 and leave me unemployed and homeless.  Presumably living in a cardboard
@@ -35,7 +35,8 @@ area between layers because those wavy beads are much longer.
 ### stretch goal: woodgrain
 
 Small variations in height, but variations themselves varying over z axis so
-that it gets thinner and thicker as well.
+that it gets thinner and thicker as well.  Arranged such that the
+cumulative effect mimics that of wood grain.
 
 ## Weaving
 
