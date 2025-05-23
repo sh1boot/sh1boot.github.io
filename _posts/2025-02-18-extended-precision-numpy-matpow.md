@@ -13,12 +13,28 @@ modular arithmetic.
 
 You can mitigate that a little by implementing `pow()` manually, but for
 large-ish modulo it's still possible to overflow the intermediates even
-while regularly reducing the range between matrix operations.
+while regularly reducing the range between intermediate operations.
 
-So knowing that there's a basic technique for extending multiplication
-beyond the size of the native data types you have, where you slice each
-input into high and low parts and multiply these together the way you
-learned in primary school, and which looks a bit like this:
+Such a manual implementation, without explicitly addressing the
+large-modulo-overflow problem, might look like this:
+
+```python
+def matmul(x, y, m): return x @ y % m
+
+def matpow(a, i, m):
+  p = numpy.identity(a.shape[0], dtype=uint64)
+  while i > 0:
+    i, z = divmod(i, 2)
+    if z:
+      p = matmul(p, a, m)
+    a = matmul(a, a, m)
+  return p
+```
+
+Now, there's a basic technique for extending multiplication beyond the
+size of the native data types you have, where you slice each input into
+high and low parts and multiply these together the way you learned in
+primary school.  It looks a bit like this:
 
 ```python
 def mul(a, b):
@@ -40,11 +56,12 @@ def mul(a, b):
   return (lo, hi)
 ```
 
-It turns out you can do exactly this trick but with modular matrix
-arithmetic in much the same way.  Moreover you can continue to use numpy
-to implement it; you just end up doing the multi-step approach on the
-_outside_ of the iteration through the matrices rather than on the
-inside the way `dtype=object` probably would.
+Knowing that, it turns out you can do essentially this trick but with
+modular matrix arithmetic in much the same way.  Moreover you can
+continue to use numpy to implement it; you just end up doing the
+multi-step approach on the _outside_ of the iteration through the
+matrices rather than on the inside the way `dtype=object` probably
+would.
 
 This way you still use whatever accelerated implementation is behind the
 64-bit numpy matrix multiplication; just in a few extra passes, and then
@@ -140,22 +157,6 @@ effectively means ensuring that `mlo` is less than `mhi`, by clamping
 restricts the maximum result for `d` to a value which can't overflow.
 
 It gets fiddly.
-
-Oh, and you might want a `matpow()` to copy-paste.  Let's see if I can
-write it correctly on my first try without checking:
-
-```python
-def matpow(a, i, m):
-  p = numpy.identity(a.shape[0], dtype=uint64)
-  while i > 0:
-    i, z = divmod(i, 2)
-    if z:
-      p = matmul(p, a, m)
-    a = matmul(a, a, m)
-  return p
-```
-
-There.  Bound to work!
 
 Is it actually faster than `dtype=object`?  Yes for large matrices.  how
 large the matrix has to be to benefit depends on `m`.  if it's very
