@@ -4,12 +4,16 @@ layout: post
 title: Syntactic sugar for RISC-V Vector extensions
 ---
 While I never did much of consequence with x86 vector intrinsics, I did write
-a lot of assembly for Arm NEON, and I found the transition to C intrinsics to
+a lot of assembly for Arm Neon, and I found the transition to C intrinsics to
 be acutely painful.
+
+The [ACLE][] Neon intrinsics are very explicit about types, and don't
+allow the sorts of aliasing that one usually has to do to for tricky
+optimisations.
 
 Then came SVE, then came RISC-V Vector (RVV).  Thankfully these used a lot
 more fuction overloading (native to C++, but also enabled as an extension in
-C).  But RVV is _still_ painful.
+C).  But even with that RVV is _still_ very painful.
 
 The most outstanding wart is the decision to adhere strictly to the assembly
 mnemonics.  Where assembly (which lacks types) has to distinguish between a
@@ -18,22 +22,44 @@ And where assembly cannot deduce the element size from the (typeless) pointer
 argument, the name of the intrinsic function changes.
 
 LMUL and the bit width of lines are often codified in the function name
-unnecessarily, too.  Making it challenging to switch between signed, unsigned,
-or floating-point types without explicitly calling out all the other details of
-the type.
+unnecessarily, too.  For example, you can't `vreinterpret` between
+signed, unsigned, or floating-point types without explicitly calling out
+all the other details of the source type at the same time.
 
-And there are many cases where the natural function arguments are not adequate
-to deduce the complete type (including LMUL) of the operation.  `vle`, for
-example.
+And there are also cases where the natural function arguments are not adequate
+to deduce the complete type (that is, including LMUL) for the operation;
+`vle`, for example.
 
-These are a huge obstacle to template metaprogramming and code generality.
+And probably most annoying of all is that some LMUL/type combinations
+are undefined because they _could_ (not necessarily because they do)
+produce less than a whole data type.  These configurations can be
+supported in hardware and would only come about as a consequence of
+running on hardware which supports them, but you have to do workarounds
+to access them, or even to get generic code to compile.
 
-But it struck me there's this ever-present vector-length argument.  It's a
-`size_t`, but it could be changed to an integer-compatible(ish) family of types
-bearing the additional type information needed to deduce the missing details.
+These are huge obstacles to template metaprogramming and code generality.
 
-You can use constructors which take separate element and LMUL size arguments,
-or take a vector type for the same effect.
+A lot of this can be replaced with functions with simpler names and more
+overloading.  But that still leaves a lot of warts.
+
+You could pass template arguments to make up for those gaps, but it
+struck me that there's this ever-present vector-length argument.  It's a
+`size_t`, but it could be changed to an integer-compatible(ish) family
+of types bearing the additional type information needed to deduce
+the missing details.
+
+That mostly just relocates the template-argument problem to the
+constructor for the length argument, but on the plus side that's
+typically abstracted up to the top of the function where the variable is
+declared.  You can use constructors which take separate element and LMUL
+size arguments, or take a vector type for the same effect.
+
+From that point on that variable informs whichever operations need to be
+informed without interfering with the flow of the logic.  It can also
+serve as a weak (or strong?) continuity check by being compatible only
+with the appropriate other vector-length types after widening or
+narrowing operations.  Give or take signed/unsigned mixing, which is
+often deliberate.
 
 More questionably I wondered if that argument should be extended to also
 encode the mask register and/or the undisturbed/agnostic modes for tail and
@@ -49,5 +75,11 @@ more comprehensively.
 
 When I find time.
 
+I see there's standard SIMD stuff in C++, now(ish), too:
+<https://en.cppreference.com/w/cpp/experimental/simd>
+
+Not sure how to reconcile these.
+
 [sketch]: <https://github.com/sh1boot/rvv_utils/blob/sketch/sketch.cc>
 [intrinsics viewer]: <https://dzaima.github.io/intrinsics-viewer/>
+[ACLE]: <https://arm-software.github.io/acle/main/acle.html>
