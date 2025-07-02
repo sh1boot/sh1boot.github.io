@@ -7,7 +7,7 @@ In the compression world it's usual to compare the time spent
 compressing and decompressing data with the time difference in
 transmitting the compressed or uncompressed data over a given network.
 In this experiment I managed to make the compression faster than the
-bandwidth to RAM.  Under special circumstances and with no apologies for
+bandwidth to RAM.  Sort of.  Under special circumstances and with no apologies for
 the egregious clickbait headline.
 
 In the simplest possible terms this compression works by maintaining a
@@ -64,9 +64,14 @@ fragments rather than every byte.
 * Clean up the code.
   - Figure out a proper generic interface with virtual methods in places
     that make sense and don't have scary performance implications.
-  - Do a proper 64-bit input crc32 implementation via clmul.
-  - Tweak the clmul crc for performance.
-  - Tweak everything else for performance.
+
+* Do a proper 64-bit input crc32 implementation via clmul.
+
+* Tweak the clmul crc for performance.
+
+* Tweak everything else for performance.
+
+* Does the Adler-32 implementation even work?
 
 [previously]: </more-efficient-nonsense-text/>
 [defl-8bit]: <https://github.com/sh1boot/defl-8bit>
