@@ -11,28 +11,28 @@ bandwidth to RAM.  Sort of.  Under special circumstances and with no apologies f
 the egregious clickbait headline.
 
 In the simplest possible terms this compression works by maintaining a
-dictionary of pre-cooked strings, and appending those to the output
+dictionary of pre-cooked strings, appending those to the output
 stream, and noting when they've already been emitted recently (a simple
 index to last use with bounds check) and emitting a backreference code
 instead of the full string in those cases.
 
-Non-pre-cooked strings are not supported efficiently.  It's a compressor
+Non-pre-cooked strings are not supported efficiently.  It's an encoder
 restricted to very specific applications.  Probably.
 
 The bit-packing overhead is obviated by contriving Huffman codes which
 [always fall on byte boundaries][previously].  This is impossible for a
-generic octet stream, but is achievable for UTF-8 text.
+generic octet stream in the Delete format, but is achievable for UTF-8 text.
 
 The _hard part_ turned out to be the checksum calculation.  When I
 thought of the idea I assumed (hoped) it would be an Adler32 checksum
 where it is easy to reason about appending precomputed checksums to the
 running checksum.  It turned out gzip uses CRC32, and gzip is the
-preferred over zlib in web browsers.  So I had to figure out how to
+preferred format over zlib in web browsers.  So I had to figure out how to
 append CRC checksums as efficiently as possible.
 
 It turns out you can precompute the string checksum and store the string
-length as a multiplier to be applied to the running checksum via clmul
-and a 64-bit crc32 operation.
+length as a multiplier to be applied to the running checksum via [clmul][]
+and folding that with a 64-bit crc32 operation.
 
 Arm has CPU instructions for both of these operations, but x86 only has
 the former (its CRC instruction uses the wrong polynomial), which means
@@ -74,4 +74,5 @@ fragments rather than every byte.
 * Does the Adler-32 implementation even work?
 
 [previously]: </more-efficient-nonsense-text/>
+[clmul]: <Https://en.wikipedia.org/wiki/CLMUL_instruction_set>
 [defl-8bit]: <https://github.com/sh1boot/defl-8bit>
