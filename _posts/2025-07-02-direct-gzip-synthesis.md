@@ -1,7 +1,7 @@
 ---
 layout: post
-title: How I made a gzip compressor faster than memcpy
-tags: compression, number-theory
+title: How I made a gzip encoder faster than memcpy
+tags: compression, number-theory, crc
 ---
 In the compression world it's usual to compare the time spent
 compressing and decompressing data with the time difference in
