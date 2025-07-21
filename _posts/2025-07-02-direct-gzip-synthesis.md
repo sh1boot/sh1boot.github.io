@@ -46,32 +46,24 @@ TODO: a bunch of extra exposition
 Here's the code: [defl-8bit][].
 
 ## possible improvements
-* Do the conventional rolling hash thing, but on the precomputed string
-fragments rather than every byte.
-
-* A preprocessor to break input text into strings at the most
+* Write a preprocessor to break input text into strings at the most
   appropriate boundaries, adding flexibility in random string
   generation.
-
 * Implement the higher-level backref operator so multiple backreferences
   can be consolidated and their checksums can be computed as the
   difference between start and end of previous copy.
-
+* Make larger backrefs using the conventional rolling hash thing, but on
+  the precomputed string fragments rather than every byte.
 * Or, remember previous backref distance and merge them when possible.
-
-* Clean up this post.
-
 * Clean up the code.
-  - Figure out a proper generic interface with virtual methods in places
-    that make sense and don't have scary performance implications.
-
-* Do a proper 64-bit input crc32 implementation via clmul.
-
-* Tweak the clmul crc for performance.
-
-* Tweak everything else for performance.
-
+* Figure out a proper generic interface with virtual methods in places
+  that make sense and don't have scary performance implications.
+* Add a practical fallback implementation for CRC for webasm
+  compatibility (all that work for nothing!).
 * Does the Adler-32 implementation even work?
+* Tweak the clmul crc for performance.
+* Tweak everything else for performance.
+* Clean up this post.
 
 [previously]: </more-efficient-nonsense-text/>
 [clmul]: <Https://en.wikipedia.org/wiki/CLMUL_instruction_set>
