@@ -305,16 +305,16 @@ more (2 bits, all immediates):
         "subi4spn",
 ```
 
-cmp (3 bits, 50% immediates):
+cmp (3 bits, all immediates):
 ```
-        "slti",
-        "sltiu",
+        "slti0",
+        "slti1",
+        "slti0u",
+        "slti1u",
         "seqi0",
         "seqi1",
-        "slt",
-        "sltu",
-        "seq",
-        "???",
+        "???i",
+        "???I",
 ```
 
 
@@ -333,6 +333,8 @@ and/bic
 ```
 Other opcodes like break can be overloaded in the rd=0 space.  Or fall
 back to 32-bit encoding.
+
+should probably prohibit mem->arith dependency in one instruction?
 
 ### caveats
 * Arithmetic paired with ldst are affected by the ld/st width (yikes?),
