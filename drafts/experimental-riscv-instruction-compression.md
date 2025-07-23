@@ -320,12 +320,14 @@ cmp (3 bits, 50% immediates):
 
 should probably formalise mul/mulh/etc to:
 ```
-mul,mulh
+mul,mulhu
 div,rem
 add,sub
 add,sltu # carry flag out (addc)
-min/max
+min,max
 minu/maxu
+mul,mulh
+mul,mulhsu
 and/bic
 
 ```
