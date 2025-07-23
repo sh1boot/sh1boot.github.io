@@ -291,7 +291,7 @@ full (5 bits, 50% immediates):
         "mulh",
         "div",
         "rem",
-        "??",  # where are clt, gle, cltu, cleu (or whatever)
+        "??",  # where are slt, sltu, seq, etc.?
         "??",
         "??",
         "??",
@@ -307,14 +307,14 @@ more (2 bits, all immediates):
 
 cmp (3 bits, 50% immediates):
 ```
-        "clti",
-        "clei",
-        "cltui",
-        "cleui",
-        "clt",
-        "cle",
-        "cltu",
-        "cleu",
+        "slti",
+        "sltiu",
+        "seqi0",
+        "seqi1",
+        "slt",
+        "sltu",
+        "seq",
+        "???",
 ```
 
 
