@@ -317,6 +317,18 @@ cmp (3 bits, 50% immediates):
         "cleu",
 ```
 
+
+should probably formalise mul/mulh/etc to:
+```
+mul,mulh
+div/rem
+add,sub
+set-carry/add
+min/max
+minu/maxu
+and/bic
+
+```
 Other opcodes like break can be overloaded in the rd=0 space.  Or fall
 back to 32-bit encoding.
 
