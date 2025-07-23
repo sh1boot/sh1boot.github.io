@@ -313,7 +313,7 @@ cmp (3 bits, all immediates):
         "slti1u",
         "seqi0",
         "seqi1",
-        "???i",
+        "???i",  # how about bit test?
         "???I",
 ```
 
