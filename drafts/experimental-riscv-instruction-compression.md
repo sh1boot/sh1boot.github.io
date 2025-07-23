@@ -249,8 +249,8 @@ set0 (4 bits, 50% immediates):
         "subi1",
         "andi0",
         "andi1",
-        "bici0",
-        "bici1",
+        "bici0", # replace with addi4spn
+        "bici1", # replace with addi4spn
         "add",
         "addw",
         "sub",
@@ -292,12 +292,12 @@ full (5 bits, 50% immediates):
         "div",
         "rem",
         "??",  # where are slt, sltu, seq, etc.?
-        "??",
+        "??",  # all,srl,sra ?
         "??",
         "??",
 ```
 
-more (2 bits, all immediates):
+more (2 bits, all immediates): # kill this 
 ```
         "addiw",
         "subiw",
