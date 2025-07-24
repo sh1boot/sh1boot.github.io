@@ -12,13 +12,13 @@ the future).
 
 RISCV is implemented both in lightweight scalar implementations, and in
 wide out-of-order implementations, each of which need to take very
-different perspectives on how to ingest the instruction stream.
+different approaches how to ingest the instruction stream.
 
-The large number of instruction entrypoints is problematic for
+The large number of instruction entrypoints and unsigned 32-bit opcodes are problematic for
 out-of-order machines, while the low-end processors want to minimise
 code size and icache load.
 
-This model aims at a compromise, with slightly less conventional parsing
+This model aims for a compromise, with slightly less conventional parsing
 of compressed instructions, while also allowing a compressed instruction
 pair be ingested as a 32-bit opcode but subject to uop fission later in
 the pipeline (a process that already exists by necessity).
@@ -44,7 +44,7 @@ Macro-op fusion stuff:
 * <https://arxiv.org/pdf/1607.02318>
 * <https://en.wikichip.org/wiki/macro-operation_fusion#Proposed_fusion_operations>
 
-## A childish attempt
+## A provisional attempt
 With no statistical model of instruction-pair frequency, I just guessed
 at what might work and came up with the following.
 
@@ -82,7 +82,7 @@ supported instruction set is decided.
 total size: (0x40000000),  bits: 30
 ```
 
-Other opcodes like break can be overloaded in the rd=0 space.  Or fall
+Other opcodes like breakpoint can be overloaded in the rd=0 space.  Or fall
 back to 32-bit encoding.
 
 THe `add,sltu` pair forms and add-with carry, but is problematic in its
@@ -107,6 +107,7 @@ The `mem,arithmetic` pairs should probably be defined to prohibit use of
 the load result in the second operation, even though this is probably a
 very reasonable thing to expect to do in general.
 
+And the `cmp,b` pairsanage the `beqi` and `bnqi` Qualcomm proposal.
 
 #### ldst (4 bits):
 ```
@@ -223,6 +224,7 @@ the bit index to test and to branch on.
   choices.  I took some guidance from the existing compressed
   instruction extension to keep it in roughly the right place, but my
   changes may add their own implications.
+* There might be much to much overlap between the different register sharing modes for arithmeric.  This needs to be looked at still.
 
 ### Variations
 * For `mem,mem` the immediate could be smaller and the pair of
