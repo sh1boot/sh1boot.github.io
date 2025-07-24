@@ -8,27 +8,6 @@ in a way that did _not_ allow for the creation of un-aligned 32-bit
 opcodes (and would not set a precedent for unaligned 64-bit opcodes in
 the future).
 
-## Design objectives
-
-* Continue to support 32-bit opcode packets, but squeezing pairs of
-  instructions into those packets.
-* Ensure that every such packet can be interpreted in two passes as two
-  independent instructions, each conforming to the standard RISCV ISA
-  model.
-* Capture some proposed instruction extensions which could be
-  implemented as macro-op fusion instructions and formalise them as
-  pairs within a 32-bit packet.
-* Make code smaller.
-
-### Sources
-
-Qualcomm Znew/Zics:
-<https://lists.riscv.org/g/tech-profiles/attachment/332/0/code_size_extension_rvi_20231006.pdf>
-
-Macro-op fusion stuff:
-<https://arxiv.org/pdf/1607.02318>
-<https://en.wikichip.org/wiki/macro-operation_fusion#Proposed_fusion_operations>
-
 ## Rationale
 
 RISCV is implemented both in lightweight scalar implementations, and in
@@ -44,8 +23,26 @@ of compressed instructions, while also allowing a compressed instruction
 pair be ingested as a 32-bit opcode but subject to uop fission later in
 the pipeline (a process that already exists by necessity).
 
+## Design objectives
 
+* Continue to support 32-bit opcode packets, but squeezing pairs of
+  instructions into those packets.
+* Ensure that every such packet can be interpreted in two passes as two
+  independent instructions, each conforming to the standard RISCV ISA
+  model.
+* Capture some proposed instruction extensions which could be
+  implemented as macro-op fusion instructions and formalise them as
+  pairs within a 32-bit packet.
+* Make code smaller.
 
+### Sources
+
+Qualcomm Znew/Zics:
+* <https://lists.riscv.org/g/tech-profiles/attachment/332/0/code_size_extension_rvi_20231006.pdf>
+
+Macro-op fusion stuff:
+* <https://arxiv.org/pdf/1607.02318>
+* <https://en.wikichip.org/wiki/macro-operation_fusion#Proposed_fusion_operations>
 
 ## A childish attempt
 With no statistical model of instruction-pair frequency, I just guessed
@@ -98,10 +95,7 @@ The `mem,mem` operations essentially mimic the load/store pair
 instructions proposed by Qualcomm, but lacking pre/post-increment
 because that would break the 2-in-1-out contract in a two-round
 implementation.  These share the base register and immediate offset
-arguments, and the destination register is a consecutive pair
-(alternatively, the immediate could be smaller and the pair of
-destination registers could be arbitrary, consistent with the 
-arithmetic instructions which share both source registers).
+arguments, and the destination register is a consecutive pair.
 
 The `arithmetic,mem` and `mem,arithmetic` pairs provide the
 pre/post-increment operations proposed by Qualcomm, but are then
@@ -229,6 +223,12 @@ the bit index to test and to branch on.
   choices.  I took some guidance from the existing compressed
   instruction extension to keep it in roughly the right place, but my
   changes may add their own implications.
+
+### Variations
+* For `mem,mem` the immediate could be smaller and the pair of
+destination registers could be arbitrary, consistent with the 
+arithmetic instructions which share both source registers.
+* `op.full rd,rs,rs ; =~op.full =rd,=rd,rs` is also 25 bits and could probably be more use in that it doesn't corrupt the original sources.  just have to pick a sensible `~op.full`.
 
 ### Questions
 * I didn't do anything about an optimisation using the same rd for both
