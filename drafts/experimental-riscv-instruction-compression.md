@@ -37,6 +37,7 @@ necessity).
 * Capture some proposed instruction extensions which could be
   implemented as macro-op fusion instructions and formalise them as
   pairs within one 32-bit packet.
+* Use no more than 1/4 (30 bits) of the opcode space.
 * Make code smaller.
 
 ### References
