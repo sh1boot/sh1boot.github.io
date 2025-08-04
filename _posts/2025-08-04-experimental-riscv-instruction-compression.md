@@ -366,12 +366,21 @@ operation which simply computes the carry from the inputs.
   know!
 * Did I choose the right basic arithmetic instructions?
 
+## Observations
+
+Reserving a portion of the coding space for compressed instructions it's different from Thumb.  One doesn't have to squeeze everything in.
+If something is difficult it can be ignored and left to the 32-but encoding, leaving coding space to allow anything else to capture more cases.
+
+On the other hand it's tempting to hang on to some of the CISC-like tuples on the basis that they are strong candidates for fusion, and sometimes that _is_ a squeeze.
+It's bad form to pre-suppose the implementation in the ISA, but it's still tempting to make such an optimisation available.
+
 ## Next steps
+I really need more data about why each instruction fails to fall into a pair.  Is it because I chose the wrong shortlist of opcodes, or because the operand constraints don't fit, or because the immediate is too big?  A lot of this hangs on choices the compiler made, which in turn reflect the interaction set it was aiming for, but I don't think I'm capable of iterating over the compiler's notion of available instructions, so I'll just use proxy configurations instead.
+
 As a general guide I plan to use:
 ```
 qemu-riscv64-static -d nochain,in_asm,execxx ./coremark
 ```
-
 (or something like that) to collect translation blocks of instructions
 and count the number of times each block is executed.  These blocks,
 compiled in different ways, can be used for a casual measure of the
