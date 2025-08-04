@@ -369,7 +369,7 @@ operation which simply computes the carry from the inputs.
 ### Observations
 
 Reserving a portion of the coding space for compressed instructions it's different from Thumb.  One doesn't have to squeeze everything in.
-If something is difficult it can be ignored and left to the 32-but encoding, leaving coding space to allow anything else to capture more cases.
+If something is difficult it can be ignored and left to the 32-bit encoding, leaving coding space to allow anything else to capture more cases.
 
 On the other hand it's tempting to hang on to some of the CISC-like tuples on the basis that they are strong candidates for fusion, and sometimes that _is_ a squeeze.
 It's bad form to pre-suppose the implementation in the ISA, but it's still tempting to make such an optimisation available.
