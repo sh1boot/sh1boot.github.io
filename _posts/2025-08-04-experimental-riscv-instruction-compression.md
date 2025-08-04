@@ -318,7 +318,7 @@ think about it.
 | `???`     | `???`     |
 ```
 
-The use of an `add,sltu` pair forms and add-with carry, but is
+The use of an `add,sltu` pair forms and add-with-carry, but is
 problematic in its definition.  It breaks the pattern of sharing both
 source registers, needing the result of the previous add instead,
 _unless_ the `sltu` part is instead redefined to be a different
@@ -366,7 +366,7 @@ operation which simply computes the carry from the inputs.
   know!
 * Did I choose the right basic arithmetic instructions?
 
-## Observations
+### Observations
 
 Reserving a portion of the coding space for compressed instructions it's different from Thumb.  One doesn't have to squeeze everything in.
 If something is difficult it can be ignored and left to the 32-but encoding, leaving coding space to allow anything else to capture more cases.
