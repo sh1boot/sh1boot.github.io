@@ -1,6 +1,9 @@
 ---
 layout: post
 title: An experimental RISCV instruction compression
+tags: computer-architecture
+redirect_from:
+  - /drafts/experimental-riscv-instruction-compression/
 ---
 
 I wanted to experiment with a means of reducing compiled RISCV code size
