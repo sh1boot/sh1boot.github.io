@@ -379,7 +379,7 @@ I really need more data about why each instruction fails to fall into a pair.  I
 
 As a general guide I plan to use:
 ```
-qemu-riscv64-static -d nochain,in_asm,execxx ./coremark
+qemu-riscv64-static -d nochain,in_asm,execxx ./benchmark
 ```
 (or something like that) to collect translation blocks of instructions
 and count the number of times each block is executed.  These blocks,
