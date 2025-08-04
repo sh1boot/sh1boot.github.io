@@ -375,7 +375,7 @@ On the other hand it's tempting to hang on to some of the CISC-like tuples on th
 It's bad form to pre-suppose the implementation in the ISA, but it's still tempting to make such an optimisation available.
 
 ## Next steps
-I really need more data about why each instruction fails to fall into a pair.  Is it because I chose the wrong shortlist of opcodes, or because the operand constraints don't fit, or because the immediate is too big?  A lot of this hangs on choices the compiler made, which in turn reflect the interaction set it was aiming for, but I don't think I'm capable of iterating over the compiler's notion of available instructions, so I'll just use proxy configurations instead.
+I really need more data about why each instruction fails to fall into a pair.  Is it because I chose the wrong shortlist of opcodes, or because the operand constraints don't fit, or because the immediate is too big?  A lot of this hangs on choices the compiler made, which in turn reflect the instruction set it was aiming for, but I don't think I'm capable of iterating over the compiler's notion of available instructions, so I'll just use proxy configurations instead.
 
 As a general guide I plan to use:
 ```
