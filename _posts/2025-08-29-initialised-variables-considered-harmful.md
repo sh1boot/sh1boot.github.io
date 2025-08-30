@@ -1,6 +1,9 @@
 ---
 layout: post
 title: Initialisation at declaration considered harmful
+redirect_from:
+  - /drafts/initialised-variables-considered-harmful/
+  - /initialized-variables-considered-harmful/
 ---
 Suppose you have a variable `x`.
 
@@ -65,7 +68,7 @@ any `std::array_of_optionals<>` with contiguous value storage?
 
 Generally `std::optional<>` should have no performance impact
 where the compiler can prove that the uninitialised case
-never escapes, which is the intent of a correctly-formed program anyway; but 
+never escapes, which is the intent of a correctly-formed program anyway; but
 I have less optimism for arrays[^1].
 
 The thing is, though, on any worthwhile compiler leaving the variable
@@ -77,7 +80,7 @@ code and make it right.
 This is most valuable if the code was clean before you made changes
 and suddenly this warning turns up.
 
-And if the compiler can't decide, maybe because the type is an array or whatever, then being 
+And if the compiler can't decide, maybe because the type is an array or whatever, then being
 the diligent you that you are you'll catch it when you run your unit tests
 with `-fsanitize=memory`.
 
