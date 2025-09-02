@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Initialisation at declaration considered harmful
+description: Why I think initialising variables at declaration is not such a good idea as people seem to think it is.
 redirect_from:
   - /drafts/initialised-variables-considered-harmful/
   - /initialized-variables-considered-harmful/
@@ -72,41 +73,49 @@ never escapes, which is the intent of a correctly-formed program anyway; but
 I have less optimism for arrays[^1].
 
 The thing is, though, on any worthwhile compiler leaving the variable
-uninitialised _is_ setting it to an illegal value which the compiler will try to
-prove cannot escape.  If `(some_circumstances ||
+uninitialised _is_ setting it to an illegal value which the compiler
+will try to prove cannot escape.  If `(some_circumstances ||
 some_other_circumstances || unusual_circumstances)` isn't provably true
 then the compiler will gripe about this and you'll have to revisit the
 code and make it right.
 This is most valuable if the code was clean before you made changes
 and suddenly this warning turns up.
 
-And if the compiler can't decide, maybe because the type is an array or whatever, then being
-the diligent you that you are you'll catch it when you run your unit tests
+And if the compiler can't decide, maybe because the type is an array or
+whatever, then being the diligent you that you are you'll catch it when
+you run your unit tests
 with `-fsanitize=memory`.
 
 But if you do initialise the variable before you know what should be in
 that variable, then those checks will never work.  You can introduce
-bugs which cause the initialiser to become the final value and neither
-the compiler nor the sanitiser will be able to tell you that you've done
-so.  You'd have been better off knowing you just broke something, but
-instead you'll just get that "safe" value you initialised with.
+bugs which cause the initialiser you chose, before you knew what the
+value should be, to become the final value and neither the compiler nor
+the sanitiser will be able to tell you that you've done so.  You'd have
+been better off knowing you just broke something, but instead you'll
+just get that "safe" value you initialised with.
 
-Modern tooling has made an uninitialised variable the implicit signalling
-illegal state.  But it's also long-established
-bad style, so people have put time and effort into hiding bugs which
-would have been surfaced by the tools had they _not_ tried to
-improve their code.
+Modern tooling has made an uninitialised variable the implicit
+signalling illegal state.  But it's also long-established bad style, so
+people have put time and effort into hiding bugs which would have been
+surfaced by the tools had they _not_ tried to improve their code.
 
-It's unfortunate that there's no consistent way to _explicitly_ declare a
-variable as having an illegal state which should raise an error if it's
-used.  There are well-known values like `nullptr`, `NAN`,
-`std::numeric_limits<T>::signaling_NaN`, maybe `T::end()`, etc.,
-but all the integers get is something ad-hoc like `-1`.
-Only `std::optional<>` comes with a clear
-statement that
-the value is genuinely absent, but it demands compromises and is limited to run-time checking.
+It's unfortunate that there's no consistent way to _explicitly_ declare
+a variable as having an illegal state which should raise an error if
+it's used.  There are well-known values like `nullptr`, `NAN`,
+`std::numeric_limits<T>::signaling_NaN`, maybe `T::end()`, etc., but all
+the integers get is something ad-hoc like `-1`.  Only `std::optional<>`
+comes with a clear statement that the value is genuinely absent, but it
+demands compromises and is limited to run-time checking.
 
-I would prefer explicit syntax for "I don't know yet" initialisers which still allow the tools to do their job but can drop in default fill values when the tools reach their limits.  Like C++26's [erroneous behaviour][], but made explicit so as to stave off those generic "uninitialised variable" warnings.  Perhaps name it `undecided<T>{}` or `uncommitted<T>{}`, with an optional value argument if you don't want to leave that choice to the implementation, reflecting that the developer hasn't chosen a value and any attempt to read it before it changes would be a mistake, but without implying that it could be uninitialised.
+I would prefer explicit syntax for "I don't know yet" initialisers which
+still allow the tools to do their job but can drop in default fill
+values when the tools reach their limits.  Like C++26's [erroneous
+behaviour][], but made explicit so as to stave off those generic
+"uninitialised variable" warnings.  Perhaps name it `undecided<T>{}` or
+`uncommitted<T>{}`, with an optional value argument if you don't want to
+leave that choice to the implementation, reflecting that the developer
+hasn't chosen a value and any attempt to read it before it changes would
+be a mistake, but without implying that it could be uninitialised.
 
 [^1]: Perhaps this will improve under pressure from promises made by C++26.
 
