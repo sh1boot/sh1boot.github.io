@@ -84,8 +84,8 @@ with `-fsanitize=memory`.
 
 But if you do initialise the variable before you know what should be in
 that variable, then those checks will never work.  You can introduce
-bugs which cause the initialiser you chose, before you knew what the
-value should be, to become the final value and neither the compiler nor
+bugs which cause the initialiser you chose (before you knew what the
+value should be) to become the final value, and neither the compiler nor
 the sanitiser will be able to tell you that you've done so.  You'd have
 been better off knowing you just broke something, but instead you'll
 just get that "safe" value you initialised with.
