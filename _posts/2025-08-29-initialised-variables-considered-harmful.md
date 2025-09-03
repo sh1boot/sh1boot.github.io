@@ -75,10 +75,10 @@ some_other_circumstances || unusual_circumstances)` isn't provably true
 then the compiler will gripe about this and you'll have to revisit the
 code and make it right.
 This is most valuable if the code was clean before you made changes
-and suddenly this warning turns up.
+and afterwards this warning suddenly turns up.
 
-And if the compiler can't decide, maybe because the type is an array or
-whatever, then being the diligent you that you are you'll hopefully be able to catch some more complex cases when
+And if the compiler can't decide, maybe because of memory indirection and external functions or
+whatever, then being the diligent you that you are you'll hopefully catch those cases when
 you run your unit tests
 with `-fsanitize=memory`.
 
