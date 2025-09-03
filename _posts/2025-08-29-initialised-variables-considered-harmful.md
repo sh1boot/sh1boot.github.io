@@ -63,15 +63,10 @@ appropriate values.  You could use a bigger type
 as a temporary,
 or you can go out-of-band by using
 `std::optional<>` which includes a separate flag saying whether or not
-the variable has been initialised.  But that has consequences on syntax, which is annoying,
-you then have to add _manual_ run-time checks for uninitialised states,
-and it's not efficient in arrays.  It may not even be usable -- is there
-any `std::array_of_optionals<>` with contiguous value storage?
-
-Generally `std::optional<>` should have no performance impact
-where the compiler can prove that the uninitialised case
-never escapes, which is the intent of a correctly-formed program anyway; but
-I have less optimism for arrays[^1].
+the variable has been initialised.  But these require that extra checks be
+_manually_ implemented before the variable is used.  Otherwise they'll
+likely produce silent failures of their own.  And they might not be put in
+all the necessary places, because it's a _manual_ effort.
 
 The thing is, though, on any worthwhile compiler leaving the variable
 uninitialised _is_ setting it to an illegal value which the compiler
@@ -83,7 +78,7 @@ This is most valuable if the code was clean before you made changes
 and suddenly this warning turns up.
 
 And if the compiler can't decide, maybe because the type is an array or
-whatever, then being the diligent you that you are you'll hopefully catch it when
+whatever, then being the diligent you that you are you'll hopefully be able to catch some more complex cases when
 you run your unit tests
 with `-fsanitize=memory`.
 
@@ -115,7 +110,5 @@ behaviour][], but made explicit so as to stave off those generic
 leave that choice to the implementation, reflecting that the developer
 hasn't chosen a value and any attempt to read it before it changes would
 be a mistake, but without implying that it could be uninitialised.
-
-[^1]: Perhaps this will improve under pressure from promises made by C++26.
 
 [erroneous behaviour]: <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2795r5.html>
