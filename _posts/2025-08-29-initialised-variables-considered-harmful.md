@@ -64,6 +64,7 @@ as a temporary,
 or you can go out-of-band by using
 `std::optional<>` which includes a separate flag saying whether or not
 the variable has been initialised.  But that has consequences on syntax, which is annoying,
+you then have to add _manual_ run-time checks for uninitialised states,
 and it's not efficient in arrays.  It may not even be usable -- is there
 any `std::array_of_optionals<>` with contiguous value storage?
 
@@ -103,9 +104,7 @@ It's unfortunate that there's no consistent way to _explicitly_ declare
 a variable as having an illegal state which should raise an error if
 it's used.  There are well-known values like `nullptr`, `NAN`,
 `std::numeric_limits<T>::signaling_NaN`, maybe `T::end()`, etc., but all
-the integers get is something ad-hoc like `-1`.  Only `std::optional<>`
-comes with a clear statement that the value is genuinely absent, but it
-demands compromises and is limited to run-time checking.
+the integers get is something ad-hoc like `-1` or `std::optional<>` with extra run-time checks everywhere.
 
 I would prefer explicit syntax for "I don't know yet" initialisers which
 still allow the tools to do their job but can drop in default fill
