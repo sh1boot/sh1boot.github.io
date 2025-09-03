@@ -99,7 +99,7 @@ It's unfortunate that there's no consistent way to _explicitly_ declare
 a variable as having an illegal state which should raise an error if
 it's used.  There are well-known values like `nullptr`, `NAN`,
 `std::numeric_limits<T>::signaling_NaN`, maybe `T::end()`, etc., but all
-the integers get is something ad-hoc like `-1` or `std::optional<>` with extra run-time checks everywhere.
+the integers get is something ad-hoc like `-1` or `std::optional<>` which need extra run-time checks everywhere.
 
 I would prefer explicit syntax for "I don't know yet" initialisers which
 still allow the tools to do their job but can drop in default fill
