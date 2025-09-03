@@ -83,7 +83,7 @@ This is most valuable if the code was clean before you made changes
 and suddenly this warning turns up.
 
 And if the compiler can't decide, maybe because the type is an array or
-whatever, then being the diligent you that you are you'll catch it when
+whatever, then being the diligent you that you are you'll hopefully catch it when
 you run your unit tests
 with `-fsanitize=memory`.
 
