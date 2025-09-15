@@ -48,7 +48,8 @@ int y = f(x);
 
 But what if your intention was not to set `y` to `f(0)`?  What if the real
 bug was in failing to consider another case and come up with a suitable
-result in that case as well?
+result in that case as well?  What if `x` was actually a `uid_t`?
+Should it still be initialised to zero as a "safe default"?
 
 ```c++
 int x;  // will definitely get overwritten
