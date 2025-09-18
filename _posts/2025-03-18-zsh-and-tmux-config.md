@@ -283,7 +283,8 @@ option contains more to expand, it can be referenced with, eg.,
 
 ### Detecting an idle shell
 
-If a pane has gone back to the shell, that's occasionally worth knowing:
+If a pane was running a command but has gone back to the shell (ie., is
+now idle), that's occasionally worth knowing:
 
 ```conf
 set -g @shell_idle "#{==:#{pane_current_command},zsh}"
@@ -354,8 +355,9 @@ current working directory.  I don't want that to be `/home/...` for
 every window, so it's better to truncate from the left.
 
 When a command is running, that becomes the window title, and the
-essential information there is probably the first word, so I want to
-truncate from the right.
+essential information there is probably the first word (the command), so
+I want to truncate from the right.  One hopes truncation doesn't go so
+far as to create dozens of tabs named simply `vim ...`.
 
 The difference in tmux format specifiers is expressed as whether or not
 the crop length has a negative prefix on it, as shown above.
