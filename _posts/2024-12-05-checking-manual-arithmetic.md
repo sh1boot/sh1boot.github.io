@@ -125,10 +125,9 @@ from the other tests we've done?
 Last question first: no.
 
 What got me started on this post was wondering the same thing after
-seeing this [Stand Up Maths][] video showing off a bunch of
-[divisibility tests][]:
-{% include youtube.liquid id='6pLz8wEQYkA' %}
-and thinking about that in relation to their [2024 Pi calculation
+seeing a [Stand Up Maths][] [video](https://youtu.be/6pLz8wEQYkA)
+showing off a bunch of [divisibility tests][] and thinking about that in
+relation to their [2024 Pi calculation
 effort](https://youtu.be/LIg-6glbLkU).
 
 But when you note that you can do a 10001 test via its prime factors it
