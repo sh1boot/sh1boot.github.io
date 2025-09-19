@@ -54,10 +54,10 @@ logic bugs?
 
 Well, you could initialise `x` with a value so absurd that the mistake
 was bound to be highly visible in some way or other.  Good choices are
-signalling NaNs, `nullptr`, etc., or something you'll eventually catch
-in an `assert()` eventually (if you remember).  That's problematic if
-your type can only represent legal and appropriate values (very often
-the case for DSP work).
+signalling NaNs, `nullptr`, etc., or something you'll catch in an
+`assert()` eventually (if you remember, and if you have the test
+coverage).  That's problematic if your type can only represent legal and
+appropriate values (very often the case for DSP work).
 
 You could use a bigger type as a temporary, or use `std::optional<>`
 which includes an explicit flag saying whether or not the variable has
@@ -143,6 +143,27 @@ pointer type to choose `nullptr`.
 C++26 might achieve that if you leave the variable uninitialised at
 definition, but that just looks like a mistake, and it's a landmine if
 you don't have your compiler configured appropriately.
+
+Additionally, if you could be explicit, you can be _more_ explicit about
+other things, like:
+
+```c++
+int f(Result& result, int arg) {
+    result = uncommitted<Result>{};
+    // ...
+    result = work_in_progress;
+    // ...
+    if (accident_happened) {
+        result = uncommitted<Result>{};
+        return -1;
+    }
+    // ...
+    return 0;
+}
+```
+
+And let the tools ensure that result is left untouched when it's in an
+undefined state.
 
 
 [erroneous behaviour]: <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2795r5.html>
