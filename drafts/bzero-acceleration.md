@@ -3,31 +3,31 @@ layout: post
 title: Fast internal erase of SDRAM
 ---
 Imagine how many security vulnerabilities might be mitigated if only
-every release operation came with a free `bzero()` to destroy the
-released information.  But that's an expensive operation and there's no
+every `free()` operation came with a free `bzero()` to destroy the
+freed data.  But that's an expensive operation and there's no
 strong case for spending all that effort on "just in case" situations
-which _shouldn't_ occur in well-formed code.  Just write better code!
+which _shouldn't_ occur in well-formed code.  Just write better code, silly!
 
-So I was thinking about this in conjunction with a memory tagging system
+I was thinking about this in conjunction with a memory tagging system
 which would auto-erase cache lines whenever the tags change, rather than
 requiring a dedicated sweep of addresses to update the tags to new
-values so as to avoid faults after the change.
+values otherwise necessary to avoid faults after the deliberate change.
 
 Re-tagging with automatic erasure might work well at the cache level
 where a tag mismatch zeroes the whole cache line and avoids going out to
-physical memory to fetch what is just going to be recently-zeroed memory
-(or memory you shouldn't be allowed to see anyway).  But in those gaps
+physical memory to fetch what is just going to be recently-zeroed data
+(or data you shouldn't be allowed to see anyway).  But in those gaps
 between cache hits you've got other problems.
 
-One could have an hierarchy of erasure bits to elide cache miss loads
+I think one could have an hierarchy of erasure bits to elide cache miss loads
 from memory marked invalid (then clear that bit when you mark the cache
 line dirty, because coherency interfaces will then behave as-if the
-memory has been erased).
+memory has been erased); but those details are for another post...
 
 At the bottom of all that you have a _lot_ of memory, requiring a lot of
 tags.  But I think that with just a small tweak to the design of SDRAM
 chips (no big deal, right?) one could maintain just one bit of tag per
-row of memory.  Pencil that in as one bit per 4kB.
+row of memory.  Pencil that in as one bit per 4kB of data.
 
 For any whole-4kB (or whatever your SDRAM page size is) chunk of memory
 you want erased, you just set its erasure bit, saying you'll do it
