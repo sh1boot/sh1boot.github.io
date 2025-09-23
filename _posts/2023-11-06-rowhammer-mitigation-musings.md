@@ -36,8 +36,10 @@ accepts and presents on the data bus.
 Hashing, or [whitening][], could reduce the risk that the local average of
 stored bits will be something extreme and instead make it more likely to be
 something middling (on a binomial distribution, I believe).  Real-world data
-frequently lacks this property because it's full of regular patterns, and
+frequently lacks this property because it's full of regular patterns; and
 malicious data could be even worse.
+
+When you whiten data then the possibility of an adverse pattern showing up does still exist, but it's in a place much less likely to occur naturally, and as the data goes through its usual small permutations the adverse pattern disappears again much faster.
 
 Supposing the charge of an individual bit were to decay exponentially towards a
 a local average of its neighbours, then moving that average closer to the
@@ -60,20 +62,20 @@ parameters need to be kept a secret.  That's a thing which normal memory
 encryption has to do anyway, so hopefully a solved problem (spoiler: keeping
 secrets is never a solved problem).
 
-That also highlights that modern CPUs have the means to compare the RowHammer
-sensitivity of hashed versus unhashed storage.  Which is handy.
+That also highlights that modern CPUs have, in the form of in-memory encryption features like [TME][] and [SME][], the means to compare the RowHammer
+sensitivity of hashed versus unhashed storage.  Which is handy.  Somebody should do that.  I wish I had the means myself.
 
 ## Allowing ECC to do its job more effectively
 
 The above mitigation doesn't exactly solve anything, though.  It would just
 move the problem around and hopefully makes the failure case less likely and
-with smaller effect.  Ideally sufficiently small an effect that ECC could do
+with smaller effect.  Ideally it makes errors sufficiently small in effect that ECC could do
 its job effectively.
 
 The greater mitigation would be to spread what ECC considers in a block across
 different physical regions of storage; so that an attack focused on one part of
 the chip is effective only against a small portion of the block which ECC has
-to salvage.
+to salvage; even in the overall damage is large, ECC might need only correct small fragments of it at a time if the ECC block is properly distributed.
 
 ### Row address permutation
 
@@ -137,23 +139,23 @@ unrealistic for a variety of reasons.
 I think that's all I've got on the matter.  But as a general observation data
 communications has pushed up against the [Shannon limit][] with generous
 application of techniques that I'm haven't heard much about in the DRAM space.
-Perhaps the great impediment is finding out techniques which are low latency
+Perhaps the great impediment is finding the techniques which are low latency
 and low power.  Of course we do already have ECC.  Perhaps it's just a matter
 of deciding how to make it more effective?
 
 Another thing that stands out to me is [RowPress][].  That leaving a row active
 for longer causes more corruption.  Learning about this attack is when I found
-out that DRAM is not quite what I thought it was.  I used to think that it
+out that DRAM is not quite what I thought it was.  I used to think that
 during activation it would register the values from the capacitors into flops
 and answer subsequent queries from the flops, and then write the data back to
-recharge the capacitors before moving on to a new row.  It turns out the
-arrangement is not like that at all, and the internals of the array seem to be
-hot for the duration of the activation.  I guess the fact that it's not already
-the way I thought it was implies that the way I thought it was is too expensive
-or too slow.  I don't know.
+recharge the capacitors before moving on to a new row.  This I leaned is only half true.  The data is latched (not registered; and a latch is half a flop -- haha!), and the data isn't written back on a closure cycle, instead the sense amps which test the bit have a positive feedback loop which drives all the way back into the capacitors while also providing a discrete reading for digital logic.  So as long as the row is open and leakage in the capacitors is being topped up, and that leakage is going... probably into its neighbours.
+
+This part seems easy to fix.  The data is already latched so you could just disconnect the source row, I guess.
 
 [RowHammer talk]: <https://youtu.be/wGcVrKaOvFo>
 [RowHammer slides]: <https://safari.ethz.ch/architecture_seminar/fall2023/lib/exe/fetch.php?media=onur-comparchseminar-fall2023-lecture3-rowhammerstory-afterlecture.pdf>
 [whitening]: <https://en.wikipedia.org/wiki/Whitening_transformation>
+[TME]: <Https://en.wikichip.org/wiki/x86/tme>
+[SME]: <Https://en.wikichip.org/wiki/x86/sme>
 [Shannon limit]: <https://en.wikipedia.org/wiki/Noisy-channel_coding_theorem>
 [RowPress]: <https://arxiv.org/abs/2306.17061>
