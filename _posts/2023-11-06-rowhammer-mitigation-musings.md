@@ -148,7 +148,7 @@ for longer causes more corruption.  Learning about this attack is when I found
 out that DRAM is not quite what I thought it was.  I used to think that
 during activation it would register the values from the capacitors into flops
 and answer subsequent queries from the flops, and then write the data back to
-recharge the capacitors before moving on to a new row.  This I leaned is only half true.  The data is latched (not registered; and a latch is half a flop -- haha!), and the data isn't written back on a closure cycle.  Instead the sense amps which test the bit have a positive feedback loop which propagates all the way back into the capacitors which they're reading while also providing a clean level for the digital logic.  So as long as the row is open and leakage in the capacitors is being topped up, and that leakage is going... probably into its neighbours.
+recharge the capacitors before moving on to a new row.  This I leaned is only half true.  The data is latched (not registered; and a latch is half a flop -- haha!), and the data isn't written back on a closure cycle.  Instead the sense amps which test the bit have a positive feedback loop which propagates all the way back into the capacitors which they're reading while also providing a clean level for the digital logic.  So as long as the row is open any leakage in the capacitors is being topped up, and that leakage is going... probably into its neighbours.
 
 This part seems easy to fix.  The data is already latched so you could just disconnect the source row, I guess.
 
