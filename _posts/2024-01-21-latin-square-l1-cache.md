@@ -96,12 +96,15 @@ rectangle 1x8 or 8x1 at any whole position touches each memory only once.
 There are also some 2x4 and 4x2 sub-rectangle positions which work, but not all
 of them.  With more memories you can get more rectangle options.
 
-Generally you can address any rectangle at its natural alignment on both axes,
-plus one additional axis of freedom on top of that.
+Generally you can address any rectangle at its natural alignment on both
+axes, plus one additional axis of freedom on top of that.  Natural
+alignment is where the horizontal offset is divisible by the rectangle's
+width, and/or vertical offset is divisible by the height, etc..
 
-In the case of 8x1 and 1x8 that means anywhere at all.  But if you have a 2x4
-or 4x2 you can slide arbitrarily on the vertical or horizontal axis away from
-natural alignment, but not always both.  Sometimes you get conflicts in the
+In the case of 8x1 and 1x8, having that one extra degree of freedom
+means an position at all.  But if you have a 2x4 or 4x2 you can slide
+arbitrarily on the vertical or horizontal axis away from natural
+alignment, but not always both.  Sometimes you get conflicts in the
 corners.
 
 Are there better solutions?
