@@ -2,58 +2,98 @@
 layout: post
 title: Memory tagging
 ---
-Years ago I happened across an early description of what's since become
-[Arm MTE][].  It tied in neatly with other concepts I'd worked with in
-memory aliasing and diagnostics, and it unlocked a world of potential.
-Eventually I got to see the Arm design, and it was a far more muted
-concept, and I lost all my energy for the idea.
+Years ago I happened across an early description of techniques which
+subsequently became [Arm MTE][].  It tied in neatly with other concepts
+I'd worked with in memory aliasing and diagnostics, and I saw it as
+unlocking a huge world of potential, and I raved at length about
+possibilities.  However, the final design turned out to be something a
+lot more muted than all the ideas I had about the technology, and when I
+saw it I lost most of my energy for the idea.
 
-Recently I learned that [Apple][Apple MIE] seem to have felt the same
-way as I did, and they actually did something about it.  I haven't been
-able to find much detail so far, but their discussion about having to do
-it in conjuction with substantial OS and application rewrites rings
-true.  Clearly Arm wanted something that people would adopt without all
-that hassle.
+Fair enough, though.  I always approach these things much too
+aggressively, without regard to backward compatibility or just what a
+nightmare it would be to rework the software to do all the things I see
+could be done.  These are obstacles to adoption for people who aren't as
+unhinged as I.
 
-Being that I can't find any straightforward explanation for Apple's
-changes I reverted to form and just started making up all my own shit;
-or resurrecting my old ideas or something.  I had a lot of ideas back in
-the day, and they faded over time, but they're slowly coming back the
-more I think about MTE.
+But just recently I learned that [Apple][Apple MIE] seem to have felt
+the same way as I did, and they actually did something about it.  I
+haven't been able to find much detail so far, but their discussion about
+having to do it in conjuction with substantial OS and application
+rewrites rings true.  Just my scene.  Clearly Arm wanted something that
+people would adopt without all that hassle.
+
+Since I can't find any straightforward explanation for what Apple wanted
+changed I reverted to form and just started making up all my own things
+all over again; or resurrecting my old ideas or something.  I forget
+everything I thought the first time, but I do remember being talked down
+from a couple of ideas which I seem to have re-invented again in this
+iteration.
+
+## Memory tagging in brief
+
+Basically every address (at the granularity of a cache line) has
+embedded within it a tag of around four bits.  If you try to use memory
+with the tag that is not assigned to that memory then you get told off
+at the hardware level.
+
+To make this useful, you colour adjacent objects in memory (at the cache
+line resolution) with different tags so that pointers to one thing can't
+encroach on pointers to adjacent things.
+
+When memory is freed you can mark it with a different tag so the old
+pointers with the old tag embedded don't work anymore, and when it's
+re-allocated the new pointers will have a new tag and the old pointers
+can't interfere with it.
+
+But it's only four bits so there's still some risk of collision,
+depending on how you manage it.
 
 ## Repurposing memory
 
-The first thing that troubled me was the performance implications of
-changing tags when memory is re-used, deliberately, with an updated tag.
-It feels like all of the memory needs to be visited in order to inform
-the cache that it needs to use new tags.
+The first thing that stands out to me is how you change the tag
+assignment of a piece of memory.  If you execute instructions to change
+the tag of each cache line (or backing store for memory not resident in
+the cache right now) then that's potentially a very tedious operation.
 
-But what if one didn't bother with that.
+But what if one didn't bother with that?
 
 What if, instead, writes automatically erased the memory whenever the
-tag didn't match (never raising any fault), and updated the tag to its
-new value.  Then only reads raise faults on mismatched tags, if they
-haven't already been written.
+tag failed to match (no need to raise a fault just yet), and
+simultaneously updated the tag to its new value?  No need to visit SDRAM
+in that case.  Note that a tag update hits (and erases) the whole cache
+line even though the data will typically be much narrower.  The rest
+needs zeroing.
 
-You shouldn't be reading something that you didn't initialise for
-yourself anyway.  So if you get a fault trying to use your own memory
-then it's probably uninitialised data and you should go fix your code.
+Then it's down to the reads to raise faults when they hit a bad tag.
+That'll be a fault if the wrong pointer is trying to access memory, or
+the current owner hasn't yet initialised the memory, but also if a bad
+actor has tried to stomp on that memory with an incorrect tag (albeit in
+a deferred way).
 
-This leaves open the possibility of a bad actor just trying to erase
-legitimate date while it's being used.  In this case innocent code won't
-be able to read what they injected because the updated tag will cause
-that code to fault instead, but if they can inject a bad write before
-a good write then all the data surrounding the good write can be
+You shouldn't be reading something that you haven't already initialised
+for yourself anyway.  So if you get a fault trying to use your own
+memory then it's probably uninitialised data and you should go fix your
+code.
+
+Except, not exactly...
+
+First, this leaves open the possibility of a bad actor just trying to
+erase legitimate date while it's being used.  In this case innocent code
+won't be able to read what they injected because the updated tag will
+cause that code to fault instead, but if they can inject a bad write
+before a good write then all the data surrounding the good write can be
 silently erased.
 
-Now I get to this point and I think "OK, it's just a 12.5% tax to keep a
-'valid' bit for each byte", so you can still fault on every undefined
-read in a cache line which you've only partially written (or been
-tricked into re-erasing by a bad actor).
+Now at this point I'm inclined to think "OK, it's just a 12.5% tax to
+keep a 'valid' bit for each byte", so you can still fault on every
+undefined read in a cache line which you've only partially written (or
+been tricked into re-erasing by a bad actor).
 
 Strictly that tax should run down the whole memory stack to account for
-evictions at all the levels.  You can fudge it but that just means the
-attacker has to force those evictions to make their attack viable.
+evictions at all the levels.  That's bad.  You can fudge it when it gets
+too far away from the CPU but that just means the attacker has to force
+evictions to make their attack viable.
 
 But not every first memory access is a whole byte.  Many are necessarily
 read-modify-write operations because they need to modify less than a
@@ -62,11 +102,36 @@ This means they'll get trapped on the initial read of those don't-care
 bits which they'll simply write back again and, presumably, come back
 around to overwrite later on or just never use.
 
-Which leads me to thinking about having the compiler do analysis to
+### softening read-before-write penalties
+
+This leads me to thinking about having the compiler do analysis to
 decide what data _might_ require a read-modify-write and to
 pre-initialise just that memory with valid data.  The majority of cases
 don't have bitfields anyway, so if they read before write there's
 something not appropriate going on.
+
+Another approach might be to pre-erase on both reads and writes of wrong
+tags, but to have an out-of-band structure with dedicated mechanisms for
+fast set-up of tag patterns, and to check in that structure in a less
+responsive way than L1 cache, so that a fault can be raised if that
+provisional erasure was a mistake.
+
+Overlooking the matter of how to set up the out-of-band part, this does
+mean that the cache can switch efficiently _at least_ in the cases where
+programs follow the write-before-read data model, while still trapping
+faulty behaviour.
+
+Maybe there's a hybrid situation, here, where the fault can be used by
+MSAN to examine the bitfield cases more closely and simulate
+bit-accurate tagging where it's necessary.
+
+It leaves open a little window of speculation attack where you might
+trick the application into reading zero and behaving as if a function
+call succeeded while it's still speculating.  I don't expect any branch
+decisions to be affected during speculation based on speculative
+calculations, but maybe masking and clamping operations could be fooled.
+
+Have to think about how bad that might be...
 
 ## Timing attacks
 
@@ -108,6 +173,22 @@ judgement as to whether or not those bits formed the correct address.
 This means fewer bits get checked to confirm that the pointer signature
 passes, with greater risk of false positives, but the encrypted and
 decrypted tag will still has a good chance of being corrupted.
+
+## Overlapping with memory erase
+
+If tags auto-erase, then they're implementing the first stage in a bulk,
+lazy `bzero()` system which elides memory operations and replaces them
+with zeroes which will need to be written back later.  The original
+4-bit tagging scheme is not going to be reliable for large-scale erasure
+between tasks (which is critical, and not just a helpful debugging
+feature).  But there are a couple of ways to mitigate that.  One is to
+extend the tag with a task ID (it doesn't have to fit in the address
+register any longer, so its size is not so limited), which the OS
+contrives to guarantee to be unique.  Another might be to have a
+separate "definitely erase" bit alongside the tag id, so it's treated as
+a mismatch regardless.  This requires updating or flushing the L1
+cache, though, so it's comparable to just calling `bzero()` before
+handing the page over.
 
 [Arm MTE]: <https://developer.arm.com/documentation/108035/0100/How-does-MTE-work->
 [Apple MIE]: <https://security.apple.com/blog/memory-integrity-enforcement/>
