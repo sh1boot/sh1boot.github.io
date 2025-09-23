@@ -16,6 +16,12 @@ electronics to send and receive electromagnetic pings through the paint, which
 would be distorted by thermal and mechanical stresses in the chassis.  And then
 use AI to sort out the meaning and location of those distortions?
 
+A single layer of stencil might not do much interesting on its on, being
+mostly just resistive.  I'm assuming it would work better in two or three
+conductive layers with an insulator between them to make the circuit
+more reactive (capacitive, mostly), and more likely to express different
+characteristics under strain or heat.
+
 There's already [a company][Bare Conductive] selling 'electric paint' for much
 simpler tasks.  This one might need electronics closer to an SDR antenna than
 to a toy computer GPIO.  Also more consistent fabrication, if that problem
