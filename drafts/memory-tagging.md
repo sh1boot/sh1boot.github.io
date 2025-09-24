@@ -7,47 +7,51 @@ subsequently became [Arm MTE][].  It tied in neatly with other concepts
 I'd worked with in memory aliasing and diagnostics, and I saw it as
 unlocking a huge world of potential, and I raved at length about
 possibilities.  However, the final design turned out to be something a
-lot more muted than all the ideas I had about the technology, and when I
-saw it I lost most of my energy for the idea.
+lot more muted than all the ideas I had, and when I saw it I lost most
+of my energy for the idea.
 
 Fair enough, though.  I always approach these things much too
-aggressively, without regard to backward compatibility or just what a
-nightmare it would be to rework the software to do all the things I see
-could be done.  These are obstacles to adoption for people who aren't as
-unhinged as I.
+aggressively, with no regard to backward compatibility or just what a
+nightmare it would be to rework the software to achieve all the things I
+see could be done.  These are obstacles to adoption for people who
+aren't as unhinged as I.  Clearly Arm wanted something that people would
+adopt without all that hassle.
 
 But just recently I learned that [Apple][Apple MIE] seem to have felt
 the same way as I did, and they actually did something about it.  I
 haven't been able to find much detail so far, but their discussion about
 having to do it in conjuction with substantial OS and application
-rewrites rings true.  Just my scene.  Clearly Arm wanted something that
-people would adopt without all that hassle.
+rewrites rings true.  Just my scene.
 
 Since I can't find any straightforward explanation for what Apple wanted
 changed I reverted to form and just started making up all my own things
-all over again; or resurrecting my old ideas or something.  I forget
-everything I thought the first time, but I do remember being talked down
-from a couple of ideas which I seem to have re-invented again in this
-iteration.
+all over again.  Possibly resurrecting my old ideas or something.  I
+forget everything I thought the first time, but I do remember being
+talked down from a couple of ideas which I seem to have re-invented
+again in this iteration.
 
 ## Memory tagging in brief
 
-Basically every address (at the granularity of a cache line) has
+Basically every address (at the granularity of a cache line) gets
 embedded within it a tag of around four bits.  If you try to use memory
 with the tag that is not assigned to that memory then you get told off
-at the hardware level.
+at the hardware level.  Data caches already examine addresses in detail
+to see if they have the data, so it's no great stretch to define a hit
+as a "well yes, but actually no" as needed.  You just sacrifice tag
+granularity to achieve it that way.
 
 To make this useful, you colour adjacent objects in memory (at the cache
 line resolution) with different tags so that pointers to one thing can't
-encroach on pointers to adjacent things.
+encroach on adjacent memory designated for other things.
 
 When memory is freed you can mark it with a different tag so the old
-pointers with the old tag embedded don't work anymore, and when it's
-re-allocated the new pointers will have a new tag and the old pointers
-can't interfere with it.
+pointers with the old tag don't work anymore, and when it's re-allocated
+the new pointers will have a new tag and the old pointers can't
+interfere with it.
 
-But it's only four bits so there's still some risk of collision,
-depending on how you manage it.
+But it's only a few bits so there's still some risk of collision, and
+that makes it hard to exploit in more ambitious applications like
+generic heap colouring.
 
 ## Repurposing memory
 
@@ -91,45 +95,53 @@ undefined read in a cache line which you've only partially written (or
 been tricked into re-erasing by a bad actor).
 
 Strictly that tax should run down the whole memory stack to account for
-evictions at all the levels.  That's bad.  You can fudge it when it gets
-too far away from the CPU but that just means the attacker has to force
-evictions to make their attack viable.
+evictions at all the levels.  That's untenable.  You can fudge it when
+it gets too far away from the CPU but that just means the attacker has
+to force evictions to make their attack viable, and they've never had
+any difficulty doing that.
 
-But not every first memory access is a whole byte.  Many are necessarily
-read-modify-write operations because they need to modify less than a
-byte, or a bitfield which doesn't start and end on byte boundaries.
-This means they'll get trapped on the initial read of those don't-care
-bits which they'll simply write back again and, presumably, come back
-around to overwrite later on or just never use.
+It gets worse, though, because not every first memory access is a whole
+byte.  Many are necessarily read-modify-write operations because they
+need to modify less than a byte, or it involves a bitfield which doesn't
+start and end on byte boundaries.  This means they'll get trapped on the
+initial read of those don't-care bits which they would simply write back
+again and, presumably, come back around to overwrite later on or just
+never use.
 
 ### softening read-before-write penalties
 
 This leads me to thinking about having the compiler do analysis to
 decide what data _might_ require a read-modify-write and to
 pre-initialise just that memory with valid data.  The majority of cases
-don't have bitfields anyway, so if they read before write there's
-something not appropriate going on.
+don't have bitfields anyway, so if those read before writing that's
+plausibly something dangerous (not necessarily dangerous, but a fix should
+be a price worth paying for greater safety in the general case).
 
 Another approach might be to pre-erase on both reads and writes of wrong
-tags, but to have an out-of-band structure with dedicated mechanisms for
-fast set-up of tag patterns, and to check in that structure in a less
+tags, but to also refer to an out-of-band structure with dedicated
+mechanisms for fast set-up of tag patterns (conventional data caches
+are not fast at this), and to check in that structure, albeit in a less
 responsive way than L1 cache, so that a fault can be raised if that
-provisional erasure was a mistake.
+provisional erasure was a misstep.  If we don't get assent from the tag
+check then the program is broken and must die, so the spurious erasure
+is not the top concern.  Go get yourself a victim cache if that makes
+you sad.
 
 Overlooking the matter of how to set up the out-of-band part, this does
 mean that the cache can switch efficiently _at least_ in the cases where
 programs follow the write-before-read data model, while still trapping
 faulty behaviour.
 
-Maybe there's a hybrid situation, here, where the fault can be used by
-MSAN to examine the bitfield cases more closely and simulate
-bit-accurate tagging where it's necessary.
+Maybe there's a hybrid opportunity, here, where the fault can be trapped
+by MSAN to examine the bitfield cases more closely and simulate
+bit-accurate tagging as needed.
 
-It leaves open a little window of speculation attack where you might
-trick the application into reading zero and behaving as if a function
-call succeeded while it's still speculating.  I don't expect any branch
-decisions to be affected during speculation based on speculative
-calculations, but maybe masking and clamping operations could be fooled.
+This seems to leave open a little window of speculation attack surface
+where you might trick the application into reading zero and behaving as
+if a function call succeeded while it's still speculating.  I don't
+expect any branch decisions to be affected during speculation based on
+speculative calculations, but maybe masking and clamping operations
+could be fooled.
 
 Have to think about how bad that might be...
 
@@ -150,9 +162,9 @@ a more solid grasp on what specifically they meant about the security
 implications.
 
 OK, I just looked, and they point to Meltdown-style attacks; where you
-perform a load an permissible load and use the data to pollute other
-cache lines to determine what that value is while you're still
-speculating, before the operation is trapped.
+perform an unpermitted load and use the data to pollute other cache
+lines to determine what that value is while you're still speculating,
+before the operation is trapped.
 
 I think they didn't really address "do the eviction but withold the
 data".
@@ -172,7 +184,8 @@ overlapped with the authentication, and encrypted and decrypted without
 judgement as to whether or not those bits formed the correct address.
 This means fewer bits get checked to confirm that the pointer signature
 passes, with greater risk of false positives, but the encrypted and
-decrypted tag will still has a good chance of being corrupted.
+decrypted tag will amount to having the same chance of producing an
+unusable address.
 
 ## Overlapping with memory erase
 
