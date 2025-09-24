@@ -22,9 +22,9 @@ At the bottom of all that you have a _lot_ of memory, requiring a lot of
 tags which you neither want to store nor maintain in fine detail.
 
 I think that with just a small tweak to the design of SDRAM chips (no
-big deal, right?) one could implement deferred bulk erasure using just
-one bit of tag per row of memory.  Pencil that in as one bit per 4kB of
-data.
+big deal, right?) and supporting logic in the memory controller one
+could implement deferred bulk erasure using just one bit of tag per row
+of memory.  Pencil that in as one bit per 4kB of data.
 
 For any whole-4kB (or whatever your SDRAM page size is) chunk of memory
 you want erased, you just set its erasure bit, saying you'll do it
@@ -90,3 +90,18 @@ the whole precharge phase.
 
 You can do memcpy() this way, too, but in a fairly limited way, since
 the copy only functions within the same bank on the same device.
+
+### Compared with other techniques
+
+While checking some details about the feasibility of this technique I
+learned about [RowClone][].
+
+This method differs in that it only zeroes data and, more importantly,
+that the cost of doing the work is reduced to just that of updating the
+deferred erasure tags (presumably a start-length pair delivered to the
+memory controller which would update many tags per cycle), and the
+actual erasure is deferred until the row is actually opened (if ever)
+and the timing costs are hidden behind the usual row open timing cost.
+
+
+[RowClone]: <https://people.inf.ethz.ch/omutlu/pub/rowclone_micro13.pdf>
