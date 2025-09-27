@@ -187,8 +187,14 @@ just disconnect the source row, I guess.
 
 ## Oh, look, there we go...
 
-It looks like [Cube][] implements at least the row swizzling to maximise
-the error correction efficacy.
+It looks like [Cube][] implements at least the row-swizzling element of
+this.
+
+I haven't read it yet, but they mention Feistel cyphers, so I'm guessing
+they take the secrecy factor quite seriously.  I'm mindful that if you
+over-engineer at the outset, with the intent of solving the issue once
+and for all, you set too high a bar to entry.  I'm sure modest swizzles
+would be sufficient.
 
 [RowHammer talk]: <https://youtu.be/wGcVrKaOvFo>
 [RowHammer slides]: <https://safari.ethz.ch/architecture_seminar/fall2023/lib/exe/fetch.php?media=onur-comparchseminar-fall2023-lecture3-rowhammerstory-afterlecture.pdf>
