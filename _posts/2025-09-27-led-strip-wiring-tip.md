@@ -6,7 +6,7 @@ svg: true
 Something you may notice for very long runs of LED strip is that they
 can be bright at one end and dim at the other.  That's because the
 strips are two long power rails with a bit of internal resistance and
-current through the LEDs at the far end has more of that resistance to
+current through the LEDs at the far end have more of that resistance to
 travel through.
 
 Here's how LED strips are typically wired:
@@ -144,9 +144,9 @@ you go from the power supply the greater the resistance of the power
 rails.
 
 But if you happen to be running the strip in a loop, such that the ends
-land up close to each other, or if you happen to have a heap of extra
-wire to run alongside the strip, then there's a simple fix for the
-difference in brightness.
+end up somewhat close to each other, or if you happen to have a heap of
+extra wire to run alongside the strip, then there's a simple fix for
+that difference in brightness.
 
 Connect one side of the power supply to the near end of the strip, and
 connect the other side of the power supply to the far end of the strip.
@@ -215,9 +215,9 @@ Like so:
         </g>
 </svg>
 
-This way the distance the current travels to each LED is (approximately)
-the same, and so the resistance is the same and the current is the same
-and the brightness is the same, all the way along the strip.
+This way the length of the circuit through each LED is (approximately)
+the same, and so the resistance is the same they all come out the same
+brightness all the way along the strip.
 
 You'll see this in some prefabricated lighting strings which are _not_
 designed to be cut.  They'll have a third wire which appears to not be
@@ -225,3 +225,8 @@ connected to the LEDs, but at the end it'll be looping the circuit back
 from the far end so that all the loads are balanced.  If you cut those
 then they just don't work anymore, because you would need to reconnect
 the right two wires.
+
+It might be tempting to link both ends of the strip together in tee
+intersections with the power supply.  That should work, and you'll get
+more light out of the system overall, but you may still see a bit of
+dimming in the middle of the loop.
