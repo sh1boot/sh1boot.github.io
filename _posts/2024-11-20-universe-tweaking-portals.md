@@ -83,5 +83,10 @@ There's also this:
 
 TODO: discuss..
 
+Oh, and also, the rim of a portal might be infinitely sharp, on the
+basis of, I guess, nobody really saying what it's made of or how thick
+it should be and if it had any thickness then where would it be, etc..
+So you could have portal-based blade weapons, and stuff like that.
+
 
 [tessellated playfield]: <https://www.halfbakery.com/idea/Tessellated_2c_20phase-shifted_20playfield>
