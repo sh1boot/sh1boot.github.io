@@ -20,18 +20,15 @@ Here's how LED strips are typically wired:
     fill: currentColor;
     fill-opacity:0.0625;
 }
-.hookup {
-    stroke-width: 2px;
-}
 .hookup-plus {
-    stroke: red;
-    stroke-opacity: 50%;
-    stroke-width: 2px;
+    stroke: color-mix(in oklab, currentColor, red);
+    stroke-width: 3px;
+    stroke-linecap: round;
 }
 .hookup-minus {
-    stroke: blue;
-    stroke-opacity: 50%;
-    stroke-width: 2px;
+    stroke: color-mix(in oklab, currentColor, blue);
+    stroke-width: 3px;
+    stroke-linecap: round;
 }
 .current {
     visibility:hidden;
@@ -43,7 +40,7 @@ Here's how LED strips are typically wired:
     opacity: 100%;
     -webkit-animation-name: currentAnimation;
     -webkit-animation-iteration-count: infinite;
-    -webkit-animation-duration: 2.5s;
+    -webkit-animation-duration: 1.5s;
     -webkit-animation-timing-function: linear;
 }
 </style>
@@ -58,11 +55,9 @@ Here's how LED strips are typically wired:
         <g id="resistor"><rect x="-10" y="10" width="20" height="50" /><path d="M0,0v10 M0,60v10 "/></g>
         <g id="ledstack"><use x="0" y="0" href="#led" /><use x="0" y="70" href="#led" /><use x="0" y="140" href="#led" /><use x="0" y="210" href="#resistor" /></g>
 </defs>
-        <use href="#power" x="80" y="120" />
-        <path d="M80,120 C80,80  0, 20 140, 20" class="hookup" />
-        <path d="M80,190 C80,230 0,300 140,300" class="hookup" />
-        <path d="M80,120 C80,80  0, 20 140, 20" class="hookup-plus" />
-        <path d="M80,190 C80,230 0,300 140,300" class="hookup-minus" />
+        <use href="#power" x="40" y="120" />
+        <path d="M40,120 C40,50  0, 20 140, 20" class="hookup-plus" />
+        <path d="M40,190 C40,250 0,300 140,300" class="hookup-minus" />
         <line x1="140" y1="20" x2="750" y2="20" />
         <use href="#pos" x="145" y="10"/>
         <use href="#pos" x="745" y="10"/>
@@ -84,11 +79,9 @@ of every three or six LEDs.
 Let's simplify that by treating the LED circuits as lamps:
 
 <svg width="100%" viewbox="0 -10 799 129">
-        <use href="#power" x="80" y="20" />
-        <path d="M80,20 C80,-20 110,20 140,20" class="hookup" />
-        <path d="M80,20 C80,-20 110,20 140,20" class="hookup-plus" />
-        <path d="M80,90 C80,130 110,90 140,90" class="hookup" />
-        <path d="M80,90 C80,130 110,90 140,90" class="hookup-minus" />
+        <use href="#power" x="40" y="20" />
+        <path d="M40,20 C40,-20  90,20 140,20" class="hookup-plus" />
+        <path d="M40,90 C40,130  90,90 140,90" class="hookup-minus" />
         <line x1="140" y1="20" x2="750" y2="20" />
         <use href="#pos" x="145" y="10"/>
         <use href="#pos" x="745" y="10"/>
@@ -97,45 +90,45 @@ Let's simplify that by treating the LED circuits as lamps:
         <use href="#neg" x="745" y="80"/>
         <g class="ledcurrent">
         <use href="#lamp" x="200" y="20" />
-        <path d="M70,20 C70,-35 110,10 140,10
+        <path d="M30,20 C30,-35 90,10 140,10
             H170
             c25,0 30,20 30,45 0,25 -5,45 -30,45
-            H140 C110,100, 70,145 70,90" class="current" />
+            H140 C90,100, 30,145 30,90" class="current" />
         </g>
         <g class="ledcurrent">
         <use href="#lamp" x="300" y="20" />
-        <path d="M70,20 C70,-35 110,10 140,10
+        <path d="M30,20 C30,-35 90,10 140,10
             H270
             c25,0 30,20 30,45 0,25 -5,45 -30,45
-            H140 C110,100, 70,145 70,90" class="current" />
+            H140 C90,100, 30,145 30,90" class="current" />
         </g>
         <g class="ledcurrent">
         <use href="#lamp" x="400" y="20" />
-        <path d="M70,20 C70,-35 110,10 140,10
+        <path d="M30,20 C30,-35 90,10 140,10
             H370
             c25,0 30,20 30,45 0,25 -5,45 -30,45
-            H140 C110,100, 70,145 70,90" class="current" />
+            H140 C90,100, 30,145 30,90" class="current" />
         </g>
         <g class="ledcurrent">
         <use href="#lamp" x="500" y="20" />
-        <path d="M70,20 C70,-35 110,10 140,10
+        <path d="M30,20 C30,-35 90,10 140,10
             H470
             c25,0 30,20 30,45 0,25 -5,45 -30,45
-            H140 C110,100, 70,145 70,90" class="current" />
+            H140 C90,100, 30,145 30,90" class="current" />
         </g>
         <g class="ledcurrent">
         <use href="#lamp" x="600" y="20" />
-        <path d="M70,20 C70,-35 110,10 140,10
+        <path d="M30,20 C30,-35 90,10 140,10
             H570
             c25,0 30,20 30,45 0,25 -5,45 -30,45
-            H140 C110,100, 70,145 70,90" class="current" />
+            H140 C90,100, 30,145 30,90" class="current" />
         </g>
         <g class="ledcurrent">
         <use href="#lamp" x="700" y="20" />
-        <path d="M70,20 C70,-35 110,10 140,10
+        <path d="M30,20 C30,-35 90,10 140,10
             H670
             c25,0 30,20 30,45 0,25 -5,45 -30,45
-            H140 C110,100, 70,145 70,90" class="current" />
+            H140 C90,100, 30,145 30,90" class="current" />
         </g>
 </svg>
 
@@ -155,9 +148,7 @@ Like so:
 
 <svg width="100%" viewbox="0 0 799 189">
         <use href="#powerh" x="365" y="150" />
-        <path d="M375,150 C-105,150  0,20 100,20" class="hookup" />
         <path d="M375,150 C-105,150  0,20 100,20" class="hookup-plus" />
-        <path d="M435,150 C935,150 800,90 700,90" class="hookup" />
         <path d="M435,150 C935,150 800,90 700,90" class="hookup-minus" />
         <line x1="100" y1="20" x2="700" y2="20" />
         <use href="#pos" x="105" y="10"/>
@@ -220,11 +211,17 @@ the same, and so the resistance is the same they all come out the same
 brightness all the way along the strip.
 
 You'll see this in some prefabricated lighting strings which are _not_
-designed to be cut.  They'll have a third wire which appears to not be
-connected to the LEDs, but at the end it'll be looping the circuit back
-from the far end so that all the loads are balanced.  If you cut those
-then they just don't work anymore, because you would need to reconnect
-the right two wires.
+designed to be cut.  They'll have a third wire which is not be connected
+directly to the LEDs, but at the end it'll be connected to one of the
+wires which is, and it will complete the circuit from the far end back
+to the power supply to balance things out.  If you cut those then they
+just don't work anymore, because you would need to reconnect two of the
+wires at the same end.
+
+It doesn't matter if the power supply hookup lines are different
+lengths.  Having the total length be unnecessarily long will be less
+energy efficient, but they affect all the LEDs equally regardless of
+whether or not both sides are the same length.
 
 It might be tempting to link both ends of the strip together in tee
 intersections with the power supply.  That should work, and you'll get
