@@ -132,9 +132,9 @@ Let's simplify that by treating the LED circuits as lamps:
         </g>
 </svg>
 
-You can hover over a lamp to see how long the circuit is.  The further
-you go from the power supply the greater the resistance of the power
-rails.
+You can hover over a lamp to see where the current flows.  The further
+you go from the power supply the greater the cumulative resistance of
+the power rails.
 
 But if you happen to be running the strip in a loop, such that the ends
 end up somewhat close to each other, or if you happen to have a heap of
