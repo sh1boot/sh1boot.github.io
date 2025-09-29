@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head><style>
+div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style></head>
+<body>
+<div style="color: black; background: white;">
+  <svg width="450" viewbox="0 0 450 80">
+<style>
+.tone1 { fill: oklch(from currentColor calc(.9 - .6 * l) .1 .000turn); }
+.tone2 { fill: oklch(from currentColor calc(.9 - .6 * l) .1 .618turn); }
+.tone3 { fill: oklch(from currentColor calc(.9 - .6 * l) .1 .236turn); }
+.tone4 { fill: oklch(from currentColor calc(.9 - .6 * l) .1 .854turn); }
+.tone5 { fill: oklch(from currentColor calc(.9 - .6 * l) .1 .472turn); }
+.tone6 { fill: oklch(from currentColor calc(.9 - .6 * l) .1 .090turn); }
+.tone7 { fill: oklch(from currentColor calc(.9 - .6 * l) .1 .708turn); }
+.tone8 { fill: oklch(from currentColor calc(.9 - .6 * l) .1 .326turn); }
+.tone9 { fill: oklch(from currentColor calc(.9 - .6 * l) .1 .922turn); }
+
+.tone1 { stroke: oklch(from currentColor calc(.4 + .5 * l) .2 .000turn); }
+.tone2 { stroke: oklch(from currentColor calc(.4 + .5 * l) .2 .618turn); }
+.tone3 { stroke: oklch(from currentColor calc(.4 + .5 * l) .2 .236turn); }
+.tone4 { stroke: oklch(from currentColor calc(.4 + .5 * l) .2 .854turn); }
+.tone5 { stroke: oklch(from currentColor calc(.4 + .5 * l) .2 .472turn); }
+.tone6 { stroke: oklch(from currentColor calc(.4 + .5 * l) .2 .090turn); }
+.tone7 { stroke: oklch(from currentColor calc(.4 + .5 * l) .2 .708turn); }
+.tone8 { stroke: oklch(from currentColor calc(.4 + .5 * l) .2 .326turn); }
+.tone9 { stroke: oklch(from currentColor calc(.4 + .5 * l) .2 .922turn); }
+
+rect {
+  stroke: currentColor;
+  fill-opacity: 100%;
+}
+
+path {
+  stroke-width: 2px;
+  fill: none;
+  fill-opacity: 0%;
+}
+
+text {
+  stroke: none;
+  fill: currentColor;
+  dominant-baseline: middle;
+  text-anchor: middle;
+}
+</style>
+  <defs>
+    <g id="testbox">
+    <rect x="5" y="5" width="40" height="40" class="filltone" />
+    <text x="25" y="25">box</text>
+    <path d="M-15,50 c10,60 55,-40 75,20" class="stroketone" />
+    </g>
+    <g id="testpattern">
+    <use href="#testbox" x="  0" class="tone1"/> <use href="#testbox" x=" 50" class="tone2"/>
+    <use href="#testbox" x="100" class="tone3"/> <use href="#testbox" x="150" class="tone4"/>
+    <use href="#testbox" x="200" class="tone5"/> <use href="#testbox" x="250" class="tone6"/>
+    <use href="#testbox" x="300" class="tone7"/> <use href="#testbox" x="350" class="tone8"/>
+    <use href="#testbox" x="400" class="tone9"/>
+    </g>
+  </defs>
+  <use href="#testpattern" x="0" y="0"/>
+  </svg>
+  🍌banana for scale
+</div>
+
+<div style="color: white; background: black;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+<div style="color: yellow; background: navy;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+<div style="color: #333; background: #ccc;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+</body>
+</html>
