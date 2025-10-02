@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+<style>
+* {
+  --tint-fg: oklch(from currentColor
+      clamp(0.4, l, 0.9)
+      calc(l * -.3 + .35)
+      calc(var(--tint) * 222deg));
+  --tint-bg: oklch(from currentColor
+      clamp(0.4, 1.2 - l, 0.9)
+      calc(l * .05 + .15)
+      calc(var(--tint) * 222deg));
+}
+
+.tint0 { --tint: 0; }
+.tint1 { --tint: 1; }
+.tint2 { --tint: 2; }
+.tint3 { --tint: 3; }
+.tint4 { --tint: 4; }
+.tint5 { --tint: 5; }
+.tint6 { --tint: 6; }
+.tint7 { --tint: 7; }
+.tint8 { --tint: 8; }
+
+.tintbox {
+  stroke: currentColor;
+  fill-opacity: 100%;
+  fill: var(--tint-bg);
+}
+
+.tintline {
+  stroke: var(--tint-fg);
+  stroke-width: 2px;
+  fill: none;
+  fill-opacity: 0%;
+}
+
+text {
+  fill: currentColor;
+  stroke: none;
+  dominant-baseline: middle;
+  text-anchor: middle;
+}
+
+div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+</head>
+<body>
+<div style="color: black; background: white;">
+  <svg width="450" viewbox="0 0 450 80">
+  <defs>
+    <g id="testbox">
+    <rect x="5" y="5" width="40" height="40" class="tintbox" />
+    <text x="25" y="25">box</text>
+    <path d="M-15,50 c10,60 55,-40 75,20" class="tintline" />
+    </g>
+    <g id="testpattern">
+    <use href="#testbox" x="  0" class="tint0"/> <use href="#testbox" x=" 50" class="tint1"/>
+    <use href="#testbox" x="100" class="tint2"/> <use href="#testbox" x="150" class="tint3"/>
+    <use href="#testbox" x="200" class="tint4"/> <use href="#testbox" x="250" class="tint5"/>
+    <use href="#testbox" x="300" class="tint6"/> <use href="#testbox" x="350" class="tint7"/>
+    <use href="#testbox" x="400" class="tint8"/>
+    </g>
+  </defs>
+  <use href="#testpattern" x="0" y="0"/>
+  </svg>
+  🍌banana for scale
+</div>
+
+<div style="color: white; background: black;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+<div style="color: yellow; background: navy;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+<div style="color: #333; background: #ccc;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+<div style="color: #666; background: #999;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+<div style="color: #999; background: #333;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+<div style="color: #666; background: #ccc;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+<div style="color: #ccc; background: #666;">
+  <svg width="450" viewbox="0 0 450 80"> <use href="#testpattern"/></svg>
+  🍌banana for scale
+</div>
+</body>
+</html>
