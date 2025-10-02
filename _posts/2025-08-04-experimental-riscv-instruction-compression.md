@@ -299,7 +299,7 @@ I don't think `bittest` is a thing in any RISCV extension?  But I'm
 throwing it in here because it fills a niche.  The immediate operand is
 the bit index to test and to branch on.
 
-Some instructions I jsut made up to fill in gaps while I didn't want to
+Some instructions I just made up to fill in gaps while I didn't want to
 think about it.
 
 ```
@@ -323,6 +323,8 @@ problematic in its definition.  It breaks the pattern of sharing both
 source registers, needing the result of the previous add instead,
 _unless_ the `sltu` part is instead redefined to be a different
 operation which simply computes the carry from the inputs.
+
+TODO: Extracting carry like this raises questions on whether overflow is also warranted, and also if there should be branching versions of the same ops for efficiently handling small arithmetic with low-overhead escapes to longer arithmetic as needed (signed and/or unsigned, like as needed in in python and JavaScript).
 
 ### Caveats
 * Arithmetic paired with ldst are affected by the ld/st width (yikes?),
