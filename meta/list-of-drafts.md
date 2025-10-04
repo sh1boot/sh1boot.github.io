@@ -2,7 +2,7 @@
 layout: page
 title: Some not-even-half-baked thoughts
 tags: hidden-tags
-catogeries: index
+categories: index
 sitemap: false
 ---
 {%- assign drafts = site.pages | where_exp: "item", "item.dir contains '/drafts/'" -%}
