@@ -29,12 +29,12 @@ eight-bit inputs.
 <svg width="100%" viewbox="0 0 800 608">
   <defs>
   {% for n in (0..7) -%}
-    <g id="a{{n}}"><rect width="80" height="40" /><text x="40" y="20">a{{n}}</text></g>
+    <g id="a{{n}}" class="tint{{n}}"><rect class="tintbox" width="80" height="40" /><text x="40" y="20">a{{n}}</text></g>
   {% endfor -%}
   {% for n in (0..7) -%}
-    <g id="b{{n}}"><rect width="10" height="40" /><text x="5" y="20" font-size="smaller">{{n}}</text></g>
-    <g id="c{{n}}"><rect width="10" height="40" /><text x="5" y="20" font-size="smaller">{{n}}</text></g>
-    <g id="d{{n}}"><rect width="10" height="40" /><text x="5" y="20" font-size="smaller">{{n}}</text></g>
+    <g id="b{{n}}" class="tint{{n|plus:8}}"><rect class="tintbox" width="10" height="40" /><text x="5" y="20" font-size="smaller">{{n}}</text></g>
+    <g id="c{{n}}" class="tint{{n|plus:16}}"><rect class="tintbox" width="10" height="40" /><text x="5" y="20" font-size="smaller">{{n}}</text></g>
+    <g id="d{{n}}" class="tint{{n|plus:24}}"><rect class="tintbox" width="10" height="40" /><text x="5" y="20" font-size="smaller">{{n}}</text></g>
   {% endfor -%}
   <g id="etc"><rect width="10" height="40" /><text x="5" y="20">&hellip;</text></g>
   </defs>
@@ -68,22 +68,22 @@ eight-bit inputs.
   {% endfor -%}
 
   {% for n in (0..7) -%}
-    <g class="blockgroup{{n | plus: 8}}">
+    <g class="hlset">
     <use href="#b{{n}}" x="{{n | times: 10 | plus: 70}}" y="20" />
     <use href="#b{{n}}" x="130" y="{{n | times: 50 | plus: 150}}" />
     </g>
-    <g class="blockgroup{{n | plus: 8}}">
+    <g class="hlset">
     <use href="#c{{n}}" x="{{n | times: 10 | plus: 160}}" y="20" />
     <use href="#c{{n}}" x="310" y="{{n | times: 50 | plus: 150}}" />
     </g>
-    <g class="blockgroup{{n | plus: 8}}">
+    <g class="hlset">
     <use href="#d{{n}}" x="{{n | times: 10 | plus: 250}}" y="20" />
     <use href="#d{{n}}" x="490" y="{{n | times: 50 | plus: 150}}" />
     </g>
   {% endfor -%}
 
   {% for n in (0..7) -%}
-    <g class="blockgroup{{n}}">
+    <g class="hlset">
     <use href="#a{{n}}" x="{{n | times: 90 | plus: 70}}" y="80" />
     <use href="#a{{n}}" x="160" y="{{n | times: 50 | plus: 150}}" />
     <use href="#a{{n}}" x="340" y="{{n | times: 50 | plus: 150}}" />
@@ -95,13 +95,13 @@ eight-bit inputs.
   <line x1="470" y1="550" x2="605" y2="550" />
   <rect x="80"  y="560" width="50" height="40" />
   <text x="105" y="580">00000</text>
-  <rect x="130" y="560" width="110" height="40" class="blockgroup0" />
+  <rect x="130" y="560" width="110" height="40" class="tint0 tintbox" />
   <rect x="260" y="560" width="50" height="40" />
   <text x="285" y="580">00000</text>
-  <rect x="310" y="560" width="110" height="40" class="blockgroup1" />
+  <rect x="310" y="560" width="110" height="40" class="tint1 tintbox" />
   <rect x="440" y="560" width="50" height="40" />
   <text x="465" y="580">00000</text>
-  <rect x="490" y="560" width="110" height="40" class="blockgroup2" />
+  <rect x="490" y="560" width="110" height="40" class="tint2 tintbox" />
   <rect x="620" y="560" width="50" height="40" />
   <text x="645" y="580">00000</text>
   <rect x="670" y="560" width="110" height="40" />

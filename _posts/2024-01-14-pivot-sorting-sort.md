@@ -33,8 +33,8 @@ but it represents a simpler conceptual model).
 <svg width="100%" height="60" viewbox="0 0 660 60">
   <defs>
     {% for v in (0..15) %} <path id="value{{v}}" width="10" height="40"  d="M5 {{v | times:-2 | plus: 44}} V50" stroke-width="6" /> {% endfor %}
-    <rect id="element" width="10" height="40" y="10" class="block1" />
-    <rect id="pivot" width="10" height="40" y="10" class="block0" />
+    <rect class="tint1 tintbox" id="element" width="10" height="40" y="10" />
+    <rect class="tint2 tintbox" id="pivot" width="10" height="40" y="10" />
   </defs>
   <rect id="array" width="640" height="40" y="10" x="10" />
   {% assign array="11 1 7 6 7 9 1 1 5 7 0 2 8 2 8 4 4 7 15 0 13 8 11 6 14 12 0 4 4 8 8 3 12 9 0 5 8 5 4 3 2 14 8 15 7 14 15 13 5 14 3 11 11 3 1 0 2 15 0 11 1 14 4 8" | split: " " %}

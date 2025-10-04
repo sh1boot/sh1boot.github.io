@@ -39,8 +39,8 @@ little-endian bit string:
     {%- for row in rows -%}
       {%- assign cells = row | split: " " -%}
       {%- for cell in cells -%}
-        <g id="{{cell}}" class="block{{forloop.parentloop.index0}}">
-          <rect x="0" y="24" width="22" height="24" />
+        <g id="{{cell}}" class="tint{{forloop.parentloop.index0}}">
+          <rect class="tintbox" x="0" y="24" width="22" height="24" />
           <text x="11" y="36"><tspan>{{cell | split: "" | first}}<tspan font-size="60%" dy="10%">{{cell | split: "" | last}}</tspan>
           </tspan></text>
         </g>

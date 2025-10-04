@@ -118,7 +118,7 @@ only be neighbours for one specific device.
 <svg width="100%" viewbox="0 0 800 465">
   <defs>
     {% for n in (0..15) -%}
-    <g id="row{{n}}"><rect x="0" y="0" width="140" height="30" /><text x="70" y="15">row {{n}}</text></g>
+    <g id="row{{n}}" class="tint{{n}}"><rect class="tintbox" x="0" y="0" width="140" height="30" /><text x="70" y="15">row {{n}}</text></g>
     {% endfor -%}
   </defs>
   <text x="80" y="25">logical address</text><text x="80" y="445">&hellip;</text>
@@ -127,7 +127,7 @@ only be neighbours for one specific device.
   <rect x="485" y="5" width="150" height="460" /><text x="560" y="25">chip 2</text><text x="560" y="445">&hellip;</text>
   <rect x="645" y="5" width="150" height="460" /><text x="720" y="25">chip 3</text><text x="720" y="445">&hellip;</text>
   {% for n in (0..15) -%}
-    <g class="blockgroup{{n}}">
+    <g class="hlset">
     {% if n < 10 %}<text x="80" y="{{n | times: 40 | plus: 60}}">row {{n}}</text>{%endif%}
     {% assign m = n | times: 4369 | divided_by: 1 | modulo: 16 %}
     {% if m < 10 %}<use href="#row{{n}}" x="170" y="{{m | times: 40 | plus: 40 }}" />{%endif%}

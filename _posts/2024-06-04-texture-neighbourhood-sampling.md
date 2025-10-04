@@ -38,24 +38,24 @@ step changes every time an integer boundary is crossed:
 <svg viewbox="0 0 640 340">
 <defs>
   {%- assign letters = "mnopqrst" | split: '' -%}
-  <g id="pixel"><circle r="12"/></g>
+  <g id="pixel"><circle class="tintbox" r="12"/></g>
   {%- for n in (0..7) %}
-  <g id="pixlbl_{{n}}" class="block{{n}}"><text font-variant="small-caps">{{letters[n]}}</text></g>
-  <g id="pixel_{{n}}" class="block{{n}}"><use href="#pixel" /><use href="#pixlbl_{{n}}" /></g>
+  <g id="pixlbl_{{n}}" class="tint{{n}}"><text font-variant="small-caps">{{letters[n]}}</text></g>
+  <g id="pixel_{{n}}" class="tint{{n}}"><use href="#pixel" /><use href="#pixlbl_{{n}}" /></g>
   {%- endfor %}
 
-  <g id="narrow"><rect x="0" y="-10" width="50" height="20" /></g>
-  <g id="wide"><rect x="0" y="-10" width="100" height="20" /></g>
+  <g id="narrow"><rect class="tintbox" x="0" y="-10" width="50" height="20" /></g>
+  <g id="wide"><rect class="tintbox" x="0" y="-10" width="100" height="20" /></g>
   <g id="down_1x">
-    <polygon points="0,10 0,-10 50,10" stroke="none" />
+    <polygon class="tintbox" points="0,10 0,-10 50,10" stroke="none" />
     <path d="M0,-10 l50,20" /></g>
   <g id="up_1x">
-    <polygon points="0,10 50,-10 50,10" stroke="none" />
+    <polygon class="tintbox" points="0,10 50,-10 50,10" stroke="none" />
     <path d="M0,10 l50,-20" /></g>
 
   {%- for n in (0..7) %}
-  <g id="narrow{{n}}" class="block{{n}}"><use href="#narrow" /><use href="#pixlbl_{{n}}" x="25" /></g>
-  <g id="wide{{n}}" class="block{{n}}"><use href="#wide" /><use href="#pixlbl_{{n}}" x="50" /></g>
+  <g id="narrow{{n}}" class="tint{{n}}"><use href="#narrow" /><use href="#pixlbl_{{n}}" x="25" /></g>
+  <g id="wide{{n}}" class="tint{{n}}"><use href="#wide" /><use href="#pixlbl_{{n}}" x="50" /></g>
   {%- endfor %}
 </defs>
   <g id="illustration">
@@ -89,9 +89,9 @@ step changes every time an integer boundary is crossed:
 </g>
   {%- for n in (0..5) %}
   <use href="#narrow{{n}}" x="{{n | times: 50 | plus: 200}}" y="230" />
-  <use href="#down_1x" x="{{n | times: 50 | plus: 200}}" y="260" class="block{{n}}" />
+  <use href="#down_1x" x="{{n | times: 50 | plus: 200}}" y="260" class="tint{{n}}" />
   <use href="#narrow{{n}}" x="{{n | times: 50 | plus: 150}}" y="290" />
-  <use href="#up_1x" x="{{n | times: 50 | plus: 150}}" y="320" class="block{{n}}" />
+  <use href="#up_1x" x="{{n | times: 50 | plus: 150}}" y="320" class="tint{{n}}" />
   {%- endfor %}
 </svg>
 
@@ -122,27 +122,27 @@ Consequently, variables change like so:
 <svg viewbox="0 0 640 340">
   <use href="#illustration" />
 
-  <use href="#wide0" x="150" y="230" class="block0" />
-  <use href="#wide2" x="250" y="230" class="block2" />
-  <use href="#wide4" x="350" y="230" class="block4" />
+  <use href="#wide0" x="150" y="230" class="tint0" />
+  <use href="#wide2" x="250" y="230" class="tint2" />
+  <use href="#wide4" x="350" y="230" class="tint4" />
 
-  <use href="#up_1x"   x="150" y="260" class="block0" />
-  <use href="#down_1x" x="200" y="260" class="block0" />
-  <use href="#up_1x"   x="250" y="260" class="block2" />
-  <use href="#down_1x" x="300" y="260" class="block2" />
-  <use href="#up_1x"   x="350" y="260" class="block4" />
-  <use href="#down_1x" x="400" y="260" class="block4" />
+  <use href="#up_1x"   x="150" y="260" class="tint0" />
+  <use href="#down_1x" x="200" y="260" class="tint0" />
+  <use href="#up_1x"   x="250" y="260" class="tint2" />
+  <use href="#down_1x" x="300" y="260" class="tint2" />
+  <use href="#up_1x"   x="350" y="260" class="tint4" />
+  <use href="#down_1x" x="400" y="260" class="tint4" />
 
-  <use href="#wide1" x="200" y="290" class="block1" />
-  <use href="#wide3" x="300" y="290" class="block3" />
-  <use href="#wide5" x="400" y="290" class="block5" />
+  <use href="#wide1" x="200" y="290" class="tint1" />
+  <use href="#wide3" x="300" y="290" class="tint3" />
+  <use href="#wide5" x="400" y="290" class="tint5" />
 
-  <use href="#up_1x"   x="200" y="320" class="block1" />
-  <use href="#down_1x" x="250" y="320" class="block1" />
-  <use href="#up_1x"   x="300" y="320" class="block3" />
-  <use href="#down_1x" x="350" y="320" class="block3" />
-  <use href="#up_1x"   x="400" y="320" class="block5" />
-  <use href="#down_1x" x="450" y="320" class="block5" />
+  <use href="#up_1x"   x="200" y="320" class="tint1" />
+  <use href="#down_1x" x="250" y="320" class="tint1" />
+  <use href="#up_1x"   x="300" y="320" class="tint3" />
+  <use href="#down_1x" x="350" y="320" class="tint3" />
+  <use href="#up_1x"   x="400" y="320" class="tint5" />
+  <use href="#down_1x" x="450" y="320" class="tint5" />
 </svg>
 
 While `a` and `b` do still take step changes, they do so when their

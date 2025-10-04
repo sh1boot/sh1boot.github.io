@@ -27,8 +27,8 @@ swizzle bits describing the endianness of the data.
 <svg viewbox="0 0 800 496">
   <defs>
     {%- for byte in (0..9) -%}
-      <g id="b{{byte}}" class="block{{byte}}">
-        <rect x="0" y="0" width="32" height="32"/>
+      <g id="b{{byte}}" class="tint{{byte}}">
+        <rect class="tintbox" x="0" y="0" width="32" height="32"/>
         <text x="16" y="16">b{{byte}}</text>
       </g>
     {%- endfor -%}

@@ -1,40 +1,67 @@
 <style>
+  @property --glow {
+    syntax: "<number>";
+    initial-value: 0;
+    inherits: true;
+  }
+  @property --hue {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: true;
+  }
   svg {
     stroke:currentColor;
     stroke-width:1.5;
-    fill:currentColor;
-    fill-opacity:0.0625;
+    fill:oklch(from currentColor calc(l * -.8 + .9) c h);
+    fill-opacity: 60%;
   }
   text {
-        stroke:none;
-        fill:currentColor;
-        fill-opacity:1.0;
-        dominant-baseline:middle;
-        text-anchor:middle;
+    stroke:none;
+    fill:currentColor;
+    fill-opacity:100%;
+    dominant-baseline:middle;
+    text-anchor:middle;
   }
   path {
     fill:none;
-    fill-opacity:1.0;
   }
-  @-webkit-keyframes highlightbg {
-    0% { fill-opacity: 0.5; }
-    50% {fill-opacity: 0.0; }
-    100% {fill-opacity: 0.5; }
+  .opaque-background {
+    --tinted-fill: oklch(from currentColor
+        calc(clamp(0.4, 1.2 - l, 0.9) + var(--glow,0))
+        calc(l * .05 + .15)
+        var(--hue));
   }
-  {% for n in (0..20) %} :root {
-      --unique-color{{n}}: oklch(
-        {{-n | times: 0.6180339887498948482 | modulo: 1 | times: -30 | plus: 80 | round}}{{'% '}}
-        {{-n | times: 0.7548776662466927 | modulo: 1 | times: -50 | plus: 125 | round}}{{'% '}}
-        {{-n | times: 0.5698402909980532 | modulo: 1 | times: 360 | round}}deg);
-  } {% endfor %}
-  {% for n in (0..20) %} .block{{n}} { fill:var(--unique-color{{n}}); fill-opacity: 0.125; }
-  .blockgroup{{n}} { fill:var(--unique-color{{n}}); fill-opacity: 0.2; }
-  .blockgroup{{n}}:hover { fill:var(--unique-color{{n}}); fill-opacity: 0.50;
+  * {
+    --tinted-stroke: oklch(from currentColor
+        calc(clamp(0.4, l, 0.9) + var(--glow,0))
+        calc(l * -.3 + .35)
+        var(--hue));
+    --tinted-fill: oklch(from currentColor
+        calc(clamp(0.4, 1.2 - l, 0.9) + var(--glow,0))
+        calc(l * .2 + .2)
+        var(--hue));
+  }
+
+  {%- for n in (0..32) %}
+  .tint{{n}} {--hue:{{n|times:223|modulo:360}}deg;}
+  {%- endfor %}
+
+  .tintbox {
+    fill: var(--tinted-fill);
+  }
+
+  .tintline {
+    stroke: var(--tinted-stroke);
+    stroke-width: 2px;
+  }
+
+  @keyframes hlglow {
+    from { --glow: .3; }
+    to   { --glow: -.3; }
+  }
+  .hlset:hover {
+    animation: 1.5s linear(0, 1, 0) infinite hlglow;
     font-weight: bold;
-    font-size: larger;
-    -webkit-animation-name: highlightbg;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-duration: 1.5s;
+    stroke-width: 2px;
   }
-  {% endfor %}
 </style>

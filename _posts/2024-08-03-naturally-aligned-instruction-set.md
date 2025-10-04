@@ -93,31 +93,31 @@ and decoded from the same bits (sometimes denoted as the `Rsd` operand):
 <svg viewbox="-1 -1 800 126">
   <defs>
     {%- for opc in (0..1) -%}
-      <g id="opc{{opc}}_4" class="block{{opc}}">
-        <rect x="0" y="0" width="64" height="24"/>
+      <g id="opc{{opc}}_4" class="tint{{opc}}">
+        <rect class="tintbox" x="0" y="0" width="64" height="24"/>
         <text x="32" y="12">Op{{opc}} op</text>
       </g>
-      <g id="rs1_{{opc}}_5" class="block{{opc}}">
-        <rect x="0" y="0" width="80" height="24"/>
+      <g id="rs1_{{opc}}_5" class="tint{{opc}}">
+        <rect class="tintbox" x="0" y="0" width="80" height="24"/>
         <text x="40" y="12">Op{{opc}} Rs1</text>
       </g>
-      <g id="rs2_{{opc}}_5" class="block{{opc}}">
-        <rect x="0" y="0" width="80" height="24"/>
+      <g id="rs2_{{opc}}_5" class="tint{{opc}}">
+        <rect class="tintbox" x="0" y="0" width="80" height="24"/>
         <text x="40" y="12">Op{{opc}} Rs2</text>
       </g>
-      <g id="imm5_{{opc}}" class="block{{opc}}">
-        <rect x="0" y="0" width="80" height="24"/>
+      <g id="imm5_{{opc}}" class="tint{{opc}}">
+        <rect class="tintbox" x="0" y="0" width="80" height="24"/>
         <text x="40" y="12">Op{{opc}} imm</text>
       </g>
-      <g id="imm10_{{opc}}" class="block{{opc}}">
-        <rect x="0" y="0" width="160" height="24"/>
+      <g id="imm10_{{opc}}" class="tint{{opc}}">
+        <rect class="tintbox" x="0" y="0" width="160" height="24"/>
         <text x="80" y="12">Op{{opc}} imm</text>
       </g>
-      <g id="rd_{{opc}}_5" class="block{{opc}}">
-        <rect x="0" y="0" width="80" height="24"/>
+      <g id="rd_{{opc}}_5" class="tint{{opc}}">
+        <rect class="tintbox" x="0" y="0" width="80" height="24"/>
         <text x="40" y="12">Op{{opc}} Rd</text>
       </g>
-      <g id="rsd_{{opc}}_5" class="block{{opc}}">
+      <g id="rsd_{{opc}}_5" class="tint{{opc}}">
         <use href="#rs1_{{opc}}_5" x="0" y="-12"/>
         <use href="#rd_{{opc}}_5" x="0" y="12"/>
       </g>
@@ -282,12 +282,12 @@ instruction, because those don't exist.
       </g>
     {%- endfor -%}
     {%- for opc in (0..15) -%}
-      <g id="opc{{opc}}_16" class="block{{opc}}">
-        <rect x="0" y="0" width="96" height="24"/>
+      <g id="opc{{opc}}_16" class="tint{{opc}}">
+        <rect class="tintbox" x="0" y="0" width="96" height="24"/>
         <text x="48" y="12">Op{{opc}}</text>
       </g>
-      <g id="opc{{opc}}_15" class="block{{opc}}">
-        <rect x="16" y="0" width="80" height="24"/>
+      <g id="opc{{opc}}_15" class="tint{{opc}}">
+        <rect class="tintbox" x="16" y="0" width="80" height="24"/>
         <text x="56" y="12">Op{{opc}}</text>
       </g>
     {%- endfor -%}
