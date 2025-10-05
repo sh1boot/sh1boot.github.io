@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" /><link rel="stylesheet" href="/assets/main.css" /><link type="application/atom+xml" rel="alternate" href="http://0.0.0.0:4000/feed.xml" title="tīkōuka.dev" />
+<link rel="me" href="https://github.com/sh1boot" />
+<link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  @property --glow {
+    syntax: "<number>";
+    initial-value: 0;
+    inherits: true;
+  }
+  @property --hue {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: true;
+  }
+  svg {
+    stroke:currentColor;
+    stroke-width:1.5;
+    fill:oklch(from currentColor calc(l * -.8 + .9) c h);
+    fill-opacity: 60%;
+  }
+  text {
+    stroke:none;
+    fill:currentColor;
+    fill-opacity:100%;
+    dominant-baseline:middle;
+    text-anchor:middle;
+  }
+  path {
+    fill:none;
+  }
+  .opaque-background {
+    --tinted-fill: oklch(from currentColor
+        calc(clamp(0.4, 1.2 - l, 0.9) + var(--glow,0))
+        calc(l * .05 + .15)
+        var(--hue));
+  }
+  * {
+    --tinted-stroke: oklch(from currentColor
+        calc(clamp(0.4, l, 0.9) + var(--glow,0))
+        calc(l * -.3 + .35)
+        var(--hue));
+    --tinted-fill: oklch(from currentColor
+        calc(clamp(0.4, 1.2 - l, 0.9) + var(--glow,0))
+        calc(l * .2 + .2)
+        var(--hue));
+  }
+  .tint0 {--hue:0deg;}
+  .tint1 {--hue:223deg;}
+  .tint2 {--hue:86deg;}
+  .tint3 {--hue:309deg;}
+  .tint4 {--hue:172deg;}
+  .tint5 {--hue:35deg;}
+  .tint6 {--hue:258deg;}
+  .tint7 {--hue:121deg;}
+  .tint8 {--hue:344deg;}
+  .tint9 {--hue:207deg;}
+  .tint10 {--hue:70deg;}
+  .tint11 {--hue:293deg;}
+  .tint12 {--hue:156deg;}
+  .tint13 {--hue:19deg;}
+  .tint14 {--hue:242deg;}
+  .tint15 {--hue:105deg;}
+  .tint16 {--hue:328deg;}
+  .tint17 {--hue:191deg;}
+  .tint18 {--hue:54deg;}
+  .tint19 {--hue:277deg;}
+  .tint20 {--hue:140deg;}
+  .tint21 {--hue:3deg;}
+  .tint22 {--hue:226deg;}
+  .tint23 {--hue:89deg;}
+  .tint24 {--hue:312deg;}
+  .tint25 {--hue:175deg;}
+  .tint26 {--hue:38deg;}
+  .tint27 {--hue:261deg;}
+  .tint28 {--hue:124deg;}
+  .tint29 {--hue:347deg;}
+  .tint30 {--hue:210deg;}
+  .tint31 {--hue:73deg;}
+  .tint32 {--hue:296deg;}
+
+  .tintbox {
+    fill: var(--tinted-fill);
+  }
+
+  .tintline {
+    stroke: var(--tinted-stroke);
+    stroke-width: 2px;
+  }
+
+  @keyframes hlglow {
+    from { --glow: .3; }
+    to   { --glow: -.3; }
+  }
+  .hlset:hover {
+    animation: 1.5s linear(0, 1, 0) infinite hlglow;
+    font-weight: bold;
+    stroke-width: 2px;
+  }
+</style>
+
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">tīkōuka.dev</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/top/manifesto/">Manifesto</a><a class="page-link" href="/top/todo/">TODO</a><a class="page-link" href="/top/links/">external links</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Messing about with SVG.</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Hello.</p>
+
+<svg width="10" viewbox="0 0 799 479">
+<defs>
+
+
+
+<g id="test0" class="tint0">
+<rect class="tintbox" x="10" y="10" width="60" height="50" />
+<text x="40" y="30">box 0</text>
+<circle class="tintbox" cx="660" cy="20" r="10" />
+<text x="700" y="18">label 0</text>
+<path class="tintline" d="M675 25 h50" />
+<path class="tintline" d="M-40,80
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test1" class="tint1">
+<rect class="tintbox" x="90" y="10" width="60" height="50" />
+<text x="120" y="30">box 1</text>
+<circle class="tintbox" cx="660" cy="50" r="10" />
+<text x="700" y="48">label 1</text>
+<path class="tintline" d="M675 55 h50" />
+<path class="tintline" d="M40,80
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test2" class="tint2">
+<rect class="tintbox" x="170" y="10" width="60" height="50" />
+<text x="200" y="30">box 2</text>
+<circle class="tintbox" cx="660" cy="80" r="10" />
+<text x="700" y="78">label 2</text>
+<path class="tintline" d="M675 85 h50" />
+<path class="tintline" d="M120,80
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test3" class="tint3">
+<rect class="tintbox" x="250" y="10" width="60" height="50" />
+<text x="280" y="30">box 3</text>
+<circle class="tintbox" cx="660" cy="110" r="10" />
+<text x="700" y="108">label 3</text>
+<path class="tintline" d="M675 115 h50" />
+<path class="tintline" d="M200,80
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test4" class="tint4">
+<rect class="tintbox" x="330" y="10" width="60" height="50" />
+<text x="360" y="30">box 4</text>
+<circle class="tintbox" cx="660" cy="140" r="10" />
+<text x="700" y="138">label 4</text>
+<path class="tintline" d="M675 145 h50" />
+<path class="tintline" d="M280,80
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test5" class="tint5">
+<rect class="tintbox" x="410" y="10" width="60" height="50" />
+<text x="440" y="30">box 5</text>
+<circle class="tintbox" cx="660" cy="170" r="10" />
+<text x="700" y="168">label 5</text>
+<path class="tintline" d="M675 175 h50" />
+<path class="tintline" d="M360,80
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test6" class="tint6">
+<rect class="tintbox" x="490" y="10" width="60" height="50" />
+<text x="520" y="30">box 6</text>
+<circle class="tintbox" cx="660" cy="200" r="10" />
+<text x="700" y="198">label 6</text>
+<path class="tintline" d="M675 205 h50" />
+<path class="tintline" d="M440,80
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test7" class="tint7">
+<rect class="tintbox" x="570" y="10" width="60" height="50" />
+<text x="600" y="30">box 7</text>
+<circle class="tintbox" cx="660" cy="230" r="10" />
+<text x="700" y="228">label 7</text>
+<path class="tintline" d="M675 235 h50" />
+<path class="tintline" d="M520,80
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+
+
+<g id="test8" class="tint8">
+<rect class="tintbox" x="10" y="130" width="60" height="50" />
+<text x="40" y="150">box 8</text>
+<circle class="tintbox" cx="660" cy="260" r="10" />
+<text x="700" y="258">label 8</text>
+<path class="tintline" d="M675 265 h50" />
+<path class="tintline" d="M-40,200
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test9" class="tint9">
+<rect class="tintbox" x="90" y="130" width="60" height="50" />
+<text x="120" y="150">box 9</text>
+<circle class="tintbox" cx="660" cy="290" r="10" />
+<text x="700" y="288">label 9</text>
+<path class="tintline" d="M675 295 h50" />
+<path class="tintline" d="M40,200
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test10" class="tint10">
+<rect class="tintbox" x="170" y="130" width="60" height="50" />
+<text x="200" y="150">box 10</text>
+<circle class="tintbox" cx="660" cy="320" r="10" />
+<text x="700" y="318">label 10</text>
+<path class="tintline" d="M675 325 h50" />
+<path class="tintline" d="M120,200
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test11" class="tint11">
+<rect class="tintbox" x="250" y="130" width="60" height="50" />
+<text x="280" y="150">box 11</text>
+<circle class="tintbox" cx="660" cy="350" r="10" />
+<text x="700" y="348">label 11</text>
+<path class="tintline" d="M675 355 h50" />
+<path class="tintline" d="M200,200
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test12" class="tint12">
+<rect class="tintbox" x="330" y="130" width="60" height="50" />
+<text x="360" y="150">box 12</text>
+<circle class="tintbox" cx="660" cy="380" r="10" />
+<text x="700" y="378">label 12</text>
+<path class="tintline" d="M675 385 h50" />
+<path class="tintline" d="M280,200
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test13" class="tint13">
+<rect class="tintbox" x="410" y="130" width="60" height="50" />
+<text x="440" y="150">box 13</text>
+<circle class="tintbox" cx="660" cy="410" r="10" />
+<text x="700" y="408">label 13</text>
+<path class="tintline" d="M675 415 h50" />
+<path class="tintline" d="M360,200
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test14" class="tint14">
+<rect class="tintbox" x="490" y="130" width="60" height="50" />
+<text x="520" y="150">box 14</text>
+<circle class="tintbox" cx="660" cy="440" r="10" />
+<text x="700" y="438">label 14</text>
+<path class="tintline" d="M675 445 h50" />
+<path class="tintline" d="M440,200
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test15" class="tint15">
+<rect class="tintbox" x="570" y="130" width="60" height="50" />
+<text x="600" y="150">box 15</text>
+<circle class="tintbox" cx="660" cy="470" r="10" />
+<text x="700" y="468">label 15</text>
+<path class="tintline" d="M675 475 h50" />
+<path class="tintline" d="M520,200
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+
+
+<g id="test16" class="tint16">
+<rect class="tintbox" x="10" y="250" width="60" height="50" />
+<text x="40" y="270">box 16</text>
+<circle class="tintbox" cx="660" cy="500" r="10" />
+<text x="700" y="498">label 16</text>
+<path class="tintline" d="M675 505 h50" />
+<path class="tintline" d="M-40,320
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test17" class="tint17">
+<rect class="tintbox" x="90" y="250" width="60" height="50" />
+<text x="120" y="270">box 17</text>
+<circle class="tintbox" cx="660" cy="530" r="10" />
+<text x="700" y="528">label 17</text>
+<path class="tintline" d="M675 535 h50" />
+<path class="tintline" d="M40,320
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test18" class="tint18">
+<rect class="tintbox" x="170" y="250" width="60" height="50" />
+<text x="200" y="270">box 18</text>
+<circle class="tintbox" cx="660" cy="560" r="10" />
+<text x="700" y="558">label 18</text>
+<path class="tintline" d="M675 565 h50" />
+<path class="tintline" d="M120,320
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test19" class="tint19">
+<rect class="tintbox" x="250" y="250" width="60" height="50" />
+<text x="280" y="270">box 19</text>
+<circle class="tintbox" cx="660" cy="590" r="10" />
+<text x="700" y="588">label 19</text>
+<path class="tintline" d="M675 595 h50" />
+<path class="tintline" d="M200,320
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test20" class="tint20">
+<rect class="tintbox" x="330" y="250" width="60" height="50" />
+<text x="360" y="270">box 20</text>
+<circle class="tintbox" cx="660" cy="620" r="10" />
+<text x="700" y="618">label 20</text>
+<path class="tintline" d="M675 625 h50" />
+<path class="tintline" d="M280,320
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test21" class="tint21">
+<rect class="tintbox" x="410" y="250" width="60" height="50" />
+<text x="440" y="270">box 21</text>
+<circle class="tintbox" cx="660" cy="650" r="10" />
+<text x="700" y="648">label 21</text>
+<path class="tintline" d="M675 655 h50" />
+<path class="tintline" d="M360,320
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test22" class="tint22">
+<rect class="tintbox" x="490" y="250" width="60" height="50" />
+<text x="520" y="270">box 22</text>
+<circle class="tintbox" cx="660" cy="680" r="10" />
+<text x="700" y="678">label 22</text>
+<path class="tintline" d="M675 685 h50" />
+<path class="tintline" d="M440,320
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test23" class="tint23">
+<rect class="tintbox" x="570" y="250" width="60" height="50" />
+<text x="600" y="270">box 23</text>
+<circle class="tintbox" cx="660" cy="710" r="10" />
+<text x="700" y="708">label 23</text>
+<path class="tintline" d="M675 715 h50" />
+<path class="tintline" d="M520,320
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+
+
+<g id="test24" class="tint24">
+<rect class="tintbox" x="10" y="370" width="60" height="50" />
+<text x="40" y="390">box 24</text>
+<circle class="tintbox" cx="660" cy="740" r="10" />
+<text x="700" y="738">label 24</text>
+<path class="tintline" d="M675 745 h50" />
+<path class="tintline" d="M-40,440
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test25" class="tint25">
+<rect class="tintbox" x="90" y="370" width="60" height="50" />
+<text x="120" y="390">box 25</text>
+<circle class="tintbox" cx="660" cy="770" r="10" />
+<text x="700" y="768">label 25</text>
+<path class="tintline" d="M675 775 h50" />
+<path class="tintline" d="M40,440
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test26" class="tint26">
+<rect class="tintbox" x="170" y="370" width="60" height="50" />
+<text x="200" y="390">box 26</text>
+<circle class="tintbox" cx="660" cy="800" r="10" />
+<text x="700" y="798">label 26</text>
+<path class="tintline" d="M675 805 h50" />
+<path class="tintline" d="M120,440
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test27" class="tint27">
+<rect class="tintbox" x="250" y="370" width="60" height="50" />
+<text x="280" y="390">box 27</text>
+<circle class="tintbox" cx="660" cy="830" r="10" />
+<text x="700" y="828">label 27</text>
+<path class="tintline" d="M675 835 h50" />
+<path class="tintline" d="M200,440
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test28" class="tint28">
+<rect class="tintbox" x="330" y="370" width="60" height="50" />
+<text x="360" y="390">box 28</text>
+<circle class="tintbox" cx="660" cy="860" r="10" />
+<text x="700" y="858">label 28</text>
+<path class="tintline" d="M675 865 h50" />
+<path class="tintline" d="M280,440
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test29" class="tint29">
+<rect class="tintbox" x="410" y="370" width="60" height="50" />
+<text x="440" y="390">box 29</text>
+<circle class="tintbox" cx="660" cy="890" r="10" />
+<text x="700" y="888">label 29</text>
+<path class="tintline" d="M675 895 h50" />
+<path class="tintline" d="M360,440
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test30" class="tint30">
+<rect class="tintbox" x="490" y="370" width="60" height="50" />
+<text x="520" y="390">box 30</text>
+<circle class="tintbox" cx="660" cy="920" r="10" />
+<text x="700" y="918">label 30</text>
+<path class="tintline" d="M675 925 h50" />
+<path class="tintline" d="M440,440
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+<g id="test31" class="tint31">
+<rect class="tintbox" x="570" y="370" width="60" height="50" />
+<text x="600" y="390">box 31</text>
+<circle class="tintbox" cx="660" cy="950" r="10" />
+<text x="700" y="948">label 31</text>
+<path class="tintline" d="M675 955 h50" />
+<path class="tintline" d="M520,440
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5
+      c9,20 18,-25 27,5" />
+</g>
+
+
+</defs>
+</svg>
+
+<svg width="800" viewbox="0 0 799 479">
+
+<use class="hlset" href="#test0" />
+
+<use class="hlset" href="#test1" />
+
+<use class="hlset" href="#test2" />
+
+<use class="hlset" href="#test3" />
+
+<use class="hlset" href="#test4" />
+
+<use class="hlset" href="#test5" />
+
+<use class="hlset" href="#test6" />
+
+<use class="hlset" href="#test7" />
+
+<use class="hlset" href="#test8" />
+
+<use class="hlset" href="#test9" />
+
+<use class="hlset" href="#test10" />
+
+<use class="hlset" href="#test11" />
+
+<use class="hlset" href="#test12" />
+
+<use class="hlset" href="#test13" />
+
+<use class="hlset" href="#test14" />
+
+<use class="hlset" href="#test15" />
+
+<use class="hlset" href="#test16" />
+
+<use class="hlset" href="#test17" />
+
+<use class="hlset" href="#test18" />
+
+<use class="hlset" href="#test19" />
+
+<use class="hlset" href="#test20" />
+
+<use class="hlset" href="#test21" />
+
+<use class="hlset" href="#test22" />
+
+<use class="hlset" href="#test23" />
+
+<use class="hlset" href="#test24" />
+
+<use class="hlset" href="#test25" />
+
+<use class="hlset" href="#test26" />
+
+<use class="hlset" href="#test27" />
+
+<use class="hlset" href="#test28" />
+
+<use class="hlset" href="#test29" />
+
+<use class="hlset" href="#test30" />
+
+<use class="hlset" href="#test31" />
+
+</svg>
+
+<div style="background:white;color:black;"> 
+<svg width="800" viewbox="0 0 799 479">
+
+<use class="hlset" href="#test0" />
+
+<use class="hlset" href="#test1" />
+
+<use class="hlset" href="#test2" />
+
+<use class="hlset" href="#test3" />
+
+<use class="hlset" href="#test4" />
+
+<use class="hlset" href="#test5" />
+
+<use class="hlset" href="#test6" />
+
+<use class="hlset" href="#test7" />
+
+<use class="hlset" href="#test8" />
+
+<use class="hlset" href="#test9" />
+
+<use class="hlset" href="#test10" />
+
+<use class="hlset" href="#test11" />
+
+<use class="hlset" href="#test12" />
+
+<use class="hlset" href="#test13" />
+
+<use class="hlset" href="#test14" />
+
+<use class="hlset" href="#test15" />
+
+<use class="hlset" href="#test16" />
+
+<use class="hlset" href="#test17" />
+
+<use class="hlset" href="#test18" />
+
+<use class="hlset" href="#test19" />
+
+<use class="hlset" href="#test20" />
+
+<use class="hlset" href="#test21" />
+
+<use class="hlset" href="#test22" />
+
+<use class="hlset" href="#test23" />
+
+<use class="hlset" href="#test24" />
+
+<use class="hlset" href="#test25" />
+
+<use class="hlset" href="#test26" />
+
+<use class="hlset" href="#test27" />
+
+<use class="hlset" href="#test28" />
+
+<use class="hlset" href="#test29" />
+
+<use class="hlset" href="#test30" />
+
+<use class="hlset" href="#test31" />
+
+</svg>
+ </div>
+<div style="background:#aaa;color:black;"> 
+<svg width="800" viewbox="0 0 799 479">
+
+<use class="hlset" href="#test0" />
+
+<use class="hlset" href="#test1" />
+
+<use class="hlset" href="#test2" />
+
+<use class="hlset" href="#test3" />
+
+<use class="hlset" href="#test4" />
+
+<use class="hlset" href="#test5" />
+
+<use class="hlset" href="#test6" />
+
+<use class="hlset" href="#test7" />
+
+<use class="hlset" href="#test8" />
+
+<use class="hlset" href="#test9" />
+
+<use class="hlset" href="#test10" />
+
+<use class="hlset" href="#test11" />
+
+<use class="hlset" href="#test12" />
+
+<use class="hlset" href="#test13" />
+
+<use class="hlset" href="#test14" />
+
+<use class="hlset" href="#test15" />
+
+<use class="hlset" href="#test16" />
+
+<use class="hlset" href="#test17" />
+
+<use class="hlset" href="#test18" />
+
+<use class="hlset" href="#test19" />
+
+<use class="hlset" href="#test20" />
+
+<use class="hlset" href="#test21" />
+
+<use class="hlset" href="#test22" />
+
+<use class="hlset" href="#test23" />
+
+<use class="hlset" href="#test24" />
+
+<use class="hlset" href="#test25" />
+
+<use class="hlset" href="#test26" />
+
+<use class="hlset" href="#test27" />
+
+<use class="hlset" href="#test28" />
+
+<use class="hlset" href="#test29" />
+
+<use class="hlset" href="#test30" />
+
+<use class="hlset" href="#test31" />
+
+</svg>
+ </div>
+<div style="background:navy;color:yellow;"> 
+<svg width="800" viewbox="0 0 799 479">
+
+<use class="hlset" href="#test0" />
+
+<use class="hlset" href="#test1" />
+
+<use class="hlset" href="#test2" />
+
+<use class="hlset" href="#test3" />
+
+<use class="hlset" href="#test4" />
+
+<use class="hlset" href="#test5" />
+
+<use class="hlset" href="#test6" />
+
+<use class="hlset" href="#test7" />
+
+<use class="hlset" href="#test8" />
+
+<use class="hlset" href="#test9" />
+
+<use class="hlset" href="#test10" />
+
+<use class="hlset" href="#test11" />
+
+<use class="hlset" href="#test12" />
+
+<use class="hlset" href="#test13" />
+
+<use class="hlset" href="#test14" />
+
+<use class="hlset" href="#test15" />
+
+<use class="hlset" href="#test16" />
+
+<use class="hlset" href="#test17" />
+
+<use class="hlset" href="#test18" />
+
+<use class="hlset" href="#test19" />
+
+<use class="hlset" href="#test20" />
+
+<use class="hlset" href="#test21" />
+
+<use class="hlset" href="#test22" />
+
+<use class="hlset" href="#test23" />
+
+<use class="hlset" href="#test24" />
+
+<use class="hlset" href="#test25" />
+
+<use class="hlset" href="#test26" />
+
+<use class="hlset" href="#test27" />
+
+<use class="hlset" href="#test28" />
+
+<use class="hlset" href="#test29" />
+
+<use class="hlset" href="#test30" />
+
+<use class="hlset" href="#test31" />
+
+</svg>
+ </div>
+<div style="background:black;color:white;"> 
+<svg width="800" viewbox="0 0 799 479">
+
+<use class="hlset" href="#test0" />
+
+<use class="hlset" href="#test1" />
+
+<use class="hlset" href="#test2" />
+
+<use class="hlset" href="#test3" />
+
+<use class="hlset" href="#test4" />
+
+<use class="hlset" href="#test5" />
+
+<use class="hlset" href="#test6" />
+
+<use class="hlset" href="#test7" />
+
+<use class="hlset" href="#test8" />
+
+<use class="hlset" href="#test9" />
+
+<use class="hlset" href="#test10" />
+
+<use class="hlset" href="#test11" />
+
+<use class="hlset" href="#test12" />
+
+<use class="hlset" href="#test13" />
+
+<use class="hlset" href="#test14" />
+
+<use class="hlset" href="#test15" />
+
+<use class="hlset" href="#test16" />
+
+<use class="hlset" href="#test17" />
+
+<use class="hlset" href="#test18" />
+
+<use class="hlset" href="#test19" />
+
+<use class="hlset" href="#test20" />
+
+<use class="hlset" href="#test21" />
+
+<use class="hlset" href="#test22" />
+
+<use class="hlset" href="#test23" />
+
+<use class="hlset" href="#test24" />
+
+<use class="hlset" href="#test25" />
+
+<use class="hlset" href="#test26" />
+
+<use class="hlset" href="#test27" />
+
+<use class="hlset" href="#test28" />
+
+<use class="hlset" href="#test29" />
+
+<use class="hlset" href="#test30" />
+
+<use class="hlset" href="#test31" />
+
+</svg>
+ </div>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+  <div class="wrapper"><div class="footer-col-wrapper">
+    <p>Less of a blog and more of a pesonal wiki as I continuously revise old posts. Rarely about cabbage trees.</p><ul class="social-media-list"><li><a href="https://github.com/sh1boot"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">sh1boot</span></a></li></ul>
+</div></div>
+</footer>
+</body>
+
+</html>
