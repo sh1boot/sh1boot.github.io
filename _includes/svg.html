@@ -25,20 +25,14 @@
   path {
     fill:none;
   }
-  .opaque-background {
-    --tinted-fill: oklch(from currentColor
-        calc(clamp(0.4, 1.2 - l, 0.9) + var(--glow,0))
-        calc(l * .05 + .15)
-        var(--hue));
-  }
   * {
     --tinted-stroke: oklch(from currentColor
-        calc(clamp(0.4, l, 0.9) + var(--glow,0))
-        calc(l * -.3 + .35)
+        calc(clamp(0.4, l, 0.9) - var(--glow,0))
+        calc(clamp(0.2, l, 0.8) * -.3 + .35)
         var(--hue));
     --tinted-fill: oklch(from currentColor
         calc(clamp(0.4, 1.2 - l, 0.9) + var(--glow,0))
-        calc(l * .2 + .2)
+        calc(clamp(0.2, l, 0.8) * .3 + .05)
         var(--hue));
   }
 
@@ -52,12 +46,11 @@
 
   .tintline {
     stroke: var(--tinted-stroke);
-    stroke-width: 2px;
   }
 
   @keyframes hlglow {
-    from { --glow: .3; }
-    to   { --glow: -.3; }
+    from { --glow: -.3; }
+    to   { --glow: .3; }
   }
   .hlset:hover {
     animation: 1.5s linear(0, 1, 0) infinite hlglow;
