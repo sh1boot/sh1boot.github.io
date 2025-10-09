@@ -49,6 +49,7 @@
 svg {
   stroke:currentColor;
   stroke-width: 1.5px;
+  fill: oklab(from currentColor clamp(.2, 1 - l, .8) a b);
   fill-opacity: 100%;
 }
 text {
