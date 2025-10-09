@@ -10,15 +10,15 @@ current through the LEDs at the far end have more of that resistance to
 travel through.
 
 Here's how LED strips are typically wired:
-<svg width="100%" viewbox="0 0 799 319">
+<svg width="100%" viewbox="0 0 800 320">
 <style>
 @-webkit-keyframes currentAnimation {
   from { stroke-dashoffset: 12; }
   to { stroke-dashoffset: 0; }
 }
 .component {
-    fill: currentColor;
-    fill-opacity:0.0625;
+    fill: oklab(from currentColor clamp(.05, 1 - l, .95) a b);
+    fill-opacity:100%;
 }
 .hookup-plus {
     stroke: color-mix(in oklab, currentColor, red);
@@ -78,7 +78,7 @@ of every three or six LEDs.
 
 Let's simplify that by treating the LED circuits as lamps:
 
-<svg width="100%" viewbox="0 -10 799 129">
+<svg width="100%" viewbox="0 -10 800 130">
         <use href="#power" x="40" y="20" />
         <path d="M40,20 C40,-20  90,20 140,20" class="hookup-plus" />
         <path d="M40,90 C40,130  90,90 140,90" class="hookup-minus" />
@@ -146,7 +146,7 @@ connect the other side of the power supply to the far end of the strip.
 Be careful to still connect minus to minus and plus to plus, though.
 Like so:
 
-<svg width="100%" viewbox="0 0 799 189">
+<svg width="100%" viewbox="0 0 800 190">
         <use href="#powerh" x="365" y="150" />
         <path d="M375,150 C-105,150  0,20 100,20" class="hookup-plus" />
         <path d="M435,150 C935,150 800,90 700,90" class="hookup-minus" />
