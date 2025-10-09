@@ -1,60 +1,68 @@
 <style>
-  @property --glow {
-    syntax: "<number>";
-    initial-value: 0;
-    inherits: true;
-  }
-  @property --hue {
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: true;
-  }
-  svg {
-    stroke:currentColor;
-    stroke-width:1.5;
-    fill:oklch(from currentColor calc(l * -.8 + .9) c h);
-    fill-opacity: 60%;
-  }
-  text {
-    stroke:none;
-    fill:currentColor;
-    fill-opacity:100%;
-    dominant-baseline:middle;
-    text-anchor:middle;
-  }
-  path {
-    fill:none;
-  }
-  * {
-    --tinted-stroke: oklch(from currentColor
-        calc(clamp(0.4, l, 0.9) - var(--glow,0))
-        calc(clamp(0.2, l, 0.8) * -.3 + .35)
-        var(--hue));
-    --tinted-fill: oklch(from currentColor
-        calc(clamp(0.4, 1.2 - l, 0.9) + var(--glow,0))
-        calc(clamp(0.2, l, 0.8) * .3 + .05)
-        var(--hue));
-  }
+@property --glow {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+@keyframes hlglow {
+  from { --glow: -.3; }
+  to   { --glow: .3; }
+}
+.hlset:hover {
+  animation: 1.5s linear(0, 1, 0) infinite hlglow;
+  font-weight: bold;
+  stroke-width: 2px;
+}
+:root {
+  --a2: .81917251339;
+  --a0: .6710436067;
+  --a1: .5497004779;
+}
+* {
+  --tinted-stroke: oklab(from oklab(from currentColor
+      clamp(.4, l *  100 - 50, .9)
+      clamp(.15, l * -100 + 50, .3)
+      clamp(.15, l * -100 + 50, .3))
+    calc(calc(mod(var(--a0) * var(--tint), 1) - l) * .25 + l + var(--glow, 0))
+    calc(calc(mod(var(--a1) * var(--tint), 1) - 0.5) * a)
+    calc(calc(mod(var(--a2) * var(--tint), 1) - 0.5) * b));
+  --tinted-fill: oklab(from oklab(from currentColor
+      clamp(.4, l * -100 + 50, .9)
+      clamp(.15, l *  100 - 50, .3)
+      clamp(.15, l *  100 - 50, .3))
+    calc(calc(mod(var(--a0) * var(--tint), 1) - l) * .25 + l + var(--glow, 0))
+    calc(calc(mod(var(--a1) * var(--tint), 1) - 0.5) * a)
+    calc(calc(mod(var(--a2) * var(--tint), 1) - 0.5) * b));
+}
+{%- for n in (0..32) %}
+.tint{{n}} {--tint:{{n}};}
+{%- endfor %}
 
-  {%- for n in (0..32) %}
-  .tint{{n}} {--hue:{{n|times:223|modulo:360}}deg;}
-  {%- endfor %}
+.tintbox {
+  fill: var(--tinted-fill);
+}
 
-  .tintbox {
-    fill: var(--tinted-fill);
-  }
+.tintline {
+  stroke: var(--tinted-stroke);
+}
 
-  .tintline {
-    stroke: var(--tinted-stroke);
-  }
+svg {
+  stroke:currentColor;
+  stroke-width: 1.5px;
+  fill-opacity: 100%;
+}
+text {
+  stroke:none;
+  fill:currentColor;
+  fill-opacity:100%;
+  dominant-baseline:middle;
+  text-anchor:middle;
+}
+path {
+  fill:none;
+}
+path:nohover {
+  stroke-width: 2.5px;
+}
 
-  @keyframes hlglow {
-    from { --glow: -.3; }
-    to   { --glow: .3; }
-  }
-  .hlset:hover {
-    animation: 1.5s linear(0, 1, 0) infinite hlglow;
-    font-weight: bold;
-    stroke-width: 2px;
-  }
 </style>
