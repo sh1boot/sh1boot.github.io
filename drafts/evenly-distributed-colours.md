@@ -1,14 +1,15 @@
 ---
 last_modified_at: Sat, 3 Aug 2024 21:13:35 -0700  # 3fc1ea7 a-handful-of-drafts
 layout: post
-title:  Choosing colours which are perceptually distinct
+title:  Choosing n different colours for graphs
 mathjax: true
 ---
 <style>
 .example {
     display: flex;
+    flex-wrap: wrap;
     width: auto;
-    height: auto;
+    height: 160px;
     border: 1px solid;
     overflow: auto;
     resize: both;
@@ -16,106 +17,132 @@ mathjax: true
 .example span {
     width: 60px;
     min-height: 40px;
+    flex-grow: 1;
     text-align: center;
     line-height: 40px;
+    border: .5px solid black;
 }
 </style>
 
-A technique I'm familiar with for creating a series of random distinct
-colours is to take regular steps around the hue of the HSL or HSV colour
-space.  With this method each step would advance by a ratio of φ (the
-Golden ratio, 1.618) turns around the hue, or about 222°, because of the
-mathematical properties that that has.
+One way to generate a palette of colours for distinguishing different
+objects in graphs and diagrams is to take regular steps around the hue
+axis of the HSL colour wheel.  If you know how many you'll need then
+your can subdivide the space evenly, but if you do not then you can use
+1/φ instead.
 
-In brief, $n\times\phi \mod 1$ has the property that every new point
-falls inside one of the largest gaps, and inside the largest span of
+Of course, a much simpler way is to just pick a bunch of reasonable
+colours and put them in a table; but doing things the hard way is more
+interesting.
+
+Spoiler alert: this won't attempt to address accessibility for
+colour-blind users.
+
+$\frac{n}{\varphi} \mod 1$ has the property that every new $n$ falls
+inside one of the largest gaps, and inside the largest span of
 contiguous largest gaps (when there are many largest-equal gaps), etc.,
 subdividing that gap/span by 1:φ, which is tolerably close to 1:2.
 
-Or more casually, each new value is as far as possible from any previous
-value, without the complexity of deciding in advance how many
-subdivisions you'll need, or changing step sizes at different stages in
-the sequence.
+That is to say that each new value is as far as possible from previous
+values without knowing in advance how many subdivisions you'll need or
+changing step sizes at different stages in the sequence.
 
-So each new hue is as far as possible from any previous hue, and your
-colours are maximally spaced in one axis.
-
+<figure>
 <div class="example">
-{% for n in (0..32) %}
-<span style="background: hsv({{n |times:222.5}}, 50%, 50%);">{{n}}</span>
+{%- for n in (0..59) %}
+<span style="background: hsl({{n |times:0.618033989 |modulo:1 |times:360}}deg, 60%, 70%);">{{n}}</span>
 {%- endfor %}
 </div>
+<figcaption>HSL((n / φ % 1 * 360), 60%, 70%)</figcaption>
+</figure>
 
-This has _not_ worked well for me using HSV or HSL.  Broadly, over a
-very short span I would encounter colours which looked very similar to
-each other while I was sure that there were plenty of other colours
-which would have been better choices.
+Do you see what's wrong there?  It seems to visit relatively few colours
+before coming back around to something very similar to a colour that's
+already been used.  So things get indistinct much sooner than one might
+hope.
 
-I thought this might be a human perception problem, where different
-parts of the HSV hue might be perceptually condensed.  So I switched to
-OKLCh instead.  It did not help.
+HSL is tied to the numerical coding of colour in RGB, which is not a
+good representation of human colour perception.  OKLCh is meant to be
+better.  let's try that:
 
+<figure>
 <div class="example">
-{% for n in (0..32) %}
-<span style="background: oklch(.5 .3 {{n |times:222.5}});">{{n}}</span>
+{%- for n in (0..59) %}
+<span style="background: oklch(75% 30% {{n |times:0.618033989 |modulo:1 |times:360}}deg);">{{n}}</span>
 {%- endfor %}
 </div>
+<figcaption>OKLCh(75% 30% (n / φ % 1 * 360))</figcaption>
+</figure>
 
-One problem with OKLCh is that it's so easy to stumble out of gamut; and
-the CSS policy for bringing thing in-gamut is currently not well
-defined, the existing guesses don't do anything helpful, and the raging
-debates about how to define it well don't look like they'll head
-anywhere helpful either.
+That's probably worse.  In this space the lightness and saturation are
+fixed in a way that HSL doesn't achieve, with a consequence that they're
+all kind of samey.
+
+Either way, the problem is that things necessarily start to get crowded
+when you're trying to subdivide just one axis.
+
+Fun fact: When taking steps of 1/φ mod 1 those "kind of similar" colours
+occur at intervals of Fibonacci numbers.   Resize this boxes above to be
+a Fibonacci number in width and observe the vertical stripes of like
+colours.  Every Fibonacci-numbered step gets closer to your starting
+point than any earlier step.
+
+Another problem with OKLCh is that it's so easy to stumble out of gamut
+-- outside of the range of colours which your display can represent
+(generally in RGB) -- and the CSS policy for bringing things in-gamut is
+currently not well defined, the existing guesses don't do anything
+helpful, and the debates about how to define it well don't look like
+they'll head anywhere helpful imminently.
 
 TODO: discuss gamut mapping, very briefly.
 
-But the real problem was that things necessarily start to get crowded
-when you're trying to subdivide just one axis.
+But let's persevere with it for now.
 
-Fun fact: those "kind of similar" colours occur at intervals of
-Fibonacci numbers.  When you do the mod-1 business with φ, every time
-your step count lands on a Fibonacci number, you've achieved the next
-closest value to your starting point.  So starting at 0, 3 will look a
-bit similar, and 5 will look a bit more similar, and 8 will look
-much too similar and 13 is indistinguishable.  14 will look much more
-distinct from 0, but it's not at all distinct from 1.  And so forth.
+Colour has three axes to work with.  Sort of.  To maintain contrast one
+doesn't want to move luminance around and have it get too close to the
+luminance of the background where it'll lack sufficient contrast to draw
+things clearly.  So let's try exploring the whole hue/saturation plane
+with a fixed luminance.
 
-But colour has three axes to work with.  Within reason.  For practical
-reasons it's not prudent to cover the full spread of luma; because
-whatever you're drawing has to have clear contrast with the background
-over which it's drawn.  Whatever luma your background has, the highlight
-colours must cluster on the opposite end of that.
+This raises the question "how do we do this even distribution thing in
+two dimensions?".  That's a question that troubled me for years.  The
+solution (strictly, "a" solution, but I  don't have a better one to show
+you) is a [generalisation][quasirandom sequences] on the Golden ratio
+trick.
 
-But that still leaves two axes, right?  Pick separate U and V components
-in a slice of the YUV space?  Where it's grey in the middle and
-saturated around the edges?
+What all that boils down to is that in two dimensions you add
+(0.7548776662, 0.5698402910) (one over the Plastic ratio, ρ=1.3247, and
+one over the square of the plastic ratio) to your coordinate, mod 1 in
+each axis.  This behaves somewhat like 1/φ but in two dimensions, and a
+bit more compromised in how well it distributes itself, because this
+problem isn't easy.
 
-This brings us to "how do we do this even distribution thing in two
-dimensions?".  Which is a thing that's troubled me for years.
+Also we now switch to OKLab so our two dimensions appear evenly over the
+plane.
 
-The solution (strictly, "a" solution, but I wouldn't seriously
-contemplate any other at this stage) is a [generalisation][quasirandom
-sequences] on the golden ratio technique.
+TODO: explain the disc sampling alternative.
+<figure>
+<div class="example">
+{%- for n in (0..59) %}
+<span style="background: oklab(
+    70%
+    {{n |times: 0.7548776662 |modulo: 1 |minus: 0.5 |times: 60}}%
+    {{n |times: 0.5698402910 |modulo: 1 |minus: 0.5 |times: 60}}%);">{{n}}</span>
+{%- endfor %}
+</div>
+<figcaption>OKLab(70% (n / ρ % 1 * 60 - 30)% (n / ρ² % 1 * 60 - 30)%</figcaption>
+</figure>
 
-What that boils down to is that in two dimensions you add
-(0.7548776662, 0.5698402910) to your coordinate, mod 1 in each axis, you get
-the same regular coverage as with &phi; mod 1 in the 1D case.
-
-But there are issues.  That first coordinate is too close to 0.75, which
+One problem here is that the first coordinate is too close to 3/4.  This
 means it appears to cycle between four points with a slow precession.
+Resize that box and see for yourself.
 
-Why is that?
-
-Well, aside from the fact that we can see it's _obviously_ close to
-0.75, something else that stands out about it is that when expressed as
-a continuing fraction it's 1,3,12,... and 12 is a really big number;
-compared to phi, which is 1,1,1,1,... (this is how it earns the title
-"most irrational number".
+Why is that?  Perhaps the metric for what the best numbers for this job
+is is flawed, but I don't have a better one.
 
 Anyway, as I see it, if you're red-green colourblind, and OKLab is
 arranged so that your colourblindness runs along one axis, then you're
-going to be stuck examining only the other axis, and you don't want that
-to be restricted to four clusters of very similar values.
+going to be stuck perceiving more of the other axis, and you don't want
+that to be restricted to four clusters of very similar values.
 
 So let's revisit the last axis.  Luma.
 
@@ -127,19 +154,24 @@ appropriate end of the luminance scale to provide good contrast from the
 background colour (or from the line/text colour when used as a
 background).
 
+<figure>
+<div class="example">
+{%- for n in (0..59) %}
+<span style="background: oklab(
+    {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.6}}
+    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35}}
+    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35}});">{{n}}</span>
+{%- endfor %}
+</div>
+<figcaption>OKLab L,a,b stepping</figcaption>
+</figure>
+
+How does it stand up to colourblind filter tests?  Not so good.  That needs further research.
+
 Also it helps to increase the saturation when the luminance is low, and
 to decrease the saturation when the luminance is high.  It seems that
 dark colours struggle to stand out with modest saturation, and light
 colours are overpowering with too much saturation.
-
-<div class="example">
-{% for n in (0..32) %}
-<span style="background: oklab(
-    {{n |times: .6710436067 |modulo: 1 |times: 0.25 |plus: 0.5}} 
-    {{n |times: .5497004779 |modulo: 1 |minus: 0.5 |times: 0.3}}
-    {{n |times: .8191725134 |modulo: 1 |minus: 0.5 |times: 0.3}});">{{n}}</span>
-{%- endfor %}
-</div>
 
 [opponent process]: <https://en.wikipedia.org/wiki/Opponent_process>
 
