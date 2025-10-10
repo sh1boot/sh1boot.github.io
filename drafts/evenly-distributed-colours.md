@@ -2,38 +2,66 @@
 last_modified_at: Sat, 3 Aug 2024 21:13:35 -0700  # 3fc1ea7 a-handful-of-drafts
 layout: post
 title:  Choosing colours which are perceptually distinct
+mathjax: true
 ---
-A popular technique for picking distinct colours is to advance some
-ratio around the hue of HSL or HSV space.  Typically using the golden
-ratio as a means of getting optimal distribution of those choices for an
-undefined number of iterations.
+A technique I'm familiar with for creating a series of random distinct
+colours is to take regular steps around the hue of the HSL or HSV colour
+space.  With this method each step would advance by a ratio of φ (the
+Golden ratio, 1.618) turns around the hue, or about 222°, because of the
+mathematical properties that that has.
 
-The golden ratio has this property, for successive integer multiples,
-that it always places the next value in a way that subdivides the
-largest empty interval into two golden-ratio-ed pieces.  Sometimes there
-are many equally-sized intervals, and in that case the interval it picks
-is also distributed in a similar way of breaking runs of largest
-intervals into smaller runs by the same ratio.  This makes for a very
-even fill when you don't know in advance how many points you'll add.
+In brief, $n\times\phi \mod 1$ has the property that every new point
+falls inside one of the largest gaps, and inside the largest span of
+contiguous largest gaps (when there are many largest-equal gaps), etc.,
+subdividing that gap/span by 1:φ, which is tolerably close to 1:2.
 
-This was _not_ working well for me using HSV or HSL.  My feeling was
-that I would see several very similar colours before seeing another
-colour that was much more distinct.
+Or more casually, each new value is as far as possible from any previous
+value, without the complexity of deciding in advance how many
+subdivisions you'll need, or changing step sizes at different stages in
+the sequence.
 
-Upon further investigation it looked like moving from HSV to OKLCh would
-distribute things more evenly in a perceptual space.
+So each new hue is as far as possible from any previous hue, and your
+colours are maximally spaced in one axis.
 
-However, this tends to go out-of-gamut, and the policy for bringing
-thing in-gamut is currently not well defined, the existing guesses don't
-do anything helpful, and the raging debates about how to define it well
-don't look like they'll head anywhere helpful either.
+This has _not_ worked well for me using HSV or HSL.  Broadly, over a
+very short span I would encounter colours which looked very similar to
+each other while I was sure that there were plenty of other colours
+which would have been better choices.
+
+I thought this might be a human perception problem, where different
+parts of the HSV hue might be perceptually condensed.  So I switched to
+OKLCh instead.  It did not help.
+
+One problem with OKLCh is that it's so easy to stumble out of gamut; and
+the CSS policy for bringing thing in-gamut is currently not well
+defined, the existing guesses don't do anything helpful, and the raging
+debates about how to define it well don't look like they'll head
+anywhere helpful either.
 
 TODO: discuss gamut mapping, very briefly.
 
-But as well as that, spinning around hue is overlooking a degree of
-freedom which should be exploited.
+But the real problem was that things necessarily start to get crowded
+when you're trying to subdivide just one axis.
 
-So this brings us to "how do we do this even distribution thing in two
+Fun fact: those "kind of similar" colours occur at intervals of
+Fibonacci numbers.  When you do the mod-1 business with φ, every time
+your step count lands on a Fibonacci number, you've achieved the next
+closest value to your starting point.  So starting at 0, 3 will look a
+bit similar, and 5 will look a bit more similar, and 8 will look
+much too similar and 13 is indistinguishable.  14 will look much more
+distinct from 0, but it's not at all distinct from 1.  And so forth.
+
+But colour has three axes to work with.  Within reason.  For practical
+reasons it's not prudent to cover the full spread of luma; because
+whatever you're drawing has to have clear contrast with the background
+over which it's drawn.  Whatever luma your background has, the highlight
+colours must cluster on the opposite end of that.
+
+But that still leaves two axes, right?  Pick separate U and V components
+in a slice of the YUV space?  Where it's grey in the middle and
+saturated around the edges?
+
+This brings us to "how do we do this even distribution thing in two
 dimensions?".  Which is a thing that's troubled me for years.
 
 The solution (strictly, "a" solution, but I wouldn't seriously
@@ -59,6 +87,21 @@ Anyway, as I see it, if you're red-green colourblind, and OKLab is
 arranged so that your colourblindness runs along one axis, then you're
 going to be stuck examining only the other axis, and you don't want that
 to be restricted to four clusters of very similar values.
+
+So let's revisit the last axis.  Luma.
+
+By extending the pattern to three axes we sidestep the 0.75 problem, and
+we get more freedom to vary the colours to try to avoid collisions.
+
+We just have to be careful to stay clustered well towards the
+appropriate end of the luminance scale to provide good contrast from the
+background colour (or from the line/text colour when used as a
+background).
+
+Also it helps to increase the saturation when the luminance is low, and
+to decrease the saturation when the luminance is high.  It seems that
+dark colours struggle to stand out with modest saturation, and light
+colours are overpowering with too much saturation.
 
 
 [opponent process]: <https://en.wikipedia.org/wiki/Opponent_process>
