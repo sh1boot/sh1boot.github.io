@@ -4,6 +4,23 @@ layout: post
 title:  Choosing colours which are perceptually distinct
 mathjax: true
 ---
+<style>
+.example {
+    display: flex;
+    width: auto;
+    height: auto;
+    border: 1px solid;
+    overflow: auto;
+    resize: both;
+}
+.example span {
+    width: 60px;
+    min-height: 40px;
+    text-align: center;
+    line-height: 40px;
+}
+</style>
+
 A technique I'm familiar with for creating a series of random distinct
 colours is to take regular steps around the hue of the HSL or HSV colour
 space.  With this method each step would advance by a ratio of φ (the
@@ -23,6 +40,12 @@ the sequence.
 So each new hue is as far as possible from any previous hue, and your
 colours are maximally spaced in one axis.
 
+<div class="example">
+{% for n in (0..32) %}
+<span style="background: hsv({{n |times:222.5}}, 50%, 50%);">{{n}}</span>
+{%- endfor %}
+</div>
+
 This has _not_ worked well for me using HSV or HSL.  Broadly, over a
 very short span I would encounter colours which looked very similar to
 each other while I was sure that there were plenty of other colours
@@ -31,6 +54,12 @@ which would have been better choices.
 I thought this might be a human perception problem, where different
 parts of the HSV hue might be perceptually condensed.  So I switched to
 OKLCh instead.  It did not help.
+
+<div class="example">
+{% for n in (0..32) %}
+<span style="background: oklch(.5 .3 {{n |times:222.5}});">{{n}}</span>
+{%- endfor %}
+</div>
 
 One problem with OKLCh is that it's so easy to stumble out of gamut; and
 the CSS policy for bringing thing in-gamut is currently not well
@@ -103,6 +132,14 @@ to decrease the saturation when the luminance is high.  It seems that
 dark colours struggle to stand out with modest saturation, and light
 colours are overpowering with too much saturation.
 
+<div class="example">
+{% for n in (0..32) %}
+<span style="background: oklab(
+    {{n |times: .6710436067 |modulo: 1 |times: 0.25 |plus: 0.5}} 
+    {{n |times: .5497004779 |modulo: 1 |minus: 0.5 |times: 0.3}}
+    {{n |times: .8191725134 |modulo: 1 |minus: 0.5 |times: 0.3}});">{{n}}</span>
+{%- endfor %}
+</div>
 
 [opponent process]: <https://en.wikipedia.org/wiki/Opponent_process>
 
