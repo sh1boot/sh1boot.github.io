@@ -49,121 +49,144 @@ changing step sizes at different stages in the sequence.
 <figure>
 <div class="example">
 {%- for n in (0..59) %}
-<span style="background: hsl({{n |times:0.618033989 |modulo:1 |times:360}}deg, 60%, 70%);">{{n}}</span>
+<span style="background: hsl({{n |times:0.618033989 |modulo:1 |times:360 |round}}deg, 60%, 70%);">{{n}}</span>
 {%- endfor %}
 </div>
 <figcaption>HSL((n / φ % 1 * 360), 60%, 70%)</figcaption>
 </figure>
 
-Do you see what's wrong there?  It seems to visit relatively few colours
-before coming back around to something very similar to a colour that's
-already been used.  So things get indistinct much sooner than one might
-hope.
+There's a problem here.  It seems to visit relatively few colours before
+coming back around to something very similar to a colour that's already
+been used.  So things get indistinct much sooner than one might hope.
 
-HSL is tied to the numerical coding of colour in RGB, which is not a
-good representation of human colour perception.  OKLCh is meant to be
-better.  let's try that:
+Fun fact: When taking steps of 1/φ mod 1 those "kind of similar" colours
+occur at distances which are Fibonacci numbers.   You can resize the box
+above to line up different columns.
+
+HSL is tied to the numerical coding of colour in RGB.  It's made out of
+up and down ramps of R and G and B without regard to how they're
+perceived.  Maybe it would work better if the hue was evenly distributed
+in human perception rather than what the display understands.
+
+So let's try OKLCh:
 
 <figure>
 <div class="example">
 {%- for n in (0..59) %}
-<span style="background: oklch(75% 30% {{n |times:0.618033989 |modulo:1 |times:360}}deg);">{{n}}</span>
+<span style="background: oklch(75% 30% {{n |times:0.618033989 |modulo:1 |times:360 |round}}deg);">{{n}}</span>
 {%- endfor %}
 </div>
 <figcaption>OKLCh(75% 30% (n / φ % 1 * 360))</figcaption>
 </figure>
 
-That's probably worse.  In this space the lightness and saturation are
-fixed in a way that HSL doesn't achieve, with a consequence that they're
-all kind of samey.
+This has the unfortunate design feature of flattening the lightness of
+each colour, so all the obvious contrast is gone.  Maybe the hues are
+more evenly spread, but it's hard to tell.
 
-Either way, the problem is that things necessarily start to get crowded
-when you're trying to subdivide just one axis.
+On the other hand, the contrast with the numbers written on the boxes is
+a bit better.  And that's important.
 
-Fun fact: When taking steps of 1/φ mod 1 those "kind of similar" colours
-occur at intervals of Fibonacci numbers.   Resize this boxes above to be
-a Fibonacci number in width and observe the vertical stripes of like
-colours.  Every Fibonacci-numbered step gets closer to your starting
-point than any earlier step.
+If only the hue is varied then things get crowded very quickly.  If the
+lightness varies too much then clarity can be compromised.
 
 Another problem with OKLCh is that it's so easy to stumble out of gamut
--- outside of the range of colours which your display can represent
-(generally in RGB) -- and the CSS policy for bringing things in-gamut is
-currently not well defined, the existing guesses don't do anything
-helpful, and the debates about how to define it well don't look like
-they'll head anywhere helpful imminently.
+(the range of colours which the display can represent) and the CSS
+policy for bringing things in-gamut is currently not well defined, the
+existing guesses don't do anything helpful for this situation, and the
+debates about how to define it well don't look like they'll head
+anywhere helpful imminently.
 
 TODO: discuss gamut mapping, very briefly.
 
 But let's persevere with it for now.
 
-Colour has three axes to work with.  Sort of.  To maintain contrast one
-doesn't want to move luminance around and have it get too close to the
-luminance of the background where it'll lack sufficient contrast to draw
-things clearly.  So let's try exploring the whole hue/saturation plane
-with a fixed luminance.
+Being reluctant to mess about with lightness, let's see what else can be
+done in the chroma plane.  That's "chromatic intensity" in OKLCh, or
+saturation, or the green-red and blue-yellow channels in OKLab.
 
-This raises the question "how do we do this even distribution thing in
-two dimensions?".  That's a question that troubled me for years.  The
-solution (strictly, "a" solution, but I  don't have a better one to show
-you) is a [generalisation][quasirandom sequences] on the Golden ratio
-trick.
+So how do you get the properties of $\frac{n}{\varphi} \mod 1$ in two
+dimensions?  That's a question that troubled me for years.  The solution
+(strictly, "a" solution, but I  don't have a better one to show you) is
+a [generalisation][quasirandom sequences] on the Golden ratio trick.
 
-What all that boils down to is that in two dimensions you add
-(0.7548776662, 0.5698402910) (one over the Plastic ratio, ρ=1.3247, and
-one over the square of the plastic ratio) to your coordinate, mod 1 in
-each axis.  This behaves somewhat like 1/φ but in two dimensions, and a
-bit more compromised in how well it distributes itself, because this
-problem isn't easy.
+What all that boils down to is that in two dimensions you multiply $n$
+by (0.7548776662, 0.5698402910), which is one over the [Plastic
+ratio][] (ρ=1.3247) and one over the square of the plastic ratio, mod 1
+in each axis.  This maximises the minimum distance between points in two
+dimensions, etc..
 
-Also we now switch to OKLab so our two dimensions appear evenly over the
-plane.
-
-TODO: explain the disc sampling alternative.
+So here's that applied to OKLab:
 <figure>
 <div class="example">
 {%- for n in (0..59) %}
 <span style="background: oklab(
-    70%
-    {{n |times: 0.7548776662 |modulo: 1 |minus: 0.5 |times: 60}}%
-    {{n |times: 0.5698402910 |modulo: 1 |minus: 0.5 |times: 60}}%);">{{n}}</span>
+{{-''-}}    .75
+{{-' '-}}   {{n |times: 0.7548776662 |modulo: 1 |minus: 0.5 |times:0.4 |round:3}}
+{{-' '-}}   {{n |times: 0.5698402910 |modulo: 1 |minus: 0.5 |times:0.4 |round:3}});">{{n}}</span>
 {%- endfor %}
 </div>
 <figcaption>OKLab(70% (n / ρ % 1 * 60 - 30)% (n / ρ² % 1 * 60 - 30)%</figcaption>
 </figure>
 
-One problem here is that the first coordinate is too close to 3/4.  This
-means it appears to cycle between four points with a slow precession.
-Resize that box and see for yourself.
+This fills a square in the chroma plane, so it has pointy corners of
+extra saturation and is probably going out of gamut and being mapped
+back in in unpredictable ways.
 
-Why is that?  Perhaps the metric for what the best numbers for this job
-is is flawed, but I don't have a better one.
+Sampling evenly across a disc is a bit more fiddly.  Given a uniformly
+random number you need to take its square root before combining it with
+a random angle to get a uniform distribution on a disc.  Here's that, in
+OKLCh:
 
-Anyway, as I see it, if you're red-green colourblind, and OKLab is
-arranged so that your colourblindness runs along one axis, then you're
-going to be stuck perceiving more of the other axis, and you don't want
-that to be restricted to four clusters of very similar values.
+<figure>
+<div class="example">
+{%- for n in (0..59) %}
+<span style="background: oklch(
+{{-''-}}     .75
+{{-' '-}}    calc(sqrt({{n |times: 0.7548776662 |modulo: 1 |round:3}}) * .2)
+{{-' '-}}    {{n |times: 0.5698402910 |modulo: 1 |times: 360 |round}}deg);">{{n}}</span>
+{%- endfor %}
+</div>
+<figcaption>OKLCh(.7 sqrt(n / ρ % 1) (n / ρ² % 1 * 360)</figcaption>
+</figure>
 
-So let's revisit the last axis.  Luma.
+Both of these have notable issues between every fourth colour.  That's
+because one of the factors here is so close to 3/4 (or the Plastic ratio
+is so close to 4/3), so four times that mod 1 is close to zero.
 
-By extending the pattern to three axes we sidestep the 0.75 problem, and
-we get more freedom to vary the colours to try to avoid collisions.
+Next step is to make adjustments to the lightness.  But only modest
+adjustments so that all results still have strong contrast with the
+background colour.
 
-We just have to be careful to stay clustered well towards the
-appropriate end of the luminance scale to provide good contrast from the
-background colour (or from the line/text colour when used as a
-background).
+I don't know of a name for the next ratio after Golden and Plastic, but
+its value is 1.22074408460575947536, and the reciprocals are
+(0.8191725134, 0.6710436067, 0.5497004779).
+
+This needs scaling to ensure we don't go across all of the lightness
+axis.
 
 <figure>
 <div class="example">
 {%- for n in (0..59) %}
 <span style="background: oklab(
-    {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.6}}
-    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35}}
-    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35}});">{{n}}</span>
+{{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.6|round:3}}
+{{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
+{{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
 {%- endfor %}
 </div>
 <figcaption>OKLab L,a,b stepping</figcaption>
+</figure>
+
+Here's an alternative way to reduce the range:
+<figure>
+<div class="example">
+{%- for n in (0..59) %}
+<span style="background: oklab(
+{{-''-}}     {{n |times: 0.6710436067 |modulo: 0.25 |plus: 0.6|round:3}}
+{{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
+{{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
+{%- endfor %}
+</div>
+<figcaption>another OKLab L,a,b stepping</figcaption>
 </figure>
 
 How does it stand up to colourblind filter tests?  Not so good.  That needs further research.
@@ -180,3 +203,7 @@ colours are overpowering with too much saturation.
 [shadertoy demo]: <https://www.shadertoy.com/view/MXdGR7>
 [stack exchange version]: <https://math.stackexchange.com/questions/2360055/combining-low-discrepancy-sets-to-produce-a-low-discrepancy-set>
 [OKLab]: <https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklab>
+
+[Golden ratio]: <https://en.wikipedia.org/wiki/Golden_ratio>
+[Plastic ratio]: <https://en.wikipedia.org/wiki/Plastic_ratio>
+
