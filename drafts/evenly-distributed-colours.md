@@ -9,7 +9,7 @@ mathjax: true
     display: flex;
     flex-wrap: wrap;
     width: auto;
-    height: 160px;
+    height: 100px;
     border: 1px solid;
     overflow: auto;
     resize: both;
@@ -80,14 +80,13 @@ So let's try OKLCh:
 </figure>
 
 This has the unfortunate design feature of flattening the lightness of
-each colour, so all the obvious contrast is gone.  Maybe the hues are
-more evenly spread, but it's hard to tell.
+each colour, so some of the bonus contrast is taken away.  Maybe the
+hues are more evenly spread, but it's hard to tell.
 
 On the other hand, the contrast with the numbers written on the boxes is
 a bit better.  And that's important.
 
-If only the hue is varied then things get crowded very quickly.  If the
-lightness varies too much then clarity can be compromised.
+If only the hue is varied then things get crowded very quickly.
 
 Another problem with OKLCh is that it's so easy to stumble out of gamut
 (the range of colours which the display can represent) and the CSS
@@ -146,7 +145,7 @@ OKLCh:
 {{-' '-}}    {{n |times: 0.5698402910 |modulo: 1 |times: 360 |round}}deg);">{{n}}</span>
 {%- endfor %}
 </div>
-<figcaption>OKLCh(.7 sqrt(n / ρ % 1) (n / ρ² % 1 * 360)</figcaption>
+<figcaption>OKLCh(.7 (sqrt(n / ρ % 1) * .2) (n / ρ² % 1 * 360))</figcaption>
 </figure>
 
 Both of these have notable issues between every fourth colour.  That's
@@ -158,11 +157,11 @@ adjustments so that all results still have strong contrast with the
 background colour.
 
 I don't know of a name for the next ratio after Golden and Plastic, but
-its value is 1.22074408460575947536, and the reciprocals are
-(0.8191725134, 0.6710436067, 0.5497004779).
+its value is g=1.22074408460575947536, and the reciprocals of the powers
+are (0.8191725134, 0.6710436067, 0.5497004779).
 
-This needs scaling to ensure we don't go across all of the lightness
-axis.
+The lightness figure needs compression to ensure we don't wander too
+far.
 
 <figure>
 <div class="example">
@@ -173,10 +172,11 @@ axis.
 {{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
 {%- endfor %}
 </div>
-<figcaption>OKLab L,a,b stepping</figcaption>
+<figcaption>OKLab((n/g² % 1 * .25 + 0.6) (n/g³ % 1 * .35 - .175) (n/g % 1 * .35 - .175))</figcaption>
 </figure>
 
-Here's an alternative way to reduce the range:
+Instead of compressing it, maybe it's more appropriate to use a smaller
+modulo?
 <figure>
 <div class="example">
 {%- for n in (0..59) %}
@@ -186,10 +186,48 @@ Here's an alternative way to reduce the range:
 {{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
 {%- endfor %}
 </div>
-<figcaption>another OKLab L,a,b stepping</figcaption>
+<figcaption>OKLab((n/g² % .25 + 0.6) (n/g³ % 1 * .35 - .175) (n/g % 1 * .35 - .175))</figcaption>
+</figure>
+This version has some colours that look very alike at a spacing of 21.
+
+Going back a step and shuffling the order of the terms:
+<figure>
+<div class="example">
+{%- for n in (0..59) %}
+<span style="background: oklab(
+{{-''-}}     {{n |times: 0.8191725134 |modulo: 1 |times: 0.25 |plus: 0.6|round:3}}
+{{-' '-}}    {{n |times: 0.6710436067 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
+{{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
+{%- endfor %}
+</div>
+<figcaption>OKLab((n/g % 1 * .25 + 0.6) (n/g² % 1 * .35 - .175) (n/g³ % 1 * .35 - .175))</figcaption>
 </figure>
 
-How does it stand up to colourblind filter tests?  Not so good.  That needs further research.
+Or as a polar mapping:
+<figure>
+<div class="example">
+{%- for n in (0..59) %}
+<span style="background: oklch(
+{{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.6|round:3}}
+{{-' '-}}    calc(sqrt({{n |times: 0.5497004779 |modulo: 1 |round:3}}) * 0.3)
+{{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |times: 360 |round}});">{{n}}</span>
+{%- endfor %}
+</div>
+<figcaption>OKLCh((n/g² % 1 * .25 + 0.6) (sqrt(n/g³ % 1) * .3) (n/g % 1 * 360))</figcaption>
+</figure>
+
+And back to HSL:
+<figure>
+<div class="example">
+{%- for n in (0..59) %}
+<span style="background: hsl(
+{{-''-}}     {{n |times: 0.8191725134 |modulo: 1 |times: 360 |round}}deg,
+{{-' '-}}    calc(sqrt({{n |times: 0.5497004779 |modulo: 1 |round:3}}) * 100%),
+{{-' '-}}    {{n |times: 0.6710436067 |modulo: 1 |times: 25 |plus: 60 |round}}%);">{{n}}</span>
+{%- endfor %}
+</div>
+<figcaption>HSL((n/g % 1 * 360), (sqrt(n/g³ % 1) * 100%), (n/g² % 1 * 25% + 60%))</figcaption>
+</figure>
 
 Also it helps to increase the saturation when the luminance is low, and
 to decrease the saturation when the luminance is high.  It seems that
