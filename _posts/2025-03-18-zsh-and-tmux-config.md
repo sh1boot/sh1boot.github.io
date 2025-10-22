@@ -20,6 +20,7 @@ configurations, which might offer some inspiration to others.
 Here's some of my `~/.zshrc`:
 
 ```zsh
+stty size >/dev/null
 local _ESC=$'\E'
 local _BEL=$'\a'
 
@@ -77,6 +78,20 @@ function set-scrollback-prompt() {
 }
 zle -N accept-line set-scrollback-prompt
 ```
+
+### Getting aligned on the correct terminal size
+
+Sometimes when I connect from a terminal emulator in a weird state,
+everytihng gets the wrong idea about the size of the window.  Running a
+command which makes the right query gets everyone on the same page, and
+`stty` is a good candidate:
+
+```zsh
+stty size >/dev/null
+```
+
+I used to use `resize` but that's part of an X11 package and not always
+available.
 
 ### Setting window title from path or command
 
