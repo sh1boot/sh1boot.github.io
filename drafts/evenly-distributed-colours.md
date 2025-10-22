@@ -123,15 +123,11 @@ saturation, or C for "chromatic intensity" in OKLCh.  Alternatively, the
 a (green-red) and b (blue-yellow) axes of OKLab.
 
 So how do you get the properties of $\frac{n}{\varphi} \mod 1$ in two
-dimensions?  That's a question that troubled me for years.  The solution
-(strictly, "a" solution, but I  don't have a better one to show you) is
-a [generalisation][quasirandom sequences] on the Golden ratio trick.
-
-What all that boils down to is that in two dimensions you multiply $n$
-by (0.7548776662, 0.5698402910), which is one over the [Plastic
-ratio][] (ρ=1.3247) and one over the square of the plastic ratio, mod 1
-in each axis.  This maximises the minimum distance between points in two
-dimensions, etc..
+dimensions?  It turns out a (the?) [generalisation][quasirandom
+sequences] takes us to the [plastic ratio][] (ρ=1.3247), next.  In
+short, multiply $n$ by  (1/ρ, 1/ρ²), or (0.7548776662, 0.5698402910).
+This maximises the minimum distance between any two points in two
+dimensions.
 
 Here's how that looks in OKLab:
 <figure>
@@ -169,13 +165,14 @@ Here's what that gives us for OKLCh:
 <figcaption>OKLCh(.75 (sqrt(n / ρ % 1) &times; .2) (n / ρ² % 1 &times; 360&deg;))</figcaption>
 </figure>
 
-Something unfortunate about the plastic ratio shows up, here.  It's too
-close to 4/3.  This has the consequence that one axis appears nearly
-periodic mod 4, with quite a slow precession.  For example, in the polar
-test case, we start at 0 so the first radius is zero (grey), and every
-fourth colour after that is very grey as well, and it takes a long way
-to climb out of that hole.  If we switch the axes around then the
-problem will manifest in the hue instead of the saturation:
+Something really unfortunate about the plastic ratio shows up, here.
+It's too close to 4/3.  This has the consequence that one axis appears
+nearly periodic mod 4, with quite a slow precession.  For example, in
+the polar test case, we start at 0 so the first radius is zero (grey),
+and every fourth colour after that is very close to grey as well, and it
+takes a long way to climb out of that hole.  If we switch the axes
+around then the problem will manifest in the hue instead of the
+saturation:
 
 <figure>
 <div class="example">
@@ -189,9 +186,36 @@ problem will manifest in the hue instead of the saturation:
 <figcaption>OKLCh(.75 (sqrt(n / ρ² % 1) &times; .2) (n / ρ % 1 &times; 360&deg;))</figcaption>
 </figure>
 
+For completeness, let's also try OKLCh but with fixed C and varying the
+lightness instead.
+<figure>
+<div class="example">
+{%- for n in (0..59) %}
+<span style="background: oklch(
+{{-''-}}     {{n |times: 0.7548776662 |modulo: 1 |times: 0.25 |plus: 0.63 |round:3}}
+{{-' '-}}    .12
+{{-' '-}}    {{n |times: 0.5698402910 |modulo: 1 |times: 360 |round}}deg);">{{n}}</span>
+{%- endfor %}
+</div>
+<figcaption>OKLCh((n/ρ % 1 &times; .25 + .63) .12 (n / ρ² % 1 &times; 360&deg;))</figcaption>
+</figure>
+
+Or swapping the axes:
+<figure>
+<div class="example">
+{%- for n in (0..59) %}
+<span style="background: oklch(
+{{-''-}}     {{n |times: 0.5698402910 |modulo: 1 |times: 0.25 |plus: 0.63 |round:3}}
+{{-' '-}}    .12
+{{-' '-}}    {{n |times: 0.7548776662 |modulo: 1 |times: 360 |round}}deg);">{{n}}</span>
+{%- endfor %}
+</div>
+<figcaption>OKLCh((n/ρ² % 1 &times; .25 + .63) .12 (n / ρ % 1 &times; 360&deg;))</figcaption>
+</figure>
+
 ## Varying three axes
 
-Next step is to make adjustments to the lightness.  But only modest
+Next step is to make adjustments to all three; but only modest
 adjustments so that all results still have strong contrast with the
 background colour.
 
@@ -206,12 +230,12 @@ far.
 <div class="example">
 {%- for n in (0..59) %}
 <span style="background: oklab(
-{{-''-}}     {{n |times: 0.8191725134 |modulo: 1 |times: 0.25 |plus: 0.6|round:3}}
+{{-''-}}     {{n |times: 0.8191725134 |modulo: 1 |times: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    {{n |times: 0.6710436067 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
 {{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
 {%- endfor %}
 </div>
-<figcaption>OKLab((n/g % 1 &times; .25 + 0.6) (n/g² % 1 &times; .35 - .175) (n/g³ % 1 &times; .35 - .175))</figcaption>
+<figcaption>OKLab((n/g % 1 &times; .25 + .63) (n/g² % 1 &times; .35 - .175) (n/g³ % 1 &times; .35 - .175))</figcaption>
 </figure>
 
 But I preferred the result with the terms in a different order:
@@ -219,12 +243,12 @@ But I preferred the result with the terms in a different order:
 <div class="example">
 {%- for n in (0..59) %}
 <span style="background: oklab(
-{{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.6|round:3}}
+{{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
 {{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
 {%- endfor %}
 </div>
-<figcaption>OKLab((n/g² % 1 &times; .25 + 0.6) (n/g³ % 1 &times; .35 - .175) (n/g % 1 &times; .35 - .175))</figcaption>
+<figcaption>OKLab((n/g² % 1 &times; .25 + .63) (n/g³ % 1 &times; .35 - .175) (n/g % 1 &times; .35 - .175))</figcaption>
 </figure>
 
 Instead of scaling it, another way might be to use a smaller modulo:
@@ -232,12 +256,12 @@ Instead of scaling it, another way might be to use a smaller modulo:
 <div class="example">
 {%- for n in (0..59) %}
 <span style="background: oklab(
-{{-''-}}     {{n |times: 0.6710436067 |modulo: 0.25 |plus: 0.6|round:3}}
+{{-''-}}     {{n |times: 0.6710436067 |modulo: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
 {{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
 {%- endfor %}
 </div>
-<figcaption>OKLab((n/g² % .25 + 0.6) (n/g³ % 1 &times; .35 - .175) (n/g % 1 &times; .35 - .175))</figcaption>
+<figcaption>OKLab((n/g² % .25 + .63) (n/g³ % 1 &times; .35 - .175) (n/g % 1 &times; .35 - .175))</figcaption>
 </figure>
 But this version becomes distinctly worse at intervals of 22.  Which is
 respectable, but it's not as good as the previous version.
@@ -248,12 +272,12 @@ saturation a little to help).  Back to polar:
 <div class="example">
 {%- for n in (0..59) %}
 <span style="background: oklch(
-{{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.6|round:3}}
+{{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    calc(sqrt({{n |times: 0.5497004779 |modulo: 1 |round:3}}) * 0.2)
 {{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |times: 360 |round}});">{{n}}</span>
 {%- endfor %}
 </div>
-<figcaption>OKLCh((n/g² % 1 &times; .25 + 0.6) (sqrt(n/g³ % 1) &times; .2) (n/g % 1 &times; 360&deg;))</figcaption>
+<figcaption>OKLCh((n/g² % 1 &times; .25 + .63) (sqrt(n/g³ % 1) &times; .2) (n/g % 1 &times; 360&deg;))</figcaption>
 </figure>
 
 And back to HSL:
@@ -301,10 +325,10 @@ closer, but I guess it's a display or perception thing.  I don't see
 this oddity in OKLCh, which probably means it's giving that linear
 perceptual spacing needed for this task.
 
-## Adjusting to match the context
+## Putting it into context
 
-Simple line art can be drawn in SVG using `currentColor` lines over a
-transparent background.  This means that whatever colour text and
+So... simple line art can be drawn in SVG using `currentColor` lines
+over a transparent background.  This means that whatever colour text and
 background the user has set up will follow through into diagrams and
 everything will look consistent rather than having big white rectangles
 around each diagram, or black-on-black diagrams.
@@ -313,28 +337,18 @@ Then some lines might need to be distinguished by colour (along with
 other cues, for accessibility) and some shapes might similarly need to
 be filled with distinguishing colours in the same way.
 
-Using the same palette in all four situations is going to result in poor
-contrast.
+The same palette in all four situations is going to result in poor
+contrast.  If a colour is good for drawing clear lines on a black
+background, it's not going to be a good fill colour where white text
+might be added over the top; and so forth...  We'll need at least two
+palettes for contrasting with light or dark text and dark or light
+backgrounds.
 
-If a colour is good for drawing clear lines on a black background, it's
-not going to be a good fill colour where white text might be added over
-the top.  If a colour is a good background tint for a box with text on
-top, it's probably going to be a bad at drawing lines which contrast
-with the default background.  Etc..
-
-So what we need is two to four palettes.  A set of good line colours for
-light backgrounds, a set of good line colours for dark backgrounds, and
-sets of good tint colours for filling boxes while remaining true to the
-light or dark background, so that the same text colour can be used with
-high contrast on top of the tint.
-
-
-I can't back this up with any science, but in my experience viable
-colours exist in two regions:
-
-* low-saturation light colours (pastels)
-* high-saturation dark colours (deep colours)
-
+In my totally unscientific tinkering I've found that low-saturation
+light colours (pastels) work well for lines on dark backgrounds and for
+fill colours behind dark text, and that high-saturation dark colours
+("deep" colours) work well well for lines on light backgrounds and fill
+colours behind light text.
 
 In CSS you can deduce a contrasting background colour with something
 like: `HSL(from currentColor 0, 0, clamp(0, l * -100 + 50, 1))` This
@@ -342,7 +356,38 @@ negates the luminance and amplifies 100-fold so as to hit the limits
 imposed by `clamp()` right away.  Resulting in either black or white
 being chosen.
 
-TODO: elaborate
+One can also deduce that a low saturation might be desired when
+`currentColor` has a low lightness value, and high saturation is desired
+when `currentColor` has a high lightness value.
+
+It's easier to do this in two steps, first making a "mask" colour, and
+then using that mask as the basis for palette colours:
+```css
+* {
+  --stroke-mask: oklab(from currentColor
+      clamp(.40, l *  100 - 50, .9)
+      clamp(.15, l * -100 + 50, .3)
+      clamp(.15, l * -100 + 50, .3));
+  --fill-mask: oklab(from currentColor
+      clamp(.40, l * -100 + 50, .9)
+      clamp(.15, l *  100 - 50, .3)
+      clamp(.15, l *  100 - 50, .3))
+
+  --colour-stroke: oklab(from var(--stroke-mask)
+    calc(calc(mod(.6710436067 * var(--n), 1) - l) * .25 + l)
+    calc(calc(mod(.5497004779 * var(--n), 1) - 0.5) * a)
+    calc(calc(mod(.8191725134 * var(--n), 1) - 0.5) * b));
+  --colour-fill: oklab(from var(--fill-mask)
+    calc(calc(mod(.6710436067 * var(--n), 1) - l) * .25 + l)
+    calc(calc(mod(.5497004779 * var(--n), 1) - 0.5) * a)
+    calc(calc(mod(.8191725134 * var(--n), 1) - 0.5) * b));
+}
+```
+
+Where `--n` is an integer colour index.  Just set `--n` to different
+numbers for each group of objects which should have the same colour, and
+use `var(--colour-stroke)` and/or `var(--colour-fill)` as appropriate
+within that.
 
 [opponent process]: <https://en.wikipedia.org/wiki/Opponent_process>
 
