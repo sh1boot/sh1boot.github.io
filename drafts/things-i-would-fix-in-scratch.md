@@ -8,6 +8,10 @@ Extra built-in operators:
 
 Custom blocks should be able to return values.
 
+Bucket/list-like AND and OR blocks, rather than having to stack up
+pairwise.  Maybe graphically rendered, with serial or parallel
+connections.  Sums, too.  And right-click "negate" option on variables.
+
 Built in "spread" effect, like scale, but origins of unconnected pieces
 move without themselves changing size (useful for particle effects and
 explosions and stuff like that).
@@ -17,6 +21,9 @@ Variables should be presented in container boxes, representing scope
 
 Different blocks for "with screen refresh", rather than this arcane
 checkbox you only see at creation.
+
+Double-click on function blocks to go to where they're defined.  Maybe
+variables too (where there's a set-var-to).
 
 Also:
 * diff-ability and revision control
