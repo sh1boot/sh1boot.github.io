@@ -2,7 +2,7 @@
 {%- capture embed -%} https://www.shadertoy.com/embed/{{include.id}}?paused=false&amp;gui=false {%- endcapture %}
 {%- capture direct -%} https://www.shadertoy.com/view/{{include.id}} {%- endcapture %}
 {%- assign sandbox="allow-scripts allow-same-origin" %}
-{%- assign buttontext="click to run shader" %}
+{%- assign buttontext="click to run shader (right-click here and open in new tab, because embed is broken right now)" %}
 {%- capture id -%} shadertoy-{{include.id | slugify}} {%- endcapture %}
 
 {%- include clickable-embed.liquid
