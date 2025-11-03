@@ -9,17 +9,17 @@ mathjax: true
     display: flex;
     flex-wrap: wrap;
     width: auto;
-    height: 100px;
+    height: 90px;
     border: 1px solid;
     overflow: auto;
     resize: both;
 }
 .example span {
-    width: 60px;
-    min-height: 40px;
+    width: 38px;
+    min-height: 30px;
     flex-grow: 1;
     text-align: center;
-    line-height: 40px;
+    line-height: 30px;
     border: .5px solid black;
 }
 figcaption {
@@ -65,7 +65,7 @@ Stepping this way around the hue of the HSL space gives these colours:
 
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: hsl({{n |times:0.618033989 |modulo:1 |times:360 |round}}deg, 60%, 70%);">{{n}}</span>
 {%- endfor %}
 </div>
@@ -90,7 +90,7 @@ So let's try again but with OKLCh:
 
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklch(75% 30% {{n |times:0.618033989 |modulo:1 |times:360 |round}}deg);">{{n}}</span>
 {%- endfor %}
 </div>
@@ -132,7 +132,7 @@ dimensions.
 Here's how that looks in OKLab:
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklab(
 {{-''-}}    .75
 {{-' '-}}   {{n |times: 0.7548776662 |modulo: 1 |minus: 0.5 |times:0.4 |round:3}}
@@ -155,7 +155,7 @@ radius the different angles around that circle fall closer together).
 Here's what that gives us for OKLCh:
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklch(
 {{-''-}}     .75
 {{-' '-}}    calc(sqrt({{n |times: 0.7548776662 |modulo: 1 |round:3}}) * .2)
@@ -176,7 +176,7 @@ saturation:
 
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklch(
 {{-''-}}     .75
 {{-' '-}}    calc(sqrt({{n |times: 0.5698402910 |modulo: 1 |round:3}}) * .2)
@@ -190,7 +190,7 @@ For completeness, let's also try OKLCh but with fixed C and varying the
 lightness instead.
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklch(
 {{-''-}}     {{n |times: 0.7548776662 |modulo: 1 |times: 0.25 |plus: 0.63 |round:3}}
 {{-' '-}}    .12
@@ -203,7 +203,7 @@ lightness instead.
 Or swapping the axes:
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklch(
 {{-''-}}     {{n |times: 0.5698402910 |modulo: 1 |times: 0.25 |plus: 0.63 |round:3}}
 {{-' '-}}    .12
@@ -228,7 +228,7 @@ far.
 
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklab(
 {{-''-}}     {{n |times: 0.8191725134 |modulo: 1 |times: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    {{n |times: 0.6710436067 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
@@ -241,7 +241,7 @@ far.
 But I preferred the result with the terms in a different order:
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklab(
 {{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
@@ -254,7 +254,7 @@ But I preferred the result with the terms in a different order:
 Instead of scaling it, another way might be to use a smaller modulo:
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklab(
 {{-''-}}     {{n |times: 0.6710436067 |modulo: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
@@ -270,7 +270,7 @@ Those all have that pointy-corner problem (though I trimmed the
 saturation a little to help).  Back to polar:
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: oklch(
 {{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    calc(sqrt({{n |times: 0.5497004779 |modulo: 1 |round:3}}) * 0.2)
@@ -283,7 +283,7 @@ saturation a little to help).  Back to polar:
 And back to HSL:
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: hsl(
 {{-''-}}     {{n |times: 0.8191725134 |modulo: 1 |times: 360 |round}}deg,
 {{-' '-}}    calc(sqrt({{n |times: 0.5497004779 |modulo: 1 |round:3}}) * 70%),
@@ -296,7 +296,7 @@ And back to HSL:
 In another order:
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: hsl(
 {{-''-}}     {{n |times: 0.5497004779 |modulo: 1 |times: 360 |round}}deg,
 {{-' '-}}    calc(sqrt({{n |times: 0.8191725134 |modulo: 1 |round:3}}) * 70%),
@@ -309,7 +309,7 @@ In another order:
 And another:
 <figure>
 <div class="example">
-{%- for n in (0..59) %}
+{%- for n in (0..62) %}
 <span style="background: hsl(
 {{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 360 |round}}deg,
 {{-' '-}}    calc(sqrt({{n |times: 0.8191725134 |modulo: 1 |round:3}}) * 70%),
@@ -350,6 +350,11 @@ fill colours behind dark text, and that high-saturation dark colours
 ("deep" colours) work well well for lines on light backgrounds and fill
 colours behind light text.
 
+I think maybe the saturation might need to be increased for thin lines
+to help compensate for the limited screen coverage, but I don't want to
+dive into that detail right now.  But this might lead to needing four
+versions of the palette rather than two.
+
 In CSS you can deduce a contrasting background colour with something
 like: `HSL(from currentColor 0, 0, clamp(0, l * -100 + 50, 1))` This
 negates the luminance and amplifies 100-fold so as to hit the limits
@@ -388,6 +393,11 @@ Where `--n` is an integer colour index.  Just set `--n` to different
 numbers for each group of objects which should have the same colour, and
 use `var(--colour-stroke)` and/or `var(--colour-fill)` as appropriate
 within that.
+
+TODO:
+here's where I'd demonstrate boxes and lines in different colours, and
+on different backgrounds, but I don't really have time right now.
+
 
 [opponent process]: <https://en.wikipedia.org/wiki/Opponent_process>
 
