@@ -20,6 +20,11 @@ But they do not.
    externalising]
  * etc...
 
+Seriously.  In my own experience such disobedient crawlers have been
+responsible for long periods of down time or sporadic access on sites I
+needed to use at the time.  There are protocols to prevent this from
+happening but they simply disobey those protocols and break websites.
+
 So there's are projects of various sorts to slow them down or to
 disincentivise crawling where it's not welcome so the scrapers either
 stop or they poison themselves with malicious content whenever they
