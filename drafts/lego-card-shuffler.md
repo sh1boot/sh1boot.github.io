@@ -89,7 +89,7 @@ Here I would add a picture, but my build got stripped for parts by the
 kids, and now we have a Porsche 911 instead of a card shuffler.  So I'm
 going to have to draw a diagram instead.
 
-{% include tinkercad.liquid id='bdK1J8czaCm' image='images/radix-shelf.png' %}
+{% include tinkercad.liquid id='bdK1J8czaCm' image='/images/radix-shelf.png' %}
 
 ### Dealing
 
