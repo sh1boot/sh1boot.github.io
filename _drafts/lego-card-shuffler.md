@@ -89,7 +89,7 @@ Here I would add a picture, but my build got stripped for parts by the
 kids, and now we have a Porsche 911 instead of a card shuffler.  So I'm
 going to have to draw a diagram instead.
 
-TODO: draw a diagram
+{% include tinkercad.liquid id='bdK1J8czaCm' image='images/radix-shelf.png' %}
 
 ### Dealing
 
@@ -116,3 +116,10 @@ appropriately.  This switch should be carefully designed to not damage
 the cards if the timing is off.
 
 TODO: more diagrams?
+
+### Control
+
+For the actual control logic I mean to use a Micro:Bit, because it's
+cheap.
+
+TODO: say more
