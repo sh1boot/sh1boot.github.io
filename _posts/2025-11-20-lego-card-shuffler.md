@@ -27,11 +27,11 @@ deck can be separated into face-up and face-down stacks in one pass.
 
 A [riffle][] can be modelled as dividing the cards into two stacks and
 randomly picking either the left or right stack to deliver the next card
-to the result, over and over until we run out of cards.  Each
+to the result, over and over until there are no more cards.  Each
 choice is based on probabilities proportional to the number of cards in
-each stack, and this model implies the dealer would tries to mix the two
-piles evenly rather than letting one side expire early with the other
-simply dropped on top.
+each stack, and this model implies the dealer tries to mix the two
+stacks evenly rather than letting one side expire early and then simply
+dropping the rest of the cards from the other stack on top.
 
 Unfortunately if you have too much precision then the outcome is that
 you interleave the cards in a regular left-right-left-right pattern,
@@ -60,10 +60,8 @@ To use a sorting machine as a shuffler you can randomly assign unique
 numbers to each card, and then sort the cards by their associated
 numbers.
 
-What you _cannot_ do is to take a sorting algorithm and then make random
-decisions at each comparison.  That's everybody's first thought but it
-rarely works.
-
+What you _should not_ do is to take a sorting algorithm and then make random
+decisions at each comparison.  That rarely works.
 Radix sorting might perform comparatively well in this arrangement, but
 it's still wrong.  In fact it's radix sort's good (but not perfect)
 performance that makes riffle shuffling converge on a strong shuffle
@@ -78,16 +76,18 @@ number, which represents its index in the shuffled pile.  In essense
 the process gives each card a random 6-bit number and then sorts them by
 those numbers.
 
-Unfortunately, assigning numbers this way allows the possibility that
+A radix sort replays that same string of decisions but in reverse order.  Reading those same index numbers from the other end.
+
+But look out.  Just assigning numbers this way allows the possibility that
 two cards could have the same number, and then their final order
 won't be changed from their initial order.  More riffles adds more bits
 to the numbers, decreasing the chances of two numbers having the same
 number and being "stuck together" for the whole shuffle, but it's a
 coarse approximation of picking predictably unique numbers.
 
-An ideal shuffle chooses a unique index for every card, and then sorts
-by that value.  Rather; an ideal shuffle chooses one of the 52! possible
-permutations and then puts the cards in that order, but that order can
+An ideal shuffle chooses _unique indices_ for each card, and then sorts
+by that value.  Moreover; an ideal shuffle chooses one of the 52! possible
+permutations and then puts the cards in that order, and that order can
 be described by numbering the cards according to where they land.  A
 pair of cards could still come out in the same order as they went in,
 but only with a suitably low probability.
@@ -95,7 +95,7 @@ but only with a suitably low probability.
 That's a thing we can do trivially in a microcontroller, but
 not-at-all-trivially in a Victorian-era mechanical contraption.
 
-## How to build a thing out of Lego?
+## How to build a thing for that?
 
 To build a radix-sorting machine I need to be able to take cards one at
 a time from the source deck and to deliver them to one of two (or n)
