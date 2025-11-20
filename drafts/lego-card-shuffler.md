@@ -158,7 +158,9 @@ the cards if the timing is off.
 
 TODO: more diagrams?
 
-### Control
+### Actuation
+
+#### controller
 
 For the actual control logic I mean to use a [Micro:Bit][], because it's
 cheap and because my employer gave me one to celerbate an anniversary.
@@ -173,6 +175,14 @@ their standard connectors.
 
 TODO: pictures
 TODO: parts list and links
+
+#### motors
+
+blah blah quadrature encoder
+
+#### interfaces
+
+#### PID control loop
 
 [radix sort]: <https://en.wikipedia.org/wiki/Radix_sort>
 [riffle]: <https://en.wikipedia.org/wiki/Shuffling#Riffle>
