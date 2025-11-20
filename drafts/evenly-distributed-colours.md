@@ -3,6 +3,7 @@ last_modified_at: Sat, 3 Aug 2024 21:13:35 -0700  # 3fc1ea7 a-handful-of-drafts
 layout: post
 title:  Choosing n different colours for graphs
 mathjax: true
+tags: web svg css
 ---
 <style>
 .example {

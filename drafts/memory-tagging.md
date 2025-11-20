@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Memory tagging
+tags: computer-architecture security
 ---
 Years ago I happened across an early description of techniques which
 subsequently became [Arm MTE][].  It tied in neatly with other concepts

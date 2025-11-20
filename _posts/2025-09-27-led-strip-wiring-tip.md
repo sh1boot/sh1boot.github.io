@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Getting even light from long LED strips
+tags: electronics, not-just-software
 svg: true
 ---
 Something you may notice for very long runs of LED strip is that they

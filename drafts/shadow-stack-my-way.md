@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Shadow stack and physical registers
-tags: computer-architecture
+tags: computer-architecture security
 ---
 Something I feel the world missed when it adopted shadow stacks for
 security is that if that stack is secreted away in a place the

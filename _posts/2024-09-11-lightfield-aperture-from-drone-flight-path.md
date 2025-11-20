@@ -2,6 +2,7 @@
 last_modified_at: Thu, 12 Sep 2024 10:18:30 -0700  # af73db2 publish-lightfield-drone-path
 layout: post
 title: Light field aperture synthesis from drone flight path
+tags: not-just-software
 ---
 For a low-rate-of-change scene like a construction site, I think it
 should be possible to use a drone with a camera on it to repeatedly fly
