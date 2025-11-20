@@ -4,9 +4,9 @@ title: Designing a Lego card shuffler
 tags: electronics not-just-software
 ---
 A problem with mechanical card shufflers is that they do things like
-riffles with mechanical precision, and mechanical precision tends toward
-predictable outcomes.  Thinking about this gave me the idea that I could
-do my own but with deliberate and controlled use of random numbers in
+riffles with mechanical precision, and mechanical precision tends to produce
+predictable outcomes (at least in theory).  Thinking about this gave me the idea that I could
+do my own but with deliberate and controlled use of robust random numbers in
 order to produce a true shuffle.
 
 I figured the thing to do would be to enumerate the cards randomly and
@@ -25,11 +25,11 @@ deck can be separated into face-up and face-down stacks in one pass.
 
 ### What's a riffle?
 
-A [riffle][] can be modelled as dividing the source into two piles and
-randomly picking either the left or right pile to deliver the next card
-to the resulting pile, over and over until we run out of cards.  Each
+A [riffle][] can be modelled as dividing the cards into two stacks and
+randomly picking either the left or right stack to deliver the next card
+to the result, over and over until we run out of cards.  Each
 choice is based on probabilities proportional to the number of cards in
-each hand, and this model implies the dealer would try to mix the two
+each stack, and this model implies the dealer would tries to mix the two
 piles evenly rather than letting one side expire early with the other
 simply dropped on top.
 
