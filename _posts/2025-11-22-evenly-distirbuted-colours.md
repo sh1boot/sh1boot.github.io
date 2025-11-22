@@ -31,26 +31,44 @@ figcaption {
 
 One way to generate a palette of colours for distinguishing different
 lines and objects in diagrams is to take regular steps around the hue
-axis of the HSL colour wheel.  If you know how many you'll need then
-your can subdivide the space evenly, or if you do not then you can use
-1/φ as the interval instead.  But this has limitations...
-
-Spoiler alert: this won't (directly) attempt to address accessibility
-for colour-blind users.
+parameter of the HSL colour wheel.  If you know how many you'll need
+then your can subdivide the space evenly, or if you do not then you can
+use 1/φ as the interval instead.  But this has limitations...
 
 Of course a much simpler solution is to just pick a bunch of reasonable
 colours and put them in a table (eg., [1][Kelly's 22 colours] [2][Tube
 map] [3][20 distinct colours]).  But doing things the hard way is more
-interesting.
+interesting.  Also, a list which includes both black and white isn't
+solving quite the right problem for this post...
 
-Also, I have extra constraints.  It's not much use knowing that black
-and white won't be mistaken for each other when you want to draw them
-both on the same background colour, likely black or white, and expect
-them both to have strong contrast to that background.
+Spoiler alert: this won't (directly) attempt to address accessibility
+for colour-blind users.
 
-So I don't want colours with an unnecessarily wide spread in lightness.
+I've written [in the past][web-shit] about trying to draw diagrams
+and graphs on web pages.  The essential point is that you can embed SVG
+with a transparent background but you must use `currentColor` as the pen
+colour when you do this, so that the image is drawn in the same colour
+as the text, rather than assuming that the background is always white so
+you need to draw black on top.  If you use something like [Dark
+Reader][] you'll often see this go awry.
 
-## Varying one axis
+Alternatively you can force the background of the image to be a known
+colour, but then on a contrasting background that can still be hard to
+look at.
+
+So I know how to draw lines with reasonable contrast from the
+background, without assuming that the background will be light or dark.
+The next problem is to add to that palette some extra colours which also
+contrast with the background but are visibly distinct from each other.
+Like three lines on a graph.
+
+## Single-parameter variation
+
+A quick-and-dirty notion of "contrast" is having a different brightness.
+Having a different colour but the same brightness can be very hard to
+look at.  So for starters, let's look at just varying the colour while
+keeping brightness at a single value chosen to contrast with the text or
+the background.
 
 $\frac{n}{\varphi} \mod 1$ has the property that every new $n$ falls
 inside one of the largest gaps, and inside the largest span of
@@ -62,7 +80,8 @@ previous values as possible without deciding in advance how many
 values you'll need or changing step sizes at different stages in the
 sequence.
 
-Stepping this way around the hue of the HSL space gives these colours:
+Anyway, let's have a look.  These colours step around the hue of the HSL
+space:
 
 <figure>
 <div class="example">
@@ -73,21 +92,22 @@ Stepping this way around the hue of the HSL space gives these colours:
 <figcaption>HSL(n / φ % 1 &times; 360&deg;, 60%, 70%)</figcaption>
 </figure>
 
-There's a problem here.  It seems to visit relatively few colours before
-coming back around to use something very similar to a colour that's
-already been used.  So things get indistinct much sooner than one might
-hope.
+It's interactive.  You can resize the box to change the way rows line
+up, so you can put different colours next to each other for comparison.
+
+And if you do that you'll see a problem.  It seems to visit relatively
+few colours before coming back around to use something very similar to a
+colour that's already been used.  So things get indistinct much sooner
+than one might hope.
 
 Fun fact: When taking steps of 1/φ mod 1 those "kind of similar" colours
-occur at distances which are Fibonacci numbers.   You can resize the box
-above to line up different columns.
+occur at distances which are Fibonacci numbers.  Resize the box to have
+a Fibonacci number of columns and you'll see stripes.
 
 HSL is tied to the numerical coding of colour in RGB.  It's made out of
 up and down ramps of R and G and B without regard to how they're
-perceived.  Maybe it would work better if the hue was evenly distributed
-in human perception rather than what the display understands.
-
-So let's try again but with OKLCh:
+perceived.  OKLCh, on the other hand, is tied more closely to human
+perception.  Maybe that'll help:
 
 <figure>
 <div class="example">
@@ -98,36 +118,41 @@ So let's try again but with OKLCh:
 <figcaption>OKLCh(75% 30% (n / φ % 1 &times; 360&deg;))</figcaption>
 </figure>
 
-This has the unfortunate effect (a feature in any other setting) of
-flattening the lightness of each colour, so some of the bonus contrast
-is taken away.  Maybe the hues are more evenly spread, but it's hard to
-tell.
+This has the unfortunate effect (normally a feature) of flattening the
+lightness of each colour, so none of the colours are distinguished by
+the perceptual lightness variations which would sneak through HSL.
+Maybe the hues are more evenly spread, but I can't see it.
 
 On the positive side, the contrast with the numbers written on the boxes
-is more even.  And that's important.
+is more even.  That's important.
 
 Another problem with OKLCh is that it's so easy to stumble out of gamut
 (the range of colours which the display can represent) and this brings
-[gamut mapping][] into play, and that's not well defined right now and
-it may never be defined in a way that's useful for these purposes.  It's
-not always obvious if or when the test swatches I'm using here are being
-clipped to fit the display capabilities, and not everybody will have the
-same results.
+[gamut mapping][] into play.  The way to do that is not well defined
+right now and it may never be defined in a way that's useful for these
+purposes.  It's not always obvious how and when the test swatches I'm
+using here will be clipped to fit the display capabilities, so it's hard
+to be confident that everybody sees the same thing.
 
-But let's persevere with it for a while longer...
+That's a problem with human perception anyway, but this makes it so much
+worse.
 
-## Varying two axes
+But let's persevere with it a while longer...
 
-Whichever space is used here, changing just the hue is trying to pack
-too much into the one axis.  The next parameter we can add is
-saturation, or C for "chromatic intensity" in OKLCh.  Alternatively, the
-a (green-red) and b (blue-yellow) axes of OKLab.
+## Multi-parameter variation
+
+Changing just the one parameter doesn't seem to get us a lot of distinct
+choices.  The next thing we can change without interfering with our
+fixed brightness constraint is saturation, or C for "chromatic
+intensity" in OKLCh.  Alternatively, C represents the distance which the
+a (green-red) and b (blue-yellow) values are from 0,0 in OKLab, so we
+could vary a and b instead of C and h.
 
 So how do you get the properties of $\frac{n}{\varphi} \mod 1$ in two
 dimensions?  It turns out a (the?) [generalisation][quasirandom
 sequences] takes us to the [plastic ratio][] (ρ=1.3247), next.  In
-short, multiply $n$ by  (1/ρ, 1/ρ²), or (0.7548776662, 0.5698402910).
-This maximises the minimum distance between any two points in two
+short, multiply $n$ by  (1/ρ, 1/ρ²), or (0.7548776662, 0.5698402910) mod
+1.  This maximises the minimum distance between any two points in two
 dimensions.
 
 Here's how that looks in OKLab:
@@ -144,16 +169,22 @@ Here's how that looks in OKLab:
 </figure>
 
 This gives uniform coverage of a square in the chroma plane, so it has
-pointy corners of extra saturation.  It's probably going out of gamut
-and being clipped in unpredictable ways.
+pointy corners where the saturation reaches further out than it can near
+the edges.  It's probably going out of gamut and being clipped in
+unpredictable ways.
 
-We can convert this to a uniform disc by randomising radius and angle,
-instead.  To make this uniform you have to take the square root of the
-radius, which compensates for what would otherwise be an
-over-concentration of points at the centre (because with a shorter
-radius the different angles around that circle fall closer together).
+In another problem space we could use rejection sampling to avoid those
+ugly corners, but then we can't define a colour as a simple function of
+$n$.  Instead, a technique to map two uniform random values (a square)
+to a uniform distribution over a disc is to take one value as the radius
+and the other as an angle around that circle.  Squaring the value used
+as radius compensates for the over-concentration of points around the
+centre (proof left as an exercise for Google search).
 
-Here's what that gives us for OKLCh:
+Does this retain the mathematical rigor of low-discrepancy sequences?
+No.  Not at all.  But it's the best I have right now.
+
+And here's what that gives us for OKLCh:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
@@ -167,13 +198,14 @@ Here's what that gives us for OKLCh:
 </figure>
 
 Something really unfortunate about the plastic ratio shows up, here.
-It's too close to 4/3.  This has the consequence that one axis appears
-nearly periodic mod 4, with quite a slow precession.  For example, in
-the polar test case, we start at 0 so the first radius is zero (grey),
-and every fourth colour after that is very close to grey as well, and it
-takes a long way to climb out of that hole.  If we switch the axes
-around then the problem will manifest in the hue instead of the
-saturation:
+It's too close to 4/3.  This has the consequence that one parameter
+appears nearly periodic mod 4, with a very slow precession.  For
+example, in the polar test case, we start at 0 so the first radius is
+zero (grey), and every fourth colour after that is very close to grey as
+well, and it takes a long time to climb out of that hole.
+
+By switching the axes around then the problem will manifest in the hue
+instead:
 
 <figure>
 <div class="example">
@@ -189,6 +221,7 @@ saturation:
 
 For completeness, let's also try OKLCh but with fixed C and varying the
 lightness instead.
+
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
@@ -202,6 +235,7 @@ lightness instead.
 </figure>
 
 Or swapping the axes:
+
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
@@ -214,18 +248,18 @@ Or swapping the axes:
 <figcaption>OKLCh((n/ρ² % 1 &times; .25 + .63) .12 (n / ρ % 1 &times; 360&deg;))</figcaption>
 </figure>
 
-## Varying three axes
+## Varying all three parameters
 
-Next step is to make adjustments to all three; but only modest
-adjustments so that all results still have strong contrast with the
-background colour.
+Next step is to make adjustments to all three parameters; but only
+modest adjustments so that all results still have strong contrast with
+the background colour.
 
 I don't know of a name for what comes after Golden and Plastic, but its
 value is g=1.22074408460575947536, and the reciprocals of the powers are
 (0.8191725134, 0.6710436067, 0.5497004779).
 
-The lightness figure needs compression to ensure we don't wander too
-far.
+The lightness figure needs compression to ensure things don't wander too
+far and start failing to meet the original contrast limitation.
 
 <figure>
 <div class="example">
@@ -240,6 +274,7 @@ far.
 </figure>
 
 But I preferred the result with the terms in a different order:
+
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
@@ -252,7 +287,9 @@ But I preferred the result with the terms in a different order:
 <figcaption>OKLab((n/g² % 1 &times; .25 + .63) (n/g³ % 1 &times; .35 - .175) (n/g % 1 &times; .35 - .175))</figcaption>
 </figure>
 
-Instead of scaling it, another way might be to use a smaller modulo:
+I wasn't sure about the appropriateness of compressing an axis of an
+LDS the way I was doing it, so I tried using a smaller modulo instead:
+
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
@@ -264,11 +301,13 @@ Instead of scaling it, another way might be to use a smaller modulo:
 </div>
 <figcaption>OKLab((n/g² % .25 + .63) (n/g³ % 1 &times; .35 - .175) (n/g % 1 &times; .35 - .175))</figcaption>
 </figure>
-But this version becomes distinctly worse at intervals of 22.  Which is
+
+but this version becomes distinctly worse at intervals of 22.  Which is
 respectable, but it's not as good as the previous version.
 
-Those all have that pointy-corner problem (though I trimmed the
-saturation a little to help).  Back to polar:
+Those are all OKLab, so they have pointy saturation corners -- though I
+did reduce the range a little to compensate.  Let's try another OKLCh:
+
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
@@ -282,6 +321,7 @@ saturation a little to help).  Back to polar:
 </figure>
 
 And back to HSL:
+
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
@@ -294,7 +334,8 @@ And back to HSL:
 <figcaption>HSL((n/g % 1 &times; 360&deg;), (sqrt(n/g³ % 1) &times; 70%), (n/g² % 1 &times; 25% + 55%))</figcaption>
 </figure>
 
-In another order:
+And HSL with the axes rearranged:
+
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
@@ -307,43 +348,18 @@ In another order:
 <figcaption>HSL((n/g³ % 1 &times; 360&deg;), (sqrt(n/g % 1) &times; 70%), (n/g² % 1 &times; 25% + 55%))</figcaption>
 </figure>
 
-And another:
-<figure>
-<div class="example">
-{%- for n in (0..62) %}
-<span style="background: hsl(
-{{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 360 |round}}deg,
-{{-' '-}}    calc(sqrt({{n |times: 0.8191725134 |modulo: 1 |round:3}}) * 70%),
-{{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |times: 25 |plus: 55 |round}}%);">{{n}}</span>
-{%- endfor %}
-</div>
-<figcaption>HSL((n/g² % 1 &times; 360&deg;), (sqrt(n/g % 1) &times; 70%), (n/g³ % 1 &times; 25% + 55%))</figcaption>
-</figure>
-
-In my experiments the bright greens seemed to collide first, but they
-seemed better separated at lower saturation.  Numerically they _must_ be
-closer, but I guess it's a display or perception thing.  I don't see
-this oddity in OKLCh, which probably means it's giving that linear
-perceptual spacing needed for this task.
+So many choices... also, you can add some arbitrary starting value to
+pick a handful of colours you like the look of, and the subsequent
+colours will only come up in extreme cases.
 
 ## Putting it into context
 
-So... simple line art can be drawn in SVG using `currentColor` lines
-over a transparent background.  This means that whatever colour text and
-background the user has set up will follow through into diagrams and
-everything will look consistent rather than having big white rectangles
-around each diagram, or black-on-black diagrams.
-
-Then some lines might need to be distinguished by colour (along with
-other cues, for accessibility) and some shapes might similarly need to
-be filled with distinguishing colours in the same way.
-
-The same palette in all four situations is going to result in poor
-contrast.  If a colour is good for drawing clear lines on a black
-background, it's not going to be a good fill colour where white text
-might be added over the top; and so forth...  We'll need at least two
-palettes for contrasting with light or dark text and dark or light
-backgrounds.
+Given some function or other to turn an index into a colour, that colour
+still has to make sense for the way it's being used.  Coloured lines
+want contrast with the background while being distinguishable from each
+other, but if you fill in a box you probably want that fill to have
+contrast with any text that goes inside, so it should be close to the
+background colour.
 
 In my totally unscientific tinkering I've found that low-saturation
 light colours (pastels) work well for lines on dark backgrounds and for
@@ -351,10 +367,14 @@ fill colours behind dark text, and that high-saturation dark colours
 ("deep" colours) work well well for lines on light backgrounds and fill
 colours behind light text.
 
-I think maybe the saturation might need to be increased for thin lines
-to help compensate for the limited screen coverage, but I don't want to
-dive into that detail right now.  But this might lead to needing four
-versions of the palette rather than two.
+Also, fills turn out to be easier to distinguish from each other than
+lines, so lines might need their saturation amplified a bit to
+compensate.  Maybe.  I don't want to go that deep right now.
+
+All that said; one should have other means to distinguish things because
+not everybody sees colour the same way.
+
+## Code plz!
 
 In CSS you can deduce a contrasting background colour with something
 like: `HSL(from currentColor 0, 0, clamp(0, l * -100 + 50, 1))` This
@@ -400,10 +420,11 @@ here's where I'd demonstrate boxes and lines in different colours, and
 on different backgrounds, but I don't really have time right now.
 
 
+[web-shit]: </what-ive-learned-so-far-about-web-stuff/>
+[Dark Reader]: <https://darkreader.org/>
+
 [opponent process]: <https://en.wikipedia.org/wiki/Opponent_process>
-
 [quasirandom sequences]: <https://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/>
-
 [shadertoy demo]: <https://www.shadertoy.com/view/MXdGR7>
 [stack exchange version]: <https://math.stackexchange.com/questions/2360055/combining-low-discrepancy-sets-to-produce-a-low-discrepancy-set>
 [OKLab]: <https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklab>
