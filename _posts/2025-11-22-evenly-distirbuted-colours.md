@@ -5,29 +5,6 @@ title:  Choosing n different colours for graphs
 mathjax: true
 tags: web svg css
 ---
-<style>
-.example {
-    display: flex;
-    flex-wrap: wrap;
-    width: auto;
-    height: 90px;
-    border: 1px solid;
-    overflow: auto;
-    resize: both;
-}
-.example span {
-    width: 38px;
-    min-height: 30px;
-    flex-grow: 1;
-    text-align: center;
-    line-height: 30px;
-    border: .5px solid black;
-}
-figcaption {
-    text-align: center;
-    font-family: monospace;
-}
-</style>
 One way to generate a palette of colours for distinguishing different
 lines and objects in diagrams is to take regular steps around the hue
 parameter of the HSL colour wheel.  If you know how many you'll need
@@ -81,6 +58,29 @@ sequence.
 
 Anyway, let's have a look.  These colours step around the hue of the HSL
 space:
+<style>
+.example {
+    display: flex;
+    flex-wrap: wrap;
+    width: auto;
+    height: 90px;
+    border: 1px solid;
+    overflow: auto;
+    resize: both;
+}
+.example span {
+    width: 38px;
+    min-height: 30px;
+    flex-grow: 1;
+    text-align: center;
+    line-height: 30px;
+    border: .5px solid black;
+}
+figcaption {
+    text-align: center;
+    font-family: monospace;
+}
+</style>
 
 <figure>
 <div class="example">
