@@ -28,7 +28,6 @@ figcaption {
     font-family: monospace;
 }
 </style>
-
 One way to generate a palette of colours for distinguishing different
 lines and objects in diagrams is to take regular steps around the hue
 parameter of the HSL colour wheel.  If you know how many you'll need
