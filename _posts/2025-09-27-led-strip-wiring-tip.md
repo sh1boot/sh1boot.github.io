@@ -208,16 +208,16 @@ Like so:
 </svg>
 
 This way the length of the circuit through each LED is (approximately)
-the same, and so the resistance is the same they all come out the same
+the same, and so the resistance is the same and they all come out the same
 brightness all the way along the strip.
 
 You'll see this in some prefabricated lighting strings which are _not_
 designed to be cut.  They'll have a third wire which is not be connected
 directly to the LEDs, but at the end it'll be connected to one of the
-wires which is, and it will complete the circuit from the far end back
+other wires, and that will complete the circuit from the far end back
 to the power supply to balance things out.  If you cut those then they
 just don't work anymore, because you would need to reconnect two of the
-wires at the same end.
+wires at the cut point.
 
 It doesn't matter if the power supply hookup lines are different
 lengths.  Having the total length be unnecessarily long will be less
