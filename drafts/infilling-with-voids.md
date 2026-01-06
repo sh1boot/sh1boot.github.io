@@ -144,11 +144,13 @@ to express both.
 After a bit of digging I found a [simple way][sdflab] to get from those
 simple equations to an .STL file.
 
-[STL sphubes][sphubes-stl] ([lower-resolution versions][sphubes-lowres-stl])
+[STL sphubes][sphubes-stl] ([lower-resolution STL sphubes][sphubes-lowres-stl])
 
 But as we learned with the sphere, this isn't going to work because of
 the roof problem, and my lack of access to an "external" lightning fill.
 Now it's a bit worse because that roof is wider.
+
+[download STL anyway][sphube-test]
 
 So back to the compromises I go...
 
@@ -157,6 +159,7 @@ So back to the compromises I go...
 [Lightning]: <https://www.orcaslicer.com/wiki/print_settings/strength/strength_settings_patterns#lightning>
 
 [onion-test]: </blobs/cube-minus-onion.stl>
+[sphube-test]: </blobs/cube-minus-sphube.stl>
 [sphubes-stl]: </blobs/sphubes.tar.xz>
 [sphubes-lowres-stl]: </blobs/sphubes_lowres.tar.xz>
 [onion]: <https://www.tinkercad.com/things/43k3a2lx2MD-funky-hango-stantia>
