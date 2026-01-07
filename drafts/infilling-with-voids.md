@@ -103,6 +103,8 @@ deviating too much further from our spherical ideal.
 
 Enter, The [Sphube][]!
 
+{% include tinkercad.liquid id='7dc2EkDfy6a' image='/images/infill-sphube-void.png' %}
+
 You might be more familiar with the [squircle][], and this is just a 3D
 extension on that idea.  These squircles and hypersquircles have the
 benefit of being continous curves, and so should be a bit more resistant
@@ -162,8 +164,6 @@ So back to the compromises I go...
 [sphube-test]: </blobs/cube-minus-sphube.stl>
 [sphubes-stl]: </blobs/sphubes.tar.xz>
 [sphubes-lowres-stl]: </blobs/sphubes_lowres.tar.xz>
-[onion]: <https://www.tinkercad.com/things/43k3a2lx2MD-funky-hango-stantia>
-[onion-pic]: </images/infill-onion-void.png>
 
 [sdflab]: <https://github.com/fogleman/sdf>
 [squircle]: <https://en.wikipedia.org/wiki/Squircle>
