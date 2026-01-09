@@ -15,8 +15,9 @@
   {%- endunless %}
 {%- endcapture %}
 
-{%- if page.id != clickable_embed_pageid -%}
-{%- capture clickable_embed_pageid %}{{page.id}}{% endcapture %}
+{%- capture page_id_x %}{{page.id}}x{% endcapture %}
+{%- if page_id_x != clickable_embed_pageid -%}
+{%- capture clickable_embed_pageid %}{{page_id_x}}{% endcapture %}
   <style>
     .click-embed {
       background-color: transparent;
@@ -52,7 +53,11 @@
     text-decoration: none;
   } </style>
   <img class="maximised-image" src="{{preview}}" />
+  {%- if include.embed %}
   <a href="{{include.embed}}">
+  {%- else %}
+  <a href="{{include.direct}}" target="_blank">
+  {%- endif %}
     {%- if include.buttontext -%}
       <div class="button">{{include.buttontext}}</div>
     {%- endif -%}

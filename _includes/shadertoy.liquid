@@ -1,8 +1,10 @@
-{%- capture preview -%} https://shadertoy.com/media/shaders/{{include.id}}.jpg {%- endcapture %}
-{%- capture embed -%} https://www.shadertoy.com/embed/{{include.id}}?paused=false&amp;gui=false {%- endcapture %}
+{%- capture preview -%} /images/shadertoy_cache/{{include.id}}.jpg {%- endcapture %}
+{%- assign embed = null %}
+{%- comment -%} https://shadertoy.com/media/shaders/{{include.id}}.jpg {%- endcomment %}
+{%- comment -%} https://www.shadertoy.com/embed/{{include.id}}?paused=false&amp;gui=false {%- endcomment %}
 {%- capture direct -%} https://www.shadertoy.com/view/{{include.id}} {%- endcapture %}
-{%- assign sandbox="allow-scripts allow-same-origin" %}
-{%- assign buttontext="click to run shader (right-click here and open in new tab, because embed is broken right now)" %}
+{%- assign sandbox="allow-scripts allow-same-origin allow-popups" %}
+{%- assign buttontext="click to run shader (new tab)" %}
 {%- capture id -%} shadertoy-{{include.id | slugify}} {%- endcapture %}
 
 {%- include clickable-embed.liquid
