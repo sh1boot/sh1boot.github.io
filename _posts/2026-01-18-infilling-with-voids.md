@@ -2,20 +2,20 @@
 layout: post
 title: In-filling 3D prints with holes
 tags: 3d-printing daft-ideas
+#svg: true
 ---
 I got to thinking about 3d printing infill the other day, and eventually
 I decided that there should be ways of scooping large chunks out of the
 middle, rather than in-filling with an homogenous sparse pattern, and
 retaining some or all of the original strength of the homogenous fill.
 
-My hypothesis: it must be possible to replace a proportion of the infill
-with a sphere with stiff walls and no fill, at no extra cost in print
-time or strength.
-
+I was thinking a sphere, originally.  And applying that subtraction
+recursively in all of the solid areas left by the previous removals.
 Why a sphere?  Well, that's the mathematical ideal.  Unfortunately you
 can't print a sphere without something inside to support the roof (and
 maybe floor) while it's printing.  Also, the continuous symmetry of a
-sphere doesn't really apply when it's sliced into layers.
+sphere doesn't really mean much when it's sliced into layers and has
+different strength characteristics in different directions.
 
 So spheres are obviously not ideal at all.  But lots of things won't be
 ideal, here.  Let's start compromising!
@@ -119,6 +119,32 @@ model.  This construction should work like a [truss arch bridge], with
 the infill acting as truss, the monocoque providing the arch(es), and
 the external model being the road surface people drive across.
 
+Consider how the cross-section looks something like a bridge (two
+bridges):
+<div style="display:flex;justify-content:center;align-items:center;">
+<svg width="420" height="420">
+<pattern id="infill" patternUnits="userSpaceOnUse" width="20" height="20">
+  <path d="M0,10 10,0 20,10 10,20 z" stroke-width="2" fill="none" stroke="currentColor" />
+</pattern>
+<path d="M10,410 v-400 h400 v200 l-50,0
+        c0,-120 -30,-150 -150,-150
+        c-120,0 -150,30 -150,150
+        c0,120 30,150 150,150
+        c120,0 150,-30 150,-150
+        h50 v200 h-400"
+        fill="url(#infill)" stroke="none" />
+<path d="M10,410 v-400 h400 v400 h-400 z M360,210
+        c0,-120 -30,-150 -150,-150
+        c-120,0 -150,30 -150,150
+        c0,120 30,150 150,150
+        c120,0 150,-30 150,-150"
+        fill="none" stroke="currentColor" stroke-width="8" />
+</svg>
+</div>
+This is a really half-arsed bridge.  The infill is just a regular
+pattern rather than triangles with carefully-chosen dimensions and
+placement.  But it might be sufficient.  Baby steps.
+
 The down-side is that trusses add tensile stress (where steel excels,
 but 3D prints do not), which means that layer adhesion becomes a much
 more concerning factor.  Maybe that's why this isn't a standard approach
@@ -150,12 +176,16 @@ simple equations to an .STL file.
 
 But as we learned with the sphere, this isn't going to work because of
 the roof problem, and my lack of access to an "external" lightning fill.
-Now it's a bit worse because that roof is wider.
+Now it's a bit worse because that roof is wider and flatter.
 
 [download STL anyway][sphube-test]
 
-So back to the compromises I go...
+So back to the compromises I must go...
 
+Or I can just post this as-is and go tinker with sphubes generalised to
+other platonic solids for no clear reason at all:
+
+{% include desmos3d.liquid id='vaghz21ukz' image='/images/dodecasphedron.png' %}
 
 [OrcaSlicer]: <https://www.orcaslicer.com/>
 [Lightning]: <https://www.orcaslicer.com/wiki/print_settings/strength/strength_settings_patterns#lightning>
