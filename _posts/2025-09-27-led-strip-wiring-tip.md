@@ -137,15 +137,20 @@ You can hover over a lamp to see where the current flows.  The further
 you go from the power supply the greater the cumulative resistance of
 the power rails.
 
+The expedient but costly solution is to reinforce the power rails in the
+strip by soldering some heavy hookup wire onto the strip at some of the
+cut points where you don't actually cut it (once every metre should be
+plenty; more frequently would be unnecessarily tedious).
+
 But if you happen to be running the strip in a loop, such that the ends
-end up somewhat close to each other, or if you happen to have a heap of
-extra wire to run alongside the strip, then there's a simple fix for
-that difference in brightness.
+end up somewhat close to each other, or if you're willing to run one
+length of hookup wire alongside the strip, then there's a simpler fix
+for that difference in brightness.
 
 Connect one side of the power supply to the near end of the strip, and
 connect the other side of the power supply to the far end of the strip.
-Be careful to still connect minus to minus and plus to plus, though.
-Like so:
+Be careful to still connect minus to minus and plus to plus in the usual
+way, though.  Like so:
 
 <svg width="100%" viewbox="0 0 800 190">
         <use href="#powerh" x="365" y="150" />
@@ -216,8 +221,8 @@ designed to be cut.  They'll have a third wire which is not be connected
 directly to the LEDs, but at the end it'll be connected to one of the
 other wires, and that will complete the circuit from the far end back
 to the power supply to balance things out.  If you cut those then they
-just don't work anymore, because you would need to reconnect two of the
-wires at the cut point.
+won't work anymore, because you would need to reconnect two of the wires
+at the cut point.
 
 It doesn't matter if the power supply hookup lines are different
 lengths.  Having the total length be unnecessarily long will be less
