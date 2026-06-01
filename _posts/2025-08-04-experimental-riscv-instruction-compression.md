@@ -24,8 +24,8 @@ low-end processors still want to minimise code size and icache burden.
 I've previously mused over the idea of [aligned 32-bit packets of 16-bit
 instructions][natural alignment] with extra constraints to try to make
 it easy to ingest the packet as a single opcode, and then to split it
-into micro-ops later in the pipeline, where everything gets split into
-micro-ops already.
+into micro-ops later in the pipeline, where everything else gets split
+into micro-ops already.
 
 And at the same time I observed that overlapping `rd` and `rs1` operands
 is not the only way to overload the bits in an opcode.
