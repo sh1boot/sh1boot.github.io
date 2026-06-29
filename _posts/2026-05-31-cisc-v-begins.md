@@ -137,6 +137,16 @@ pairing opportunities.  Unfortunately Claude soon became mired in its
 own bad code, and I was spending more time asking it to clean up its
 messes than I was trying new experiments.
 
+For sample data I used a generic kernel built for a basic RVA profile
+(or maybe RVM?), and I built [Godot][] for RVA23, and ran stats on both
+of these, attempting to reorder instructions to bring pairs together,
+but not too intelligently.
+
+This is operating a little blind, and overlooking how the compiler might
+arrange things differently if it knew the target instruction set, but
+it's the limit of the effort I'm going to make.  Instead, I spent most
+of my energy cursing at Claude.
+
 The whole effort was kind of a bust, and I needed to spend more time
 than I had doing it all from scratch.  I could, theoretically, vibe-code
 it from scratch asking for a much more restricted tool where I could do
@@ -315,3 +325,4 @@ to redistribute the bits for a second interpretation).
 [experimental RISC-V compression]: </experimental-riscv-instruction-compression>
 
 [naturally aligned instruction set]: </naturally-aligned-instruction-set>
+[Godot]: <https://docs.godotengine.org/en/stable/engine_details/development/compiling/index.html>`
