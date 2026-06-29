@@ -28,9 +28,10 @@ accumulator and adding that accumulator into the second accumulator, in
 parallel without mixing anything between lanes.
 
 If the buffer is not a multiple of N long, you can pad it to a multiple of N by
-[notionally] stuffing zero bytes in front, because zeroes at the beginning do
-not affect the cumulative sum (zeroes at the end cause all the values in the B
-sum to get multiplied differently, so you can't do that).
+[notionally] stuffing zero bytes at the front of the input while keeping the
+original value of `length`, because zeroes at the beginning do not affect the
+cumulative sum (zeroes at the _end_ cause all the values in the B sum to get
+multiplied differently, so you can't do that).
 
 This gives you N sums in the form:
 
@@ -48,23 +49,23 @@ $$\begin{align}
   B = length + &\sum_{j=1}^{length} (length - j + 1)data_{j} \mod 65521
 \end{align}$$
 
-Which we can derive thus:
+Which we can derive by noting that a byte at position $p = (j-1)N + i$ carries
+weight $length - p + 1$ in $B$.  When $N$ divides $length$ that weight splits
+cleanly into $N(length/N - j + 1) + (1 - i)$, so each stream contributes
+$N B_i + (1 - i)A_i$:
 
 $$\begin{align}
   A = 1 + &\sum_{i=1}^{N} A_{i} \mod 65521 \\
   \\
-  B = length + &\sum_{i=1}^{N} N \times B_{i} + (N - i)A_{i} \mod 65521
+  B = length + &\sum_{i=1}^{N} N \times B_{i} + (1 - i)A_{i} \mod 65521
 \end{align}$$
 
-Or something like that, anyway.  I haven't checked for things like off-by-one
-in my half-baked conversion from C notation to mathematical notation.
+This is all a bit distorted from the zero-based arrays in sensible programming
+languages, but I had Claude check my TeX so I'm sure it's fine.
 
-(TODO: make sure they're actually right)
-
-Having that reduction operation on hand (assuming I expressed it correctly),
-you can set it aside until you've calculated N parallel checksums and then do
-it as a finalisation step outside of any loops.  Everything else is
-embarrassingly parallel.
+Having that reduction operation on hand, you can set it aside until you've
+calculated N parallel checksums and then do it as a finalisation step outside
+of any loops.  Everything else is embarrassingly parallel.
 
 Now it might seem like to avoid regular overflow and regular modulo we would
 need to use 32-bit accumulators with periodic resets.  But actually not so
