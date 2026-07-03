@@ -4,11 +4,13 @@ layout: post
 title:  Choosing n different colours for graphs
 mathjax: true
 tags: web svg css
+redirect_from:
+  - evenly-distirbuted-colours
 ---
 One way to generate a palette of colours for distinguishing different
 lines and objects in diagrams is to take regular steps around the hue
 parameter of the HSL colour wheel.  If you know how many you'll need
-then your can subdivide the space evenly, or if you do not then you can
+then you can subdivide the space evenly, or if you do not then you can
 use 1/φ as the interval instead.  But this has limitations...
 
 Of course a much simpler solution is to just pick a bunch of reasonable
@@ -180,7 +182,7 @@ and the other as an angle around that circle.  Squaring the value used
 as radius compensates for the over-concentration of points around the
 centre (proof left as an exercise for Google search).
 
-Does this retain the mathematical rigor of low-discrepancy sequences?
+Does this retain the mathematical rigour of low-discrepancy sequences?
 No.  Not at all.  But it's the best I have right now.
 
 And here's what that gives us for OKLCh:
@@ -363,7 +365,7 @@ background colour.
 In my totally unscientific tinkering I've found that low-saturation
 light colours (pastels) work well for lines on dark backgrounds and for
 fill colours behind dark text, and that high-saturation dark colours
-("deep" colours) work well well for lines on light backgrounds and fill
+("deep" colours) work well for lines on light backgrounds and fill
 colours behind light text.
 
 Also, fills turn out to be easier to distinguish from each other than

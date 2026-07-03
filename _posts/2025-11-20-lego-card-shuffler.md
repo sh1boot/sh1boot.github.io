@@ -72,7 +72,7 @@ after only one or two extra rounds beyond the theoretical minimum.
 If every card remembers whether it came from the left pile or the right
 pile, for every riffle step in a shuffle, then it would come out with
 six or seven boolean values, which you can combine as bits into a
-number, which represents its index in the shuffled pile.  In essense
+number, which represents its index in the shuffled pile.  In essence
 the process gives each card a random 6-bit number and then sorts them by
 those numbers.
 
@@ -80,7 +80,7 @@ A radix sort replays that same string of decisions but in reverse order.  Readin
 
 But look out.  Just assigning numbers this way allows the possibility that
 two cards could have the same number, and then their final order
-won't be changed from their initial order.  More riffles adds more bits
+won't be changed from their initial order.  More riffles add more bits
 to the numbers, decreasing the chances of two numbers having the same
 number and being "stuck together" for the whole shuffle, but it's a
 coarse approximation of picking predictably unique numbers.
@@ -199,7 +199,7 @@ TODO: more diagrams?
 #### controller
 
 For the actual control logic I went with a [micro:bit][], because it's
-cheap and because my employer gave me one to celerbate an anniversary.
+cheap and because my employer gave me one to celebrate an anniversary.
 Also my boss gave me another one because he thought he'd never have time
 to use his.
 
@@ -268,7 +268,7 @@ again to begin lowering everything.  At this point rollers are still
 disengaged and the cards are on the shuttle which is above the top
 shelf.
 
-On they way down the shuttle deposits the cards on the top shelf and
+On the way down the shuttle deposits the cards on the top shelf and
 passes between the forks.  Once the shuttle hits the bottom, the [TBD]
 mechanism disengages from the shuttle and begins turning the rollers
 again.  As each card passes by, move the ramp up or down to direct the

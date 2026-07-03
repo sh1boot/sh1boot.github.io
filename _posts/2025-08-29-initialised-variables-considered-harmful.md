@@ -21,8 +21,8 @@ particular value.
 if (some_circumstances) x = particular_value;
 ```
 
-And later on `x`'s good buddy `y` wants to have it's own value based
-on`x`'s value.
+And later on `x`'s good buddy `y` wants to have its own value based
+on `x`'s value.
 
 ```c++
 int y = f(x);
@@ -137,7 +137,7 @@ that logic.  If not, `-fsanitize=memory` might pick it up provided you
 have a test case that covers it.  If not, then a default value is
 inserted as chosen by `uncommitted<int>{}`, or the value you specify if
 you choose to do so (even though you've clearly never tested it).  One
-might expect `uncomitted<float>{}` to choose a signalling NaN and any
+might expect `uncommitted<float>{}` to choose a signalling NaN and any
 pointer type to choose `nullptr`.
 
 C++26 might achieve that if you leave the variable uninitialised at

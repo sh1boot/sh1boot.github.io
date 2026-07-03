@@ -13,7 +13,7 @@ middle of an instruction, and multi-issue problems with recognising
 correct instruction start points, and so on...
 
 It also, while introducing some of the complexity of CISC, leaves behind
-other CISC advantages like explict macro-op encoding for often-fused
+other CISC advantages like explicit macro-op encoding for often-fused
 operations in higher-performance machines.  But by blithely throwing in
 CISC instructions to get code size down you give up the simplicity of
 implementation for compact designs.
@@ -123,7 +123,7 @@ outside of exceptions should accept it being set, and relative branches
 are in 32-bit increments.
 
 Also, while instruction pairing may suggest the use of a direct data
-path from one intruction to the next within the packet, without the need
+path from one instruction to the next within the packet, without the need
 to land the result in a register, this data still has to be exposed for
 save, restore, and inspection by an exception handler. So a temporary
 register must be available.
@@ -201,7 +201,7 @@ or
 op0, rd1, ra0, rb0
 op1, rd1, rd1, rb1
 ```
-can be replaced this with:
+can be replaced with:
 ```
 op0, x31, ra0, rb0
 op1, rd1, x31, rb1
@@ -299,7 +299,7 @@ category, with a small wrinkle that the second instruction does the same
 thing but takes the immediate with an extra offset (the data size of the
 memory operation).
 
-# The compressable instruction sets
+# The compressible instruction sets
 
 I simply haven't had enough time to decide what to put in my straw-man
 proposal, yet. And I've run out of time to work it out.  I blame AI.
@@ -314,7 +314,7 @@ much poorer.  I blame C++ for that.
 I've avoided dealing with this.  What I do instead is count up the
 number of bits I need to encode all the fields, and then count the
 number of combinations this creates and add these to the total, and try
-to keep that total less than 2<<30.
+to keep that total less than 2^30.
 
 Actually laying the bits out in an instruction packet doesn't seem
 terribly interesting.  I guess it's nice to align the source and
@@ -325,4 +325,4 @@ to redistribute the bits for a second interpretation).
 [experimental RISC-V compression]: </experimental-riscv-instruction-compression>
 
 [naturally aligned instruction set]: </naturally-aligned-instruction-set>
-[Godot]: <https://docs.godotengine.org/en/stable/engine_details/development/compiling/index.html>`
+[Godot]: <https://docs.godotengine.org/en/stable/engine_details/development/compiling/index.html>

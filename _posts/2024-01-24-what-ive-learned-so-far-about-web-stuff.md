@@ -5,7 +5,7 @@ title:  What I've learned so far about CSS, SVG, Liquid, and Jekyll
 description: Embedding diagrams on GitHub Pages from someone trying to keep away from web stuff.
 tags: web css svg liquid jekyll wtf-am-i-doing
 ---
-From the point of view of knowing almost nothing about how any web techology
+From the point of view of knowing almost nothing about how any web technology
 works, here's a bunch of stuff I had to pick up to draw a picture in a
 GitHub-powered blog.
 

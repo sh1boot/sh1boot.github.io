@@ -107,7 +107,7 @@ Enter, The [Sphube][]!
 
 You might be more familiar with the [squircle][], and this is just a 3D
 extension on that idea.  These squircles and hypersquircles have the
-benefit of being continous curves, and so should be a bit more resistant
+benefit of being continuous curves, and so should be a bit more resistant
 to buckling than a flat-faced cube would be.  That makes them a more
 viable [monocoque][].
 

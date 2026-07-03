@@ -334,7 +334,7 @@ TODO: Extracting carry like this raises questions on whether overflow is also wa
   choices.  I took some guidance from the existing compressed
   instruction extension to keep it in roughly the right place, but my
   changes may add their own implications.
-* There might be much to much overlap between the different register
+* There might be much too much overlap between the different register
   sharing modes for arithmeric.  This needs to be looked at still.
 
 ### Variations

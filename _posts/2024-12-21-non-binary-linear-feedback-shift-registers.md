@@ -9,7 +9,7 @@ tags: number-theory random debruijn
 There's way too much documentation about binary [LFSRs][LFSR] out there,
 and not a whole lot on doing the same with other bases.  So I've put
 together some tables and a few notes so everybody can throw something
-together without to much effort.
+together without too much effort.
 
 ([Skip to the data](#tables))
 
