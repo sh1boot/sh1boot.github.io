@@ -74,8 +74,10 @@ But there are many related schemes would could be devised, and I think
 technology is in a place, right now, where it should be trivial to
 automate.  I just can't be bothered doing that.
 
+Update: I got Claude to do me a [demo implementation].
 
 [ChatGPT]: <https://chatgpt.com/>
 [steganography]: <https://en.wikipedia.org/wiki/steganography>
 [Morse code]: <https://en.wikipedia.org/wiki/Morse_code>
 [acrostics]: <https://en.wikipedia.org/wiki/Acrostic>
+[demo implementation]: <https://github.com/sh1bot/morse_stego>
