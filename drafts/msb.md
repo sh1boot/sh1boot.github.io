@@ -1,7 +1,9 @@
 ---
 layout: post
 title: Why highest-set-bit is better than count-leading-zeroes
+svg: true
 ---
+
 I do not like count-leading-zeroes (`clz`) as a machine instruction.  I
 think it's clumsy and unergonomic and fails to justify itself in any
 practical applications that I can think of.
@@ -10,23 +12,123 @@ practical applications that I can think of.
 significant bit of a word and counting downwards until it encounters a
 bit which is not set to zero.
 
-```
- f e d c b a 9 8 7 6 5 4 3 2 1 0 f e d c b a 9 8 7 6 5 4 3 2 1 0 
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|1|0|1|1|1|0|0|0|0|0|0|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-CLZ: 21
-MSB: 10
-```
-```
+<div class="bitfield">
+{%- assign bits = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 1 0 0 0 0 0 0" | split: " " -%}
+{%- assign msb = 10 -%}
+{%- assign clztint = 1 -%}
+{%- assign msbtint = 4 -%}
+{%- assign slots = 32 -%}
+{%- assign cw = 26 -%}
+{%- assign ch = 26 -%}
+{%- assign pad = 2 -%}
+{%- assign half = cw | divided_by: 2 -%}
+{%- assign w = bits.size -%}
+{%- assign base = slots | minus: w -%}
+{%- assign clz = w | minus: 1 | minus: msb -%}
+{%- assign colMsb = slots | minus: 1 | minus: msb -%}
+{%- assign xMsbLeft = colMsb | times: cw | plus: pad -%}
+{%- assign xWordLeft = base | times: cw | plus: pad -%}
+{%- assign xMsbCenter = xMsbLeft | plus: half -%}
+{%- assign braceMid = xWordLeft | plus: xMsbLeft | divided_by: 2 -%}
+{%- assign W = slots | times: cw | plus: pad | plus: pad -%}
+<svg width="100%" height="70" viewBox="0 0 {{ W }} 70">
+<title>Bit layout of a {{ w }}-bit word</title>
+<desc>Highest set bit is bit {{ msb }}; count-leading-zeros is {{ clz }} at this width.</desc>
+<g class="hlset tint{{ clztint }}">
+{%- for b in bits -%}
+{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
+{%- if idx > msb -%}
+{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
+<rect class="tintbox" x="{{ x }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
+{%- endif -%}
+{%- endfor -%}
+<path class="tintline" d="M{{ xWordLeft }},47 V51 H{{ xMsbLeft }} V47"/>
+<text x="{{ braceMid }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">clz = {{ clz }}</text>
+</g>
+<g class="hlset tint{{ msbtint }}">
+<rect class="tintbox" x="{{ xMsbLeft }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
+<path class="tintline" d="M{{ xMsbCenter }},45 V51"/>
+<text x="{{ xMsbCenter }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">msb = {{ msb }}</text>
+</g>
+{%- for b in bits -%}
+{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
+{%- if idx < msb -%}
+{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
+<rect x="{{ x }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
+{%- endif -%}
+{%- endfor -%}
+{%- for b in bits -%}
+{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
+{%- assign xc = x | plus: half -%}
+<text x="{{ xc }}" y="31" font-size="15">{{ b }}</text>
+{%- endfor -%}
+{%- for b in bits -%}
+{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
+{%- assign xc = x | plus: half -%}
+{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
+<text x="{{ xc }}" y="9" font-size="11" fill-opacity=".55">{{ idx }}</text>
+{%- endfor -%}
+</svg>
+</div>
 
-                                 f e d c b a 9 8 7 6 5 4 3 2 1 0 
-                                +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                |0|0|0|0|0|1|0|1|1|1|0|0|0|0|0|0|
-                                +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-CLZ: 5
-MSB: 10
-```
+<div class="bitfield">
+{%- assign bits = "0 0 0 0 0 1 0 1 1 1 0 0 0 0 0 0" | split: " " -%}
+{%- assign msb = 10 -%}
+{%- assign clztint = 1 -%}
+{%- assign msbtint = 4 -%}
+{%- assign slots = 32 -%}
+{%- assign cw = 26 -%}
+{%- assign ch = 26 -%}
+{%- assign pad = 2 -%}
+{%- assign half = cw | divided_by: 2 -%}
+{%- assign w = bits.size -%}
+{%- assign base = slots | minus: w -%}
+{%- assign clz = w | minus: 1 | minus: msb -%}
+{%- assign colMsb = slots | minus: 1 | minus: msb -%}
+{%- assign xMsbLeft = colMsb | times: cw | plus: pad -%}
+{%- assign xWordLeft = base | times: cw | plus: pad -%}
+{%- assign xMsbCenter = xMsbLeft | plus: half -%}
+{%- assign braceMid = xWordLeft | plus: xMsbLeft | divided_by: 2 -%}
+{%- assign W = slots | times: cw | plus: pad | plus: pad -%}
+<svg role="img" aria-label="{{ w }}-bit word, msb at bit {{ msb }}, clz {{ clz }}" viewBox="0 0 {{ W }} 70" width="{{ W }}" height="70" style="max-width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+<title>Bit layout of a {{ w }}-bit word</title>
+<desc>Highest set bit is bit {{ msb }}; count-leading-zeros is {{ clz }} at this width.</desc>
+<g class="hlset tint{{ clztint }}">
+{%- for b in bits -%}
+{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
+{%- if idx > msb -%}
+{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
+<rect class="tintbox" x="{{ x }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
+{%- endif -%}
+{%- endfor -%}
+<path class="tintline" d="M{{ xWordLeft }},47 V51 H{{ xMsbLeft }} V47"/>
+<text x="{{ braceMid }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">clz = {{ clz }}</text>
+</g>
+<g class="hlset tint{{ msbtint }}">
+<rect class="tintbox" x="{{ xMsbLeft }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
+<path class="tintline" d="M{{ xMsbCenter }},45 V51"/>
+<text x="{{ xMsbCenter }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">msb = {{ msb }}</text>
+</g>
+{%- for b in bits -%}
+{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
+{%- if idx < msb -%}
+{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
+<rect x="{{ x }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
+{%- endif -%}
+{%- endfor -%}
+{%- for b in bits -%}
+{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
+{%- assign xc = x | plus: half -%}
+<text x="{{ xc }}" y="31" font-size="15">{{ b }}</text>
+{%- endfor -%}
+{%- for b in bits -%}
+{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
+{%- assign xc = x | plus: half -%}
+{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
+<text x="{{ xc }}" y="9" font-size="11" fill-opacity=".55">{{ idx }}</text>
+{%- endfor -%}
+</svg>
+</div>
 
 This tells you how many bits you can shift the value left without
 overflow, which sounds good but that's not always as useful as it
