@@ -1,5 +1,5 @@
 ---
-last_modified_at: 2025-07-21 03:50:15 +0000 # 4f6b4b5 gzip-synth-improvements
+last_modified_at: 2026-07-06 19:47:44 +0000 # 99bec28 remove-junk-commas-from-tags
 layout: post
 title: How I made a gzip encoder faster than memcpy
 tags: compression number-theory crc

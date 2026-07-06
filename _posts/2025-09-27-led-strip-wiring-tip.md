@@ -1,4 +1,5 @@
 ---
+last_modified_at: 2026-07-06 19:47:44 +0000 # 99bec28 remove-junk-commas-from-tags
 layout: post
 title: Getting even light from long LED strips
 tags: electronics not-just-software

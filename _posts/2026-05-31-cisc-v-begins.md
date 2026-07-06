@@ -1,5 +1,5 @@
 ---
-last_modified_at: 2026-07-03 18:53:07 +0000 # f68150a spelling
+last_modified_at: 2026-07-06 19:47:44 +0000 # 99bec28 remove-junk-commas-from-tags
 layout: post
 title: "CISC-V: code compression in the style of a CISC architecture"
 tags: vibe-coding computer-architecture riscv

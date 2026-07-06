@@ -1,5 +1,5 @@
 ---
-last_modified_at: 2025-11-03 02:25:23 +0000 # 35346f3 note-on-poisoning
+last_modified_at: 2026-07-06 19:47:44 +0000 # 99bec28 remove-junk-commas-from-tags
 layout: post
 title: Poisoning badly-behaved AI crawlers
 redirect_from:
