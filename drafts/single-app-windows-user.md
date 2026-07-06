@@ -1,7 +1,7 @@
 ---
 title: Setting up a single-app user in Windows
 layout: post
-tags: windows, parenting
+tags: windows parenting
 ---
 Restricting a Windows user to a single application can be helpful to remove
 distractions.  Ideally this would be achieved with Kiosk mode, but this is

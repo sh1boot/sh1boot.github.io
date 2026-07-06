@@ -4,7 +4,7 @@ layout: post
 title: Poisoning badly-behaved AI crawlers
 redirect_from:
  - /drafts/poisoning-delinquent-ai-crawlers/
-tags: compression, ai
+tags: compression ai
 ---
 Regardless of how you feel about generative AI stealing your job or
 filling creative spaces with slop or whatever, one thing I hope is less

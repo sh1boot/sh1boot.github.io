@@ -2,7 +2,7 @@
 last_modified_at: 2026-07-06 06:57:22 +0000 # 76943ba link-to-demo
 layout: post
 title: Hiding messages in machine-generated text
-tags: steganography, ai
+tags: steganography ai
 ---
 On a whim I thought I'd try getting [ChatGPT][] to do a bit of
 [steganography][] for me.  There are a bazillion ways (give or take) for

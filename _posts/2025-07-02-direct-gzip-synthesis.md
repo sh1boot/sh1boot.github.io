@@ -2,7 +2,7 @@
 last_modified_at: 2025-07-21 03:50:15 +0000 # 4f6b4b5 gzip-synth-improvements
 layout: post
 title: How I made a gzip encoder faster than memcpy
-tags: compression, number-theory, crc
+tags: compression number-theory crc
 ---
 In the compression world it's usual to compare the time spent
 compressing and decompressing data with the time difference in

@@ -2,7 +2,7 @@
 last_modified_at: 2026-07-03 18:53:07 +0000 # f68150a spelling
 layout: post
 title: "CISC-V: code compression in the style of a CISC architecture"
-tags: vibe-coding, computer-architecture, riscv
+tags: vibe-coding computer-architecture riscv
 ---
 
 Given a mixed-length instruction stream like Thumb or RVC you encounter

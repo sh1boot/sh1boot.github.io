@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Pages using the SVG header
-tags: hidden-tags, svg
+tags: hidden-tags svg
 categories: index
 sitemap: false
 ---

@@ -1,14 +1,13 @@
 ---
-last_modified_at: 2026-07-03 18:53:07 +0000 # f68150a spelling
 layout: post
 title: Getting even light from long LED strips
-tags: electronics, not-just-software
+tags: electronics not-just-software
 svg: true
 ---
 Something you may notice for very long runs of LED strip is that they
 can be bright at one end and dim at the other.  That's because the
 strips are two long power rails with a bit of internal resistance and
-current through the LEDs at the far end has more of that resistance to
+current through the LEDs at the far end have more of that resistance to
 travel through.
 
 Here's how LED strips are typically wired:
@@ -218,7 +217,7 @@ the same, and so the resistance is the same and they all come out the same
 brightness all the way along the strip.
 
 You'll see this in some prefabricated lighting strings which are _not_
-designed to be cut.  They'll have a third wire which is not connected
+designed to be cut.  They'll have a third wire which is not be connected
 directly to the LEDs, but at the end it'll be connected to one of the
 other wires, and that will complete the circuit from the far end back
 to the power supply to balance things out.  If you cut those then they
