@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
+last_modified_at: 2025-02-15 08:38:19 +0000 # 79e252a lots-of-tagging-work
 layout: post
 title:  Stupid font tricks
 tags: graphics fonts needs-example

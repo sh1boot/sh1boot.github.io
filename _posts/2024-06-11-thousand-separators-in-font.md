@@ -1,5 +1,5 @@
 ---
-last_modified_at: Fri, 21 Mar 2025 17:03:27 -0700  # 2e93572 digitgrouper-link-to-FiraCode-wiki
+last_modified_at: 2025-03-22 00:03:27 +0000 # 2e93572 digitgrouper-link-to-FiraCode-wiki
 layout: post
 title:  Font-based digit grouping
 tags: graphics fonts digit-grouping terminals

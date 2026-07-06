@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
+last_modified_at: 2025-09-28 06:15:08 +0000 # 19c9407 silly-thought-on-portals
 layout: post
 title:  Invisible, universe-tweaking portals
 tags: games portals needs-work needs-example

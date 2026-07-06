@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: 2025-10-05 16:50:49 +0000 # 25a107d refactor-svg-css
 layout: post
 title:  On the endianness of bitstreams
 description: Contrasting the benefits of big-endian and little-endian packing in bitstreams and observing that one consequence shows up in Zstandard.

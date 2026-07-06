@@ -1,5 +1,5 @@
 ---
-last_modified_at: Thu, 27 Mar 2025 13:13:56 -0700  # 188d334 add-ai-and-compression-tags
+last_modified_at: 2025-03-27 20:13:56 +0000 # 188d334 add-ai-and-compression-tags
 layout: post
 title: Entropy coding as a text generator
 tags: compression

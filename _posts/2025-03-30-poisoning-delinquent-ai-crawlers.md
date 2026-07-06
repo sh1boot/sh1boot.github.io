@@ -1,5 +1,5 @@
 ---
-last_modified_at: Wed, 9 Apr 2025 12:40:12 -0700  # 48401ce more-ai-poison-update
+last_modified_at: 2025-11-03 02:25:23 +0000 # 35346f3 note-on-poisoning
 layout: post
 title: Poisoning badly-behaved AI crawlers
 redirect_from:

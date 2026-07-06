@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: 2025-01-07 22:30:48 +0000 # 5d3af96 a-tagging-system
 layout: post
 title:  Embedded web content without all that JavaScript cruft
 description: A bit of Jekyll hacking to stop other sites' JavaScript running rampant on my blog without the user being forewarned.

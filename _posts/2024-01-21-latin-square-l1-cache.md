@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
+last_modified_at: 2116-08-04 14:28:43 +0000 # 2f71e03 extra-latin-square-detail
 layout: post
 title:  A Latin-Square-based L1 cache layout
 description: Using a solution to the Latin Squares problem as a memory slicing scheme to address convenient access to 2D memory patterns.

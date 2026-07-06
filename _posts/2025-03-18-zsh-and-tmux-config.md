@@ -1,5 +1,5 @@
 ---
-last_modified_at: Thu, 20 Mar 2025 17:54:35 -0700  # 026afdb picture-for-zsh-tmux-post
+last_modified_at: 2025-10-22 05:13:47 +0000 # 81bca8a stty-size-for-zsh
 layout: post
 title: My tmux and zsh configuration
 redirect_from:

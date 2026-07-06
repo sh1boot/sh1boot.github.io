@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: 2026-06-29 18:00:39 +0000 # c1f91f3 fix-up-TeX-in-adler
 format: post
 title: Optimising Adler-32 checksum
 description: A rundown of the steps I've taken to improve SIMD throughout of Adler-32 checksum calculation by constraining authentic range.

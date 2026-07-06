@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sun, 16 Mar 2025 21:05:23 -0700  # 65b60dd Update-2024-12-21-non-binary-linear-feedback-shift-registers.md
+last_modified_at: 2026-07-03 18:53:07 +0000 # f68150a spelling
 layout: post
 title:  Non-binary Linear Feedback Shift Registers
 mathjax: true

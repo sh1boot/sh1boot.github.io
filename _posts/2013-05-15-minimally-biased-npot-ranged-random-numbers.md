@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 20:17:44 -0800  # b55c021 recurse-tag-pages
+last_modified_at: 2025-01-08 04:17:44 +0000 # b55c021 recurse-tag-pages
 title: Minimally biased NPOT-ranged random numbers
 description: Digging a little further in to the problem of scaling random numbers over a finite range without biasing certain results over others.
 tags: number-theory random

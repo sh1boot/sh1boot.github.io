@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 15 Feb 2025 00:38:19 -0800  # 79e252a lots-of-tagging-work
+last_modified_at: 2025-10-05 16:50:49 +0000 # 25a107d refactor-svg-css
 layout: post
 title:  Naturally-aligned compressed opcode encoding
 mathjax: true

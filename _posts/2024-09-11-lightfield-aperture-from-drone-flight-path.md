@@ -1,5 +1,5 @@
 ---
-last_modified_at: Thu, 12 Sep 2024 10:18:30 -0700  # af73db2 publish-lightfield-drone-path
+last_modified_at: 2025-11-20 07:49:53 +0000 # fa410d9 more-tagging
 layout: post
 title: Light field aperture synthesis from drone flight path
 tags: not-just-software

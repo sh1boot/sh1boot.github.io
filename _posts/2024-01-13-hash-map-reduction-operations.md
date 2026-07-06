@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: 2025-01-07 22:30:48 +0000 # 5d3af96 a-tagging-system
 layout: post
 title:  Hash map reduction operations
 description: Since STL's mapping from a hash to table-index is surprisingly primitive, what are some ways to do it better (and when might those turn out worse)?

@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: 2025-11-20 07:49:53 +0000 # fa410d9 more-tagging
 layout: post
 title:  A pick-resistant lock design
 description: A simple design for a pick-resistant pin tumbler lock using non-circular gears.

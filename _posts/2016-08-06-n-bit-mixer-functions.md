@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 20:17:44 -0800  # b55c021 recurse-tag-pages
+last_modified_at: 2025-01-08 04:17:44 +0000 # b55c021 recurse-tag-pages
 layout: post
 title: N-bit Mixer Functions
 description: A collection of mixer functions in the style of Murmur hash's finalisation mixer, for 8 to 128 bits.

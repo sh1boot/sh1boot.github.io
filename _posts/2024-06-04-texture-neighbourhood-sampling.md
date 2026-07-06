@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: 2025-10-05 16:50:49 +0000 # 25a107d refactor-svg-css
 layout: post
 title:  Neighbourhood sampling order during texture filtering
 description: A workaround to avoid glitches when working with derivative functions around texture interpolation logic.

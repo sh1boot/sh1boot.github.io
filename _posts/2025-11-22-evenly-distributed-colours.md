@@ -1,5 +1,5 @@
 ---
-last_modified_at: Sat, 3 Aug 2024 21:13:35 -0700  # 3fc1ea7 a-handful-of-drafts
+last_modified_at: 2026-07-03 18:53:07 +0000 # f68150a spelling
 layout: post
 title:  Choosing n different colours for graphs
 mathjax: true

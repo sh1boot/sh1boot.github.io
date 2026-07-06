@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 22:48:05 -0800  # 272fdc9 fix-redirect-from-usage
+last_modified_at: 2025-10-05 16:50:49 +0000 # 25a107d refactor-svg-css
 layout: post
 title:  Idly musing over RowHammer mitigation strategies
 tags: rowhammer security hashing computer-architecture error-correction

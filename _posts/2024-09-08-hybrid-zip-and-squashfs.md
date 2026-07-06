@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 17 Sep 2024 23:25:50 -0700  # 07f5de6 separate-out-my-fantasy-fs
+last_modified_at: 2024-09-18 06:25:50 +0000 # 07f5de6 separate-out-my-fantasy-fs
 layout: post
 title: Hybridising zip files with an alternate compression scheme
 ---

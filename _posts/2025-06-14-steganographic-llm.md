@@ -1,4 +1,5 @@
 ---
+last_modified_at: 2026-07-06 06:57:22 +0000 # 76943ba link-to-demo
 layout: post
 title: Hiding messages in machine-generated text
 tags: steganography, ai

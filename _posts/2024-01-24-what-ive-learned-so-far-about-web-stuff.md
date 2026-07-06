@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 21:23:21 -0800  # d54a7de tidy-up-some-bad-metadata
+last_modified_at: 2026-07-03 18:53:07 +0000 # f68150a spelling
 layout: post
 title:  What I've learned so far about CSS, SVG, Liquid, and Jekyll
 description: Embedding diagrams on GitHub Pages from someone trying to keep away from web stuff.

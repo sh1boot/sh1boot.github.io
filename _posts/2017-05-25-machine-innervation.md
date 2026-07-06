@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: 2026-07-03 18:53:07 +0000 # f68150a spelling
 layout: post
 title:  Machine innervation
 tags: ai reliability electronics wtf-am-i-doing

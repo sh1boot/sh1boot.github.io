@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: 2025-09-18 18:43:54 +0000 # e737180 Don-t-inline-stand-up-maths-video
 layout: post
 title: Extended checks on manual arithmetic
 mathjax: true

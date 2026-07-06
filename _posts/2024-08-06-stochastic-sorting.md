@@ -1,5 +1,5 @@
 ---
-last_modified_at: Wed, 9 Apr 2025 12:42:57 -0700  # 7036f88 clarify-stochastic-sorting
+last_modified_at: 2025-05-19 19:08:04 +0000 # 36f7d89 stochastic-sorting-could-generalise
 layout: post
 title: stochastically ordering items by frequency
 tags: statistics stochastic-methods needs-example

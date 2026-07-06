@@ -1,5 +1,5 @@
 ---
-last_modified_at: Tue, 7 Jan 2025 14:30:48 -0800  # 5d3af96 a-tagging-system
+last_modified_at: 2025-05-19 21:13:48 +0000 # bc5d887 Update-2023-12-18-why-i-want-a-dedicated-hash-instruction.md
 layout: post
 title:  Why I want a dedicated hash instruction
 description: My thoughts on why a CPU instruction to provide a stronger hash operation in one cycle would benefit software performance.

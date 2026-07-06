@@ -1,5 +1,5 @@
 ---
-last_modified_at: Fri, 21 Mar 2025 11:54:04 -0700  # 5732185 clarify-extended-numpy-arithmetic
+last_modified_at: 2025-05-23 19:01:10 +0000 # 0bf88b0 further-clarify-extended-numpy-matpow
 layout: post
 title: Extending range of numpy modular arithmetic
 tags: numpy
