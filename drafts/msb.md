@@ -2,6 +2,7 @@
 layout: post
 title: Why highest-set-bit is better than count-leading-zeroes
 svg: true
+tags: computer-architecture
 ---
 
 I do not like count-leading-zeroes (`clz`) as a machine instruction.  I
@@ -10,21 +11,21 @@ practical applications that I can think of.
 
 `clz` tells you how many zero bits there are starting at the most
 significant bit of a word and counting downwards until it encounters a
-bit which is not set to zero.
-
+bit which is not set to zero.  The result depends on the word size.
+For a 32-bit word you get:
 <div class="bitfield">
 {%- assign bits = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 1 0 0 0 0 0 0" | split: " " -%}
+{%- assign w = bits.size -%}
 {%- assign msb = 10 -%}
-{%- assign clztint = 1 -%}
-{%- assign msbtint = 4 -%}
+{%- assign clz = w | minus: 1 | minus: msb -%}
+{%- assign clztint = 0 -%}
+{%- assign msbtint = 1 -%}
 {%- assign slots = 32 -%}
 {%- assign cw = 26 -%}
 {%- assign ch = 26 -%}
 {%- assign pad = 2 -%}
 {%- assign half = cw | divided_by: 2 -%}
-{%- assign w = bits.size -%}
 {%- assign base = slots | minus: w -%}
-{%- assign clz = w | minus: 1 | minus: msb -%}
 {%- assign colMsb = slots | minus: 1 | minus: msb -%}
 {%- assign xMsbLeft = colMsb | times: cw | plus: pad -%}
 {%- assign xWordLeft = base | times: cw | plus: pad -%}
@@ -32,107 +33,93 @@ bit which is not set to zero.
 {%- assign braceMid = xWordLeft | plus: xMsbLeft | divided_by: 2 -%}
 {%- assign W = slots | times: cw | plus: pad | plus: pad -%}
 <svg width="100%" height="70" viewBox="0 0 {{ W }} 70">
+  <defs>
+    <g id="bit_raw">
+      <rect class="tintbox" x="0" y="18" width="{{cw}}" height="{{ch}}" />
+    </g>
+    <g id="bit_clz" class="tint{{clztint}}">
+      <rect class="tintbox" x="0" y="18" width="{{cw}}" height="{{ch}}" />
+    </g>
+    <g id="bit_msb" class="tint{{msbtint}}">
+      <rect class="tintbox" x="0" y="18" width="{{cw}}" height="{{ch}}" />
+    </g>
+  </defs>
 <title>Bit layout of a {{ w }}-bit word</title>
 <desc>Highest set bit is bit {{ msb }}; count-leading-zeros is {{ clz }} at this width.</desc>
-<g class="hlset tint{{ clztint }}">
+
 {%- for b in bits -%}
 {%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
-{%- if idx > msb -%}
-{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
-<rect class="tintbox" x="{{ x }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
-{%- endif -%}
-{%- endfor -%}
-<path class="tintline" d="M{{ xWordLeft }},47 V51 H{{ xMsbLeft }} V47"/>
-<text x="{{ braceMid }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">clz = {{ clz }}</text>
-</g>
-<g class="hlset tint{{ msbtint }}">
-<rect class="tintbox" x="{{ xMsbLeft }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
-<path class="tintline" d="M{{ xMsbCenter }},45 V51"/>
-<text x="{{ xMsbCenter }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">msb = {{ msb }}</text>
-</g>
-{%- for b in bits -%}
-{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
-{%- if idx < msb -%}
-{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
-<rect x="{{ x }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
-{%- endif -%}
-{%- endfor -%}
-{%- for b in bits -%}
 {%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
 {%- assign xc = x | plus: half -%}
-<text x="{{ xc }}" y="31" font-size="15">{{ b }}</text>
+<text x="{{ xc }}" y="9" font-size="60%" fill-opacity=".55">{{idx}}</text>
+{%- if idx > msb -%} <use href="#bit_clz" x="{{x}}" y="0" /> {%- endif -%}
+{%- if idx == msb -%} <use href="#bit_msb" x="{{x}}" y="0" /> {%- endif -%}
+{%- if idx < msb -%} <use href="#bit_raw" x="{{x}}" y="0" /> {%- endif -%}
+<text x="{{ xc }}" y="31">{{ b }}</text>
 {%- endfor -%}
-{%- for b in bits -%}
-{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
-{%- assign xc = x | plus: half -%}
-{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
-<text x="{{ xc }}" y="9" font-size="11" fill-opacity=".55">{{ idx }}</text>
-{%- endfor -%}
+<g class="hlset tint{{clztint}}">
+  <path class="tintline" d="M{{ xWordLeft }},47 V51 H{{ xMsbLeft }} V47"/>
+  <text x="{{ braceMid }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">clz = {{ clz }}</text>
+</g>
+
+<g class="hlset tint{{msbtint}}">
+  <path class="tintline" d="M{{ xMsbCenter }},45 V51"/>
+  <text x="{{ xMsbCenter }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">msb = {{ msb }}</text>
+</g>
 </svg>
 </div>
 
+And for a 16-bit word containing the same value you get:
 <div class="bitfield">
 {%- assign bits = "0 0 0 0 0 1 0 1 1 1 0 0 0 0 0 0" | split: " " -%}
-{%- assign msb = 10 -%}
-{%- assign clztint = 1 -%}
-{%- assign msbtint = 4 -%}
-{%- assign slots = 32 -%}
-{%- assign cw = 26 -%}
-{%- assign ch = 26 -%}
-{%- assign pad = 2 -%}
-{%- assign half = cw | divided_by: 2 -%}
 {%- assign w = bits.size -%}
-{%- assign base = slots | minus: w -%}
 {%- assign clz = w | minus: 1 | minus: msb -%}
+{%- assign base = slots | minus: w -%}
 {%- assign colMsb = slots | minus: 1 | minus: msb -%}
 {%- assign xMsbLeft = colMsb | times: cw | plus: pad -%}
 {%- assign xWordLeft = base | times: cw | plus: pad -%}
 {%- assign xMsbCenter = xMsbLeft | plus: half -%}
 {%- assign braceMid = xWordLeft | plus: xMsbLeft | divided_by: 2 -%}
-{%- assign W = slots | times: cw | plus: pad | plus: pad -%}
-<svg role="img" aria-label="{{ w }}-bit word, msb at bit {{ msb }}, clz {{ clz }}" viewBox="0 0 {{ W }} 70" width="{{ W }}" height="70" style="max-width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+<svg width="100%" height="70" viewBox="0 0 {{ W }} 70">
+  <defs>
+    <g id="bit_raw">
+      <rect class="tintbox" x="0" y="18" width="{{cw}}" height="{{ch}}" />
+    </g>
+    <g id="bit_clz" class="tint{{clztint}}">
+      <rect class="tintbox" x="0" y="18" width="{{cw}}" height="{{ch}}" />
+    </g>
+    <g id="bit_msb" class="tint{{msbtint}}">
+      <rect class="tintbox" x="0" y="18" width="{{cw}}" height="{{ch}}" />
+    </g>
+  </defs>
 <title>Bit layout of a {{ w }}-bit word</title>
 <desc>Highest set bit is bit {{ msb }}; count-leading-zeros is {{ clz }} at this width.</desc>
-<g class="hlset tint{{ clztint }}">
+
 {%- for b in bits -%}
 {%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
-{%- if idx > msb -%}
-{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
-<rect class="tintbox" x="{{ x }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
-{%- endif -%}
-{%- endfor -%}
-<path class="tintline" d="M{{ xWordLeft }},47 V51 H{{ xMsbLeft }} V47"/>
-<text x="{{ braceMid }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">clz = {{ clz }}</text>
-</g>
-<g class="hlset tint{{ msbtint }}">
-<rect class="tintbox" x="{{ xMsbLeft }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
-<path class="tintline" d="M{{ xMsbCenter }},45 V51"/>
-<text x="{{ xMsbCenter }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">msb = {{ msb }}</text>
-</g>
-{%- for b in bits -%}
-{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
-{%- if idx < msb -%}
-{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
-<rect x="{{ x }}" y="18" width="{{ cw }}" height="{{ ch }}"/>
-{%- endif -%}
-{%- endfor -%}
-{%- for b in bits -%}
 {%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
 {%- assign xc = x | plus: half -%}
-<text x="{{ xc }}" y="31" font-size="15">{{ b }}</text>
+<text x="{{ xc }}" y="9" font-size="60%" fill-opacity=".55">{{idx}}</text>
+{%- if idx > msb -%} <use href="#bit_clz" x="{{x}}" y="0" /> {%- endif -%}
+{%- if idx == msb -%} <use href="#bit_msb" x="{{x}}" y="0" /> {%- endif -%}
+{%- if idx < msb -%} <use href="#bit_raw" x="{{x}}" y="0" /> {%- endif -%}
+<text x="{{ xc }}" y="31">{{ b }}</text>
 {%- endfor -%}
-{%- for b in bits -%}
-{%- assign x = base | plus: forloop.index0 | times: cw | plus: pad -%}
-{%- assign xc = x | plus: half -%}
-{%- assign idx = w | minus: 1 | minus: forloop.index0 -%}
-<text x="{{ xc }}" y="9" font-size="11" fill-opacity=".55">{{ idx }}</text>
-{%- endfor -%}
+<g class="hlset tint{{clztint}}">
+  <path class="tintline" d="M{{ xWordLeft }},47 V51 H{{ xMsbLeft }} V47"/>
+  <text x="{{ braceMid }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">clz = {{ clz }}</text>
+</g>
+
+<g class="hlset tint{{msbtint}}">
+  <path class="tintline" d="M{{ xMsbCenter }},45 V51"/>
+  <text x="{{ xMsbCenter }}" y="61" font-size="13" font-weight="600" style="fill:var(--tinted-stroke)">msb = {{ msb }}</text>
+</g>
 </svg>
 </div>
 
-This tells you how many bits you can shift the value left without
-overflow, which sounds good but that's not always as useful as it
-sounds.
+From these you know how many bits you can shift the value left without
+overflowing their respective word sizes, which sounds good but that's
+not always as useful as it sounds.
 
 If you perform that shift then you'll find you're always leaving the
 "top" bit set (unless the original input was zero).  Knowing it's always
@@ -152,11 +139,11 @@ almost always end up doing some kind of fix-up which simplifies down to
 a single add or subtract of a constant on the result of the `clz`
 operation; and nothing seems too terrible about all that.
 
-Except... if we're already on the hook for a fix-up in almost every
-situation then why not just say what you mean in the first place?  `msb`
-tells us the bit index (weight) of the most significant set bit.  So why
-not just shift by `12 - msb(x)` to place the msb in bit 12 of the
-result?
+Except... if you're already on the hook for a fix-up in almost every
+situation, then why not just say what you mean in the first place?
+`msb` tells us the bit index (weight) of the most significant set bit.
+So why not just shift by `12 - msb(x)` to place the most significant set
+bit in bit 12 of the result?
 
 It happens to implement `floor(log2(x))` for integers, and doesn't bring
 in word-size considerations unnecessarily.  You insert word size
