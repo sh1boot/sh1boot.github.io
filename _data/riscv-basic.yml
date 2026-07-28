@@ -1,0 +1,55 @@
+r_type:
+  name: R-type
+  fields:
+    - { name: funct7,  width: 7, kind: reserved }
+    - { name: rs2,     width: 5, kind: reg }
+    - { name: rs1,     width: 5, kind: reg }
+    - { name: funct3,  width: 3, kind: reserved }
+    - { name: rd,      width: 5, kind: reg }
+    - { name: opcode,  width: 7, kind: op }
+
+i_type:
+  name: I-type
+  fields:
+    - { name: "imm[11:0]", width: 12, kind: imm }
+    - { name: rs1,         width: 5,  kind: reg }
+    - { name: funct3,      width: 3,  kind: reserved }
+    - { name: rd,          width: 5,  kind: reg }
+    - { name: opcode,      width: 7,  kind: op }
+
+s_type:
+  name: S-type
+  fields:
+    - { name: "imm[11:5]", width: 7, kind: imm }
+    - { name: rs2,         width: 5, kind: reg }
+    - { name: rs1,         width: 5, kind: reg }
+    - { name: funct3,      width: 3, kind: reserved }
+    - { name: "imm[4:0]",  width: 5, kind: imm }
+    - { name: opcode,      width: 7, kind: op }
+
+b_type:
+  name: B-type
+  fields:
+    - { name: "imm[12|10:5]", width: 7, kind: imm,
+        desc: "Bits 12,10,9,8,7,6,5 of the branch offset, in that order. Bit 0 is implicit zero." }
+    - { name: rs2,            width: 5, kind: reg }
+    - { name: rs1,            width: 5, kind: reg }
+    - { name: funct3,         width: 3, kind: reserved }
+    - { name: "imm[4:1|11]",  width: 5, kind: imm,
+        desc: "Bits 4,3,2,1,11 of the branch offset, in that order." }
+    - { name: opcode,         width: 7, kind: op }
+
+u_type:
+  name: U-type
+  fields:
+    - { name: "imm[31:12]", width: 20, kind: imm }
+    - { name: rd,           width: 5,  kind: reg }
+    - { name: opcode,       width: 7,  kind: op }
+
+j_type:
+  name: J-type
+  fields:
+    - { name: "imm[20|10:1|11|19:12]", width: 20, kind: imm,
+        desc: "Bits 20,10,9,...,1,11,19,...,12 of the jump offset, in that order. Bit 0 is implicit zero." }
+    - { name: rd,                      width: 5,  kind: reg }
+    - { name: opcode,                  width: 7,  kind: op }

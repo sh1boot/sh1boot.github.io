@@ -1,0 +1,54 @@
+{%- if include.order != blank -%}
+  {%- assign order_list = include.order | split: "," -%}
+{%- else -%}
+  {%- assign order_list = include.layouts.keys_or_whatever -%}
+{%- endif -%}
+{%- assign note = 0 -%}
+<table class="bitfield bitfield-combined">
+  {%- for key in order_list -%}
+    {%- assign layout = include.layouts[key] -%}
+    {% if layout.name -%}
+    <tr class="bitfield-rowlabel">
+      <th colspan="32" class="bitfield-rowlabel"> {{ layout.name }}</th>
+    </tr>
+    <tr class="bitfield-index">
+      {%- assign bitpos = 31 -%}
+      {%- for field in layout.fields -%}
+      {%- assign hi = bitpos -%}
+      {%- assign lo = bitpos | minus: field.width | plus: 1 -%}
+      {%- assign bitpos = lo | minus: 1 -%}
+      <th colspan="{{ field.width }}">
+        {%- if field.width > 1 -%}
+        <span class="bit-hi">{{ hi }}</span>&hellip;<span class="bit-lo">{{ lo }}</span>
+        {%- else -%}
+        {{ hi }}
+        {%- endif -%}
+      </th>
+      {%- endfor -%}
+    </tr>
+    {% endif -%}
+    <tr class="bitfield-fields">
+      {%- for field in layout.fields -%}
+      {%- if field.desc -%}{%- assign note = note | plus: 1 -%}{%- endif -%}
+      <td colspan="{{ field.width }}" class="tint-{{ field.kind }}"
+          {% if field.desc %}title="{{ field.desc }}"{% endif %}>
+        {{ field.name }}{% if field.desc %}<sup>{{ note }}</sup>{% endif %}
+      </td>
+      {%- endfor -%}
+    </tr>
+  {%- endfor -%}
+
+  {%- if note > 0 -%}
+  <tfoot class="bitfield-footnotes">
+  {%- assign note = 0 -%}
+  {%- for key in order_list -%}{%- assign l = include.layouts[key] -%}
+    {%- for field in l.fields -%}
+      {%- if field.desc -%}
+        {%- assign note = note | plus: 1 -%}
+        <tr class="bitfield-footnote"><td colspan="32"><sup>{{ note }}</sup> {{ field.desc }}</td></tr>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  </tfoot>
+  {%- endif -%}
+</table>
