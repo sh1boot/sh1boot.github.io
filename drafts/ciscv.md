@@ -4,21 +4,39 @@ title: Provisional CISC-V instruction set
 svg: true
 ---
 
-## The plan
+Here I finally get around to showing a system of compressing RISC-V code
+by squashing pairs of opcodes into a single 32-bit packet rather than
+squashing individual opcodes into 16-bit packets in order to address
+issues with unaligned 32-bit instruction words.
 
-Develop a system of compressing RISC-V code by squashing pairs of
-opcodes into a single 32-bit packet rather than squashing individual
-opcodes into 16-bit packets.
+I've tried to keep it resticted to just one third of the space used by
+RVC, leaving half the opcode space unallocated (assuming it won't be
+used for the remaining 2/3 of RVC, which would undermine the rationale
+below).
 
-I took a third of the RVC space to experiment with, leaving half the
-opcode space unallocated (assuming it won't be used for the remaining
-2/3 of RVC, which would undermine the rationale below).
-
-## The rationale
+## Why?
 
 * To avoid all the problems of unaligned 32-bit packets
 * To exploit inter-opcode redundancies
-* To dress up like a CISC architecture in order to gain its compression powers
+* To dress up like a CISC architecture in order to gain its powers
+
+## Decoding
+
+In its most primitive form the supposition is than in instruction
+decoder would decode the first instruction normally (with the caveat
+that the destination register is not in the usual location), while also
+preparing another normal-looking 32-bit instruction word to evaluate on
+the next cycle.
+
+If an exception occurs on the first instruction then enough state should
+be preserved that execution can resume from the second instruction in
+the packet if needed, but otherwise there's no jumping into the middle
+of a packet and it doesn't need to be efficient.
+
+Alternatively, a multi-issue implementation could ingest the packet as a
+single instruction and split it into uops at a more convenient stage in
+the pipeline.  Or implement it as a single, fused instruction, if it's
+capable.
 
 ## The structure
 
@@ -287,6 +305,6 @@ This is suboptimal because it's not using a compiler which optimises for
 the instruction set I've created.  It's also suboptimal because I'm
 using code compiled for RVC, which has register pressure not applicable
 to my encoding scheme, and so it uses more instructions than strictly
-necessary.  I have some other test cases but the tabulation got mucky,
-so let's just run with the above for now.
-
+necessary (at least in Clang's case -- GCC finds excuses to use more
+instructions regardless).  I have some other test cases but the
+tabulation got mucky, so let's just run with the above for now.
