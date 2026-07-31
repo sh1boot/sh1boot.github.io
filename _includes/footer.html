@@ -3,5 +3,11 @@
   <div class="wrapper"><div class="footer-col-wrapper">
     <p>{{- site.description | escape -}}</p>
     {%- include social.html -%}
+    <p class="site-license">
+      &copy; <a href="{{ site.url }}{{ site.baseurl }}">{{ site.title | default: "tīkōuka.dev" }}</a>,
+      published under <a href="https://creativecommons.org/licenses/by/4.0/"
+      rel="license">CC-BY 4.0</a> (with <a href="{{ site.baseurl }}/LICENSE-CONTENT/">attribution</a>).
+      Code snippets under <a href="{{ site.baseurl }}/LICENSE-CODE">0BSD</a>.
+    </p>
   </div></div>
 </footer>
