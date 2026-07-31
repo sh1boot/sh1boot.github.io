@@ -1,295 +1,283 @@
 frames:
-- name: chain-alu-pair
-  layout: |
-    ┌─────────────┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │   funct7    │   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─────────────┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│  rs2b   │o│  rs2a   │  rs1a   │o o o│   rdb   │0 0 o o o│1 0│
-    │o│         │o│  rs2a   │  rs1a   │o o o│         │0 0 o o o│1 0│   alu     tmp, rs1a, rs2a
-    │o│  rs2b   │o│         │         │o o o│   rdb   │0 0 o o o│1 0│   alu     rdb, tmp, rs2b
-    
-    │o│  rs2b   │o│imma[4:0]│  rs1a   │o o o│   rdb   │0 0 o o o│1 0│
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │0 0 o o o│1 0│   alu     tmp, rs1a, imma
-    │o│  rs2b   │o│         │         │o o o│   rdb   │0 0 o o o│1 0│   alu     rdb, tmp, rs2b
-    
-    │o│immb[4:0]│o│  rs2a   │  rs1a   │o o o│   rdb   │0 0 o o o│1 0│
-    │o│         │o│  rs2a   │  rs1a   │o o o│         │0 0 o o o│1 0│   alu     tmp, rs1a, rs2a
-    │o│immb[4:0]│o│         │         │o o o│   rdb   │0 0 o o o│1 0│   alu     rdb, tmp, immb
-    
-    │o│immb[4:0]│o│imma[4:0]│  rs1a   │o o o│   rdb   │0 0 o o o│1 0│
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │0 0 o o o│1 0│   alu     tmp, rs1a, imma
-    │o│immb[4:0]│o│         │         │o o o│   rdb   │0 0 o o o│1 0│   alu     rdb, tmp, immb
-
 - name: rsd-alu-pair
   layout: |
-    ┌─────────────┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │   funct7    │   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─────────────┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│  rs2b   │o│  rs2a   │  rsda   │o o o│  rsdb   │0 1 o o o│1 0│
-    │o│         │o│  rs2a   │  rsda   │o o o│         │0 1 o o o│1 0│   alu rsda, rsda, rs2a
-    │o│  rs2b   │o│         │         │o o o│  rsdb   │0 1 o o o│1 0│   alu rsdb, rsdb, rs2b
+    │o│  rs2b   │o│  rs2a   │  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
+    │o│  rs2b   │o│imma[4:0]│  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
+    │o│immb[4:0]│o│  rs2a   │  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
+    │o│immb[4:0]│o│imma[4:0]│  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
 
-    │o│  rs2b   │o│imma[4:0]│  rsda   │o o o│  rsdb   │0 1 o o o│1 0│
-    │o│         │o│imma[4:0]│  rsda   │o o o│         │0 1 o o o│1 0│   alu rsda, rsda, imma
-    │o│  rs2b   │o│         │         │o o o│  rsdb   │0 1 o o o│1 0│   alu rsdb, rsdb, rs2b
+    │o│         │o│  rs2a   │  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, rs2a
+    │o│  rs2b   │o│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, rs2b
+    │o│         │o│imma[4:0]│  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, imma
+    │o│  rs2b   │o│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, rs2b
+    │o│         │o│  rs2a   │  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, rs2a
+    │o│immb[4:0]│o│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, immb
+    │o│         │o│imma[4:0]│  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, imma
+    │o│immb[4:0]│o│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, immb
 
-    │o│immb[4:0]│o│  rs2a   │  rsda   │o o o│  rsdb   │0 1 o o o│1 0│
-    │o│         │o│  rs2a   │  rsda   │o o o│         │0 1 o o o│1 0│   alu rsda, rsda, rs2a
-    │o│immb[4:0]│o│         │         │o o o│  rsdb   │0 1 o o o│1 0│   alu rsdb, rsdb, immb
-
-    │o│immb[4:0]│o│imma[4:0]│  rsda   │o o o│  rsdb   │0 1 o o o│1 0│
-    │o│         │o│imma[4:0]│  rsda   │o o o│         │0 1 o o o│1 0│   alu rsda, rsda, imma
-    │o│immb[4:0]│o│         │         │o o o│  rsdb   │0 1 o o o│1 0│   alu rsdb, rsdb, immb
-
-- name: deref-chain-load-pair, base-chain-load-pair
+- name: chain-alu-pair
   layout: |
-    ┌─────────────┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │   funct7    │   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─────────────┴─────────┴─────────┴─────┴─────────┴─────────────┘
+    │o│  rs2b   │o│  rs2a   │  rs1a   │o o o│   rdb   │0 1 o o o│1 0│
+    │o│  rs2b   │o│imma[4:0]│  rs1a   │o o o│   rdb   │0 1 o o o│1 0│
+    │o│immb[4:0]│o│  rs2a   │  rs1a   │o o o│   rdb   │0 1 o o o│1 0│
+    │o│immb[4:0]│o│imma[4:0]│  rs1a   │o o o│   rdb   │0 1 o o o│1 0│
+
+    │o│         │o│  rs2a   │  rs1a   │o o o│         │0 1 o o o│1 0│   alu     tmp, rs1a, rs2a
+    │o│  rs2b   │o│         │         │o o o│   rdb   │0 1 o o o│1 0│   alu     rdb, tmp, rs2b
+    │o│         │o│imma[4:0]│  rs1a   │o o o│         │0 1 o o o│1 0│   alu     tmp, rs1a, imma
+    │o│  rs2b   │o│         │         │o o o│   rdb   │0 1 o o o│1 0│   alu     rdb, tmp, rs2b
+    │o│         │o│  rs2a   │  rs1a   │o o o│         │0 1 o o o│1 0│   alu     tmp, rs1a, rs2a
+    │o│immb[4:0]│o│         │         │o o o│   rdb   │0 1 o o o│1 0│   alu     rdb, tmp, immb
+    │o│         │o│imma[4:0]│  rs1a   │o o o│         │0 1 o o o│1 0│   alu     tmp, rs1a, imma
+    │o│immb[4:0]│o│         │         │o o o│   rdb   │0 1 o o o│1 0│   alu     rdb, tmp, immb
+
+- name: deref-chain-load-pair
+  layout: |
     │o│imma[9:5]│o│imma[4:0]│  rs1a   │o o o│   rdb   │1 0 0 0 o│1 0│
-    │o│imma[9:5]│o│imma[4:0]│  rs1a   │o o o│         │1 0 0 0 o│1 0│   load    tmp, k*imma(rs1a)
-    │o│         │o│         │         │o o o│   rdb   │1 0 0 0 o│1 0│   load    rdb, 0(tmp)
-    
     │o│immb[9:5]│o│immb[4:0]│  rs1a   │o o o│   rdb   │1 0 0 0 o│1 0│
-    │o│         │o│         │  rs1a   │o o o│         │1 0 0 0 o│1 0│   load    tmp, 0(rs1a)
+
+    │o│imma[9:5]│o│imma[4:0]│  rs1a   │o o o│         │1 0 0 0 o│1 0│   load    tmp, k*imma(rs1a)
+    │o│         │o│         │         │o o o│   rdb   │1 0 0 0 o│1 0│   load    rdb, k*immb(tmp)
+    │o│         │o│         │  rs1a   │o o o│         │1 0 0 0 o│1 0│   load    tmp, k*imma(rs1a)
     │o│immb[9:5]│o│immb[4:0]│         │o o o│   rdb   │1 0 0 0 o│1 0│   load    rdb, k*immb(tmp)
 
 - name: load-chain-alu-pair
   layout: |
-    ┌─────────────┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │   funct7    │   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─────────────┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│  rs2b   │ imma[5:0] │  rs1a   │o o o│   rdb   │1 0 0 1 o│1 0│
-    │o│immb[4:0]│ imma[5:0] │  rs1a   │o o o│   rdb   │1 0 0 1 o│1 0│
-    
+    │o│  rs2b   │o│imma[4:0]│  rs1a   │o o o│   rdb   │1 0 0 1 o│1 0│
+    │o│immb[4:0]│o│imma[4:0]│  rs1a   │o o o│   rdb   │1 0 0 1 o│1 0│
     │o│  rs2b   │o│   imma[4:0|9:5]   │o o o│   rdb   │1 0 0 1 o│1 0│ (SP-relative)
     │o│immb[4:0]│o│   imma[4:0|9:5]   │o o o│   rdb   │1 0 0 1 o│1 0│ (SP-relative)
-    
-    │o│         │ imma[5:0] │  rs1a   │o o o│         │1 0 0 1 o│1 0│   load    tmp, k*imma(rs1a)
-    │o│  rs2b   │           │         │o o o│   rdb   │1 0 0 1 o│1 0│   alu     rdb, tmp, rs2b/immb
-    
-    │o│         │ imma[5:0] │  rs1a   │o o o│         │1 0 0 1 o│1 0│   load    tmp, k*imma(rs1a)
-    │o│immb[4:0]│           │         │o o o│   rdb   │1 0 0 1 o│1 0│   alu     rdb, tmp, rs2b/immb
-    
-    │o│         │o│   imma[4:0|9:5]   │o o o│         │1 0 0 1 o│1 0│   load    tmp, k*imma(sp)
-    │o│  rs2b   │o│                   │o o o│   rdb   │1 0 0 1 o│1 0│   alu     rdb, tmp, rs2b/immb
-    
-    │o│         │o│   imma[4:0|9:5]   │o o o│         │1 0 0 1 o│1 0│   load    tmp, k*imma(sp)
-    │o│immb[4:0]│o│                   │o o o│   rdb   │1 0 0 1 o│1 0│   alu     rdb, tmp, rs2b/immb
 
-- name: load-sp-branch, load-base-branch
-  layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │h│   rda   │g│imma[4:0]│  rs1a   │o o o│immb[4:0]│1 0 1 0 o│1 0│
-    │h│   rda   │g│   imma[4:0|9:5]   │o o o│immb[4:0]│1 0 1 0 o│1 0│ (SP-relative)
-    
-    │h│   rda   │g│   imma[4:0|9:5]   │o o o│         │1 0 1 0 o│1 0│   load    rda, k*imma(sp)
-    │h│   rda   │g│                   │o o o│immb[4:0]│1 0 1 0 o│1 0│   beqz/bnez rda, zero, 4*immb
-    
-    │h│   rda   │g│imma[4:0]│  rs1a   │o o o│         │1 0 1 0 o│1 0│   load    rda, k*imma(rs1a)
-    │h│   rda   │g│         │         │o o o│immb[4:0]│1 0 1 0 o│1 0│   beqz/bnez rda, zero, 4*immb
+    │o│         │o│imma[4:0]│  rs1a   │o o o│         │1 0 0 1 o│1 0│   load    tmp, k*imma(rs1a)
+    │o│  rs2b   │o│         │         │o o o│   rdb   │1 0 0 1 o│1 0│   alu     rdb, tmp, rs2b
+    │o│         │o│imma[4:0]│  rs1a   │o o o│         │1 0 0 1 o│1 0│   load    tmp, k*imma(rs1a)
+    │o│immb[4:0]│o│         │         │o o o│   rdb   │1 0 0 1 o│1 0│   alu     rdb, tmp, immb
+
+    │o│         │o│   imma[4:0|9:5]   │o o o│         │1 0 0 1 o│1 0│   load    tmp, k*imma(sp)
+    │o│  rs2b   │o│                   │o o o│   rdb   │1 0 0 1 o│1 0│   alu     rdb, tmp, rs2b
+    │o│         │o│   imma[4:0|9:5]   │o o o│         │1 0 0 1 o│1 0│   load    tmp, k*imma(sp)
+    │o│immb[4:0]│o│                   │o o o│   rdb   │1 0 0 1 o│1 0│   alu     rdb, tmp, immb
 
 - name: arith-jump-pair
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│  rs1b   │o│  rs2a   │  rsda   │o o o│0 0 0 1 0│1 0 1 1 o│1 0│
-    │o│  rs1b   │o│imma[4:0]│  rsda   │o o o│0 0 0 1 0│1 0 1 1 o│1 0│
-    
-    │o│         │o│  rs2a   │  rsda   │o o o│0 0 0 1 0│1 0 1 1 o│1 0│   alu     rsda, rsda, rs2a/imma
-    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│1 0 1 1 o│1 0│   jr/jalr rs1b
-    │o│         │o│imma[4:0]│  rsda   │o o o│0 0 0 1 0│1 0 1 1 o│1 0│   alu     rsda, rsda, rs2a/imma
-    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│1 0 1 1 o│1 0│   jr/jalr rs1b
-    
-    │o│         │o│  rs2a   │  rsda   │o o o│0 0 0 1 0│1 0 1 1 o│1 0│   mv     rsda, rs2a
-    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│1 0 1 1 o│1 0│   jr/jalr rs1b
-    
-    │o│         │o│imma[4:0]│  rsda   │o o o│0 0 0 1 0│1 0 1 1 o│1 0│   li     rsda, imma
-    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│1 0 1 1 o│1 0│   jr/jalr rs1b
+    │o│  rs1b   │o│  rs2a   │  rsda   │o o o│0 0 0 1 0│1 0 1 0 o│1 0│
+    │o│  rs1b   │o│imma[4:0]│  rsda   │o o o│0 0 0 1 0│1 0 1 0 o│1 0│
 
-- name: arith-mem-pair   [⚠ wants g/h but word consumes them]
-  layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│  rs1b   │o│  rs2a   │  rsda   │o o o│   rdb   │1 1 0 0 o│1 0│
-    │o│  rs1b   │o│imma[4:0]│  rsda   │o o o│  rs2b   │1 1 0 0 o│1 0│
-    
-    │o│         │o│  rs2a   │  rsda   │o o o│         │1 1 0 0 o│1 0│   alu     rsda, rsda, rs2a/imma
-    │o│  rs1b   │o│         │         │o o o│   rdb   │1 1 0 0 o│1 0│   load    rdb, k*immb(rs1b)
-    
-    │o│         │o│imma[4:0]│  rsda   │o o o│         │1 1 0 0 o│1 0│   alu     rsda, rsda, rs2a/imma
-    │o│  rs1b   │o│         │         │o o o│  rs2b   │1 1 0 0 o│1 0│   store   rs2b, k*immb(rs1b)
+    │o│         │o│  rs2a   │  rsda   │o o o│0 0 0 1 0│1 0 1 0 o│1 0│   alu     rsda, rsda, rs2a
+    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│1 0 1 0 o│1 0│   jr/jalr rs1b
+    │o│         │o│imma[4:0]│  rsda   │o o o│0 0 0 1 0│1 0 1 0 o│1 0│   alu     rsda, rsda, imma
+    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│1 0 1 0 o│1 0│   jr/jalr rs1b
 
-- name: chain-li-branch   [g/h FREE for immediate]
+    │o│         │o│  rs2a   │  rsda   │o o o│0 0 0 1 0│1 0 1 0 o│1 0│   mv     rsda, rs2a
+    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│1 0 1 0 o│1 0│   jr/jalr rs1b
+
+    │o│         │o│imma[4:0]│  rsda   │o o o│0 0 0 1 0│1 0 1 0 o│1 0│   li     rsda, imma
+    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│1 0 1 0 o│1 0│   jr/jalr rs1b
+
+- name: arith-mem-pair
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │h│immb[9:5]│ imma[5:0] │  rs1b   │o o o│immb[4:0]│1 1 0 1 0│1 0│
-    
-    │h│         │ imma[5:0] │         │o o o│         │1 1 0 1 0│1 0│   li      tmp, imma
-    │h│immb[9:5]│           │  rs1b   │o o o│immb[4:0]│1 1 0 1 0│1 0│   bXX     rs1b, tmp, 4*immb
+    │o│  rs1b   │o│  rs2a   │  rsda   │o o o│   rdb   │1 0 1 1 o│1 0│
+    │o│  rs1b   │o│imma[4:0]│  rsda   │o o o│  rs2b   │1 0 1 1 o│1 0│
+
+    │o│         │o│  rs2a   │  rsda   │o o o│         │1 0 1 1 o│1 0│   alu     rsda, rsda, rs2a
+    │o│  rs1b   │o│         │         │o o o│   rdb   │1 0 1 1 o│1 0│   load    rdb, k*immb(rs1b)
+
+    │o│         │o│imma[4:0]│  rsda   │o o o│         │1 0 1 1 o│1 0│   alu     rsda, rsda, imma
+    │o│  rs1b   │o│         │         │o o o│  rs2b   │1 0 1 1 o│1 0│   store   rs2b, k*immb(rs1b)
+
+- name: addi-branch-pair
+  layout: |
+    │o│immb[9:5]│ imma[5:0] │  rsda   │o o o│immb[4:0]│1 1 0 0 0│1 0│
+
+    │o│         │ imma[5:0] │  rsda   │o o o│         │1 1 0 0 0│1 0│   addi/addiw rsda, imma
+    │o│immb[9:5]│           │  rsda   │o o o│immb[4:0]│1 1 0 0 0│1 0│   beqz/bnez rsda, zero, 4*immb
+
+- name: chain-bit-test-branch
+  layout: |
+    │o│immb[9:5]│ imma[5:0] │  rs1a   │o o o│immb[4:0]│1 1 0 0 1│1 0│
+
+    │o│         │ imma[5:0] │  rs1a   │o o o│         │1 1 0 0 1│1 0│   andi    tmp, rs1a, imma
+    │o│immb[9:5]│           │         │o o o│immb[4:0]│1 1 0 0 1│1 0│   beqz/bnez tmp, immb
+
+    │o│         │ imma[5:0] │  rs1a   │o o o│         │1 1 0 0 1│1 0│   slli    tmp, rs1a, imma
+    │o│immb[9:5]│           │         │o o o│immb[4:0]│1 1 0 0 1│1 0│   blt/bge tmp, zero, 4*immb
 
 - name: store-chain-alu-pair
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│  rs1b   │o│  rs2a   │  rs1a   │o o o│immb[4:0]│1 1 0 1 1│1 0│
-    │o│  rs1b   │o│imma[4:0]│  rs1a   │o o o│immb[4:0]│1 1 0 1 1│1 0│
-    
-    │o│immb[9:5]│o│  rs2a   │  rs1a   │o o o│immb[4:0]│1 1 0 1 1│1 0│ (SP-relative)
-    │o│immb[9:5]│o│imma[4:0]│  rs1a   │o o o│immb[4:0]│1 1 0 1 1│1 0│ (SP-relative)
-    
-    │o│         │o│  rs2a   │  rs1a   │o o o│         │1 1 0 1 1│1 0│   alu     tmp, rs1a, rs2a/imma
-    │o│  rs1b   │o│         │         │o o o│immb[4:0]│1 1 0 1 1│1 0│   store   tmp, k*immb(rs1b)
-    
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │1 1 0 1 1│1 0│   alu     tmp, rs1a, rs2a/imma
-    │o│  rs1b   │o│         │         │o o o│immb[4:0]│1 1 0 1 1│1 0│   store   tmp, k*immb(rs1b)
-    
-    │o│         │o│  rs2a   │  rs1a   │o o o│         │1 1 0 1 1│1 0│   alu     tmp, rs1a, rs2a/imma
-    │o│immb[9:5]│o│         │         │o o o│immb[4:0]│1 1 0 1 1│1 0│   store   tmp, k*immb(sp)
-    
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │1 1 0 1 1│1 0│   alu     tmp, rs1a, rs2a/imma
-    │o│immb[9:5]│o│         │         │o o o│immb[4:0]│1 1 0 1 1│1 0│   store   tmp, k*immb(sp)
+    │o│  rs1b   │o│  rs2a   │  rs1a   │o o o│immb[4:0]│1 1 0 1 0│1 0│
+    │o│  rs1b   │o│imma[4:0]│  rs1a   │o o o│immb[4:0]│1 1 0 1 0│1 0│
+    │o│immb[9:5]│o│  rs2a   │  rs1a   │o o o│immb[4:0]│1 1 0 1 0│1 0│ (SP-relative)
+    │o│immb[9:5]│o│imma[4:0]│  rs1a   │o o o│immb[4:0]│1 1 0 1 0│1 0│ (SP-relative)
 
-- name: addi-branch-pair   [⚠ wants g/h but word consumes them]
-  layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│immb[9:5]│ imma[5:0] │  rsda   │0 o o│immb[4:0]│1 1 1 0 0│1 0│
-    
-    │o│         │ imma[5:0] │  rsda   │0 o o│         │1 1 1 0 0│1 0│   addi/addiw rsda, imma
-    │o│immb[9:5]│           │  rsda   │0 o o│immb[4:0]│1 1 1 0 0│1 0│   beqz/bnez rsda, zero, 4*immb
+    │o│         │o│  rs2a   │  rs1a   │o o o│         │1 1 0 1 0│1 0│   alu     tmp, rs1a, rs2a
+    │o│  rs1b   │o│         │         │o o o│immb[4:0]│1 1 0 1 0│1 0│   store   tmp, k*immb(rs1b)
+    │o│         │o│imma[4:0]│  rs1a   │o o o│         │1 1 0 1 0│1 0│   alu     tmp, rs1a, imma
+    │o│  rs1b   │o│         │         │o o o│immb[4:0]│1 1 0 1 0│1 0│   store   tmp, k*immb(rs1b)
 
-- name: chain-bit-test-branch   [⚠ wants g/h but word consumes them]
+    │o│         │o│  rs2a   │  rs1a   │o o o│         │1 1 0 1 0│1 0│   alu     tmp, rs1a, rs2a
+    │o│immb[9:5]│o│         │         │o o o│immb[4:0]│1 1 0 1 0│1 0│   store   tmp, k*immb(sp)
+    │o│         │o│imma[4:0]│  rs1a   │o o o│         │1 1 0 1 0│1 0│   alu     tmp, rs1a, imma
+    │o│immb[9:5]│o│         │         │o o o│immb[4:0]│1 1 0 1 0│1 0│   store   tmp, k*immb(sp)
+
+- name: load-branch
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│immb[9:5]│ imma[5:0] │  rs1a   │1 o o│immb[4:0]│1 1 1 0 0│1 0│
-    
-    │o│         │ imma[5:0] │  rs1a   │1 o o│         │1 1 1 0 0│1 0│   andi    tmp, rs1a, imma
-    │o│immb[9:5]│           │         │1 o o│immb[4:0]│1 1 1 0 0│1 0│   beqz/bnez tmp, immb
-    
-    │o│         │ imma[5:0] │  rs1a   │1 o o│         │1 1 1 0 0│1 0│   slli    tmp, rs1a, imma
-    │o│immb[9:5]│           │         │1 o o│immb[4:0]│1 1 1 0 0│1 0│   blt/bge tmp, zero, 4*immb
+    │o│   rda   │o│imma[4:0]│  rs1a   │0 o o│immb[4:0]│1 1 0 1 1│1 0│
+    │o│   rda   │o│   imma[4:0|9:5]   │0 o o│immb[4:0]│1 1 0 1 1│1 0│ (SP-relative)
+
+    │o│   rda   │o│   imma[4:0|9:5]   │0 o o│         │1 1 0 1 1│1 0│   load    rda, k*imma(sp)
+    │o│   rda   │o│                   │0 o o│immb[4:0]│1 1 0 1 1│1 0│   beqz/bnez rda, zero, 4*immb
+
+    │o│   rda   │o│imma[4:0]│  rs1a   │0 o o│         │1 1 0 1 1│1 0│   load    rda, k*imma(rs1a)
+    │o│   rda   │o│         │         │0 o o│immb[4:0]│1 1 0 1 1│1 0│   beqz/bnez rda, zero, 4*immb
+
+- name: chain-li-branch
+  layout: |
+    │o│immb[9:5]│ imma[5:0] │  rs1b   │1 o o│immb[4:0]│1 1 0 1 1│1 0│
+
+    │o│         │ imma[5:0] │         │1 o o│         │1 1 0 1 1│1 0│   li      tmp, imma
+    │o│immb[9:5]│           │  rs1b   │1 o o│immb[4:0]│1 1 0 1 1│1 0│   bXX     rs1b, tmp, 4*immb
 
 - name: dual-indep-pair
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│   rda   │o│  rs2b   │  rs1a   │0 o o│   rdb   │1 1 1 0 1│1 0│
-    │o│   rda   │o│immb[4:0]│  rs1a   │0 o o│   rdb   │1 1 1 0 1│1 0│
-    │o│   rda   │o│immb[4:0]│imma[4:0]│0 o o│   rdb   │1 1 1 0 1│1 0│
-    
-    │o│   rda   │o│         │  rs1a   │0 o o│         │1 1 1 0 1│1 0│   mv      rda, rs1a
-    │o│         │o│  rs2b   │         │0 o o│   rdb   │1 1 1 0 1│1 0│   mv/li   rdb, rs2b/immb
-    
-    │o│   rda   │o│         │  rs1a   │0 o o│         │1 1 1 0 1│1 0│   mv      rda, rs1a
-    │o│         │o│immb[4:0]│         │0 o o│   rdb   │1 1 1 0 1│1 0│   mv/li   rdb, rs2b/immb
-    
-    │o│   rda   │o│         │imma[4:0]│0 o o│         │1 1 1 0 1│1 0│   li      rda, imma
-    │o│         │o│immb[4:0]│         │0 o o│   rdb   │1 1 1 0 1│1 0│   li      rdb, immb
+    │o│   rda   │o│  rs2b   │  rs1a   │0 o o│   rdb   │1 1 1 0 0│1 0│
+    │o│   rda   │o│immb[4:0]│  rs1a   │0 o o│   rdb   │1 1 1 0 0│1 0│
+    │o│   rda   │o│immb[4:0]│imma[4:0]│0 o o│   rdb   │1 1 1 0 0│1 0│
+
+    │o│   rda   │o│         │  rs1a   │0 o o│         │1 1 1 0 0│1 0│   mv      rda, rs1a
+    │o│         │o│  rs2b   │         │0 o o│   rdb   │1 1 1 0 0│1 0│   mv/li   rdb, rs2b
+    │o│   rda   │o│         │  rs1a   │0 o o│         │1 1 1 0 0│1 0│   mv      rda, rs1a
+    │o│         │o│immb[4:0]│         │0 o o│   rdb   │1 1 1 0 0│1 0│   mv/li   rdb, immb
+
+    │o│   rda   │o│         │imma[4:0]│0 o o│         │1 1 1 0 0│1 0│   li      rda, imma
+    │o│         │o│immb[4:0]│         │0 o o│   rdb   │1 1 1 0 0│1 0│   li      rdb, immb
 
 - name: dual-arith2-pair
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│   rda   │o│  rs2a   │  rs1a   │1 o o│   rdb   │1 1 1 0 1│1 0│
-    
-    │o│   rda   │o│  rs2a   │  rs1a   │1 o o│         │1 1 1 0 1│1 0│   alu     rda, rs1a, rs2a
-    │o│         │o│  rs2a   │  rs1a   │1 o o│   rdb   │1 1 1 0 1│1 0│   alu     rdb, rs1a, rs2a
+    │o│   rda   │o│  rs2a   │  rs1a   │1 o o│   rdb   │1 1 1 0 0│1 0│
 
-- name: dual-mem-addi-pair, dual-mem-shadd-pair
+    │o│   rda   │o│  rs2a   │  rs1a   │1 o o│         │1 1 1 0 0│1 0│   alu     rda, rs1a, rs2a
+    │o│         │o│  rs2a   │  rs1a   │1 o o│   rdb   │1 1 1 0 0│1 0│   alu     rdb, rs1a, rs2a
+
+- name: mem-pair
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
+    │o│   rda   │ imm[5:0]  │  rbase  │0 o o│   rdb   │1 1 1 0 1│1 0│
+    │o│  rs2b   │o│  rs2a   │  rbase  │0 o o│imm[4:0] │1 1 1 0 1│1 0│
+    │o│   rda   │o│   imm[4:0|9:5]    │0 o o│   rdb   │1 1 1 0 1│1 0│ (SP-relative)
+    │o│  rs2b   │o│  rs2a   │imm[9:5] │0 o o│imm[4:0] │1 1 1 0 1│1 0│ (SP-relative)
+
+    │o│   rda   │ imm[5:0]  │  rbase  │0 o o│         │1 1 1 0 1│1 0│   load    rda, k*imm(rbase)
+    │o│         │ imm[5:0]  │  rbase  │0 o o│   rdb   │1 1 1 0 1│1 0│   load    rdb, k*imm+k(rbase)
+
+    │o│         │o│  rs2a   │  rbase  │0 o o│imm[4:0] │1 1 1 0 1│1 0│   store   rs2a, k*imm(rbase)
+    │o│  rs2b   │o│         │  rbase  │0 o o│imm[4:0] │1 1 1 0 1│1 0│   store   rs2b, k*imm+k(rbase)
+
+    │o│   rda   │o│   imm[4:0|9:5]    │0 o o│         │1 1 1 0 1│1 0│   load    rda, k*imm(sp)
+    │o│         │o│   imm[4:0|9:5]    │0 o o│   rdb   │1 1 1 0 1│1 0│   load    rdb, k*imm+k(sp)
+
+    │o│         │o│  rs2a   │imm[9:5] │0 o o│imm[4:0] │1 1 1 0 1│1 0│   store   rs2a, k*imm(sp)
+    │o│  rs2b   │o│         │imm[9:5] │0 o o│imm[4:0] │1 1 1 0 1│1 0│   store   rs2b, k*imm+k(sp)
+
+- name: mvload-jump-pair
+  layout: |
+    │o│  rs1b   │o│imma[4:0]│  rs1a   │1 o o│   rda   │1 1 1 0 1│1 0│
+    │o│  rs1b   │o│   imma[4:0|9:5]   │1 o o│   rda   │1 1 1 0 1│1 0│
+
+    (closest-fit encoding — this frame shares rows across forms)
+    │o│         │o│         │  rs1a   │1 o o│   rda   │1 1 1 0 1│1 0│   mv      rda, rs1a
+    │o│  rs1b   │o│         │         │1 o o│         │1 1 1 0 1│1 0│   jr      rs1b
+
+    │o│         │o│imma[4:0]│  rs1a   │1 o o│   rda   │1 1 1 0 1│1 0│   load    rda, k*imma(rs1a)
+    │o│  rs1b   │o│         │         │1 o o│         │1 1 1 0 1│1 0│   jr      rs1b
+    │o│         │o│   imma[4:0|9:5]   │1 o o│   rda   │1 1 1 0 1│1 0│   load    rda, k*imma(rs1a)
+    │o│  rs1b   │o│                   │1 o o│         │1 1 1 0 1│1 0│   jr      rs1b
+
+    │o│         │o│   imma[4:0|9:5]   │1 o o│   rda   │1 1 1 0 1│1 0│   li      rda, imma
+    │o│  rs1b   │o│                   │1 o o│         │1 1 1 0 1│1 0│   jr      rs1b
+
+- name: post-inc-pair
+  layout: |
     │o│  rs2b   │o│  rs2a   │  rsda   │0 o o│imma[4:0]│1 1 1 1 0│1 0│
-    │o│imma[4:0]│o│  rs2a   │  rsda   │0 o o│   rdb   │1 1 1 1 0│1 0│
-    │o│  rs2b   │o│imma[4:0]│  rsda   │0 o o│imma[4:0]│1 1 1 1 0│1 0│
-    │o│imma[4:0]│o│imma[4:0]│  rsda   │0 o o│   rdb   │1 1 1 1 0│1 0│
-    
-    │o│         │o│         │  rsda   │0 o o│   rdb   │1 1 1 1 0│1 0│   load    rdb, 0(rsda)
-    │o│         │o│  rs2a   │  rsda   │0 o o│         │1 1 1 1 0│1 0│   shXadd  rsda, rsda, rs2a
-    
-    │o│         │o│  rs2a   │  rsda   │0 o o│         │1 1 1 1 0│1 0│   store   rs2a, 0(rsda)
-    │o│         │o│  rs2a   │  rsda   │0 o o│         │1 1 1 1 0│1 0│   shXadd  rsda, rsda, rs2a
-    
-    │o│imma[4:0]│o│imma[4:0]│  rsda   │0 o o│         │1 1 1 1 0│1 0│   addi    rsda, rsda, k*imma
-    │o│imma[4:0]│o│imma[4:0]│  rsda   │0 o o│   rdb   │1 1 1 1 0│1 0│   load    rdb, -k*imma(rsda)
-    
-    │o│         │o│imma[4:0]│  rsda   │0 o o│imma[4:0]│1 1 1 1 0│1 0│   addi    rsda, rsda, k*imma
-    │o│  rs2b   │o│imma[4:0]│  rsda   │0 o o│imma[4:0]│1 1 1 1 0│1 0│   store   rs2b, -k*imma(rsda)
+    │o│  rs2b   │o│imma[4:0]│  rsda   │0 o o│   rda   │1 1 1 1 0│1 0│
+    │o│immb[4:0]│o│  rs2a   │  rsda   │0 o o│imma[4:0]│1 1 1 1 0│1 0│
+    │o│immb[4:0]│o│imma[4:0]│  rsda   │0 o o│   rda   │1 1 1 1 0│1 0│
 
-- name: mem-pair   [⚠ wants g/h but word consumes them]
-  layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│   rda   │ imm[5:0]  │  rbase  │1 o o│   rdb   │1 1 1 1 0│1 0│
-    │o│  rs2b   │o│  rs2a   │  rbase  │1 o o│imm[4:0] │1 1 1 1 0│1 0│
-    │o│   rda   │o│   imm[4:0|9:5]    │1 o o│   rdb   │1 1 1 1 0│1 0│ (SP-relative)
-    │o│  rs2b   │o│  rs2a   │imm[9:5] │1 o o│imm[4:0] │1 1 1 1 0│1 0│ (SP-relative)
-    
-    │o│   rda   │ imm[5:0]  │  rbase  │1 o o│         │1 1 1 1 0│1 0│   load    rda, k*imm(rbase)
-    │o│         │ imm[5:0]  │  rbase  │1 o o│   rdb   │1 1 1 1 0│1 0│   load    rdb, k*imm+k(rbase)
-    
-    │o│         │o│  rs2a   │  rbase  │1 o o│imm[4:0] │1 1 1 1 0│1 0│   store   rs2a, k*imm(rbase)
-    │o│  rs2b   │o│         │  rbase  │1 o o│imm[4:0] │1 1 1 1 0│1 0│   store   rs2b, k*imm+k(rbase)
-    
-    │o│   rda   │o│   imm[4:0|9:5]    │1 o o│         │1 1 1 1 0│1 0│   load    rda, k*imm(sp)
-    │o│         │o│   imm[4:0|9:5]    │1 o o│   rdb   │1 1 1 1 0│1 0│   load    rdb, k*imm+k(sp)
-    
-    │o│         │o│  rs2a   │imm[9:5] │1 o o│imm[4:0] │1 1 1 1 0│1 0│   store   rs2a, k*imm(sp)
-    │o│  rs2b   │o│         │imm[9:5] │1 o o│imm[4:0] │1 1 1 1 0│1 0│   store   rs2b, k*imm+k(sp)
+    │o│         │o│imma[4:0]│  rsda   │0 o o│   rda   │1 1 1 1 0│1 0│   load    rda, k*imma(rsda)
+    │o│  rs2b   │o│         │  rsda   │0 o o│         │1 1 1 1 0│1 0│   shXadd  rsda, rsda, rs2b
+
+    │o│         │o│  rs2a   │  rsda   │0 o o│imma[4:0]│1 1 1 1 0│1 0│   store   rs2a, k*imma(rsda)
+    │o│  rs2b   │o│         │  rsda   │0 o o│         │1 1 1 1 0│1 0│   shXadd  rsda, rsda, rs2b
+
+    │o│         │o│imma[4:0]│  rsda   │0 o o│   rda   │1 1 1 1 0│1 0│   load    rda, k*imma(rsda)
+    │o│immb[4:0]│o│         │  rsda   │0 o o│         │1 1 1 1 0│1 0│   addi    rsda, rsda, k*immb
+
+    │o│         │o│  rs2a   │  rsda   │0 o o│imma[4:0]│1 1 1 1 0│1 0│   store   rs2a, k*imma(rsda)
+    │o│immb[4:0]│o│         │  rsda   │0 o o│         │1 1 1 1 0│1 0│   addi    rsda, rsda, k*immb
 
 - name: pre-inc-pair
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│  rs2b   │o│  rs2a   │  rsda   │0 0 o│immb[4:0]│1 1 1 1 1│1 0│
-    │o│immb[4:0]│o│  rs2a   │  rsda   │0 0 o│   rdb   │1 1 1 1 1│1 0│
-    │o│  rs2b   │o│imma[4:0]│  rsda   │0 0 o│immb[4:0]│1 1 1 1 1│1 0│
-    │o│immb[4:0]│o│imma[4:0]│  rsda   │0 0 o│   rdb   │1 1 1 1 1│1 0│
-     
-    │o│         │o│  rs2a   │  rsda   │0 0 o│         │1 1 1 1 1│1 0│   shXadd  rsda, rsda, rs2a
-    │o│immb[4:0]│o│         │  rsda   │0 0 o│   rdb   │1 1 1 1 1│1 0│   load    rdb, k*immb(rsda)
-     
-    │o│         │o│imma[4:0]│  rsda   │0 0 o│         │1 1 1 1 1│1 0│   addi    rsda, rsda, imma
-    │o│immb[4:0]│o│         │  rsda   │0 0 o│   rdb   │1 1 1 1 1│1 0│   load    rdb, k*immb(rsda)
-     
-    │o│         │o│  rs2a   │  rsda   │0 0 o│         │1 1 1 1 1│1 0│   shXadd  rsda, rsda, rs2a
-    │o│  rs2b   │o│         │  rsda   │0 0 o│immb[4:0]│1 1 1 1 1│1 0│   store   rs2b, k*immb(rsda)
-     
-    │o│         │o│imma[4:0]│  rsda   │0 0 o│         │1 1 1 1 1│1 0│   addi    rsda, rsda, imma
-    │o│  rs2b   │o│         │  rsda   │0 0 o│immb[4:0]│1 1 1 1 1│1 0│   store   rs2b, k*immb(rsda)
+    │o│  rs2b   │o│  rs2a   │  rsda   │1 0 o│immb[4:0]│1 1 1 1 0│1 0│
+    │o│immb[4:0]│o│  rs2a   │  rsda   │1 0 o│   rdb   │1 1 1 1 0│1 0│
+    │o│  rs2b   │o│imma[4:0]│  rsda   │1 0 o│immb[4:0]│1 1 1 1 0│1 0│
+    │o│immb[4:0]│o│imma[4:0]│  rsda   │1 0 o│   rdb   │1 1 1 1 0│1 0│
+
+    │o│         │o│  rs2a   │  rsda   │1 0 o│         │1 1 1 1 0│1 0│   shXadd  rsda, rsda, rs2a
+    │o│immb[4:0]│o│         │  rsda   │1 0 o│   rdb   │1 1 1 1 0│1 0│   load    rdb, k*immb(rsda)
+
+    │o│         │o│imma[4:0]│  rsda   │1 0 o│         │1 1 1 1 0│1 0│   addi    rsda, rsda, k*imma
+    │o│immb[4:0]│o│         │  rsda   │1 0 o│   rdb   │1 1 1 1 0│1 0│   load    rdb, k*immb(rsda)
+
+    │o│         │o│  rs2a   │  rsda   │1 0 o│         │1 1 1 1 0│1 0│   shXadd  rsda, rsda, rs2a
+    │o│  rs2b   │o│         │  rsda   │1 0 o│immb[4:0]│1 1 1 1 0│1 0│   store   rs2b, k*immb(rsda)
+
+    │o│         │o│imma[4:0]│  rsda   │1 0 o│         │1 1 1 1 0│1 0│   addi    rsda, rsda, k*imma
+    │o│  rs2b   │o│         │  rsda   │1 0 o│immb[4:0]│1 1 1 1 0│1 0│   store   rs2b, k*immb(rsda)
+
+- name: index-chain-mem-pair
+  layout: |
+    │o│  rs2a   │o│immb[4:0]│  rs1a   │1 1 o│   rdb   │1 1 1 1 0│1 0│
+    │o│  rs2a   │o│  rs2b   │  rs1a   │1 1 o│immb[4:0]│1 1 1 1 0│1 0│
+
+    │o│  rs2a   │o│         │  rs1a   │1 1 o│         │1 1 1 1 0│1 0│   shXadd  tmp, rs1a, rs2a
+    │o│         │o│immb[4:0]│         │1 1 o│   rdb   │1 1 1 1 0│1 0│   load    rdb, k*immb(tmp)
+
+    │o│  rs2a   │o│         │  rs1a   │1 1 o│         │1 1 1 1 0│1 0│   shXadd  tmp, rs1a, rs2a
+    │o│         │o│  rs2b   │         │1 1 o│immb[4:0]│1 1 1 1 0│1 0│   store   rs2b, k*immb(tmp)
+
+- name: addi-store-pair
+  layout: |
+    │o│  rs1a   │o│   imma[4:0|9:5]   │0 0 0│  rbase  │1 1 1 1 1│1 0│
+    │o│  rs1a   │o│   imma[4:0|9:5]   │0 0 0│immb[4:0]│1 1 1 1 1│1 0│ (SP-relative)
+
+    │o│  rs1a   │o│   imma[4:0|9:5]   │0 0 0│         │1 1 1 1 1│1 0│   addi    tmp, rs1a, imma
+    │o│         │o│                   │0 0 0│  rbase  │1 1 1 1 1│1 0│   store   tmp, 0(rbase)
+
+    │o│  rs1a   │o│   imma[4:0|9:5]   │0 0 0│         │1 1 1 1 1│1 0│   addi    tmp, rs1a, imma
+    │o│         │o│                   │0 0 0│immb[4:0]│1 1 1 1 1│1 0│   store   tmp, k*immb(sp)
 
 - name: epilogue-pair
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│  rs1b   │0│   imm[4:0|9:5]    │0 1 0│0 0 0 1 0│1 1 1 1 1│1 0│
-    
-    │o│         │0│   imm[4:0|9:5]    │0 1 0│0 0 0 1 0│1 1 1 1 1│1 0│   addi    sp, 16*imm
-    │o│  rs1b   │0│                   │0 1 0│0 0 0 1 0│1 1 1 1 1│1 0│   jr      rs1b
+    │o│  rs1b   │0│   imm[4:0|9:5]    │0 0 1│0 0 0 1 0│1 1 1 1 1│1 0│
+
+    │o│         │0│   imm[4:0|9:5]    │0 0 1│0 0 0 1 0│1 1 1 1 1│1 0│   addi    sp, 16*imm
+    │o│  rs1b   │0│                   │0 0 1│0 0 0 1 0│1 1 1 1 1│1 0│   jr      rs1b
+
+- name: li-czero-pair
+  layout: |
+    │o│  rs2b   │1│   imma[4:0|9:5]   │0 0 1│   rdb   │1 1 1 1 1│1 0│
+
+    │o│         │1│   imma[4:0|9:5]   │0 0 1│         │1 1 1 1 1│1 0│   li      tmp, imma
+    │o│  rs2b   │1│                   │0 0 1│   rdb   │1 1 1 1 1│1 0│   czero.X rdb, tmp, rs2b
 
 - name: prologue-pair
   layout: |
-    ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-    │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-    └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
-    │o│  rs1b   │1│   imm[4:0|9:5]    │0 1 0│0 0 0 1 0│1 1 1 1 1│1 0│
-    
-    │o│         │1│   imm[4:0|9:5]    │0 1 0│0 0 0 1 0│1 1 1 1 1│1 0│   addi    sp, -16*imm
-    │o│  rs1b   │1│   imm[4:0|9:5]    │0 1 0│0 0 0 1 0│1 1 1 1 1│1 0│   store   rs1b, 16*imm-k(sp)
+    │o│  rs1b   │0│   imm[4:0|9:5]    │0 1 0│0 0 0 1 0│1 1 1 1 1│1 0│
+
+    │o│         │0│   imm[4:0|9:5]    │0 1 0│0 0 0 1 0│1 1 1 1 1│1 0│   addi    sp, -16*imm
+    │o│  rs1b   │0│   imm[4:0|9:5]    │0 1 0│0 0 0 1 0│1 1 1 1 1│1 0│   store   rs1b, 16*imm-k(sp)
+
+- name: czero-select-pair
+  layout: |
+    │o│  rs2b   │1│  rs2a   │  rs1a   │0 1 0│   rdb   │1 1 1 1 1│1 0│
+
+    │o│         │1│  rs2a   │  rs1a   │0 1 0│         │1 1 1 1 1│1 0│   czero.X tmp, rs1a, rs2a
+    │o│  rs2b   │1│         │         │0 1 0│   rdb   │1 1 1 1 1│1 0│   or      rdb, tmp, rs2b
