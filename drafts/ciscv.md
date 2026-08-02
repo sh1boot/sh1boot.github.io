@@ -20,32 +20,23 @@ below).
 * To exploit inter-opcode redundancies
 * To dress up like a CISC architecture in order to gain its powers
 
-## Decoding
+Basically, I've seen too many complaints about the various consequences
+of 16-bit aligned instructions mixed with 32-bit aligned instructions,
+and so I started [thinking about it
+myself](/naturally-aligned-instruction-set/), and did [some very rough
+hacking](/experimental-riscv-instruction-compression/) to see how I
+might solve it, and am now at the stage which I present here.
 
-In its most primitive form the supposition is than in instruction
-decoder would decode the first instruction normally (with the caveat
-that the destination register is not in the usual location), while also
-preparing another normal-looking 32-bit instruction word to evaluate on
-the next cycle.
+## Packet structure
 
-If an exception occurs on the first instruction then enough state should
-be preserved that execution can resume from the second instruction in
-the packet if needed, but otherwise there's no jumping into the middle
-of a packet and it doesn't need to be efficient.
+Four register fields (the three standard ones, plus one more in the
+middle of `funct7`) shared between two consecutive instructions.
 
-Alternatively, a multi-issue implementation could ingest the packet as a
-single instruction and split it into uops at a more convenient stage in
-the pipeline.  Or implement it as a single, fused instruction, if it's
-capable.
-
-## The structure
-
-Four register fields shared between two adjacent instructions which are
-to be executed back-to-back.  The first instruction (generally) has its
-source register fields aligned to the source register field positions of
-32-bit opcodes, and the destination register field is (generally) the
-register written by the second instruction.  Other fields are recycled
-and repurposed according to the frame structure they follow.
+The first instruction (generally) has its source register fields aligned
+to the source register fields of 32-bit opcodes, but the 32-bit
+destination register field is (generally) the register written by the
+second instruction.  Other fields are recycled and repurposed according
+to the specific frame structure they follow.
 
 For example, a frame may designate a source register as also the
 destination register to save encoding space, or elide the destination
@@ -59,6 +50,24 @@ change at round number offsets.
 
 Instruction pairs only allow control flow changes in the second opcode.
 Branch targets are always 32-bit aligned.
+
+## Decoding
+
+In its most primitive form the supposition is than an instruction
+decoder would decode the first instruction normally (with the caveat
+that the destination register is not in the usual location), while also
+preparing another normal-looking 32-bit instruction word to evaluate on
+the next cycle.
+
+If an exception occurs inside a packet then enough state must be
+preserved that execution can resume from the second instruction in the
+packet if needed, but otherwise there's no jumping into the middle of a
+packet and that process doesn't need to be efficient.
+
+Alternatively, a multi-issue implementation could ingest the packet as a
+single instruction and split it into uops at a more convenient stage in
+the pipeline.  Or implement it as a single, fused instruction when
+possible.
 
 ## The process
 
@@ -285,6 +294,7 @@ table .bitfield {
 Random test files, compiled with RVC and run through a scheduler to try
 to pick out viable instruction pairs gives these results:
 
+(TODO: update these to latest changes)
 ```
 corpus          insns   pairs  packet%  realRVC%   vsRVC  to parity
 testcase0       21876    4217    80.7%     81.6%   98.9%       -199
@@ -308,3 +318,19 @@ to my encoding scheme, and so it uses more instructions than strictly
 necessary (at least in Clang's case -- GCC finds excuses to use more
 instructions regardless).  I have some other test cases but the
 tabulation got mucky, so let's just run with the above for now.
+
+## Future work
+
+0. Better test corpus.
+1. Optimise for compression performance.
+2. Tidy up for simplicity and regularity, and optimise for decoder
+   performance.
+3. Optimise for compression performance again.
+4. Tidy up again.
+5. etc...
+6. Remove warts.
+7. Remove difficult patterns.
+8. Tidy up again.
+9. Optimise for compression performance again.
+10. etc...
+11. A compiler?
