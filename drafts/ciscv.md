@@ -9,10 +9,10 @@ by squashing pairs of opcodes into a single 32-bit packet rather than
 squashing individual opcodes into 16-bit packets in order to address
 issues with unaligned 32-bit instruction words.
 
-I've tried to keep it resticted to just one third of the space used by
-RVC, leaving half the opcode space unallocated (assuming it won't be
+I've kept it resticted to just one third of the space used by RVC,
+leaving half the total opcode space unallocated -- assuming it won't be
 used for the remaining 2/3 of RVC, which would undermine the rationale
-below).
+below.
 
 ## Why?
 
@@ -20,12 +20,14 @@ below).
 * To exploit inter-opcode redundancies
 * To dress up like a CISC architecture in order to gain its powers
 
-Basically, I've seen too many complaints about the various consequences
-of 16-bit aligned instructions mixed with 32-bit aligned instructions,
-and so I started [thinking about it
+Basically, I saw too many complaints about the various consequences of
+16-bit aligned instructions mixed with 32-bit aligned instructions, and
+so I started [thinking about it
 myself](/naturally-aligned-instruction-set/), and did [some very rough
 hacking](/experimental-riscv-instruction-compression/) to see how I
-might solve it, and am now at the stage which I present here.
+might solve it, and now I'm at the stage which I present here, which I
+hope is good enough to get the general idea across and demonstrate
+viability.
 
 ## Packet structure
 
@@ -51,6 +53,13 @@ change at round number offsets.
 Instruction pairs only allow control flow changes in the second opcode.
 Branch targets are always 32-bit aligned.
 
+A frame might pose a question like "how do we implement load with base
+address write-back?" and then encapsulate the two instructions which
+implement that (`load` and `addi`) by re-using operands from the first
+instruction in the second (`rbase` -> `rdest`, `rbase` -> `rs1`,
+`offset` -> `immediate`), and then unroll that across all the
+opcodes (`lb`, `lbu`, `lh`, etc..) it needs to complete the set.
+
 ## Decoding
 
 In its most primitive form the supposition is than an instruction
@@ -69,30 +78,46 @@ single instruction and split it into uops at a more convenient stage in
 the pipeline.  Or implement it as a single, fused instruction when
 possible.
 
-## The process
+## Development process
 
 I vibe-coded an instruction scheduler which I run over a corpus of
-assembly, which attempts to optimise pairable instructions according to
-rules describing what a legitimate instruction pair would look like,
-just to get a feel for what sort of pairing rules I could introduce.  It
-looks at register usage to determine when a result is no longer needed,
-and which instructions can move past which other instructions.
+assembly, which attempts to find and fuse pairable instructions
+according to rules describing what a legitimate instruction pair would
+look like, just to get a feel for what sort of pairing rules I could
+introduce.  It looks at register usage to determine when a result is no
+longer needed, and which instructions can move past which other
+instructions.
 
 This seemed easier than writing my own compiler to optimise a made-up
-instruction set which was continuously changing.  But it has a lot of
-limitations.
+instruction set which was continuously changing, but it also has a lot
+of limitations.  There's no expectation for it to yield runnable code;
+merely to give a feel for what things would look like if the nits can be
+worked out.
 
-Then I coded up in all the pairs that seemed credible to me and began to
-measure result, adding and removing until things started looking OK-ish.
-Then I decided that was messy and re-vibed it from scratch, and then
-decided to try drawing the bit layout for the instructions directly, to
-confirm that things would actually fit.
+Then I randomly threw rules at it to see what would stick.
 
-Drawing these frames directly turned out to be more productive, because
-it meant I could impose immediate range limits which actually fit with
-the natural boundaries in the RISC-V instruction word rather than
-estimating what caught the bulk of the needs.  And it showed that it's
-all going to orbit around a 4-reg-field packing.
+After a bit of that I started to worry that my ballpark estimates for
+bit allocations weren't fit for purpose, so I tried to draw things out
+by hand, and I ended up refactoring the scheduler to accept rules
+defined in terms of instruction frame layouts rather than rules.
+
+Attempting to draw things around the standard RISC-V frames showed that
+my plan would orbit around a set of four register/immediate fields which
+would be switched around and re-used as needed by each frame.
+
+### Pairing rule selection
+
+Not intelligently done.  Redundancies not eliminated.  Optimisations
+ad-hoc.  Very little care and attention, overall.
+
+I drew inspiration from classic CISC operations, proposals for macro-op
+fusion, and things other architectures do.  And just kind of threw them
+all in there and mused openly to Claude about how that looked to me and
+asked it for feedback.
+
+Claude was not a reliable witness, and led me down many garden paths of
+faulty analyses and losses of comprehension.  But it was a process I
+could do on my phone without much attention.
 
 ### Biclique optimisation
 
@@ -115,17 +140,21 @@ this stage.
 ### Load/store pairings
 
 I was initially very reluctant to merge load/store data operands into
-chain arrangements with arithmetic, but eventually I realised I'd be
-stuck with it because that's where the compression is.  Trying to
-eliminate the load->alu pairing is worth revisiting.  I also did
-load->conditional-branch, on the basis that it's a thing and generally
-the branch predictor will already have made its decision without regard
-to the value loaded.
+interdependent arrangements with arithmetic, because it leaves no space
+for scheduling around memory delays.  Eventually I resigned myself to
+accepting it, though, because without that there's going to be a lot
+less compression.
+
+Also, it opened up opportunities to hint at things that could be left
+out of direct ALU paths.  Things like indirect branching via memory;
+which branch prediction (if you have it) would assume it knows how to do
+without seeing the data, and the data is only there to cancel the
+prediction after the fact if it was inconsistent.
 
 Less painful was chaining with base-register operand.  In particular
-filling the gap RISC-V leaves with reg+reg*k address generation, which,
+filling the gap RISC-V leaves with `rb+k*ri` address generation which,
 it turns out, can be done via temporary register without need to save
-the intermediate result.`
+the intermediate result.
 
 ## The encoding (provisional)
 
@@ -321,16 +350,30 @@ tabulation got mucky, so let's just run with the above for now.
 
 ## Future work
 
-0. Better test corpus.
-1. Optimise for compression performance.
-2. Tidy up for simplicity and regularity, and optimise for decoder
-   performance.
-3. Optimise for compression performance again.
-4. Tidy up again.
-5. etc...
-6. Remove warts.
-7. Remove difficult patterns.
-8. Tidy up again.
-9. Optimise for compression performance again.
-10. etc...
-11. A compiler?
+A major problem right now is that the enumeration of frames and opcodes
+within frames doesn't really attempt to match established conventions
+about how the decoder can resolve details quickly.  It does (generally)
+put rs1 and rs2 for the first instruction in the same slots, so they can
+be prepared early, but there are other details one wants to know soonish
+which could be surfaced but have not been.
+
+This is a thing that can be handled in the way that the currently-naive
+enumeration counts its way through the things that are needed.  Putting
+things in more thoughtful orders and moving the bits which distinguish
+particular features into predictable locations rather than just being
+counts assigned incrementally.
+
+Another problem is lack of thoughtful optimisation and, conversely,
+gross overfitting to my limited test corpus.
+
+And, of course, the regularity needs to be improved.  Balancing
+regularity and generality against compression.  And then factoring the
+cost model of a realistic compiler in and then fitting more tightly to
+that, and then reasserting regularity and generality all over again.
+Around and around and around...
+
+That said, this adventure promotes itself as being CISC-inspired, so
+being a random bucket of overlapping things that seemed like good ideas
+is pretty on-brand.
+
+And a toolchain would be nice, too.  And an implementation.
