@@ -168,7 +168,6 @@ chosen on a per-frame basis.
 <style>
 .bitfield th,td {
   text-align: center;
-  padding: 3px 4px 4px;
 }
 
 table .bitfield {
@@ -211,34 +210,32 @@ table .bitfield {
   padding: 1px 1em;
   border: none;
 }
-.tint-reg {
-    --tint: 1;
-    background-color: var(--tinted-fill);
-}
-.tint-imm {
-    --tint: 2;
-    background-color: var(--tinted-fill);
-}
 .tint-op {
-    background-color: lightgray;
+    background-color: var(--minima-table-zebra-color);
 }
 .tint-reserved {
     background-color: gray;
 }
 .tint-unused {
-    background-color: lightgray;
+}
+.tint-imm {
+    --tint: 1;
+    background-color: var(--tinted-fill);
 }
 .tint-rsrc {
-    --tint: 3;
+    --tint: 2;
     background-color: var(--tinted-fill);
 }
 .tint-rdst {
-    --tint: 4;
+    --tint: 3;
     background-color: var(--tinted-fill);
 }
 .tint-rsd {
-    --tint: 5;
-    background-color: var(--tinted-fill);
+    --tint: 2;
+    --tint-b: 3;
+    --rs-fill: var(--tinted-fill);
+    --rd-fill: var(--tinted-fill-b);
+    background: linear-gradient(135deg, var(--rs-fill) 0%, var(--rs-fill) 33%, var(--rd-fill) 67%, var(--rd-fill) 100%);
 }
 </style>
 

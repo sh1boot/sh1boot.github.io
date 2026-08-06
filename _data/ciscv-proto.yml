@@ -65,14 +65,14 @@ selector:
   word: [opcode5, funct3, g, h]        # 10 bits, MSB first
   bits: 10
   codepoints: 1024
-  reserved: 790
+  reserved: 798
   blocks: 25
   sentinels: {rd: [x0, x2]}        # reserved rd patterns; a hosted frame names one
 
 header: |
-  ┌─┬─────────┬─┬─────────┬─────────┬─────┬─────────┬─────────────┐
-  │h│ funct5  │g│   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
-  └─┴─────────┴─┴─────────┴─────────┴─────┴─────────┴─────────────┘
+  ┌─┬─┬─────────┬─────────┬─────────┬─────┬─────────┬─────────────┐
+  │h│g│ funct5  │   rs2   │   rs1   │ fn3 │   rd    │   opcode    │
+  └─┴─┴─────────┴─────────┴─────────┴─────┴─────────┴─────────────┘
 
 xlen_switchable:
   lx: {32: lw, 64: ld}
@@ -90,6 +90,7 @@ pseudo_ops:
   jr_t1: {base: jalr, encode: {rd: x0, rs1: x6}}
   jalr_link_ra: {base: jalr, encode: {rd: x1}}
   jalr_link_t1: {base: jalr, encode: {rd: x6}}
+  jr_any: {base: jalr, encode: {rd: x0}}
   ret: {base: jalr, encode: {rd: x0, rs1: x1, imm: 0}}
   beqz: {base: beq, encode: {rs2: x0}}
   bnez: {base: bne, encode: {rs2: x0}}
@@ -97,50 +98,51 @@ pseudo_ops:
 frames:
 - name: "rsd-alu-pair"
   does: "Two in-place ALU updates, each rewriting its own source register."
-  a_format: i-type
+  a_format: mixed
   id: "00"
   select: "00oooooooo"
   block: 256          # op-select indices; 256 used, 0 free
   layout: |
-    │o│  rs2b   │o│  rs2a   │  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
-    │o│  rs2b   │o│imma[4:0]│  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
-    │o│immb[4:0]│o│  rs2a   │  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
-    │o│immb[4:0]│o│imma[4:0]│  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
+    │o│o│  rs2b   │  rs2a   │  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
+    │o│o│  rs2b   │imma[4:0]│  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
+    │o│o│immb[4:0]│  rs2a   │  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
+    │o│o│immb[4:0]│imma[4:0]│  rsda   │o o o│  rsdb   │0 0 o o o│1 0│
 
-    │o│         │o│  rs2a   │  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, rs2a
-    │o│  rs2b   │o│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, rs2b
-    │o│         │o│imma[4:0]│  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, imma
-    │o│  rs2b   │o│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, rs2b
-    │o│         │o│  rs2a   │  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, rs2a
-    │o│immb[4:0]│o│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, immb
-    │o│         │o│imma[4:0]│  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, imma
-    │o│immb[4:0]│o│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, immb
+    │o│o│         │  rs2a   │  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, rs2a
+    │o│o│  rs2b   │         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, rs2b
+    │o│o│         │imma[4:0]│  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, imma
+    │o│o│  rs2b   │         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, rs2b
+    │o│o│         │  rs2a   │  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, rs2a
+    │o│o│immb[4:0]│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, immb
+    │o│o│         │imma[4:0]│  rsda   │o o o│         │0 0 o o o│1 0│   alu rsda, rsda, imma
+    │o│o│immb[4:0]│         │         │o o o│  rsdb   │0 0 o o o│1 0│   alu rsdb, rsdb, immb
   opcodes:
   - select: "aaaabbbb"
     at: 0
     n: 256
     a:
-    - {at: 0, n: 4, op: "addi", imm: {bits: 7, signed: true, field: 5, ext: "imm[6:5]"}}
-    - {at: 4, n: 4, op: "li", imm: {bits: 7, signed: true, field: 5, ext: "imm[6:5]"}}
-    - {at: 8, n: 1, op: "add"}
-    - {at: 9, n: 1, op: "addiw", imm: {bits: 5, signed: true, field: 5}}
-    - {at: 10, n: 1, op: "and"}
-    - {at: 11, n: 1, op: "andi", imm: {bits: 5, signed: true, field: 5}}
-    - {at: 12, n: 1, op: "or"}
-    - {at: 13, n: 1, op: "slli", imm: {bits: 5, signed: false, field: 5}}
-    - {at: 14, n: 1, op: "srli", imm: {bits: 5, signed: false, field: 5}}
-    - {at: 15, n: 1, op: "xor"}
+    - {at: 0, n: 2, op: "slli", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
+    - {at: 2, n: 1, op: "add"}
+    - {at: 3, n: 1, op: "sub"}
+    - {at: 4, n: 1, op: "mul"}
+    - {at: 5, n: 1, op: "or"}
+    - {at: 6, n: 1, op: "sh1add"}
+    - {at: 7, n: 1, op: "sh2add"}
+    - {at: 8, n: 1, op: "sh3add"}
+    - {at: 9, n: 1, op: "czero.nez"}
+    - {at: 10, n: 1, op: "addi", imm: {bits: 5, signed: true, field: 5}}
+    - {at: 11, n: 1, op: "li", imm: {bits: 5, signed: true, field: 5}}
+    - {at: 12, n: 1, op: "addiw", imm: {bits: 5, signed: true, field: 5}}
+    - {at: 13, n: 1, op: "andi", imm: {bits: 5, signed: true, field: 5}}
+    - {at: 14, n: 1, op: "slliw", imm: {bits: 5, signed: false, field: 5}}
+    - {at: 15, n: 1, op: "srli", imm: {bits: 5, signed: false, field: 5}}
     b:
-    - {at: 0, n: 4, op: "addi", imm: {bits: 7, signed: true, field: 5, ext: "imm[6:5]"}}
-    - {at: 4, n: 4, op: "li", imm: {bits: 7, signed: true, field: 5, ext: "imm[6:5]"}}
-    - {at: 8, n: 1, op: "add"}
-    - {at: 9, n: 1, op: "addiw", imm: {bits: 5, signed: true, field: 5}}
-    - {at: 10, n: 1, op: "and"}
-    - {at: 11, n: 1, op: "andi", imm: {bits: 5, signed: true, field: 5}}
-    - {at: 12, n: 1, op: "or"}
-    - {at: 13, n: 1, op: "slli", imm: {bits: 5, signed: false, field: 5}}
-    - {at: 14, n: 1, op: "srli", imm: {bits: 5, signed: false, field: 5}}
-    - {at: 15, n: 1, op: "xor"}
+    - {at: 0, n: 8, op: "li", imm: {bits: 8, signed: true, field: 5, ext: "imm[7:5]"}}
+    - {at: 8, n: 4, op: "addi", imm: {bits: 7, signed: true, field: 5, ext: "imm[6:5]"}}
+    - {at: 12, n: 1, op: "add"}
+    - {at: 13, n: 1, op: "or"}
+    - {at: 14, n: 1, op: "czero.eqz"}
+    - {at: 15, n: 1, op: "slli", imm: {bits: 5, signed: false, field: 5}}
 - name: "epilogue-pair"
   does: "Function epilogue: release the stack frame and return."
   a_format: i-type
@@ -150,10 +152,10 @@ frames:
   rd: x2                      # the allocated sentinel: what tells it from its host
   block: 2          # op-select indices; 2 used, 0 free
   layout: |
-    │o│  rs1b   │0│imm[4:0] │imm[9:5] │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│
+    │o│0│imm[9:5] │imm[4:0] │  rs1b   │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│
 
-    │o│         │0│imm[4:0] │imm[9:5] │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   addi    sp, 16*imm
-    │o│  rs1b   │0│         │         │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   jr      rs1b
+    │o│0│imm[9:5] │imm[4:0] │         │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   addi    sp, 16*imm
+    │o│0│         │         │  rs1b   │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   jr_any  rs1b
   opcodes:
   - select: "b"
     at: 0
@@ -161,7 +163,7 @@ frames:
     a:
     - {at: 0, n: 1, op: "addi"}
     b:
-    - {at: 0, n: 1, op: "jalr"}
+    - {at: 0, n: 1, op: "jr_any"}
     - {at: 1, n: 1, op: "ret"}
 - name: "prologue-pair"
   does: "Function prologue: reserve the stack frame and save the return address."
@@ -172,10 +174,10 @@ frames:
   rd: x2                      # the allocated sentinel: what tells it from its host
   block: 2          # op-select indices; 2 used, 0 free
   layout: |
-    │o│  rs1b   │1│imm[4:0] │imm[9:5] │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│
+    │o│1│imm[9:5] │imm[4:0] │  rs1b   │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│
 
-    │o│         │1│imm[4:0] │imm[9:5] │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   addi    sp, -16*imm
-    │o│  rs1b   │1│imm[4:0] │imm[9:5] │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   store   rs1b, 16*imm-k(sp)
+    │o│1│imm[9:5] │imm[4:0] │         │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   addi    sp, -16*imm
+    │o│1│imm[9:5] │imm[4:0] │  rs1b   │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   store   rs1b, 16*imm-k(sp)
   opcodes:
   - select: "b"
     at: 0
@@ -194,13 +196,13 @@ frames:
   rd: x2                      # the allocated sentinel: what tells it from its host
   block: 4          # op-select indices; 4 used, 0 free
   layout: |
-    │o│imma[9:5]│o│imma[4:0]│  rs1a   │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│
+    │o│o│imma[9:5]│imma[4:0]│  rs1a   │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│
 
-    │o│imma[9:5]│o│imma[4:0]│  rs1a   │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   load    tmp, k*imma(rs1a)
-    │o│         │o│         │         │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   jalr_link_ra tmp
+    │o│o│imma[9:5]│imma[4:0]│  rs1a   │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   load    tmp, k*imma(rs1a)
+    │o│o│         │         │         │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   jalr_link_ra ra, 0(tmp)
 
-    │o│imma[9:5]│o│imma[4:0]│  rs1a   │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   load    tmp, k*imma(rs1a)
-    │o│         │o│         │         │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   jalr_link_t1 tmp
+    │o│o│imma[9:5]│imma[4:0]│  rs1a   │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   load    tmp, k*imma(rs1a)
+    │o│o│         │         │         │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   jalr_link_t1 t1, 0(tmp)
   opcodes:
   - select: "ab"
     at: 0
@@ -220,19 +222,16 @@ frames:
   rd: x2                      # the allocated sentinel: what tells it from its host
   block: 64          # op-select indices; 64 used, 0 free
   layout: |
-    │o│  rs1b   │o│  rs2a   │  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│
-    │o│  rs1b   │o│imma[4:0]│  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│
+    │o│o│  rs1b   │  rs2a   │  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│
+    │o│o│  rs1b   │imma[4:0]│  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│
 
-    │o│         │o│  rs2a   │  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   alu     rsda, rsda, rs2a
-    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   jr/jalr rs1b
-    │o│         │o│imma[4:0]│  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   alu     rsda, rsda, imma
-    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   jr/jalr rs1b
+    │o│o│         │  rs2a   │  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   alu     rsda, rsda, rs2a
+    │o│o│  rs1b   │         │         │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   jr_any/jalr_link_ra rs1b
+    │o│o│         │imma[4:0]│  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   alu     rsda, rsda, imma
+    │o│o│  rs1b   │         │         │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   jr_any/jalr_link_ra rs1b
 
-    │o│         │o│  rs2a   │  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   mv     rsda, rs2a
-    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   jr/jalr rs1b
-
-    │o│         │o│imma[4:0]│  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   li     rsda, imma
-    │o│  rs1b   │o│         │         │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   jr/jalr rs1b
+    │o│o│         │imma[4:0]│  rsda   │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   li     rsda, imma
+    │o│o│  rs1b   │         │         │o o o│0 0 0 1 0│0 0 1 1 o│1 0│   jr_any/jalr_link_ra rs1b
   opcodes:
   - select: "aaaabb"
     at: 0
@@ -250,9 +249,9 @@ frames:
     - {at: 15, n: 1, op: "xor"}
     b:
     - {at: 0, n: 1, op: "ret"}
-    - {at: 1, n: 1, op: "jalr"}
-    - {at: 2, n: 1, op: "j"}
-    - {at: 3, n: 1, op: "jal"}
+    - {at: 1, n: 1, op: "jalr_link_ra"}
+    - {at: 2, n: 1, op: "jr_any"}
+    - {at: 3, n: 1, op: "j"}
 - name: "alu-alu-chain"
   does: "Two ALU operations, the second consuming the first's result."
   a_format: mixed
@@ -260,19 +259,19 @@ frames:
   select: "010ooooooo"
   block: 128          # op-select indices; 128 used, 0 free
   layout: |
-    │o│  rs2b   │o│  rs2a   │  rs1a   │o o o│   rdb   │0 1 0 o o│1 0│
-    │o│  rs2b   │o│imma[4:0]│  rs1a   │o o o│   rdb   │0 1 0 o o│1 0│
-    │o│immb[4:0]│o│  rs2a   │  rs1a   │o o o│   rdb   │0 1 0 o o│1 0│
-    │o│immb[4:0]│o│imma[4:0]│  rs1a   │o o o│   rdb   │0 1 0 o o│1 0│
+    │o│o│  rs2b   │  rs2a   │  rs1a   │o o o│   rdb   │0 1 0 o o│1 0│
+    │o│o│  rs2b   │imma[4:0]│  rs1a   │o o o│   rdb   │0 1 0 o o│1 0│
+    │o│o│immb[4:0]│  rs2a   │  rs1a   │o o o│   rdb   │0 1 0 o o│1 0│
+    │o│o│immb[4:0]│imma[4:0]│  rs1a   │o o o│   rdb   │0 1 0 o o│1 0│
 
-    │o│         │o│  rs2a   │  rs1a   │o o o│         │0 1 0 o o│1 0│   alu     tmp, rs1a, rs2a
-    │o│  rs2b   │o│         │         │o o o│   rdb   │0 1 0 o o│1 0│   alu     rdb, tmp, rs2b
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │0 1 0 o o│1 0│   alu     tmp, rs1a, imma
-    │o│  rs2b   │o│         │         │o o o│   rdb   │0 1 0 o o│1 0│   alu     rdb, tmp, rs2b
-    │o│         │o│  rs2a   │  rs1a   │o o o│         │0 1 0 o o│1 0│   alu     tmp, rs1a, rs2a
-    │o│immb[4:0]│o│         │         │o o o│   rdb   │0 1 0 o o│1 0│   alu     rdb, tmp, immb
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │0 1 0 o o│1 0│   alu     tmp, rs1a, imma
-    │o│immb[4:0]│o│         │         │o o o│   rdb   │0 1 0 o o│1 0│   alu     rdb, tmp, immb
+    │o│o│         │  rs2a   │  rs1a   │o o o│         │0 1 0 o o│1 0│   alu     tmp, rs1a, rs2a
+    │o│o│  rs2b   │         │         │o o o│   rdb   │0 1 0 o o│1 0│   alu     rdb, tmp, rs2b
+    │o│o│         │imma[4:0]│  rs1a   │o o o│         │0 1 0 o o│1 0│   alu     tmp, rs1a, imma
+    │o│o│  rs2b   │         │         │o o o│   rdb   │0 1 0 o o│1 0│   alu     rdb, tmp, rs2b
+    │o│o│         │  rs2a   │  rs1a   │o o o│         │0 1 0 o o│1 0│   alu     tmp, rs1a, rs2a
+    │o│o│immb[4:0]│         │         │o o o│   rdb   │0 1 0 o o│1 0│   alu     rdb, tmp, immb
+    │o│o│         │imma[4:0]│  rs1a   │o o o│         │0 1 0 o o│1 0│   alu     tmp, rs1a, imma
+    │o│o│immb[4:0]│         │         │o o o│   rdb   │0 1 0 o o│1 0│   alu     rdb, tmp, immb
   opcodes:
   - select: "0aaabbb"
     at: 0
@@ -319,13 +318,13 @@ frames:
   select: "0110oooooo"
   block: 64          # op-select indices; 64 used, 0 free
   layout: |
-    │o│  rs2b   │o│imma[4:0]│  rs1a   │o o o│   rdb   │0 1 1 0 o│1 0│
-    │o│immb[4:0]│o│imma[4:0]│  rs1a   │o o o│   rdb   │0 1 1 0 o│1 0│
+    │o│o│  rs2b   │imma[4:0]│  rs1a   │o o o│   rdb   │0 1 1 0 o│1 0│
+    │o│o│immb[4:0]│imma[4:0]│  rs1a   │o o o│   rdb   │0 1 1 0 o│1 0│
 
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │0 1 1 0 o│1 0│   load    tmp, k*imma(rs1a)
-    │o│  rs2b   │o│         │         │o o o│   rdb   │0 1 1 0 o│1 0│   alu     rdb, tmp, rs2b
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │0 1 1 0 o│1 0│   load    tmp, k*imma(rs1a)
-    │o│immb[4:0]│o│         │         │o o o│   rdb   │0 1 1 0 o│1 0│   alu     rdb, tmp, immb
+    │o│o│         │imma[4:0]│  rs1a   │o o o│         │0 1 1 0 o│1 0│   load    tmp, k*imma(rs1a)
+    │o│o│  rs2b   │         │         │o o o│   rdb   │0 1 1 0 o│1 0│   alu     rdb, tmp, rs2b
+    │o│o│         │imma[4:0]│  rs1a   │o o o│         │0 1 1 0 o│1 0│   load    tmp, k*imma(rs1a)
+    │o│o│immb[4:0]│         │         │o o o│   rdb   │0 1 1 0 o│1 0│   alu     rdb, tmp, immb
   opcodes:
   - select: "aabbbb"
     at: 0
@@ -356,10 +355,10 @@ frames:
   select: "0111oooooo"
   block: 64          # op-select indices; 64 used, 0 free
   layout: |
-    │o│immb[9:5]│o│imma[4:0]│  rs1b   │o o o│immb[4:0]│0 1 1 1 o│1 0│
+    │o│o│immb[9:5]│imma[4:0]│  rs1b   │o o o│immb[4:0]│0 1 1 1 o│1 0│
 
-    │o│         │o│imma[4:0]│         │o o o│         │0 1 1 1 o│1 0│   li      tmp, imma
-    │o│immb[9:5]│o│         │  rs1b   │o o o│immb[4:0]│0 1 1 1 o│1 0│   bXX     rs1b, tmp, 4*immb
+    │o│o│         │imma[4:0]│         │o o o│         │0 1 1 1 o│1 0│   li      tmp, imma
+    │o│o│immb[9:5]│         │  rs1b   │o o o│immb[4:0]│0 1 1 1 o│1 0│   bXX     rs1b, tmp, 4*immb
   opcodes:
   - select: "aaabbb"
     at: 0
@@ -380,13 +379,13 @@ frames:
   select: "10000ooooo"
   block: 32          # op-select indices; 32 used, 0 free
   layout: |
-    │o│immb[9:5]│o│imma[4:0]│  rs1a   │o o o│immb[4:0]│1 0 0 0 0│1 0│
+    │o│o│immb[9:5]│imma[4:0]│  rs1a   │o o o│immb[4:0]│1 0 0 0 0│1 0│
 
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │1 0 0 0 0│1 0│   andi    tmp, rs1a, imma
-    │o│immb[9:5]│o│         │         │o o o│immb[4:0]│1 0 0 0 0│1 0│   beqz/bnez tmp, immb
+    │o│o│         │imma[4:0]│  rs1a   │o o o│         │1 0 0 0 0│1 0│   andi    tmp, rs1a, imma
+    │o│o│immb[9:5]│         │         │o o o│immb[4:0]│1 0 0 0 0│1 0│   beqz/bnez tmp, 4*immb
 
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │1 0 0 0 0│1 0│   slli    tmp, rs1a, imma
-    │o│immb[9:5]│o│         │         │o o o│immb[4:0]│1 0 0 0 0│1 0│   blt/bge tmp, zero, 4*immb
+    │o│o│         │imma[4:0]│  rs1a   │o o o│         │1 0 0 0 0│1 0│   slli/srli tmp, rs1a, imma
+    │o│o│immb[9:5]│         │         │o o o│immb[4:0]│1 0 0 0 0│1 0│   beqz/bnez tmp, 4*immb
   opcodes:
   - select: "aaabb"
     at: 0
@@ -405,44 +404,57 @@ frames:
   a_format: i-type
   id: "10001"
   select: "10001ooooo"
-  block: 32          # op-select indices; 20 used, 12 free
+  block: 32          # op-select indices; 13 used, 19 free
   layout: |
-    │o│   rda   │o│  rs2b   │  rs1a   │o o o│   rdb   │1 0 0 0 1│1 0│
-    │o│   rda   │o│immb[4:0]│  rs1a   │o o o│   rdb   │1 0 0 0 1│1 0│
-    │o│   rda   │o│immb[4:0]│imma[4:0]│o o o│   rdb   │1 0 0 0 1│1 0│
+    │o│o│   rda   │  rs2b   │  rs1a   │o o o│   rdb   │1 0 0 0 1│1 0│
+    │o│o│   rda   │immb[4:0]│  rs1a   │o o o│   rdb   │1 0 0 0 1│1 0│
+    │o│o│   rda   │imma[4:0]│immb[4:0]│o o o│   rdb   │1 0 0 0 1│1 0│
+    │o│o│   rda   │immb[4:0]│  rs1a   │o o o│immb+rdb │1 0 0 0 1│1 0│
+    │o│o│   rda   │imma[4:0]│immb[4:0]│o o o│immb+rdb │1 0 0 0 1│1 0│
+    │o│o│imma+rda │imma[4:0]│immb[4:0]│o o o│   rdb   │1 0 0 0 1│1 0│
 
-    │o│   rda   │o│         │  rs1a   │o o o│         │1 0 0 0 1│1 0│   mv      rda, rs1a
-    │o│         │o│  rs2b   │         │o o o│   rdb   │1 0 0 0 1│1 0│   mv/li   rdb, rs2b
-    │o│   rda   │o│         │  rs1a   │o o o│         │1 0 0 0 1│1 0│   mv      rda, rs1a
-    │o│         │o│immb[4:0]│         │o o o│   rdb   │1 0 0 0 1│1 0│   mv/li   rdb, immb
+    │o│o│   rda   │         │  rs1a   │o o o│         │1 0 0 0 1│1 0│   mv      rda, rs1a
+    │o│o│         │  rs2b   │         │o o o│   rdb   │1 0 0 0 1│1 0│   mv/li   rdb, rs2b
+    │o│o│   rda   │         │  rs1a   │o o o│         │1 0 0 0 1│1 0│   mv      rda, rs1a
+    │o│o│         │immb[4:0]│         │o o o│   rdb   │1 0 0 0 1│1 0│   mv/li   rdb, immb
+    │o│o│   rda   │         │  rs1a   │o o o│         │1 0 0 0 1│1 0│   mv      rda, rs1a
+    │o│o│         │immb[4:0]│         │o o o│immb+rdb │1 0 0 0 1│1 0│   mv/li   rdb, immb
 
-    │o│   rda   │o│         │imma[4:0]│o o o│         │1 0 0 0 1│1 0│   li      rda, imma
-    │o│         │o│immb[4:0]│         │o o o│   rdb   │1 0 0 0 1│1 0│   li      rdb, immb
+    │o│o│   rda   │imma[4:0]│         │o o o│         │1 0 0 0 1│1 0│   li      rda, imma
+    │o│o│         │         │immb[4:0]│o o o│   rdb   │1 0 0 0 1│1 0│   li      rdb, immb
+    │o│o│   rda   │imma[4:0]│         │o o o│         │1 0 0 0 1│1 0│   li      rda, imma
+    │o│o│         │         │immb[4:0]│o o o│immb+rdb │1 0 0 0 1│1 0│   li      rdb, immb
+    │o│o│imma+rda │imma[4:0]│         │o o o│         │1 0 0 0 1│1 0│   li      rda, imma
+    │o│o│         │         │immb[4:0]│o o o│   rdb   │1 0 0 0 1│1 0│   li      rdb, immb
+
+        (closest-fit encoding — this frame shares rows across forms)
+    │o│o│   rda   │         │  rs1a   │o o o│         │1 0 0 0 1│1 0│   mv/li   rda, rs1a
+    │o│o│         │immb[4:0]│         │o o o│         │1 0 0 0 1│1 0│   li      ardb, immb
   opcodes:
-  - select: "00bbb"
-    at: 0
-    n: 8
+  - select: "010bb"
+    at: 8
+    n: 4
     a:
     - {at: 0, n: 1, op: "mv"}
     b:
-    - {at: 0, n: 2, op: "li", imm: {bits: 6, signed: true, field: 5, ext: "imm[5:5]"}}
-    - {at: 2, n: 2, op: "addi4spn", imm: {bits: 6, signed: false, scale: 4, field: 5, ext: "imm[5:5]"}}
-    - {at: 4, n: 1, op: "mv"}
-  - select: "01abb"
-    at: 8
+    - {at: 0, n: 2, op: "li", imm: {bits: 8, signed: true, field: 7, ext: "imm[7:7]"}}
+    - {at: 2, n: 1, op: "mv"}
+    - {at: 3, n: 1, op: "addi4spn", imm: {bits: 6, signed: false, scale: 4, field: 7}}
+  - select: "00abb"
+    at: 0
     n: 8
     a:
-    - {at: 0, n: 2, op: "li", imm: {bits: 6, signed: true, field: 5, ext: "imm[5:5]"}}
+    - {at: 0, n: 2, op: "li", imm: {bits: 8, signed: true, field: 7, ext: "imm[7:7]"}}
     b:
-    - {at: 0, n: 2, op: "li", imm: {bits: 6, signed: true, field: 5, ext: "imm[5:5]"}}
-    - {at: 2, n: 2, op: "addi4spn", imm: {bits: 6, signed: false, scale: 4, field: 5, ext: "imm[5:5]"}}
-  - select: "100ab"
-    at: 16
-    n: 4
+    - {at: 0, n: 2, op: "li", imm: {bits: 8, signed: true, field: 7, ext: "imm[7:7]"}}
+    - {at: 2, n: 1, op: "addi4spn", imm: {bits: 6, signed: false, scale: 4, field: 7}}
+  - select: "01100"
+    at: 12
+    n: 1
     a:
-    - {at: 0, n: 2, op: "addi4spn", imm: {bits: 6, signed: false, scale: 4, field: 5, ext: "imm[5:5]"}}
+    - {at: 0, n: 1, op: "addi4spn", imm: {bits: 6, signed: false, scale: 4, field: 7}}
     b:
-    - {at: 0, n: 2, op: "addi4spn", imm: {bits: 6, signed: false, scale: 4, field: 5, ext: "imm[5:5]"}}
+    - {at: 0, n: 1, op: "addi4spn", imm: {bits: 6, signed: false, scale: 4, field: 7}}
 - name: "alu-store-chain"
   does: "Compute a value and store it."
   a_format: mixed
@@ -450,13 +462,13 @@ frames:
   select: "10010ooooo"
   block: 32          # op-select indices; 32 used, 0 free
   layout: |
-    │o│  rs1b   │o│  rs2a   │  rs1a   │o o o│immb[4:0]│1 0 0 1 0│1 0│
-    │o│  rs1b   │o│imma[4:0]│  rs1a   │o o o│immb[4:0]│1 0 0 1 0│1 0│
+    │o│o│  rs1b   │  rs2a   │  rs1a   │o o o│immb[4:0]│1 0 0 1 0│1 0│
+    │o│o│  rs1b   │imma[4:0]│  rs1a   │o o o│immb[4:0]│1 0 0 1 0│1 0│
 
-    │o│         │o│  rs2a   │  rs1a   │o o o│         │1 0 0 1 0│1 0│   alu     tmp, rs1a, rs2a
-    │o│  rs1b   │o│         │         │o o o│immb[4:0]│1 0 0 1 0│1 0│   store   tmp, k*immb(rs1b)
-    │o│         │o│imma[4:0]│  rs1a   │o o o│         │1 0 0 1 0│1 0│   alu     tmp, rs1a, imma
-    │o│  rs1b   │o│         │         │o o o│immb[4:0]│1 0 0 1 0│1 0│   store   tmp, k*immb(rs1b)
+    │o│o│         │  rs2a   │  rs1a   │o o o│         │1 0 0 1 0│1 0│   alu     tmp, rs1a, rs2a
+    │o│o│  rs1b   │         │         │o o o│immb[4:0]│1 0 0 1 0│1 0│   store   tmp, k*immb(rs1b)
+    │o│o│         │imma[4:0]│  rs1a   │o o o│         │1 0 0 1 0│1 0│   alu     tmp, rs1a, imma
+    │o│o│  rs1b   │         │         │o o o│immb[4:0]│1 0 0 1 0│1 0│   store   tmp, k*immb(rs1b)
   opcodes:
   - select: "aaaab"
     at: 0
@@ -480,17 +492,88 @@ frames:
     b:
     - {at: 0, n: 1, op: "sw"}
     - {at: 1, n: 1, op: "sd"}
+- name: "setup-jump-pair"
+  does: "Set up an argument or return value, then transfer control."
+  a_format: mixed
+  id: "10011"
+  select: "10011ooooo"
+  block: 32          # op-select indices; 25 used, 7 free
+  layout: |
+    │o│o│  rs1b   │imma[4:0]│  rs1a   │o o o│   rda   │1 0 0 1 1│1 0│
+    │o│o│imma[9:5]│imma[4:0]│  rs1b   │o o o│   rda   │1 0 0 1 1│1 0│
+    │o│o│immb[9:5]│   rda   │  rs1a   │o o o│immb[4:0]│1 0 0 1 1│1 0│
+    │o│o│immb[9:5]│imma[4:0]│   rda   │o o o│immb[4:0]│1 0 0 1 1│1 0│
+
+        (closest-fit encoding — this frame shares rows across forms)
+    │o│o│         │         │  rs1a   │o o o│   rda   │1 0 0 1 1│1 0│   mv      rda, rs1a
+    │o│o│  rs1b   │         │         │o o o│         │1 0 0 1 1│1 0│   jr_any/jalr_link_ra rs1b
+
+    │o│o│         │imma[4:0]│  rs1a   │o o o│   rda   │1 0 0 1 1│1 0│   load    rda, k*imma(rs1a)
+    │o│o│  rs1b   │         │         │o o o│         │1 0 0 1 1│1 0│   jr_any/jalr_link_ra rs1b
+    │o│o│imma[9:5]│imma[4:0]│         │o o o│   rda   │1 0 0 1 1│1 0│   load    rda, k*imma(rs1a)
+    │o│o│         │         │  rs1b   │o o o│         │1 0 0 1 1│1 0│   jr_any/jalr_link_ra rs1b
+
+    │o│o│imma[9:5]│imma[4:0]│         │o o o│   rda   │1 0 0 1 1│1 0│   li      rda, imma
+    │o│o│         │         │  rs1b   │o o o│         │1 0 0 1 1│1 0│   jr_any/jalr_link_ra rs1b
+
+    │o│o│         │   rda   │  rs1a   │o o o│         │1 0 0 1 1│1 0│   mv      rda, rs1a
+    │o│o│immb[9:5]│         │         │o o o│immb[4:0]│1 0 0 1 1│1 0│   j       4*immb
+
+    │o│o│         │   rda   │  rs1a   │o o o│         │1 0 0 1 1│1 0│   load    rda, 0(rs1a)
+    │o│o│immb[9:5]│         │         │o o o│immb[4:0]│1 0 0 1 1│1 0│   j       4*immb
+
+    │o│o│         │imma[4:0]│   rda   │o o o│         │1 0 0 1 1│1 0│   li      rda, imma
+    │o│o│immb[9:5]│         │         │o o o│immb[4:0]│1 0 0 1 1│1 0│   j       4*immb
+  opcodes:
+  - select: "0aabb"
+    at: 0
+    n: 16
+    a:
+    - {at: 0, n: 1, op: "mv"}
+    - {at: 1, n: 1, op: "lbu"}
+    - {at: 2, n: 1, op: "lw"}
+    - {at: 3, n: 1, op: "ld"}
+    b:
+    - {at: 0, n: 1, op: "ret"}
+    - {at: 1, n: 1, op: "jalr_link_ra"}
+    - {at: 2, n: 1, op: "jr_any"}
+  - select: "100bb"
+    at: 16
+    n: 4
+    a:
+    - {at: 0, n: 1, op: "li"}
+    b:
+    - {at: 0, n: 1, op: "ret"}
+    - {at: 1, n: 1, op: "jalr_link_ra"}
+    - {at: 2, n: 1, op: "jr_any"}
+  - select: "101aa"
+    at: 20
+    n: 4
+    a:
+    - {at: 0, n: 1, op: "mv"}
+    - {at: 1, n: 1, op: "lbu"}
+    - {at: 2, n: 1, op: "lw"}
+    - {at: 3, n: 1, op: "ld"}
+    b:
+    - {at: 0, n: 1, op: "j", imm: {bits: 10, signed: true, scale: 4, field: 10}}
+  - select: "11000"
+    at: 24
+    n: 1
+    a:
+    - {at: 0, n: 1, op: "li"}
+    b:
+    - {at: 0, n: 1, op: "j"}
 - name: "load-base-branch-pair"
   does: "Load a value and branch on whether it is zero; the value survives."
   a_format: load
-  id: "100110"
-  select: "100110oooo"
+  id: "101000"
+  select: "101000oooo"
   block: 16          # op-select indices; 16 used, 0 free
   layout: |
-    │o│   rda   │o│imma[4:0]│  rs1a   │0 o o│immb[4:0]│1 0 0 1 1│1 0│
+    │o│o│   rda   │imma[4:0]│  rs1a   │0 o o│immb[4:0]│1 0 1 0 0│1 0│
 
-    │o│   rda   │o│imma[4:0]│  rs1a   │0 o o│         │1 0 0 1 1│1 0│   load    rda, k*imma(rs1a)
-    │o│   rda   │o│         │         │0 o o│immb[4:0]│1 0 0 1 1│1 0│   beqz/bnez rda, zero, 4*immb
+    │o│o│   rda   │imma[4:0]│  rs1a   │0 o o│         │1 0 1 0 0│1 0│   load    rda, k*imma(rs1a)
+    │o│o│   rda   │         │         │0 o o│immb[4:0]│1 0 1 0 0│1 0│   beqz/bnez rda, zero, 4*immb
   opcodes:
   - select: "aaab"
     at: 0
@@ -509,14 +592,14 @@ frames:
 - name: "load-store-chain"
   does: "Copy a value from one memory location to another."
   a_format: load
-  id: "100111"
-  select: "100111oooo"
+  id: "101001"
+  select: "101001oooo"
   block: 16          # op-select indices; 16 used, 0 free
   layout: |
-    │o│immb[4:0]│o│imma[4:0]│  rs1a   │1 o o│  rs1b   │1 0 0 1 1│1 0│
+    │o│o│  rs1b   │imma[4:0]│  rs1a   │1 o o│immb[4:0]│1 0 1 0 0│1 0│
 
-    │o│         │o│imma[4:0]│  rs1a   │1 o o│         │1 0 0 1 1│1 0│   load    tmp, k*imma(rs1a)
-    │o│immb[4:0]│o│         │         │1 o o│  rs1b   │1 0 0 1 1│1 0│   store   tmp, k*immb(rs1b)
+    │o│o│         │imma[4:0]│  rs1a   │1 o o│         │1 0 1 0 0│1 0│   load    tmp, k*imma(rs1a)
+    │o│o│  rs1b   │         │         │1 o o│immb[4:0]│1 0 1 0 0│1 0│   store   tmp, k*immb(rs1b)
   opcodes:
   - select: "ppab"
     at: 0
@@ -527,42 +610,20 @@ frames:
     - {at: 4, n: 4, a: {op: "lhu", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}, b: {op: "sh", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}}
     - {at: 8, n: 4, a: {op: "lw", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}, b: {op: "sw", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}}
     - {at: 12, n: 4, a: {op: "ld", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}, b: {op: "sd", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}}
-- name: "addi-store-off-chain"
-  does: "Compute a value from one base and store it at an offset from another."
-  a_format: i-type
-  id: "101000"
-  select: "101000oooo"
-  block: 16          # op-select indices; 16 used, 0 free
-  layout: |
-    │o│  rs1a   │o│immb[4:0]│  rbase  │0 o o│imma[4:0]│1 0 1 0 0│1 0│
-
-    │o│  rs1a   │o│         │         │0 o o│imma[4:0]│1 0 1 0 0│1 0│   addi    tmp, rs1a, imma
-    │o│         │o│immb[4:0]│  rbase  │0 o o│         │1 0 1 0 0│1 0│   store   tmp, k*immb(rbase)
-  opcodes:
-  - select: "abbb"
-    at: 0
-    n: 16
-    a:
-    - {at: 0, n: 2, op: "addi", imm: {bits: 6, signed: true, field: 5, ext: "imm[5:5]"}}
-    b:
-    - {at: 0, n: 2, op: "sb", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
-    - {at: 2, n: 2, op: "sh", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
-    - {at: 4, n: 2, op: "sw", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
-    - {at: 6, n: 2, op: "sd", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
 - name: "macro-op-pair"
   does: "Both halves of ONE computation over the same operands (mul/mulh, div/rem), declared as a pair so an implementation can fuse them."
   a_format: r-type
-  id: "101001"
-  select: "101001oooo"
+  id: "101010"
+  select: "101010oooo"
   block: 16          # op-select indices; 10 used, 6 free
   layout: |
-    │o│   rda   │o│  rs2a   │  rs1a   │1 o o│   rdb   │1 0 1 0 0│1 0│
+    │o│o│   rda   │  rs2a   │  rs1a   │0 o o│   rdb   │1 0 1 0 1│1 0│
 
-    │o│   rda   │o│  rs2a   │  rs1a   │1 o o│         │1 0 1 0 0│1 0│   alu     rda, rs1a, rs2a
-    │o│         │o│  rs2a   │  rs1a   │1 o o│   rdb   │1 0 1 0 0│1 0│   alu     rdb, rs1a, rs2a
+    │o│o│   rda   │  rs2a   │  rs1a   │0 o o│         │1 0 1 0 1│1 0│   alu     rda, rs1a, rs2a
+    │o│o│         │  rs2a   │  rs1a   │0 o o│   rdb   │1 0 1 0 1│1 0│   alu     rdb, rs1a, rs2a
 
-    │o│   rda   │o│  rs2a   │  rs1a   │1 o o│         │1 0 1 0 0│1 0│   add     rda, rs1a, rs2a
-    │o│   rda   │o│         │  rs1a   │1 o o│   rdb   │1 0 1 0 0│1 0│   sltu    rdb, rda, rs1a
+    │o│o│   rda   │  rs2a   │  rs1a   │0 o o│         │1 0 1 0 1│1 0│   add     rda, rs1a, rs2a
+    │o│o│   rda   │         │  rs1a   │0 o o│   rdb   │1 0 1 0 1│1 0│   sltu    rdb, rda, rs1a
   opcodes:
   - select: "00aa"
     at: 0
@@ -612,31 +673,31 @@ frames:
 - name: "arg-call-pair"
   does: "Set up an argument, then call through a hard-coded base register."
   a_format: mixed
-  id: "101010"
-  select: "101010oooo"
+  id: "101011"
+  select: "101011oooo"
   block: 16          # op-select indices; 16 used, 0 free
   layout: |
-    │o│  rs1a   │o│immb[4:0]│immb[9:5]│0 o o│   rda   │1 0 1 0 1│1 0│
-    │o│imma[4:0]│o│immb[4:0]│immb[9:5]│0 o o│imma+rda │1 0 1 0 1│1 0│
-    │o│imma[4:0]│o│immb[4:0]│immb[9:5]│0 o o│  rs2a   │1 0 1 0 1│1 0│
+    │o│o│immb[9:5]│   rda   │  rs1a   │1 o o│immb[4:0]│1 0 1 0 1│1 0│
+    │o│o│immb[9:5]│imma[4:0]│imma+rda │1 o o│immb[4:0]│1 0 1 0 1│1 0│
+    │o│o│immb[9:5]│  rs2a   │imma[4:0]│1 o o│immb[4:0]│1 0 1 0 1│1 0│
 
-    │o│  rs1a   │o│         │         │0 o o│   rda   │1 0 1 0 1│1 0│   mv      rda, rs1a
-    │o│         │o│immb[4:0]│immb[9:5]│0 o o│         │1 0 1 0 1│1 0│   jalr_ra 4*immb
+    │o│o│         │   rda   │  rs1a   │1 o o│         │1 0 1 0 1│1 0│   mv      rda, rs1a
+    │o│o│immb[9:5]│         │         │1 o o│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
 
-    │o│imma[4:0]│o│         │         │0 o o│imma+rda │1 0 1 0 1│1 0│   li      rda, imma
-    │o│         │o│immb[4:0]│immb[9:5]│0 o o│         │1 0 1 0 1│1 0│   jalr_ra 4*immb
+    │o│o│         │imma[4:0]│imma+rda │1 o o│         │1 0 1 0 1│1 0│   li      rda, imma
+    │o│o│immb[9:5]│         │         │1 o o│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
 
-    │o│imma[4:0]│o│         │         │0 o o│imma+rda │1 0 1 0 1│1 0│   addi4spn rda, 4*imma
-    │o│         │o│immb[4:0]│immb[9:5]│0 o o│         │1 0 1 0 1│1 0│   jalr_ra 4*immb
+    │o│o│         │imma[4:0]│imma+rda │1 o o│         │1 0 1 0 1│1 0│   addi4spn rda, 4*imma
+    │o│o│immb[9:5]│         │         │1 o o│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
 
-    │o│imma[4:0]│o│         │         │0 o o│imma+rda │1 0 1 0 1│1 0│   load    rda, k*imma(x2)
-    │o│         │o│immb[4:0]│immb[9:5]│0 o o│         │1 0 1 0 1│1 0│   jalr_ra 4*immb
+    │o│o│         │imma[4:0]│imma+rda │1 o o│         │1 0 1 0 1│1 0│   load    rda, k*imma(sp)
+    │o│o│immb[9:5]│         │         │1 o o│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
 
-    │o│imma[4:0]│o│         │         │0 o o│  rs2a   │1 0 1 0 1│1 0│   store   rs2a, k*imma(x2)
-    │o│         │o│immb[4:0]│immb[9:5]│0 o o│         │1 0 1 0 1│1 0│   jalr_ra 4*immb
+    │o│o│         │  rs2a   │imma[4:0]│1 o o│         │1 0 1 0 1│1 0│   store   rs2a, k*imma(sp)
+    │o│o│immb[9:5]│         │         │1 o o│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
 
-    │o│imma[4:0]│o│         │         │0 o o│imma+rda │1 0 1 0 1│1 0│   addi_rsd rda, imma
-    │o│         │o│immb[4:0]│immb[9:5]│0 o o│         │1 0 1 0 1│1 0│   jr_t1   4*immb
+    │o│o│         │imma[4:0]│imma+rda │1 o o│         │1 0 1 0 1│1 0│   addi_rsd rda, imma
+    │o│o│immb[9:5]│         │         │1 o o│immb[4:0]│1 0 1 0 1│1 0│   jr_t1   4*immb(t1)
   opcodes:
   - select: "aaab"
     at: 0
@@ -656,14 +717,14 @@ frames:
 - name: "inc-branch-pair"
   does: "Step a loop counter by one and branch on the comparison."
   a_format: mixed
-  id: "101011"
-  select: "101011oooo"
+  id: "101100"
+  select: "101100oooo"
   block: 16          # op-select indices; 16 used, 0 free
   layout: |
-    │o│immb[9:5]│o│  rs2b   │  rsda   │1 o o│immb[4:0]│1 0 1 0 1│1 0│
+    │o│o│immb[9:5]│  rs2b   │  rsda   │0 o o│immb[4:0]│1 0 1 1 0│1 0│
 
-    │o│         │o│         │  rsda   │1 o o│         │1 0 1 0 1│1 0│   inc/dec  rsda
-    │o│immb[9:5]│o│  rs2b   │  rsda   │1 o o│immb[4:0]│1 0 1 0 1│1 0│   bXX     rsda, rs2b, 4*immb
+    │o│o│         │         │  rsda   │0 o o│         │1 0 1 1 0│1 0│   inc/dec  rsda
+    │o│o│immb[9:5]│  rs2b   │  rsda   │0 o o│immb[4:0]│1 0 1 1 0│1 0│   bXX     rsda, rs2b, 4*immb
   opcodes:
   - select: "0bbb"
     at: 0
@@ -696,18 +757,18 @@ frames:
 - name: "mem-base-pair"
   does: "Two adjacent accesses through one base register, one data width apart."
   a_format: mixed
-  id: "101100"
-  select: "101100oooo"
+  id: "101101"
+  select: "101101oooo"
   block: 16          # op-select indices; 16 used, 0 free
   layout: |
-    │o│   rda   │o│imm[4:0] │  rbase  │0 o o│   rdb   │1 0 1 1 0│1 0│
-    │o│  rs2b   │o│  rs2a   │  rbase  │0 o o│imm[4:0] │1 0 1 1 0│1 0│
+    │o│o│   rda   │imm[4:0] │  rbase  │1 o o│   rdb   │1 0 1 1 0│1 0│
+    │o│o│  rs2b   │  rs2a   │  rbase  │1 o o│imm[4:0] │1 0 1 1 0│1 0│
 
-    │o│   rda   │o│imm[4:0] │  rbase  │0 o o│         │1 0 1 1 0│1 0│   load    rda, k*imm(rbase)
-    │o│         │o│imm[4:0] │  rbase  │0 o o│   rdb   │1 0 1 1 0│1 0│   load    rdb, k*imm+k(rbase)
+    │o│o│   rda   │imm[4:0] │  rbase  │1 o o│         │1 0 1 1 0│1 0│   load    rda, k*imm(rbase)
+    │o│o│         │imm[4:0] │  rbase  │1 o o│   rdb   │1 0 1 1 0│1 0│   load    rdb, k*imm+k(rbase)
 
-    │o│         │o│  rs2a   │  rbase  │0 o o│imm[4:0] │1 0 1 1 0│1 0│   store   rs2a, k*imm(rbase)
-    │o│  rs2b   │o│         │  rbase  │0 o o│imm[4:0] │1 0 1 1 0│1 0│   store   rs2b, k*imm+k(rbase)
+    │o│o│         │  rs2a   │  rbase  │1 o o│imm[4:0] │1 0 1 1 0│1 0│   store   rs2a, k*imm(rbase)
+    │o│o│  rs2b   │         │  rbase  │1 o o│imm[4:0] │1 0 1 1 0│1 0│   store   rs2b, k*imm+k(rbase)
   opcodes:
   - select: "pppi"
     at: 0
@@ -723,75 +784,6 @@ frames:
     - {at: 5, n: 1, a: {op: "sh", imm: {bits: 6, signed: false}}, b: {op: "sh", imm: {bits: 6, signed: false}}}
     - {at: 6, n: 1, a: {op: "sw", imm: {bits: 6, signed: false}}, b: {op: "sw", imm: {bits: 6, signed: false}}}
     - {at: 7, n: 1, a: {op: "sd", imm: {bits: 6, signed: false}}, b: {op: "sd", imm: {bits: 6, signed: false}}}
-- name: "setup-jump-pair"
-  does: "Set up an argument or return value, then transfer control."
-  a_format: mixed
-  id: "101101"
-  select: "101101oooo"
-  block: 16          # op-select indices; 15 used, 1 free
-  layout: |
-    │o│  rs1b   │o│imma[4:0]│  rs1a   │1 o o│   rda   │1 0 1 1 0│1 0│
-    │o│  rs1b   │o│imma[4:0]│imma[9:5]│1 o o│   rda   │1 0 1 1 0│1 0│
-    │o│  rs1a   │o│immb[4:0]│immb[9:5]│1 o o│   rda   │1 0 1 1 0│1 0│
-    │o│imma[4:0]│o│immb[4:0]│immb[9:5]│1 o o│   rda   │1 0 1 1 0│1 0│
-
-        (closest-fit encoding — this frame shares rows across forms)
-    │o│         │o│         │  rs1a   │1 o o│   rda   │1 0 1 1 0│1 0│   mv      rda, rs1a
-    │o│  rs1b   │o│         │         │1 o o│         │1 0 1 1 0│1 0│   jr      rs1b
-
-    │o│         │o│imma[4:0]│  rs1a   │1 o o│   rda   │1 0 1 1 0│1 0│   load    rda, k*imma(rs1a)
-    │o│  rs1b   │o│         │         │1 o o│         │1 0 1 1 0│1 0│   jr      rs1b
-    │o│         │o│imma[4:0]│imma[9:5]│1 o o│   rda   │1 0 1 1 0│1 0│   load    rda, k*imma(rs1a)
-    │o│  rs1b   │o│         │         │1 o o│         │1 0 1 1 0│1 0│   jr      rs1b
-
-    │o│         │o│imma[4:0]│imma[9:5]│1 o o│   rda   │1 0 1 1 0│1 0│   li      rda, imma
-    │o│  rs1b   │o│         │         │1 o o│         │1 0 1 1 0│1 0│   jr      rs1b
-
-    │o│  rs1a   │o│         │         │1 o o│   rda   │1 0 1 1 0│1 0│   mv      rda, rs1a
-    │o│         │o│immb[4:0]│immb[9:5]│1 o o│         │1 0 1 1 0│1 0│   j       4*immb
-
-    │o│  rs1a   │o│         │         │1 o o│   rda   │1 0 1 1 0│1 0│   load    rda, 0(rs1a)
-    │o│         │o│immb[4:0]│immb[9:5]│1 o o│         │1 0 1 1 0│1 0│   j       4*immb
-
-    │o│imma[4:0]│o│         │         │1 o o│   rda   │1 0 1 1 0│1 0│   li      rda, imma
-    │o│         │o│immb[4:0]│immb[9:5]│1 o o│         │1 0 1 1 0│1 0│   j       4*immb
-  opcodes:
-  - select: "0aab"
-    at: 0
-    n: 8
-    a:
-    - {at: 0, n: 1, op: "mv"}
-    - {at: 1, n: 1, op: "lbu"}
-    - {at: 2, n: 1, op: "lw"}
-    - {at: 3, n: 1, op: "ld"}
-    b:
-    - {at: 0, n: 1, op: "ret"}
-    - {at: 1, n: 1, op: "jalr"}
-  - select: "110b"
-    at: 12
-    n: 2
-    a:
-    - {at: 0, n: 1, op: "li"}
-    b:
-    - {at: 0, n: 1, op: "ret"}
-    - {at: 1, n: 1, op: "jalr"}
-  - select: "10aa"
-    at: 8
-    n: 4
-    a:
-    - {at: 0, n: 1, op: "mv"}
-    - {at: 1, n: 1, op: "lbu"}
-    - {at: 2, n: 1, op: "lw"}
-    - {at: 3, n: 1, op: "ld"}
-    b:
-    - {at: 0, n: 1, op: "j", imm: {bits: 10, signed: true, scale: 4, field: 10}}
-  - select: "1110"
-    at: 14
-    n: 1
-    a:
-    - {at: 0, n: 1, op: "li"}
-    b:
-    - {at: 0, n: 1, op: "j"}
 - name: "load-sp-branch-pair"
   does: "Load a stack slot and branch on whether it is zero; the value survives."
   a_format: load
@@ -799,10 +791,10 @@ frames:
   select: "1011100ooo"
   block: 8          # op-select indices; 8 used, 0 free
   layout: |
-    │o│   rda   │o│imma[4:0]│imma[9:5]│0 0 o│immb[4:0]│1 0 1 1 1│1 0│
+    │o│o│imma[9:5]│imma[4:0]│   rda   │0 0 o│immb[4:0]│1 0 1 1 1│1 0│
 
-    │o│   rda   │o│imma[4:0]│imma[9:5]│0 0 o│         │1 0 1 1 1│1 0│   load    rda, k*imma(sp)
-    │o│   rda   │o│         │         │0 0 o│immb[4:0]│1 0 1 1 1│1 0│   beqz/bnez rda, zero, 4*immb
+    │o│o│imma[9:5]│imma[4:0]│   rda   │0 0 o│         │1 0 1 1 1│1 0│   load    rda, k*imma(sp)
+    │o│o│         │         │   rda   │0 0 o│immb[4:0]│1 0 1 1 1│1 0│   beqz/bnez rda, zero, 4*immb
   opcodes:
   - select: "aab"
     at: 0
@@ -814,29 +806,51 @@ frames:
     b:
     - {at: 0, n: 1, op: "beqz"}
     - {at: 1, n: 1, op: "bnez"}
-- name: "pre-inc-pair"
-  does: "Advance a pointer, then access through it (pre-increment)."
+- name: "addi-store-off-chain"
+  does: "Compute a value from one base and store it at an offset from another."
   a_format: i-type
   id: "1011101"
   select: "1011101ooo"
   block: 8          # op-select indices; 8 used, 0 free
   layout: |
-    │o│  rs2b   │o│  rs2a   │  rsda   │0 1 o│immb[4:0]│1 0 1 1 1│1 0│
-    │o│immb[4:0]│o│  rs2a   │  rsda   │0 1 o│   rdb   │1 0 1 1 1│1 0│
-    │o│  rs2b   │o│imma[4:0]│imma[9:5]│0 1 o│  rsda   │1 0 1 1 1│1 0│
-    │o│   rdb   │o│imma[4:0]│imma[9:5]│0 1 o│  rsda   │1 0 1 1 1│1 0│
+    │o│o│  rbase  │imma[4:0]│  rs1a   │0 1 o│immb[4:0]│1 0 1 1 1│1 0│
 
-    │o│         │o│  rs2a   │  rsda   │0 1 o│         │1 0 1 1 1│1 0│   shXadd  rsda, rsda, rs2a
-    │o│immb[4:0]│o│         │  rsda   │0 1 o│   rdb   │1 0 1 1 1│1 0│   load    rdb, k*immb(rsda)
+    │o│o│         │imma[4:0]│  rs1a   │0 1 o│         │1 0 1 1 1│1 0│   addi    tmp, rs1a, imma
+    │o│o│  rbase  │         │         │0 1 o│immb[4:0]│1 0 1 1 1│1 0│   store   tmp, k*immb(rbase)
+  opcodes:
+  - select: "bbb"
+    at: 0
+    n: 8
+    a:
+    - {at: 0, n: 1, op: "addi"}
+    b:
+    - {at: 0, n: 2, op: "sb", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
+    - {at: 2, n: 2, op: "sh", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
+    - {at: 4, n: 2, op: "sw", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
+    - {at: 6, n: 2, op: "sd", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
+- name: "pre-inc-pair"
+  does: "Advance a pointer, then access through it (pre-increment)."
+  a_format: i-type
+  id: "1011110"
+  select: "1011110ooo"
+  block: 8          # op-select indices; 8 used, 0 free
+  layout: |
+    │o│o│  rs2b   │  rsda   │  rs1a   │1 0 o│immb[4:0]│1 0 1 1 1│1 0│
+    │o│o│immb[4:0]│  rsda   │  rs1a   │1 0 o│   rdb   │1 0 1 1 1│1 0│
+    │o│o│imma[9:5]│imma[4:0]│  rsda   │1 0 o│  rs2b   │1 0 1 1 1│1 0│
+    │o│o│imma[9:5]│imma[4:0]│  rsda   │1 0 o│   rdb   │1 0 1 1 1│1 0│
 
-    │o│         │o│imma[4:0]│imma[9:5]│0 1 o│  rsda   │1 0 1 1 1│1 0│   addi    rsda, rsda, k*imma
-    │o│   rdb   │o│         │         │0 1 o│  rsda   │1 0 1 1 1│1 0│   load    rdb, 0(rsda)
+    │o│o│         │  rsda   │  rs1a   │1 0 o│         │1 0 1 1 1│1 0│   shXadd  rsda, rs1a, rsda
+    │o│o│immb[4:0]│  rsda   │         │1 0 o│   rdb   │1 0 1 1 1│1 0│   load    rdb, k*immb(rsda)
 
-    │o│         │o│  rs2a   │  rsda   │0 1 o│         │1 0 1 1 1│1 0│   shXadd  rsda, rsda, rs2a
-    │o│  rs2b   │o│         │  rsda   │0 1 o│immb[4:0]│1 0 1 1 1│1 0│   store   rs2b, k*immb(rsda)
+    │o│o│imma[9:5]│imma[4:0]│  rsda   │1 0 o│         │1 0 1 1 1│1 0│   addi    rsda, rsda, k*imma
+    │o│o│         │         │  rsda   │1 0 o│   rdb   │1 0 1 1 1│1 0│   load    rdb, 0(rsda)
 
-    │o│         │o│imma[4:0]│imma[9:5]│0 1 o│  rsda   │1 0 1 1 1│1 0│   addi    rsda, rsda, k*imma
-    │o│  rs2b   │o│         │         │0 1 o│  rsda   │1 0 1 1 1│1 0│   store   rs2b, 0(rsda)
+    │o│o│         │  rsda   │  rs1a   │1 0 o│         │1 0 1 1 1│1 0│   shXadd  rsda, rs1a, rsda
+    │o│o│  rs2b   │  rsda   │         │1 0 o│immb[4:0]│1 0 1 1 1│1 0│   store   rs2b, k*immb(rsda)
+
+    │o│o│imma[9:5]│imma[4:0]│  rsda   │1 0 o│         │1 0 1 1 1│1 0│   addi    rsda, rsda, k*imma
+    │o│o│         │         │  rsda   │1 0 o│  rs2b   │1 0 1 1 1│1 0│   store   rs2b, 0(rsda)
   opcodes:
   - select: "00b"
     at: 0
@@ -873,18 +887,18 @@ frames:
 - name: "index-mem-chain"
   does: "Scaled-index addressing: compute `base + i*width` and access it."
   a_format: r-type
-  id: "1011110"
-  select: "1011110ooo"
+  id: "1011111"
+  select: "1011111ooo"
   block: 8          # op-select indices; 8 used, 0 free
   layout: |
-    │o│  rs2a   │o│immb[4:0]│  rs1a   │1 0 o│   rdb   │1 0 1 1 1│1 0│
-    │o│  rs2a   │o│  rs2b   │  rs1a   │1 0 o│immb[4:0]│1 0 1 1 1│1 0│
+    │o│o│immb[4:0]│  rs2a   │  rs1a   │1 1 o│   rdb   │1 0 1 1 1│1 0│
+    │o│o│  rs2b   │  rs2a   │  rs1a   │1 1 o│immb[4:0]│1 0 1 1 1│1 0│
 
-    │o│  rs2a   │o│         │  rs1a   │1 0 o│         │1 0 1 1 1│1 0│   shXadd  tmp, rs1a, rs2a
-    │o│         │o│immb[4:0]│         │1 0 o│   rdb   │1 0 1 1 1│1 0│   load    rdb, k*immb(tmp)
+    │o│o│         │  rs2a   │  rs1a   │1 1 o│         │1 0 1 1 1│1 0│   shXadd  tmp, rs1a, rs2a
+    │o│o│immb[4:0]│         │         │1 1 o│   rdb   │1 0 1 1 1│1 0│   load    rdb, k*immb(tmp)
 
-    │o│  rs2a   │o│         │  rs1a   │1 0 o│         │1 0 1 1 1│1 0│   shXadd  tmp, rs1a, rs2a
-    │o│         │o│  rs2b   │         │1 0 o│immb[4:0]│1 0 1 1 1│1 0│   store   rs2b, k*immb(tmp)
+    │o│o│         │  rs2a   │  rs1a   │1 1 o│         │1 0 1 1 1│1 0│   shXadd  tmp, rs1a, rs2a
+    │o│o│  rs2b   │         │         │1 1 o│immb[4:0]│1 0 1 1 1│1 0│   store   rs2b, k*immb(tmp)
   opcodes:
   - select: "00b"
     at: 0
@@ -921,14 +935,14 @@ frames:
 - name: "load0-load10-chain"
   does: "Pointer chase: bare first load, the second carries a wide offset."
   a_format: mixed
-  id: "1011111"
-  select: "1011111ooo"
+  id: "1100000"
+  select: "1100000ooo"
   block: 8          # op-select indices; 8 used, 0 free
   layout: |
-    │o│immb[9:5]│o│immb[4:0]│  rs1a   │1 1 o│   rdb   │1 0 1 1 1│1 0│
+    │o│o│immb[9:5]│immb[4:0]│  rs1a   │0 0 o│   rdb   │1 1 0 0 0│1 0│
 
-    │o│         │o│         │  rs1a   │1 1 o│         │1 0 1 1 1│1 0│   lx      tmp, 0(rs1a)
-    │o│immb[9:5]│o│immb[4:0]│         │1 1 o│   rdb   │1 0 1 1 1│1 0│   load    rdb, k*immb(tmp)
+    │o│o│         │         │  rs1a   │0 0 o│         │1 1 0 0 0│1 0│   lx      tmp, 0(rs1a)
+    │o│o│immb[9:5]│immb[4:0]│         │0 0 o│   rdb   │1 1 0 0 0│1 0│   load    rdb, k*immb(tmp)
   opcodes:
   - select: "bbb"
     at: 0
@@ -946,14 +960,14 @@ frames:
 - name: "load5-load5-chain"
   does: "Pointer chase with BOTH loads offset: a pointer in a slot, then indexed."
   a_format: mixed
-  id: "1100000"
-  select: "1100000ooo"
+  id: "1100001"
+  select: "1100001ooo"
   block: 8          # op-select indices; 8 used, 0 free
   layout: |
-    │o│imma[4:0]│o│immb[4:0]│  rs1a   │0 0 o│   rdb   │1 1 0 0 0│1 0│
+    │o│o│immb[4:0]│imma[4:0]│  rs1a   │0 1 o│   rdb   │1 1 0 0 0│1 0│
 
-    │o│imma[4:0]│o│         │  rs1a   │0 0 o│         │1 1 0 0 0│1 0│   lx      tmp, k*imma(rs1a)
-    │o│         │o│immb[4:0]│         │0 0 o│   rdb   │1 1 0 0 0│1 0│   load    rdb, k*immb(tmp)
+    │o│o│         │imma[4:0]│  rs1a   │0 1 o│         │1 1 0 0 0│1 0│   lx      tmp, k*imma(rs1a)
+    │o│o│immb[4:0]│         │         │0 1 o│   rdb   │1 1 0 0 0│1 0│   load    rdb, k*immb(tmp)
   opcodes:
   - select: "bbb"
     at: 0
@@ -971,14 +985,14 @@ frames:
 - name: "addi-store-chain"
   does: "Form a value -- constant, copy or sp-relative address -- and store it."
   a_format: i-type
-  id: "11000010"
-  select: "11000010oo"
+  id: "11000100"
+  select: "11000100oo"
   block: 4          # op-select indices; 4 used, 0 free
   layout: |
-    │o│  rs1a   │o│imma[4:0]│imma[9:5]│0 1 0│  rbase  │1 1 0 0 0│1 0│
+    │o│o│imma[9:5]│imma[4:0]│  rs1a   │1 0 0│  rbase  │1 1 0 0 0│1 0│
 
-    │o│  rs1a   │o│imma[4:0]│imma[9:5]│0 1 0│         │1 1 0 0 0│1 0│   addi    tmp, rs1a, imma
-    │o│         │o│         │         │0 1 0│  rbase  │1 1 0 0 0│1 0│   store   tmp, 0(rbase)
+    │o│o│imma[9:5]│imma[4:0]│  rs1a   │1 0 0│         │1 1 0 0 0│1 0│   addi    tmp, rs1a, imma
+    │o│o│         │         │         │1 0 0│  rbase  │1 1 0 0 0│1 0│   store   tmp, 0(rbase)
   opcodes:
   - select: "bb"
     at: 0
@@ -993,18 +1007,18 @@ frames:
 - name: "post-inc-pair"
   does: "Access through a pointer, then advance it (post-increment)."
   a_format: mixed
-  id: "11000011"
-  select: "11000011oo"
+  id: "11000101"
+  select: "11000101oo"
   block: 4          # op-select indices; 4 used, 0 free
   layout: |
-    │o│immb[4:0]│o│  rs2a   │  rsda   │0 1 1│imma[4:0]│1 1 0 0 0│1 0│
-    │o│immb[4:0]│o│imma[4:0]│  rsda   │0 1 1│   rda   │1 1 0 0 0│1 0│
+    │o│o│immb[4:0]│  rs2a   │  rsda   │1 0 1│imma[4:0]│1 1 0 0 0│1 0│
+    │o│o│immb[4:0]│imma[4:0]│  rsda   │1 0 1│   rda   │1 1 0 0 0│1 0│
 
-    │o│         │o│imma[4:0]│  rsda   │0 1 1│   rda   │1 1 0 0 0│1 0│   load    rda, k*imma(rsda)
-    │o│immb[4:0]│o│         │  rsda   │0 1 1│         │1 1 0 0 0│1 0│   addi    rsda, rsda, k*immb
+    │o│o│         │imma[4:0]│  rsda   │1 0 1│   rda   │1 1 0 0 0│1 0│   load    rda, k*imma(rsda)
+    │o│o│immb[4:0]│         │  rsda   │1 0 1│         │1 1 0 0 0│1 0│   addi    rsda, rsda, k*immb
 
-    │o│         │o│  rs2a   │  rsda   │0 1 1│imma[4:0]│1 1 0 0 0│1 0│   store   rs2a, k*imma(rsda)
-    │o│immb[4:0]│o│         │  rsda   │0 1 1│         │1 1 0 0 0│1 0│   addi    rsda, rsda, k*immb
+    │o│o│         │  rs2a   │  rsda   │1 0 1│imma[4:0]│1 1 0 0 0│1 0│   store   rs2a, k*imma(rsda)
+    │o│o│immb[4:0]│         │  rsda   │1 0 1│         │1 1 0 0 0│1 0│   addi    rsda, rsda, k*immb
   opcodes:
   - select: "0a"
     at: 0
@@ -1025,14 +1039,14 @@ frames:
 - name: "li-czero-chain"
   does: "Materialise a constant and conditionally zero it -- one arm of a select."
   a_format: i-type
-  id: "110001000"
-  select: "110001000o"
+  id: "110001100"
+  select: "110001100o"
   block: 2          # op-select indices; 2 used, 0 free
   layout: |
-    │o│  rs2b   │0│imma[4:0]│imma[9:5]│1 0 0│   rdb   │1 1 0 0 0│1 0│
+    │o│0│imma[9:5]│imma[4:0]│  rs2b   │1 1 0│   rdb   │1 1 0 0 0│1 0│
 
-    │o│         │0│imma[4:0]│imma[9:5]│1 0 0│         │1 1 0 0 0│1 0│   li      tmp, imma
-    │o│  rs2b   │0│         │         │1 0 0│   rdb   │1 1 0 0 0│1 0│   czero.X rdb, tmp, rs2b
+    │o│0│imma[9:5]│imma[4:0]│         │1 1 0│         │1 1 0 0 0│1 0│   li      tmp, imma
+    │o│0│         │         │  rs2b   │1 1 0│   rdb   │1 1 0 0 0│1 0│   czero.X rdb, tmp, rs2b
   opcodes:
   - select: "b"
     at: 0
@@ -1045,14 +1059,14 @@ frames:
 - name: "czero-or-chain"
   does: "Finish a conditional select: merge the surviving arm into the result."
   a_format: mixed
-  id: "110001001"
-  select: "110001001o"
+  id: "110001101"
+  select: "110001101o"
   block: 2          # op-select indices; 2 used, 0 free
   layout: |
-    │o│  rs2b   │1│  rs2a   │  rs1a   │1 0 0│   rdb   │1 1 0 0 0│1 0│
+    │o│1│  rs2b   │  rs2a   │  rs1a   │1 1 0│   rdb   │1 1 0 0 0│1 0│
 
-    │o│         │1│  rs2a   │  rs1a   │1 0 0│         │1 1 0 0 0│1 0│   czero.X tmp, rs1a, rs2a
-    │o│  rs2b   │1│         │         │1 0 0│   rdb   │1 1 0 0 0│1 0│   or      rdb, tmp, rs2b
+    │o│1│         │  rs2a   │  rs1a   │1 1 0│         │1 1 0 0 0│1 0│   czero.X tmp, rs1a, rs2a
+    │o│1│  rs2b   │         │         │1 1 0│   rdb   │1 1 0 0 0│1 0│   or      rdb, tmp, rs2b
   opcodes:
   - select: "a"
     at: 0
@@ -1065,18 +1079,18 @@ frames:
 - name: "mem-sp-pair"
   does: "Two adjacent stack accesses one word apart -- a spill or reload pair."
   a_format: mixed
-  id: "110001010"
-  select: "110001010o"
+  id: "110001110"
+  select: "110001110o"
   block: 2          # op-select indices; 2 used, 0 free
   layout: |
-    │o│   rda   │0│imm[4:0] │imm[9:5] │1 0 1│   rdb   │1 1 0 0 0│1 0│
-    │o│  rs2b   │0│  rs2a   │imm[9:5] │1 0 1│imm[4:0] │1 1 0 0 0│1 0│
+    │o│0│imm[9:5] │imm[4:0] │   rda   │1 1 1│   rdb   │1 1 0 0 0│1 0│
+    │o│0│imm[9:5] │  rs2a   │  rs2b   │1 1 1│imm[4:0] │1 1 0 0 0│1 0│
 
-    │o│   rda   │0│imm[4:0] │imm[9:5] │1 0 1│         │1 1 0 0 0│1 0│   load    rda, k*imm(sp)
-    │o│         │0│imm[4:0] │imm[9:5] │1 0 1│   rdb   │1 1 0 0 0│1 0│   load    rdb, k*imm+k(sp)
+    │o│0│imm[9:5] │imm[4:0] │   rda   │1 1 1│         │1 1 0 0 0│1 0│   load    rda, k*imm(sp)
+    │o│0│imm[9:5] │imm[4:0] │         │1 1 1│   rdb   │1 1 0 0 0│1 0│   load    rdb, k*imm+k(sp)
 
-    │o│         │0│  rs2a   │imm[9:5] │1 0 1│imm[4:0] │1 1 0 0 0│1 0│   store   rs2a, k*imm(sp)
-    │o│  rs2b   │0│         │imm[9:5] │1 0 1│imm[4:0] │1 1 0 0 0│1 0│   store   rs2b, k*imm+k(sp)
+    │o│0│imm[9:5] │  rs2a   │         │1 1 1│imm[4:0] │1 1 0 0 0│1 0│   store   rs2a, k*imm(sp)
+    │o│0│imm[9:5] │         │  rs2b   │1 1 1│imm[4:0] │1 1 0 0 0│1 0│   store   rs2b, k*imm+k(sp)
   opcodes:
   - select: "p"
     at: 0
