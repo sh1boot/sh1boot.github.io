@@ -17,6 +17,7 @@
   --a2: .81917251339;
   --a0: .6710436067;
   --a1: .5497004779;
+  --glow: 0.0;
 }
 * {
   --tinted-stroke: oklab(from oklab(from currentColor
@@ -33,6 +34,13 @@
     calc(calc(mod(var(--a0) * var(--tint), 1) - l) * .25 + l + var(--glow, 0))
     calc(calc(mod(var(--a1) * var(--tint), 1) - 0.5) * a)
     calc(calc(mod(var(--a2) * var(--tint), 1) - 0.5) * b));
+  --tinted-fill-b: oklab(from oklab(from currentColor
+      clamp(.4, l * -100 + 50, .9)
+      clamp(.15, l *  100 - 50, .3)
+      clamp(.15, l *  100 - 50, .3))
+    calc(calc(mod(var(--a0) * var(--tint-b), 1) - l) * .25 + l + var(--glow, 0))
+    calc(calc(mod(var(--a1) * var(--tint-b), 1) - 0.5) * a)
+    calc(calc(mod(var(--a2) * var(--tint-b), 1) - 0.5) * b));
 }
 {%- for n in (0..32) %}
 .tint{{n}} {--tint:{{n}};}

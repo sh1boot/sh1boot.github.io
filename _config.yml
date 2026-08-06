@@ -78,6 +78,7 @@ disqus:
 
 minima:
   date_format: "%e %B, %Y"
+  skin: auto
 
 # Exclude from processing.
 # The following items will not be processed, by default.

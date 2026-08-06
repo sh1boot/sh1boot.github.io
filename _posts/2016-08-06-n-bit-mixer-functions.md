@@ -84,7 +84,6 @@ opportunity to average anything out.
 |  63 | 31 | 0x465657af6d5667ad |  27 | 0x5dc7433ce2b2ba4d |  34 | 0.000170940000 |
 |  64 | 30 | 0xbf58476d1ce4e5b9 |  27 | 0x94d049bb133111eb |  31 | 0.000177390000 |
 | murmur3 mix64 | 33 | 0xff51afd7ed558ccd | 33 | 0xc4ceb9fe1a85ec53 | 33 | 0.000209670000 |
-{: style="text-align: right;" }
 
 These aren't the best coefficients, just the most thoroughly tested.  I'm in
 the middle of refining the training and will likely replace these with much
@@ -215,7 +214,6 @@ that range too..
 | 126 | 62 | 0x2402f676<wbr />b82cd3d745a3<wbr />6180dac22a5b |  67 | 0x1f7d6648<wbr />0e35477c37e8<wbr />a5c215e073ef |  54 | 0.000186570 |
 | 127 | 62 | 0x6909aa5a<wbr />669e5ab52528<wbr />9c15a2942f97 |  68 | 0x6e40aacb<wbr />80adb3c037e0<wbr />a73531f2d0c3 |  55 | 0.000183550 |
 | 128 | 59 | 0xecfb1b9b<wbr />c1f0564fc68d<wbr />d22b9302d18d |  60 | 0x4a4cf034<wbr />8b717188e2ae<wbr />ad7d60f8a0df |  84 | 0.000187520 |
-{: style="text-align: right;" }
 
 
 [splitmix64]: https://xorshift.di.unimi.it/splitmix64.c

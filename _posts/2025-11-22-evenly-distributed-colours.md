@@ -87,7 +87,7 @@ figcaption {
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: hsl({{n |times:0.618033989 |modulo:1 |times:360 |round}}deg, 60%, 70%);">{{n}}</span>
+<span style="color:black;background: hsl({{n |times:0.618033989 |modulo:1 |times:360 |round}}deg, 60%, 70%);">{{n}}</span>
 {%- endfor %}
 </div>
 <figcaption>HSL(n / φ % 1 &times; 360&deg;, 60%, 70%)</figcaption>
@@ -113,7 +113,7 @@ perception.  Maybe that'll help:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklch(75% 30% {{n |times:0.618033989 |modulo:1 |times:360 |round}}deg);">{{n}}</span>
+<span style="color:black;background: oklch(75% 30% {{n |times:0.618033989 |modulo:1 |times:360 |round}}deg);">{{n}}</span>
 {%- endfor %}
 </div>
 <figcaption>OKLCh(75% 30% (n / φ % 1 &times; 360&deg;))</figcaption>
@@ -160,7 +160,7 @@ Here's how that looks in OKLab:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklab(
+<span style="color:black;background: oklab(
 {{-''-}}    .75
 {{-' '-}}   {{n |times: 0.7548776662 |modulo: 1 |minus: 0.5 |times:0.4 |round:3}}
 {{-' '-}}   {{n |times: 0.5698402910 |modulo: 1 |minus: 0.5 |times:0.4 |round:3}});">{{n}}</span>
@@ -189,7 +189,7 @@ And here's what that gives us for OKLCh:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklch(
+<span style="color:black;background: oklch(
 {{-''-}}     .75
 {{-' '-}}    calc(sqrt({{n |times: 0.7548776662 |modulo: 1 |round:3}}) * .2)
 {{-' '-}}    {{n |times: 0.5698402910 |modulo: 1 |times: 360 |round}}deg);">{{n}}</span>
@@ -211,7 +211,7 @@ instead:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklch(
+<span style="color:black;background: oklch(
 {{-''-}}     .75
 {{-' '-}}    calc(sqrt({{n |times: 0.5698402910 |modulo: 1 |round:3}}) * .2)
 {{-' '-}}    {{n |times: 0.7548776662 |modulo: 1 |times: 360 |round}}deg);">{{n}}</span>
@@ -226,7 +226,7 @@ lightness instead.
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklch(
+<span style="color:black;background: oklch(
 {{-''-}}     {{n |times: 0.7548776662 |modulo: 1 |times: 0.25 |plus: 0.63 |round:3}}
 {{-' '-}}    .12
 {{-' '-}}    {{n |times: 0.5698402910 |modulo: 1 |times: 360 |round}}deg);">{{n}}</span>
@@ -240,7 +240,7 @@ Or swapping the axes:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklch(
+<span style="color:black;background: oklch(
 {{-''-}}     {{n |times: 0.5698402910 |modulo: 1 |times: 0.25 |plus: 0.63 |round:3}}
 {{-' '-}}    .12
 {{-' '-}}    {{n |times: 0.7548776662 |modulo: 1 |times: 360 |round}}deg);">{{n}}</span>
@@ -265,7 +265,7 @@ far and start failing to meet the original contrast limitation.
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklab(
+<span style="color:black;background: oklab(
 {{-''-}}     {{n |times: 0.8191725134 |modulo: 1 |times: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    {{n |times: 0.6710436067 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
 {{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
@@ -279,7 +279,7 @@ But I preferred the result with the terms in a different order:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklab(
+<span style="color:black;background: oklab(
 {{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
 {{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
@@ -294,7 +294,7 @@ LDS the way I was doing it, so I tried using a smaller modulo instead:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklab(
+<span style="color:black;background: oklab(
 {{-''-}}     {{n |times: 0.6710436067 |modulo: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    {{n |times: 0.5497004779 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}}
 {{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |minus: 0.5 |times: 0.35|round:3}});">{{n}}</span>
@@ -312,7 +312,7 @@ did reduce the range a little to compensate.  Let's try another OKLCh:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: oklch(
+<span style="color:black;background: oklch(
 {{-''-}}     {{n |times: 0.6710436067 |modulo: 1 |times: 0.25 |plus: 0.63|round:3}}
 {{-' '-}}    calc(sqrt({{n |times: 0.5497004779 |modulo: 1 |round:3}}) * 0.2)
 {{-' '-}}    {{n |times: 0.8191725134 |modulo: 1 |times: 360 |round}});">{{n}}</span>
@@ -326,7 +326,7 @@ And back to HSL:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: hsl(
+<span style="color:black;background: hsl(
 {{-''-}}     {{n |times: 0.8191725134 |modulo: 1 |times: 360 |round}}deg,
 {{-' '-}}    calc(sqrt({{n |times: 0.5497004779 |modulo: 1 |round:3}}) * 70%),
 {{-' '-}}    {{n |times: 0.6710436067 |modulo: 1 |times: 25 |plus: 55 |round}}%);">{{n}}</span>
@@ -340,7 +340,7 @@ And HSL with the axes rearranged:
 <figure>
 <div class="example">
 {%- for n in (0..62) %}
-<span style="background: hsl(
+<span style="color:black;background: hsl(
 {{-''-}}     {{n |times: 0.5497004779 |modulo: 1 |times: 360 |round}}deg,
 {{-' '-}}    calc(sqrt({{n |times: 0.8191725134 |modulo: 1 |round:3}}) * 70%),
 {{-' '-}}    {{n |times: 0.6710436067 |modulo: 1 |times: 25 |plus: 55 |round}}%);">{{n}}</span>
