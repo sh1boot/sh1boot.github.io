@@ -255,7 +255,7 @@ table .bitfield {
           {%- assign type = 'template' %}
         {%- elsif column contains 'rsd' %}
           {%- assign type = 'rsd' %}
-        {%- elsif column contains 'imm' %}
+        {%- elsif column contains 'im' %}
           {%- assign type = 'imm' %}
         {%- elsif column contains 'rs' %}
           {%- assign type = 'rsrc' %}
