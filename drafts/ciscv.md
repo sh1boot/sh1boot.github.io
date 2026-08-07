@@ -16,7 +16,8 @@ below.
 
 ## Why?
 
-* To avoid all the problems of unaligned 32-bit packets
+* To avoid the problems of unaligned 32-bit instructions
+* To avoid the other problems with mixed-size instructions
 * To exploit inter-opcode redundancies
 * To dress up like a CISC architecture in order to gain its powers
 
