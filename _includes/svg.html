@@ -20,24 +20,23 @@
   --glow: 0.0;
 }
 * {
-  --tinted-stroke: oklab(from oklab(from currentColor
+  --tint-stroke-base: oklab(from currentColor
       clamp(.4, l *  100 - 50, .9)
       clamp(.15, l * -100 + 50, .3)
-      clamp(.15, l * -100 + 50, .3))
+      clamp(.15, l * -100 + 50, .3));
+  --tinted-stroke: oklab(from var(--tint-stroke-base)
     calc(calc(mod(var(--a0) * var(--tint), 1) - l) * .25 + l + var(--glow, 0))
     calc(calc(mod(var(--a1) * var(--tint), 1) - 0.5) * a)
     calc(calc(mod(var(--a2) * var(--tint), 1) - 0.5) * b));
-  --tinted-fill: oklab(from oklab(from currentColor
+  --tint-fill-base: oklab(from currentColor
       clamp(.4, l * -100 + 50, .9)
       clamp(.15, l *  100 - 50, .3)
-      clamp(.15, l *  100 - 50, .3))
+      clamp(.15, l *  100 - 50, .3));
+  --tinted-fill: oklab(from var(--tint-fill-base)
     calc(calc(mod(var(--a0) * var(--tint), 1) - l) * .25 + l + var(--glow, 0))
     calc(calc(mod(var(--a1) * var(--tint), 1) - 0.5) * a)
     calc(calc(mod(var(--a2) * var(--tint), 1) - 0.5) * b));
-  --tinted-fill-b: oklab(from oklab(from currentColor
-      clamp(.4, l * -100 + 50, .9)
-      clamp(.15, l *  100 - 50, .3)
-      clamp(.15, l *  100 - 50, .3))
+  --tinted-fill-b: oklab(from var(--tint-fill-base)
     calc(calc(mod(var(--a0) * var(--tint-b), 1) - l) * .25 + l + var(--glow, 0))
     calc(calc(mod(var(--a1) * var(--tint-b), 1) - 0.5) * a)
     calc(calc(mod(var(--a2) * var(--tint-b), 1) - 0.5) * b));
