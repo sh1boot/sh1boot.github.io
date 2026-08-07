@@ -45,6 +45,14 @@ destination register to save encoding space, or elide the destination
 register slot the first instruction and a source register slot of the
 second instruction and hard-code them as a temporary register.
 
+For 'chain' rules, a temporary register is used, and not encoded in the
+packet at all.  This should probably be hard-coded as `x31` (which
+doesn't exist on RV32-E, so maybe `x7` instead?), but for the sake of
+implementation flexibility I would not want to promise that the
+intermediate result be written back _unless_ there's an exception within
+the packet.  Meaningt the value of the temporary register would be
+undefined after a chain packet.
+
 Frame structures are determined from the opcode field.  Each frame has a
 number of opcode pair configurations it supports, and these are
 enumerated and rounded up to the next power of two so that frame types
@@ -104,6 +112,13 @@ defined in terms of instruction frame layouts rather than rules.
 Attempting to draw things around the standard RISC-V frames showed that
 my plan would orbit around a set of four register/immediate fields which
 would be switched around and re-used as needed by each frame.
+
+Here's the tooling, such as it is: [CISC-V experiment][]
+
+It's not really human-readable anymore.  [Claude][] has taken it its own
+way and much of what it does is flaky and unreliable and I don't want to
+think about all that.  But it's sufficient to get a gist of whether the
+ideas make sense and how they map to real code.
 
 ### Pairing rule selection
 
@@ -219,20 +234,20 @@ table .bitfield {
 .tint-unused {
 }
 .tint-imm {
-    --tint: 1;
+    --tint: 0;
     background-color: var(--tinted-fill);
 }
 .tint-rsrc {
-    --tint: 2;
+    --tint: 1;
     background-color: var(--tinted-fill);
 }
 .tint-rdst {
-    --tint: 3;
+    --tint: 2;
     background-color: var(--tinted-fill);
 }
 .tint-rsd {
-    --tint: 2;
-    --tint-b: 3;
+    --tint: 1;
+    --tint-b: 2;
     --rs-fill: var(--tinted-fill);
     --rd-fill: var(--tinted-fill-b);
     background: linear-gradient(135deg, var(--rs-fill) 0%, var(--rs-fill) 33%, var(--rd-fill) 67%, var(--rd-fill) 100%);
@@ -289,9 +304,10 @@ table .bitfield {
       {%- assign hi = bitpos -%}
       {%- assign lo = bitpos | minus: width | plus: 1 -%}
       {%- assign bitpos = lo | minus: 1 -%}
+      {%- assign lop1 = lo | plus: 1 -%}
       <th colspan="{{width}}">
       {%- if hi != lo %}
-      <span class="bit-hi">{{hi}}</span>&hellip;<span class="bit-lo">{{lo}}</span>
+      <span class="bit-hi">{{hi}}</span>{%- if lop1 != hi -%}&hellip;{%- endif -%}<span class="bit-lo">{{lo}}</span>
       {%- else %}
       {{hi}}
       {%- endif %}
@@ -320,21 +336,20 @@ table .bitfield {
 Random test files, compiled with RVC and run through a scheduler to try
 to pick out viable instruction pairs gives these results:
 
-(TODO: update these to latest changes)
 ```
 corpus          insns   pairs  packet%  realRVC%   vsRVC  to parity
-testcase0       21876    4217    80.7%     81.6%   98.9%       -199
-godot           90172   13527    85.0%     76.3%  111.4%      +7841
-cpp-rv32       420866   91362    78.3%     71.1%  110.0%     +30091
-cpp-rv64       411687   86167    79.1%     71.4%  110.8%     +31771
-musl-rv32      119026   27481    76.9%     74.9%  102.7%      +2390
-musl-rv64      102040   21973    78.5%     72.7%  107.9%      +5843
-sqlite-rv32    192768   46325    76.0%     72.1%  105.4%      +7445
-sqlite-rv64    189677   43115    77.3%     72.1%  107.2%      +9840
--------------------------------------------------------------------
-RV32 aggregate  754536  169385   77.6%     72.3%  107.3%
-RV64 aggregate  793576  164782   79.2%     72.3%  109.6%
-COMBINED       1548112  334167   78.4%     72.3%  108.5%     +95022
+testcase0       21875    4185    80.9%     81.6%   99.1%      -167
+godot           90171   15823    82.5%     76.3%  108.1%     +5545
+cpp-rv32       418345   92667    77.8%     71.0%  109.7%    +28786
+cpp-rv64       409200   87664    78.6%     71.2%  110.4%    +30274
+musl-rv32      118990   27712    76.7%     74.9%  102.4%     +2159
+musl-rv64      102010   22208    78.2%     72.7%  107.6%     +5608
+sqlite-rv32    192688   45512    76.4%     72.1%  105.9%     +8258
+sqlite-rv64    189602   42689    77.5%     72.1%  107.5%    +10266
+---------------------------------------------------------------------
+RV32 aggregate 751898  170076    77.4%     72.2%  107.2%    +39036
+RV64 aggregate 790983  168384    78.7%     72.2%  109.1%    +51693
+COMBINED      1542881  338460    78.1%     72.2%  108.1%    +90729
 ```
 
 This is suboptimal because it's not using a compiler which optimises for
@@ -374,3 +389,10 @@ being a random bucket of overlapping things that seemed like good ideas
 is pretty on-brand.
 
 And a toolchain would be nice, too.  And an implementation.
+
+## AI disclosure statement
+
+yes.
+
+[CISC-V experiment]: <https://github.com/sh1bot/ciscv_experiment>
+[Claude]: <https://claude.ai/>
