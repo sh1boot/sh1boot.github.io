@@ -28,6 +28,11 @@
 # `select` on a frame spells the whole 10-bit selector word: '0'/'1' are the
 # identifier, 'p' the op-select bits, '.' a bit the frame does not reach.
 # `block` is how many op-select indices the frame has — 2^(number of 'p's).
+# `fixed` gives every selector/constant/sentinel slice in the same structured
+# shape: a `value` plus one concrete packet `range` (`[hi, lo]`).  Template
+# operand fields carry matching `range` entries; when one encoded value spans
+# adjacent grid fields, `field` is an array, and when it is not packet-contiguous
+# the value is repeated with `[n:m]` qualifiers in its `name`.
 #
 # RESOLVING AN INDEX TO A PAIR OF OPCODES
 #
@@ -114,23 +119,53 @@ frames:
   id: "010"
   select: "010ppppppp"
   block: 128          # op-select indices; 128 used, 0 free
+  fixed: [{name: opcode5, value: 0 1 0 p p, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: p p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│  rs2b   │  rs2a   │  rs1a   │p p p│   rdb   │0 1 0 p p│1 0│
     │p p│  rs2b   │imma[4:0]│  rs1a   │p p p│   rdb   │0 1 0 p p│1 0│
     │p p│immb[4:0]│  rs2a   │  rs1a   │p p p│   rdb   │0 1 0 p p│1 0│
     │p p│immb[4:0]│imma[4:0]│  rs1a   │p p p│   rdb   │0 1 0 p p│1 0│
-
-    │p p│         │  rs2a   │  rs1a   │p p p│         │0 1 0 p p│1 0│   alu     tmp, rs1a, rs2a
-    │p p│  rs2b   │         │         │p p p│   rdb   │0 1 0 p p│1 0│   alu     rdb, tmp, rs2b
-
-    │p p│         │imma[4:0]│  rs1a   │p p p│         │0 1 0 p p│1 0│   alu     tmp, rs1a, imma
-    │p p│  rs2b   │         │         │p p p│   rdb   │0 1 0 p p│1 0│   alu     rdb, tmp, rs2b
-
-    │p p│         │  rs2a   │  rs1a   │p p p│         │0 1 0 p p│1 0│   alu     tmp, rs1a, rs2a
-    │p p│immb[4:0]│         │         │p p p│   rdb   │0 1 0 p p│1 0│   alu     rdb, tmp, immb
-
-    │p p│         │imma[4:0]│  rs1a   │p p p│         │0 1 0 p p│1 0│   alu     tmp, rs1a, imma
-    │p p│immb[4:0]│         │         │p p p│   rdb   │0 1 0 p p│1 0│   alu     rdb, tmp, immb
+  templates:
+  - id: "010"
+    opcode: "0 1 0 p p"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "alu     tmp, rs1a, rs2a"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "alu     rdb, tmp, rs2b"
+  - id: "010"
+    opcode: "0 1 0 p p"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "alu     tmp, rs1a, imma"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "alu     rdb, tmp, rs2b"
+  - id: "010"
+    opcode: "0 1 0 p p"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "alu     tmp, rs1a, rs2a"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "alu     rdb, tmp, immb"
+  - id: "010"
+    opcode: "0 1 0 p p"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "alu     tmp, rs1a, imma"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "alu     rdb, tmp, immb"
   opcodes:
   - select: "0aaabbb"
     at: 0
@@ -176,15 +211,31 @@ frames:
   id: "1011111"
   select: "1011111ppp"
   block: 8          # op-select indices; 8 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 1 1 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 1 p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│immb[4:0]│  rs2a   │  rs1a   │1 1 p│   rdb   │1 0 1 1 1│1 0│
     │p p│  rs2b   │  rs2a   │  rs1a   │1 1 p│immb[4:0]│1 0 1 1 1│1 0│
-
-    │p p│         │  rs2a   │  rs1a   │1 1 p│         │1 0 1 1 1│1 0│   shXadd  tmp, rs1a, rs2a
-    │p p│immb[4:0]│         │         │1 1 p│   rdb   │1 0 1 1 1│1 0│   load    rdb, k*immb(tmp)
-
-    │p p│         │  rs2a   │  rs1a   │1 1 p│         │1 0 1 1 1│1 0│   shXadd  tmp, rs1a, rs2a
-    │p p│  rs2b   │         │         │1 1 p│immb[4:0]│1 0 1 1 1│1 0│   store   rs2b, k*immb(tmp)
+  templates:
+  - id: "1011111"
+    opcode: "1 0 1 1 1"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "shXadd  tmp, rs1a, rs2a"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "load    rdb, k*immb(tmp)"
+  - id: "1011111"
+    opcode: "1 0 1 1 1"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "shXadd  tmp, rs1a, rs2a"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: immb, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "store   rs2b, k*immb(tmp)"
   opcodes:
   - select: "00b"
     at: 0
@@ -224,23 +275,45 @@ frames:
   id: "1011110"
   select: "1011110ppp"
   block: 8          # op-select indices; 8 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 1 1 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 0 p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│  rs2b   │  rsda   │  rs1a   │1 0 p│immb[4:0]│1 0 1 1 1│1 0│
     │p p│immb[4:0]│  rsda   │  rs1a   │1 0 p│   rdb   │1 0 1 1 1│1 0│
     │p p│     imma[9:0]     │  rsda   │1 0 p│  rs2b   │1 0 1 1 1│1 0│
     │p p│     imma[9:0]     │  rsda   │1 0 p│   rdb   │1 0 1 1 1│1 0│
-
-    │p p│         │  rsda   │  rs1a   │1 0 p│         │1 0 1 1 1│1 0│   shXadd  rsda, rs1a, rsda
-    │p p│immb[4:0]│  rsda   │         │1 0 p│   rdb   │1 0 1 1 1│1 0│   load    rdb, k*immb(rsda)
-
-    │p p│     imma[9:0]     │  rsda   │1 0 p│         │1 0 1 1 1│1 0│   addi    rsda, rsda, k*imma
-    │p p│                   │  rsda   │1 0 p│   rdb   │1 0 1 1 1│1 0│   load    rdb, 0(rsda)
-
-    │p p│         │  rsda   │  rs1a   │1 0 p│         │1 0 1 1 1│1 0│   shXadd  rsda, rs1a, rsda
-    │p p│  rs2b   │  rsda   │         │1 0 p│immb[4:0]│1 0 1 1 1│1 0│   store   rs2b, k*immb(rsda)
-
-    │p p│     imma[9:0]     │  rsda   │1 0 p│         │1 0 1 1 1│1 0│   addi    rsda, rsda, k*imma
-    │p p│                   │  rsda   │1 0 p│  rs2b   │1 0 1 1 1│1 0│   store   rs2b, 0(rsda)
+  templates:
+  - id: "1011110"
+    opcode: "1 0 1 1 1"
+    a:
+      fields: [{name: rsda, bits: 5, type: rsd, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "shXadd  rsda, rs1a, rsda"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rsda, bits: 5, type: rsd, field: rs2, range: [24, 20]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "load    rdb, k*immb(rsda)"
+  - id: "1011110"
+    opcode: "1 0 1 1 1"
+    a:
+      fields: [{name: imma, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "addi    rsda, rsda, k*imma"
+    b:
+      fields: [{name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "load    rdb, 0(rsda)"
+  - id: "1011110"
+    opcode: "1 0 1 1 1"
+    a:
+      fields: [{name: rsda, bits: 5, type: rsd, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "shXadd  rsda, rs1a, rsda"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: rsda, bits: 5, type: rsd, field: rs2, range: [24, 20]}, {name: immb, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      template: "store   rs2b, k*immb(rsda)"
+  - id: "1011110"
+    opcode: "1 0 1 1 1"
+    a:
+      fields: [{name: imma, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "addi    rsda, rsda, k*imma"
+    b:
+      fields: [{name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}, {name: rs2b, bits: 5, type: rs, field: rd, range: [11, 7]}]
+      template: "store   rs2b, 0(rsda)"
   opcodes:
   - select: "00b"
     at: 0
@@ -280,15 +353,27 @@ frames:
   id: "11000101"
   select: "11000101pp"
   block: 4          # op-select indices; 4 used, 0 free
+  fixed: [{name: opcode5, value: 1 1 0 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 0 1, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│immb[4:0]│  rs2a   │  rsda   │1 0 1│imma[4:0]│1 1 0 0 0│1 0│
     │p p│immb[4:0]│imma[4:0]│  rsda   │1 0 1│   rda   │1 1 0 0 0│1 0│
-
-    │p p│         │imma[4:0]│  rsda   │1 0 1│   rda   │1 1 0 0 0│1 0│   load    rda, k*imma(rsda)
-    │p p│immb[4:0]│         │  rsda   │1 0 1│         │1 1 0 0 0│1 0│   addi    rsda, rsda, k*immb
-
-    │p p│         │  rs2a   │  rsda   │1 0 1│imma[4:0]│1 1 0 0 0│1 0│   store   rs2a, k*imma(rsda)
-    │p p│immb[4:0]│         │  rsda   │1 0 1│         │1 1 0 0 0│1 0│   addi    rsda, rsda, k*immb
+  templates:
+  - id: "11000101"
+    opcode: "1 1 0 0 0"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}, {name: rda, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "load    rda, k*imma(rsda)"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "addi    rsda, rsda, k*immb"
+  - id: "11000101"
+    opcode: "1 1 0 0 0"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}, {name: imma, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      template: "store   rs2a, k*imma(rsda)"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "addi    rsda, rsda, k*immb"
   opcodes:
   - select: "0a"
     at: 0
@@ -312,15 +397,31 @@ frames:
   id: "110001110"
   select: "110001110p"
   block: 2          # op-select indices; 2 used, 0 free
+  fixed: [{name: opcode5, value: 1 1 0 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 1 1, type: selector, field: funct3, range: [14, 12]}, {name: g, value: '0', type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p 0│     imm[9:0]      │   rda   │1 1 1│   rdb   │1 1 0 0 0│1 0│
     │p 0│imm[9:5] │  rs2a   │  rs2b   │1 1 1│imm[4:0] │1 1 0 0 0│1 0│
-
-    │p 0│     imm[9:0]      │   rda   │1 1 1│         │1 1 0 0 0│1 0│   load    rda, k*imm(sp)
-    │p 0│     imm[9:0]      │         │1 1 1│   rdb   │1 1 0 0 0│1 0│   load    rdb, k*imm+k(sp)
-
-    │p 0│imm[9:5] │  rs2a   │         │1 1 1│imm[4:0] │1 1 0 0 0│1 0│   store   rs2a, k*imm(sp)
-    │p 0│imm[9:5] │         │  rs2b   │1 1 1│imm[4:0] │1 1 0 0 0│1 0│   store   rs2b, k*imm+k(sp)
+  templates:
+  - id: "110001110"
+    opcode: "1 1 0 0 0"
+    a:
+      fields: [{name: imm, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rda, bits: 5, type: rd, field: rs1, range: [19, 15]}]
+      implicit: [{name: sp, type: rs}]
+      template: "load    rda, k*imm(sp)"
+    b:
+      fields: [{name: imm, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: sp, type: rs}]
+      template: "load    rdb, k*imm+k(sp)"
+  - id: "110001110"
+    opcode: "1 1 0 0 0"
+    a:
+      fields: [{name: 'imm[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'imm[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}, {name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}]
+      implicit: [{name: sp, type: rs}]
+      template: "store   rs2a, k*imm(sp)"
+    b:
+      fields: [{name: 'imm[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'imm[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}, {name: rs2b, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: sp, type: rs}]
+      template: "store   rs2b, k*imm+k(sp)"
   opcodes:
   - select: "p"
     at: 0
@@ -335,15 +436,27 @@ frames:
   id: "101101"
   select: "101101pppp"
   block: 16          # op-select indices; 16 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 1 1 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│   rda   │imm[4:0] │  rbase  │1 p p│   rdb   │1 0 1 1 0│1 0│
     │p p│  rs2b   │  rs2a   │  rbase  │1 p p│imm[4:0] │1 0 1 1 0│1 0│
-
-    │p p│   rda   │imm[4:0] │  rbase  │1 p p│         │1 0 1 1 0│1 0│   load    rda, k*imm(rbase)
-    │p p│         │imm[4:0] │  rbase  │1 p p│   rdb   │1 0 1 1 0│1 0│   load    rdb, k*imm+k(rbase)
-
-    │p p│         │  rs2a   │  rbase  │1 p p│imm[4:0] │1 0 1 1 0│1 0│   store   rs2a, k*imm(rbase)
-    │p p│  rs2b   │         │  rbase  │1 p p│imm[4:0] │1 0 1 1 0│1 0│   store   rs2b, k*imm+k(rbase)
+  templates:
+  - id: "101101"
+    opcode: "1 0 1 1 0"
+    a:
+      fields: [{name: rda, bits: 5, type: rd, field: funct5, range: [29, 25]}, {name: imm, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rbase, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "load    rda, k*imm(rbase)"
+    b:
+      fields: [{name: imm, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rbase, bits: 5, type: rs, field: rs1, range: [19, 15]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "load    rdb, k*imm+k(rbase)"
+  - id: "101101"
+    opcode: "1 0 1 1 0"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rbase, bits: 5, type: rs, field: rs1, range: [19, 15]}, {name: imm, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      template: "store   rs2a, k*imm(rbase)"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: rbase, bits: 5, type: rs, field: rs1, range: [19, 15]}, {name: imm, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      template: "store   rs2b, k*imm+k(rbase)"
   opcodes:
   - select: "pppi"
     at: 0
@@ -365,15 +478,31 @@ frames:
   id: "0110"
   select: "0110pppppp"
   block: 64          # op-select indices; 64 used, 0 free
+  fixed: [{name: opcode5, value: 0 1 1 0 p, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: p p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│  rs2b   │imma[4:0]│  rs1a   │p p p│   rdb   │0 1 1 0 p│1 0│
     │p p│immb[4:0]│imma[4:0]│  rs1a   │p p p│   rdb   │0 1 1 0 p│1 0│
-
-    │p p│         │imma[4:0]│  rs1a   │p p p│         │0 1 1 0 p│1 0│   load    tmp, k*imma(rs1a)
-    │p p│  rs2b   │         │         │p p p│   rdb   │0 1 1 0 p│1 0│   alu     rdb, tmp, rs2b
-
-    │p p│         │imma[4:0]│  rs1a   │p p p│         │0 1 1 0 p│1 0│   load    tmp, k*imma(rs1a)
-    │p p│immb[4:0]│         │         │p p p│   rdb   │0 1 1 0 p│1 0│   alu     rdb, tmp, immb
+  templates:
+  - id: "0110"
+    opcode: "0 1 1 0 p"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "load    tmp, k*imma(rs1a)"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "alu     rdb, tmp, rs2b"
+  - id: "0110"
+    opcode: "0 1 1 0 p"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "load    tmp, k*imma(rs1a)"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "alu     rdb, tmp, immb"
   opcodes:
   - select: "aabbbb"
     at: 0
@@ -403,15 +532,31 @@ frames:
   id: "10010"
   select: "10010ppppp"
   block: 32          # op-select indices; 32 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 0 1 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: p p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│  rs1b   │  rs2a   │  rs1a   │p p p│immb[4:0]│1 0 0 1 0│1 0│
     │p p│  rs1b   │imma[4:0]│  rs1a   │p p p│immb[4:0]│1 0 0 1 0│1 0│
-
-    │p p│         │  rs2a   │  rs1a   │p p p│         │1 0 0 1 0│1 0│   alu     tmp, rs1a, rs2a
-    │p p│  rs1b   │         │         │p p p│immb[4:0]│1 0 0 1 0│1 0│   store   tmp, k*immb(rs1b)
-
-    │p p│         │imma[4:0]│  rs1a   │p p p│         │1 0 0 1 0│1 0│   alu     tmp, rs1a, imma
-    │p p│  rs1b   │         │         │p p p│immb[4:0]│1 0 0 1 0│1 0│   store   tmp, k*immb(rs1b)
+  templates:
+  - id: "10010"
+    opcode: "1 0 0 1 0"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "alu     tmp, rs1a, rs2a"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: immb, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "store   tmp, k*immb(rs1b)"
+  - id: "10010"
+    opcode: "1 0 0 1 0"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "alu     tmp, rs1a, imma"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: immb, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "store   tmp, k*immb(rs1b)"
   opcodes:
   - select: "aaaab"
     at: 0
@@ -441,11 +586,20 @@ frames:
   id: "11000100"
   select: "11000100pp"
   block: 4          # op-select indices; 4 used, 0 free
+  fixed: [{name: opcode5, value: 1 1 0 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 0 0, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│     imma[9:0]     │  rs1a   │1 0 0│  rbase  │1 1 0 0 0│1 0│
-
-    │p p│     imma[9:0]     │  rs1a   │1 0 0│         │1 1 0 0 0│1 0│   addi    tmp, rs1a, imma
-    │p p│                   │         │1 0 0│  rbase  │1 1 0 0 0│1 0│   store   tmp, 0(rbase)
+  templates:
+  - id: "11000100"
+    opcode: "1 1 0 0 0"
+    a:
+      fields: [{name: imma, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "addi    tmp, rs1a, imma"
+    b:
+      fields: [{name: rbase, bits: 5, type: rs, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "store   tmp, 0(rbase)"
   opcodes:
   - select: "bb"
     at: 0
@@ -463,11 +617,20 @@ frames:
   id: "1011101"
   select: "1011101ppp"
   block: 8          # op-select indices; 8 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 1 1 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 0 1 p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│  rbase  │imma[4:0]│  rs1a   │0 1 p│immb[4:0]│1 0 1 1 1│1 0│
-
-    │p p│         │imma[4:0]│  rs1a   │0 1 p│         │1 0 1 1 1│1 0│   addi    tmp, rs1a, imma
-    │p p│  rbase  │         │         │0 1 p│immb[4:0]│1 0 1 1 1│1 0│   store   tmp, k*immb(rbase)
+  templates:
+  - id: "1011101"
+    opcode: "1 0 1 1 1"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "addi    tmp, rs1a, imma"
+    b:
+      fields: [{name: rbase, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: immb, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "store   tmp, k*immb(rbase)"
   opcodes:
   - select: "bbb"
     at: 0
@@ -485,11 +648,20 @@ frames:
   id: "101001"
   select: "101001pppp"
   block: 16          # op-select indices; 16 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 1 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│  rs1b   │imma[4:0]│  rs1a   │1 p p│immb[4:0]│1 0 1 0 0│1 0│
-
-    │p p│         │imma[4:0]│  rs1a   │1 p p│         │1 0 1 0 0│1 0│   load    tmp, k*imma(rs1a)
-    │p p│  rs1b   │         │         │1 p p│immb[4:0]│1 0 1 0 0│1 0│   store   tmp, k*immb(rs1b)
+  templates:
+  - id: "101001"
+    opcode: "1 0 1 0 0"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "load    tmp, k*imma(rs1a)"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: immb, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "store   tmp, k*immb(rs1b)"
   opcodes:
   - select: "ppab"
     at: 0
@@ -506,11 +678,20 @@ frames:
   id: "1100000"
   select: "1100000ppp"
   block: 8          # op-select indices; 8 used, 0 free
+  fixed: [{name: opcode5, value: 1 1 0 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 0 0 p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│     immb[9:0]     │  rs1a   │0 0 p│   rdb   │1 1 0 0 0│1 0│
-
-    │p p│                   │  rs1a   │0 0 p│         │1 1 0 0 0│1 0│   lx      tmp, 0(rs1a)
-    │p p│     immb[9:0]     │         │0 0 p│   rdb   │1 1 0 0 0│1 0│   load    rdb, k*immb(tmp)
+  templates:
+  - id: "1100000"
+    opcode: "1 1 0 0 0"
+    a:
+      fields: [{name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "lx      tmp, 0(rs1a)"
+    b:
+      fields: [{name: immb, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "load    rdb, k*immb(tmp)"
   opcodes:
   - select: "bbb"
     at: 0
@@ -531,11 +712,20 @@ frames:
   id: "1100001"
   select: "1100001ppp"
   block: 8          # op-select indices; 8 used, 0 free
+  fixed: [{name: opcode5, value: 1 1 0 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 0 1 p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│immb[4:0]│imma[4:0]│  rs1a   │0 1 p│   rdb   │1 1 0 0 0│1 0│
-
-    │p p│         │imma[4:0]│  rs1a   │0 1 p│         │1 1 0 0 0│1 0│   lx      tmp, k*imma(rs1a)
-    │p p│immb[4:0]│         │         │0 1 p│   rdb   │1 1 0 0 0│1 0│   load    rdb, k*immb(tmp)
+  templates:
+  - id: "1100001"
+    opcode: "1 1 0 0 0"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "lx      tmp, k*imma(rs1a)"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "load    rdb, k*immb(tmp)"
   opcodes:
   - select: "bbb"
     at: 0
@@ -556,11 +746,19 @@ frames:
   id: "101000"
   select: "101000pppp"
   block: 16          # op-select indices; 16 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 1 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 0 p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│   rda   │imma[4:0]│  rs1a   │0 p p│immb[4:0]│1 0 1 0 0│1 0│
-
-    │p p│   rda   │imma[4:0]│  rs1a   │0 p p│         │1 0 1 0 0│1 0│   load    rda, k*imma(rs1a)
-    │p p│   rda   │         │         │0 p p│immb[4:0]│1 0 1 0 0│1 0│   beqz/bnez rda, zero, 4*immb
+  templates:
+  - id: "101000"
+    opcode: "1 0 1 0 0"
+    a:
+      fields: [{name: rda, bits: 5, type: rd, field: funct5, range: [29, 25]}, {name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "load    rda, k*imma(rs1a)"
+    b:
+      fields: [{name: rda, bits: 5, type: rd, field: funct5, range: [29, 25]}, {name: immb, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: zero, type: rs}]
+      template: "beqz/bnez rda, zero, 4*immb"
   opcodes:
   - select: "aaab"
     at: 0
@@ -582,11 +780,20 @@ frames:
   id: "1011100"
   select: "1011100ppp"
   block: 8          # op-select indices; 8 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 1 1 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 0 0 p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│     imma[9:0]     │   rda   │0 0 p│immb[4:0]│1 0 1 1 1│1 0│
-
-    │p p│     imma[9:0]     │   rda   │0 0 p│         │1 0 1 1 1│1 0│   load    rda, k*imma(sp)
-    │p p│                   │   rda   │0 0 p│immb[4:0]│1 0 1 1 1│1 0│   beqz/bnez rda, zero, 4*immb
+  templates:
+  - id: "1011100"
+    opcode: "1 0 1 1 1"
+    a:
+      fields: [{name: imma, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rda, bits: 5, type: rd, field: rs1, range: [19, 15]}]
+      implicit: [{name: sp, type: rs}]
+      template: "load    rda, k*imma(sp)"
+    b:
+      fields: [{name: rda, bits: 5, type: rd, field: rs1, range: [19, 15]}, {name: immb, bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: zero, type: rs}]
+      template: "beqz/bnez rda, zero, 4*immb"
   opcodes:
   - select: "aab"
     at: 0
@@ -604,11 +811,18 @@ frames:
   id: "101100"
   select: "101100pppp"
   block: 16          # op-select indices; 16 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 1 1 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 0 p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│immb[9:5]│  rs2b   │  rsda   │0 p p│immb[4:0]│1 0 1 1 0│1 0│
-
-    │p p│         │         │  rsda   │0 p p│         │1 0 1 1 0│1 0│   inc/dec  rsda
-    │p p│immb[9:5]│  rs2b   │  rsda   │0 p p│immb[4:0]│1 0 1 1 0│1 0│   bXX     rsda, rs2b, 4*immb
+  templates:
+  - id: "101100"
+    opcode: "1 0 1 1 0"
+    a:
+      fields: [{name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "inc/dec  rsda"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}, {name: rs2b, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "bXX     rsda, rs2b, 4*immb"
   opcodes:
   - select: "0bbb"
     at: 0
@@ -644,14 +858,30 @@ frames:
   id: "10000"
   select: "10000ppppp"
   block: 32          # op-select indices; 32 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 0 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: p p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│immb[9:5]│imma[4:0]│  rs1a   │p p p│immb[4:0]│1 0 0 0 0│1 0│
-
-    │p p│         │imma[4:0]│  rs1a   │p p p│         │1 0 0 0 0│1 0│   andi    tmp, rs1a, imma
-    │p p│immb[9:5]│         │         │p p p│immb[4:0]│1 0 0 0 0│1 0│   beqz/bnez tmp, 4*immb
-
-    │p p│         │imma[4:0]│  rs1a   │p p p│         │1 0 0 0 0│1 0│   slli/srli tmp, rs1a, imma
-    │p p│immb[9:5]│         │         │p p p│immb[4:0]│1 0 0 0 0│1 0│   beqz/bnez tmp, 4*immb
+  templates:
+  - id: "10000"
+    opcode: "1 0 0 0 0"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "andi    tmp, rs1a, imma"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "beqz/bnez tmp, 4*immb"
+  - id: "10000"
+    opcode: "1 0 0 0 0"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "slli/srli tmp, rs1a, imma"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "beqz/bnez tmp, 4*immb"
   opcodes:
   - select: "aaabb"
     at: 0
@@ -671,11 +901,20 @@ frames:
   id: "0111"
   select: "0111pppppp"
   block: 64          # op-select indices; 64 used, 0 free
+  fixed: [{name: opcode5, value: 0 1 1 1 p, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: p p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│immb[9:5]│imma[4:0]│  rs1b   │p p p│immb[4:0]│0 1 1 1 p│1 0│
-
-    │p p│         │imma[4:0]│         │p p p│         │0 1 1 1 p│1 0│   li      tmp, imma
-    │p p│immb[9:5]│         │  rs1b   │p p p│immb[4:0]│0 1 1 1 p│1 0│   bXX     rs1b, tmp, 4*immb
+  templates:
+  - id: "0111"
+    opcode: "0 1 1 1 p"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "li      tmp, imma"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}, {name: rs1b, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "bXX     rs1b, tmp, 4*immb"
   opcodes:
   - select: "aaabbb"
     at: 0
@@ -695,11 +934,20 @@ frames:
   id: "110001100"
   select: "110001100p"
   block: 2          # op-select indices; 2 used, 0 free
+  fixed: [{name: opcode5, value: 1 1 0 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 1 0, type: selector, field: funct3, range: [14, 12]}, {name: g, value: '0', type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p 0│     imma[9:0]     │  rs2b   │1 1 0│   rdb   │1 1 0 0 0│1 0│
-
-    │p 0│     imma[9:0]     │         │1 1 0│         │1 1 0 0 0│1 0│   li      tmp, imma
-    │p 0│                   │  rs2b   │1 1 0│   rdb   │1 1 0 0 0│1 0│   czero.X rdb, tmp, rs2b
+  templates:
+  - id: "110001100"
+    opcode: "1 1 0 0 0"
+    a:
+      fields: [{name: imma, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "li      tmp, imma"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: rs1, range: [19, 15]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "czero.X rdb, tmp, rs2b"
   opcodes:
   - select: "b"
     at: 0
@@ -715,11 +963,20 @@ frames:
   id: "110001101"
   select: "110001101p"
   block: 2          # op-select indices; 2 used, 0 free
+  fixed: [{name: opcode5, value: 1 1 0 0 0, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 1 0, type: selector, field: funct3, range: [14, 12]}, {name: g, value: '1', type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p 1│  rs2b   │  rs2a   │  rs1a   │1 1 0│   rdb   │1 1 0 0 0│1 0│
-
-    │p 1│         │  rs2a   │  rs1a   │1 1 0│         │1 1 0 0 0│1 0│   czero.X tmp, rs1a, rs2a
-    │p 1│  rs2b   │         │         │1 1 0│   rdb   │1 1 0 0 0│1 0│   or      rdb, tmp, rs2b
+  templates:
+  - id: "110001101"
+    opcode: "1 1 0 0 0"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "czero.X tmp, rs1a, rs2a"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      implicit: [{name: tmp, type: rs}]
+      template: "or      rdb, tmp, rs2b"
   opcodes:
   - select: "a"
     at: 0
@@ -735,14 +992,26 @@ frames:
   id: "101010"
   select: "101010pppp"
   block: 16          # op-select indices; 10 used, 6 free
+  fixed: [{name: opcode5, value: 1 0 1 0 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 0 p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│   rda   │  rs2a   │  rs1a   │0 p p│   rdb   │1 0 1 0 1│1 0│
-
-    │p p│   rda   │  rs2a   │  rs1a   │0 p p│         │1 0 1 0 1│1 0│   alu     rda, rs1a, rs2a
-    │p p│         │  rs2a   │  rs1a   │0 p p│   rdb   │1 0 1 0 1│1 0│   alu     rdb, rs1a, rs2a
-
-    │p p│   rda   │  rs2a   │  rs1a   │0 p p│         │1 0 1 0 1│1 0│   add     rda, rs1a, rs2a
-    │p p│   rda   │         │  rs1a   │0 p p│   rdb   │1 0 1 0 1│1 0│   sltu    rdb, rda, rs1a
+  templates:
+  - id: "101010"
+    opcode: "1 0 1 0 1"
+    a:
+      fields: [{name: rda, bits: 5, type: rd, field: funct5, range: [29, 25]}, {name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "alu     rda, rs1a, rs2a"
+    b:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "alu     rdb, rs1a, rs2a"
+  - id: "101010"
+    opcode: "1 0 1 0 1"
+    a:
+      fields: [{name: rda, bits: 5, type: rd, field: funct5, range: [29, 25]}, {name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "add     rda, rs1a, rs2a"
+    b:
+      fields: [{name: rda, bits: 5, type: rd, field: funct5, range: [29, 25]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "sltu    rdb, rda, rs1a"
   opcodes:
   - select: "00aa"
     at: 0
@@ -795,50 +1064,72 @@ frames:
   id: "00"
   select: "00pppppppp"
   block: 256          # op-select indices; 256 used, 0 free
+  fixed: [{name: opcode5, value: 0 0 p p p, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: p p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│  rs2b   │  rs2a   │  rsda   │p p p│  rsdb   │0 0 p p p│1 0│
     │p p│  rs2b   │imma[4:0]│  rsda   │p p p│  rsdb   │0 0 p p p│1 0│
     │p p│immb[4:0]│  rs2a   │  rsda   │p p p│  rsdb   │0 0 p p p│1 0│
     │p p│immb[4:0]│imma[4:0]│  rsda   │p p p│  rsdb   │0 0 p p p│1 0│
-
-    │p p│         │  rs2a   │  rsda   │p p p│         │0 0 p p p│1 0│   alu rsda, rsda, rs2a
-    │p p│  rs2b   │         │         │p p p│  rsdb   │0 0 p p p│1 0│   alu rsdb, rsdb, rs2b
-
-    │p p│         │imma[4:0]│  rsda   │p p p│         │0 0 p p p│1 0│   alu rsda, rsda, imma
-    │p p│  rs2b   │         │         │p p p│  rsdb   │0 0 p p p│1 0│   alu rsdb, rsdb, rs2b
-
-    │p p│         │  rs2a   │  rsda   │p p p│         │0 0 p p p│1 0│   alu rsda, rsda, rs2a
-    │p p│immb[4:0]│         │         │p p p│  rsdb   │0 0 p p p│1 0│   alu rsdb, rsdb, immb
-
-    │p p│         │imma[4:0]│  rsda   │p p p│         │0 0 p p p│1 0│   alu rsda, rsda, imma
-    │p p│immb[4:0]│         │         │p p p│  rsdb   │0 0 p p p│1 0│   alu rsdb, rsdb, immb
+  templates:
+  - id: "00"
+    opcode: "0 0 p p p"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "alu rsda, rsda, rs2a"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: rsdb, bits: 5, type: rsd, field: rd, range: [11, 7]}]
+      template: "alu rsdb, rsdb, rs2b"
+  - id: "00"
+    opcode: "0 0 p p p"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "alu rsda, rsda, imma"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: rsdb, bits: 5, type: rsd, field: rd, range: [11, 7]}]
+      template: "alu rsdb, rsdb, rs2b"
+  - id: "00"
+    opcode: "0 0 p p p"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "alu rsda, rsda, rs2a"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rsdb, bits: 5, type: rsd, field: rd, range: [11, 7]}]
+      template: "alu rsdb, rsdb, immb"
+  - id: "00"
+    opcode: "0 0 p p p"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "alu rsda, rsda, imma"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rsdb, bits: 5, type: rsd, field: rd, range: [11, 7]}]
+      template: "alu rsdb, rsdb, immb"
   opcodes:
   - select: "aaaabbbb"
     at: 0
     n: 256
     a:
     - {at: 0, n: 2, op: "slli", imm: {bits: 6, signed: false, field: 5, ext: "imm[5:5]"}}
-    - {at: 2, n: 1, op: "add"}
-    - {at: 3, n: 1, op: "sub"}
-    - {at: 4, n: 1, op: "mul"}
-    - {at: 5, n: 1, op: "or"}
-    - {at: 6, n: 1, op: "sh1add"}
-    - {at: 7, n: 1, op: "sh2add"}
-    - {at: 8, n: 1, op: "sh3add"}
-    - {at: 9, n: 1, op: "czero.nez"}
-    - {at: 10, n: 1, op: "addi", imm: {bits: 5, signed: true, field: 5}}
-    - {at: 11, n: 1, op: "li", imm: {bits: 5, signed: true, field: 5}}
-    - {at: 12, n: 1, op: "addiw", imm: {bits: 5, signed: true, field: 5}}
-    - {at: 13, n: 1, op: "andi", imm: {bits: 5, signed: true, field: 5}}
-    - {at: 14, n: 1, op: "slliw", imm: {bits: 5, signed: false, field: 5}}
-    - {at: 15, n: 1, op: "srli", imm: {bits: 5, signed: false, field: 5}}
+    - {at: 2, n: 1, op: "addi", imm: {bits: 5, signed: true, field: 5}}
+    - {at: 3, n: 1, op: "li", imm: {bits: 5, signed: true, field: 5}}
+    - {at: 4, n: 1, op: "addiw", imm: {bits: 5, signed: true, field: 5}}
+    - {at: 5, n: 1, op: "andi", imm: {bits: 5, signed: true, field: 5}}
+    - {at: 6, n: 1, op: "slliw", imm: {bits: 5, signed: false, field: 5}}
+    - {at: 7, n: 1, op: "srli", imm: {bits: 5, signed: false, field: 5}}
+    - {at: 8, n: 1, op: "add"}
+    - {at: 9, n: 1, op: "sub"}
+    - {at: 10, n: 1, op: "mul"}
+    - {at: 11, n: 1, op: "or"}
+    - {at: 12, n: 1, op: "sh1add"}
+    - {at: 13, n: 1, op: "sh2add"}
+    - {at: 14, n: 1, op: "sh3add"}
+    - {at: 15, n: 1, op: "czero.nez"}
     b:
     - {at: 0, n: 8, op: "li", imm: {bits: 8, signed: true, field: 5, ext: "imm[7:5]"}}
     - {at: 8, n: 4, op: "addi", imm: {bits: 7, signed: true, field: 5, ext: "imm[6:5]"}}
-    - {at: 12, n: 1, op: "add"}
-    - {at: 13, n: 1, op: "or"}
-    - {at: 14, n: 1, op: "czero.eqz"}
-    - {at: 15, n: 1, op: "slli", imm: {bits: 5, signed: false, field: 5}}
+    - {at: 12, n: 1, op: "slli", imm: {bits: 5, signed: false, field: 5}}
+    - {at: 13, n: 1, op: "add"}
+    - {at: 14, n: 1, op: "or"}
+    - {at: 15, n: 1, op: "czero.eqz"}
 - name: "prologue-pair"
   does: "Function prologue: reserve the stack frame and save the return address."
   a_format: i-type
@@ -847,11 +1138,20 @@ frames:
   hosted_in: "rsd-alu-pair"
   rd: x2                      # the allocated sentinel: what tells it from its host
   block: 2          # op-select indices; 2 used, 0 free
+  fixed: [{name: opcode5, value: 0 0 1 0 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 1 0, type: selector, field: funct3, range: [14, 12]}, {name: g, value: '1', type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}, {name: rd, value: 0 0 0 1 0, type: sentinel, field: rd, range: [11, 7]}]
   layout: |
     │p 1│     imm[9:0]      │  rs1b   │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│
-
-    │p 1│     imm[9:0]      │         │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   addi    sp, -16*imm
-    │p 1│     imm[9:0]      │  rs1b   │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   store   rs1b, 16*imm-k(sp)
+  templates:
+  - id: "001011101"
+    opcode: "0 0 1 0 1"
+    a:
+      fields: [{name: imm, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}]
+      implicit: [{name: sp, type: rsd}]
+      template: "addi    sp, -16*imm"
+    b:
+      fields: [{name: imm, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rs1b, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: sp, type: rs}]
+      template: "store   rs1b, 16*imm-k(sp)"
   opcodes:
   - select: "b"
     at: 0
@@ -869,11 +1169,19 @@ frames:
   hosted_in: "rsd-alu-pair"
   rd: x2                      # the allocated sentinel: what tells it from its host
   block: 2          # op-select indices; 2 used, 0 free
+  fixed: [{name: opcode5, value: 0 0 1 0 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 1 0, type: selector, field: funct3, range: [14, 12]}, {name: g, value: '0', type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}, {name: rd, value: 0 0 0 1 0, type: sentinel, field: rd, range: [11, 7]}]
   layout: |
     │p 0│     imm[9:0]      │  rs1b   │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│
-
-    │p 0│     imm[9:0]      │         │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   addi    sp, 16*imm
-    │p 0│                   │  rs1b   │1 1 0│0 0 0 1 0│0 0 1 0 1│1 0│   jr_any  rs1b
+  templates:
+  - id: "001011100"
+    opcode: "0 0 1 0 1"
+    a:
+      fields: [{name: imm, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}]
+      implicit: [{name: sp, type: rsd}]
+      template: "addi    sp, 16*imm"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "jr      rs1b"
   opcodes:
   - select: "b"
     at: 0
@@ -889,6 +1197,7 @@ frames:
   id: "10001"
   select: "10001ppppp"
   block: 32          # op-select indices; 14 used, 18 free
+  fixed: [{name: opcode5, value: 1 0 0 0 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: p p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│  rs2b   │  rs2a   │   rda   │p p p│   rdb   │1 0 0 0 1│1 0│
     │p p│immb[4:0]│  rs2a   │   rda   │p p p│   rdb   │1 0 0 0 1│1 0│
@@ -896,23 +1205,49 @@ frames:
     │p p│  rs2b   │imma[4:0]│ima│ rda │p p p│   rdb   │1 0 0 0 1│1 0│
     │p p│immb[4:0]│imma[4:0]│ima│ rda │p p p│   rdb   │1 0 0 0 1│1 0│
 
-    │p p│         │  rs2a   │   rda   │p p p│         │1 0 0 0 1│1 0│   mv      rda, rs2a
-    │p p│  rs2b   │         │         │p p p│   rdb   │1 0 0 0 1│1 0│   mv/li   rdb, rs2b
-
-    │p p│         │  rs2a   │   rda   │p p p│         │1 0 0 0 1│1 0│   mv      rda, rs2a
-    │p p│immb[4:0]│         │         │p p p│   rdb   │1 0 0 0 1│1 0│   mv/li   rdb, immb
-
-    │p p│         │imma[4:0]│   rda   │p p p│         │1 0 0 0 1│1 0│   li      rda, imma
-    │p p│immb[4:0]│         │         │p p p│   rdb   │1 0 0 0 1│1 0│   li      rdb, immb
-
-    │p p│         │imma[4:0]│ima│ rda │p p p│         │1 0 0 0 1│1 0│   li      rda, imma
-    │p p│immb[4:0]│         │   │     │p p p│   rdb   │1 0 0 0 1│1 0│   li      rdb, immb
-
-        (closest-fit encoding — this frame shares rows across forms)
-    │p p│         │imma[4:0]│         │p p p│         │1 0 0 0 1│1 0│   li      arda, imma
-    │p p│immb[4:0]│         │         │p p p│   rdb   │1 0 0 0 1│1 0│   mv/li   rdb, immb
-
         where ima = imma[6:5]
+  templates:
+  - id: "10001"
+    opcode: "1 0 0 0 1"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rda, bits: 5, type: rd, field: rs1, range: [19, 15]}]
+      template: "mv      rda, rs2a"
+    b:
+      fields: [{name: rs2b, bits: 5, type: rs, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "mv/li   rdb, rs2b"
+  - id: "10001"
+    opcode: "1 0 0 0 1"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rda, bits: 5, type: rd, field: rs1, range: [19, 15]}]
+      template: "mv      rda, rs2a"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "mv/li   rdb, immb"
+  - id: "10001"
+    opcode: "1 0 0 0 1"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rda, bits: 5, type: rd, field: rs1, range: [19, 15]}]
+      template: "li      rda, imma"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "li      rdb, immb"
+  - id: "10001"
+    opcode: "1 0 0 0 1"
+    a:
+      fields: [{name: imma, bits: 7, type: imm, field: [rs2, rs1], range: [24, 18]}, {name: rda, bits: 3, type: rd, field: rs1, range: [17, 15]}]
+      template: "li      rda, imma"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "li      rdb, immb"
+  - id: "10001"
+    opcode: "1 0 0 0 1"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}]
+      template: "li      arda, imma"
+    b:
+      fields: [{name: immb, bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: rdb, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "mv/li   rdb, immb"
+    approx: true
   opcodes:
   - select: "010bb"
     at: 8
@@ -947,14 +1282,30 @@ frames:
   hosted_in: "rsd-alu-pair"
   rd: x2                      # the allocated sentinel: what tells it from its host
   block: 4          # op-select indices; 4 used, 0 free
+  fixed: [{name: opcode5, value: 0 0 1 0 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 1 1, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}, {name: rd, value: 0 0 0 1 0, type: sentinel, field: rd, range: [11, 7]}]
   layout: |
     │p p│     imma[9:0]     │  rs1a   │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│
-
-    │p p│     imma[9:0]     │  rs1a   │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   load    tmp, k*imma(rs1a)
-    │p p│                   │         │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   jalr_link_ra ra, 0(tmp)
-
-    │p p│     imma[9:0]     │  rs1a   │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   load    tmp, k*imma(rs1a)
-    │p p│                   │         │1 1 1│0 0 0 1 0│0 0 1 0 1│1 0│   jalr_link_t1 t1, 0(tmp)
+  templates:
+  - id: "00101111"
+    opcode: "0 0 1 0 1"
+    a:
+      fields: [{name: imma, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "load    tmp, k*imma(rs1a)"
+    b:
+      fields: []
+      implicit: [{name: ra, type: rd}, {name: tmp, type: rs}]
+      template: "jalr    ra, 0(tmp)"
+  - id: "00101111"
+    opcode: "0 0 1 0 1"
+    a:
+      fields: [{name: imma, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      implicit: [{name: tmp, type: rd}]
+      template: "load    tmp, k*imma(rs1a)"
+    b:
+      fields: []
+      implicit: [{name: t1, type: rd}, {name: tmp, type: rs}]
+      template: "jalr    t1, 0(tmp)"
   opcodes:
   - select: "ab"
     at: 0
@@ -971,30 +1322,70 @@ frames:
   id: "101011"
   select: "101011pppp"
   block: 16          # op-select indices; 16 used, 0 free
+  fixed: [{name: opcode5, value: 1 0 1 0 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: 1 p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│immb[9:5]│  rs2a   │   rda   │1 p p│immb[4:0]│1 0 1 0 1│1 0│
     │p p│immb[9:5]│imma[4:0]│ima│ rda │1 p p│immb[4:0]│1 0 1 0 1│1 0│
     │p p│immb[9:5]│  rs2a   │imma[4:0]│1 p p│immb[4:0]│1 0 1 0 1│1 0│
 
-    │p p│         │  rs2a   │   rda   │1 p p│         │1 0 1 0 1│1 0│   mv      rda, rs2a
-    │p p│immb[9:5]│         │         │1 p p│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
-
-    │p p│         │imma[4:0]│ima│ rda │1 p p│         │1 0 1 0 1│1 0│   li      rda, imma
-    │p p│immb[9:5]│         │   │     │1 p p│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
-
-    │p p│         │imma[4:0]│ima│ rda │1 p p│         │1 0 1 0 1│1 0│   addi4spn rda, 4*imma
-    │p p│immb[9:5]│         │   │     │1 p p│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
-
-    │p p│         │imma[4:0]│ima│ rda │1 p p│         │1 0 1 0 1│1 0│   load    rda, k*imma(sp)
-    │p p│immb[9:5]│         │   │     │1 p p│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
-
-    │p p│         │  rs2a   │imma[4:0]│1 p p│         │1 0 1 0 1│1 0│   store   rs2a, k*imma(sp)
-    │p p│immb[9:5]│         │         │1 p p│immb[4:0]│1 0 1 0 1│1 0│   jalr_ra ra, 4*immb(ra)
-
-    │p p│         │imma[4:0]│ima│ rda │1 p p│         │1 0 1 0 1│1 0│   addi_rsd rda, imma
-    │p p│immb[9:5]│         │   │     │1 p p│immb[4:0]│1 0 1 0 1│1 0│   jr_t1   4*immb(t1)
-
         where ima = imma[6:5]
+  templates:
+  - id: "101011"
+    opcode: "1 0 1 0 1"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rda, bits: 5, type: rd, field: rs1, range: [19, 15]}]
+      template: "mv      rda, rs2a"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: ra, type: rsd}]
+      template: "jalr    ra, 4*immb(ra)"
+  - id: "101011"
+    opcode: "1 0 1 0 1"
+    a:
+      fields: [{name: imma, bits: 7, type: imm, field: [rs2, rs1], range: [24, 18]}, {name: rda, bits: 3, type: rd, field: rs1, range: [17, 15]}]
+      template: "li      rda, imma"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: ra, type: rsd}]
+      template: "jalr    ra, 4*immb(ra)"
+  - id: "101011"
+    opcode: "1 0 1 0 1"
+    a:
+      fields: [{name: imma, bits: 7, type: imm, field: [rs2, rs1], range: [24, 18]}, {name: rda, bits: 3, type: rd, field: rs1, range: [17, 15]}]
+      template: "addi4spn rda, 4*imma"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: ra, type: rsd}]
+      template: "jalr    ra, 4*immb(ra)"
+  - id: "101011"
+    opcode: "1 0 1 0 1"
+    a:
+      fields: [{name: imma, bits: 7, type: imm, field: [rs2, rs1], range: [24, 18]}, {name: rda, bits: 3, type: rd, field: rs1, range: [17, 15]}]
+      implicit: [{name: sp, type: rs}]
+      template: "load    rda, k*imma(sp)"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: ra, type: rsd}]
+      template: "jalr    ra, 4*immb(ra)"
+  - id: "101011"
+    opcode: "1 0 1 0 1"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: imma, bits: 5, type: imm, field: rs1, range: [19, 15]}]
+      implicit: [{name: sp, type: rs}]
+      template: "store   rs2a, k*imma(sp)"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: ra, type: rsd}]
+      template: "jalr    ra, 4*immb(ra)"
+  - id: "101011"
+    opcode: "1 0 1 0 1"
+    a:
+      fields: [{name: imma, bits: 7, type: imm, field: [rs2, rs1], range: [24, 18]}, {name: rda, bits: 3, type: rd, field: rs1, range: [17, 15]}]
+      template: "addi_rsd rda, imma"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      implicit: [{name: t1, type: rs}]
+      template: "jr      4*immb(t1)"
   opcodes:
   - select: "aaab"
     at: 0
@@ -1017,6 +1408,7 @@ frames:
   id: "10011"
   select: "10011ppppp"
   block: 32          # op-select indices; 25 used, 7 free
+  fixed: [{name: opcode5, value: 1 0 0 1 1, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: p p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}]
   layout: |
     │p p│  rs1b   │imma[4:0]│  rs1a   │p p p│   rda   │1 0 0 1 1│1 0│
     │p p│  rs1b   │  rs2a   │  free   │p p p│   rda   │1 0 0 1 1│1 0│
@@ -1024,27 +1416,63 @@ frames:
     │p p│immb[9:5]│   rda   │  rs1a   │p p p│immb[4:0]│1 0 0 1 1│1 0│
     │p p│immb[9:5]│  rs2a   │   rda   │p p p│immb[4:0]│1 0 0 1 1│1 0│
     │p p│immb[9:5]│imma[4:0]│   rda   │p p p│immb[4:0]│1 0 0 1 1│1 0│
-
-    │p p│         │  rs2a   │  free   │p p p│   rda   │1 0 0 1 1│1 0│   mv      rda, rs2a
-    │p p│  rs1b   │         │  free   │p p p│         │1 0 0 1 1│1 0│   jr_any/jalr_link_ra rs1b
-
-    │p p│         │imma[4:0]│  rs1a   │p p p│   rda   │1 0 0 1 1│1 0│   load    rda, k*imma(rs1a)
-    │p p│  rs1b   │         │         │p p p│         │1 0 0 1 1│1 0│   jr_any/jalr_link_ra rs1b
-
-    │p p│     imma[9:0]     │         │p p p│   rda   │1 0 0 1 1│1 0│   load    rda, k*imma(rs1a)
-    │p p│                   │  rs1b   │p p p│         │1 0 0 1 1│1 0│   jr_any/jalr_link_ra rs1b
-
-    │p p│     imma[9:0]     │         │p p p│   rda   │1 0 0 1 1│1 0│   li      rda, imma
-    │p p│                   │  rs1b   │p p p│         │1 0 0 1 1│1 0│   jr_any/jalr_link_ra rs1b
-
-    │p p│         │  rs2a   │   rda   │p p p│         │1 0 0 1 1│1 0│   mv      rda, rs2a
-    │p p│immb[9:5]│         │         │p p p│immb[4:0]│1 0 0 1 1│1 0│   j       4*immb
-
-    │p p│         │   rda   │  rs1a   │p p p│         │1 0 0 1 1│1 0│   load    rda, 0(rs1a)
-    │p p│immb[9:5]│         │         │p p p│immb[4:0]│1 0 0 1 1│1 0│   j       4*immb
-
-    │p p│         │imma[4:0]│   rda   │p p p│         │1 0 0 1 1│1 0│   li      rda, imma
-    │p p│immb[9:5]│         │         │p p p│immb[4:0]│1 0 0 1 1│1 0│   j       4*immb
+  templates:
+  - id: "10011"
+    opcode: "1 0 0 1 1"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rda, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "mv      rda, rs2a"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: funct5, range: [29, 25]}]
+      template: "jr/jalr rs1b"
+  - id: "10011"
+    opcode: "1 0 0 1 1"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}, {name: rda, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "load    rda, k*imma(rs1a)"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: funct5, range: [29, 25]}]
+      template: "jr/jalr rs1b"
+  - id: "10011"
+    opcode: "1 0 0 1 1"
+    a:
+      fields: [{name: imma, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rda, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "load    rda, k*imma(rs1a)"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "jr/jalr rs1b"
+  - id: "10011"
+    opcode: "1 0 0 1 1"
+    a:
+      fields: [{name: imma, bits: 10, type: imm, field: [funct5, rs2], range: [29, 20]}, {name: rda, bits: 5, type: rd, field: rd, range: [11, 7]}]
+      template: "li      rda, imma"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "jr/jalr rs1b"
+  - id: "10011"
+    opcode: "1 0 0 1 1"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rda, bits: 5, type: rd, field: rs1, range: [19, 15]}]
+      template: "mv      rda, rs2a"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      template: "j       4*immb"
+  - id: "10011"
+    opcode: "1 0 0 1 1"
+    a:
+      fields: [{name: rda, bits: 5, type: rd, field: rs2, range: [24, 20]}, {name: rs1a, bits: 5, type: rs, field: rs1, range: [19, 15]}]
+      template: "load    rda, 0(rs1a)"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      template: "j       4*immb"
+  - id: "10011"
+    opcode: "1 0 0 1 1"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rda, bits: 5, type: rd, field: rs1, range: [19, 15]}]
+      template: "li      rda, imma"
+    b:
+      fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
+      template: "j       4*immb"
   opcodes:
   - select: "0aabb"
     at: 0
@@ -1092,18 +1520,35 @@ frames:
   hosted_in: "rsd-alu-pair"
   rd: x2                      # the allocated sentinel: what tells it from its host
   block: 64          # op-select indices; 64 used, 0 free
+  fixed: [{name: opcode5, value: 0 0 1 1 p, type: selector, field: opcode5, range: [6, 2]}, {name: funct3, value: p p p, type: selector, field: funct3, range: [14, 12]}, {name: g, value: p, type: selector, field: g, range: [30, 30]}, {name: h, value: p, type: selector, field: h, range: [31, 31]}, {name: marker, value: 1 0, type: constant, field: marker, range: [1, 0]}, {name: rd, value: 0 0 0 1 0, type: sentinel, field: rd, range: [11, 7]}]
   layout: |
     │p p│  rs1b   │  rs2a   │  rsda   │p p p│0 0 0 1 0│0 0 1 1 p│1 0│
     │p p│  rs1b   │imma[4:0]│  rsda   │p p p│0 0 0 1 0│0 0 1 1 p│1 0│
-
-    │p p│         │  rs2a   │  rsda   │p p p│0 0 0 1 0│0 0 1 1 p│1 0│   alu     rsda, rsda, rs2a
-    │p p│  rs1b   │         │         │p p p│0 0 0 1 0│0 0 1 1 p│1 0│   jr_any/jalr_link_ra rs1b
-
-    │p p│         │imma[4:0]│  rsda   │p p p│0 0 0 1 0│0 0 1 1 p│1 0│   alu     rsda, rsda, imma
-    │p p│  rs1b   │         │         │p p p│0 0 0 1 0│0 0 1 1 p│1 0│   jr_any/jalr_link_ra rs1b
-
-    │p p│         │imma[4:0]│  rsda   │p p p│0 0 0 1 0│0 0 1 1 p│1 0│   li     rsda, imma
-    │p p│  rs1b   │         │         │p p p│0 0 0 1 0│0 0 1 1 p│1 0│   jr_any/jalr_link_ra rs1b
+  templates:
+  - id: "0011"
+    opcode: "0 0 1 1 p"
+    a:
+      fields: [{name: rs2a, bits: 5, type: rs, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "alu     rsda, rsda, rs2a"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: funct5, range: [29, 25]}]
+      template: "jr/jalr rs1b"
+  - id: "0011"
+    opcode: "0 0 1 1 p"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "alu     rsda, rsda, imma"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: funct5, range: [29, 25]}]
+      template: "jr/jalr rs1b"
+  - id: "0011"
+    opcode: "0 0 1 1 p"
+    a:
+      fields: [{name: imma, bits: 5, type: imm, field: rs2, range: [24, 20]}, {name: rsda, bits: 5, type: rsd, field: rs1, range: [19, 15]}]
+      template: "li     rsda, imma"
+    b:
+      fields: [{name: rs1b, bits: 5, type: rs, field: funct5, range: [29, 25]}]
+      template: "jr/jalr rs1b"
   opcodes:
   - select: "aaaabb"
     at: 0

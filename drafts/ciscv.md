@@ -35,6 +35,58 @@ viability.
 Four register fields (the three standard ones, plus one more in the
 middle of `funct7`) shared between two consecutive instructions.
 
+{% assign bw = 18 %}
+<svg width="100%" height="52" viewbox="0 0 800 52">
+<style>
+.ins-box-selector,.ins-box-constant {
+    --tinted-fill: oklab(from var(--tint-fill-base) l 0 0);
+}
+.ins-box-imm {
+    --tint: 0;
+}
+.ins-box-rs {
+    --tint: 1;
+    stop-color: var(--tinted-fill);
+}
+.ins-box-rd {
+    --tint: 2;
+    stop-color: var(--tinted-fill);
+}
+.ins-box-rsd {
+    --tint: 1;
+    --tint-b: 2;
+    fill: url("#RSDGradient");
+}
+.opcodes td,th {
+  width: 4em;
+}
+</style>
+<defs>
+<LinearGradient id="RSDGradient" x1="0" y1="0.2" x2="1" y2="0.8">
+<stop class="ins-box-rs" offset="30%" />
+<stop class="ins-box-rd" offset="70%" />
+</LinearGradient>
+<g id="header" style="font-weight:bold;">
+<text x="2" y="13" style="text-anchor:start;">implicit</text>
+<rect x="{{bw | times:  0 | plus: 82}}" y="1" width="{{bw | times: 7}}" height="24" class="ins-box-selector tintbox" />
+<text x="{{bw | times: 3.5| plus: 82}}" y="13">funct7</text>
+<rect x="{{bw | times:  7 | plus: 82}}" y="1" width="{{bw | times: 5}}" height="24" class="ins-box-rs tintbox" />
+<text x="{{bw | times: 9.5| plus: 82}}" y="13">rs2</text>
+<rect x="{{bw | times: 12 | plus: 82}}" y="1" width="{{bw | times: 5}}" height="24" class="ins-box-rs tintbox" />
+<text x="{{bw | times:14.5| plus: 82}}" y="13">rs1</text>
+<rect x="{{bw | times: 17 | plus: 82}}" y="1" width="{{bw | times: 3}}" height="24" class="ins-box-selector tintbox" />
+<text x="{{bw | times:18.5| plus: 82}}" y="13">funct3</text>
+<rect x="{{bw | times: 20 | plus: 82}}" y="1" width="{{bw | times: 5}}" height="24" class="ins-box-rd tintbox" />
+<text x="{{bw | times:22.5| plus: 82}}" y="13">rd</text>
+<rect x="{{bw | times: 25 | plus: 82}}" y="1" width="{{bw | times: 7}}" height="24" class="ins-box-selector tintbox" />
+<text x="{{bw | times:28.5| plus: 82}}" y="13">opcode</text>
+</g>
+</defs>
+<use href="#header" />
+<rect x="{{bw | times:  2 | plus: 82}}" y="30" width="{{bw | times: 5}}" height="20" class="ins-box-rsd tintbox" />
+<text x="{{bw | times: 4.5| plus: 82}}" y="42">r_extra</text>
+</svg>
+
 The first instruction (generally) has its source register fields aligned
 to the source register fields of 32-bit opcodes, but the 32-bit
 destination register field is (generally) the register written by the
@@ -105,16 +157,18 @@ worked out.
 
 Then I randomly threw rules at it to see what would stick.
 
-After a bit of that I started to worry that my ballpark estimates for
-bit allocations weren't fit for purpose, so I tried to draw things out
-by hand, and I ended up refactoring the scheduler to accept rules
-defined in terms of instruction frame layouts rather than rules.
+Then I did something much more delinquent.  I ran optimisers against a
+dangerously small corpus to see what could be squeezed out.
+
+Then I pivoted to laying out the bit patterns by hand in order to prove
+that the budgets were being met.
 
 Attempting to draw things around the standard RISC-V frames showed that
 my plan would orbit around a set of four register/immediate fields which
 would be switched around and re-used as needed by each frame.
 
 Here's the tooling, such as it is: [CISC-V experiment][]
+(content-warning: unchecked AI output)
 
 It's not really human-readable anymore.  [Claude][] has taken it its own
 way and much of what it does is flaky and unreliable and I don't want to
@@ -174,163 +228,148 @@ the intermediate result.
 
 ## The encoding (provisional)
 
-Bits marked `o` below are the bits used to enumerate the opcode
+Here's what I came up with.  It's just a straw-man kind of thing.
+Opcodes are enumerated simply to demonstrate that they can actually be
+encoded into 32 bits.  The current assignment of the bit values is not
+how it should be done, merely how it's easily done.
+
+With a bit of massaging it appears to be possible to reduce the
+signature of each frame type down to a handful of bits in the opcode5
+field, and squeeze a signature for the transform required to turn a
+slot-B instruction into a slot-A frame in another handful of bits.  But
+I have not written (or vibed) such an allocator yet.
+
+Bits marked `p` below are the bits used to enumerate the opcode
 combinations available in each frame.  Unfortunately I didn't enumerate
 _what_ opcodes are available in each frame and used opaque placeholder
 names like `alu` and `load`, but these represent choices from set lists
 chosen on a per-frame basis.
 
 ### frame structures
-<style>
-.bitfield th,td {
-  text-align: center;
-}
-
-table .bitfield {
-  table-layout: fixed;
-  width: 100%;
-}
-.bitfield .bitfield-note {
-  font-family: monospace;
-  font-size: smaller;
-  text-align: left;
-}
-.bitfield .bitfield-spacer th {
-  font-size: 0;
-  line-height: 0;
-  padding: 0;
-  border: none;
-}
-
-.bitfield .bitfield-rowlabel th {
-  border-bottom: none;
-}
-.bitfield .bitfield-index th {
-  font-size: x-small;
-  font-weight: thin;
-  padding: 1px 3px;
-}
-.bitfield .bitfield-rowlabel + .bitfield-index th {
-  border-top: none;
-  padding-top: 0;
-}
-.bitfield .bitfield-index .bit-hi { float: left; }
-.bitfield .bitfield-index .bit-lo { float: right; }
-
-.bitfield .bitfield-fields td {
-  font-weight: normal;
-  padding: 3px 4px 4px;
-}
-.bitfield .bitfield-footnote td {
-  text-align: left;
-  padding: 1px 1em;
-  border: none;
-}
-.tint-op {
-    background-color: var(--minima-table-zebra-color);
-}
-.tint-reserved {
-    background-color: gray;
-}
-.tint-unused {
-}
-.tint-imm {
-    --tint: 0;
-    background-color: var(--tinted-fill);
-}
-.tint-rsrc {
-    --tint: 1;
-    background-color: var(--tinted-fill);
-}
-.tint-rdst {
-    --tint: 2;
-    background-color: var(--tinted-fill);
-}
-.tint-rsd {
-    --tint: 1;
-    --tint-b: 2;
-    --rs-fill: var(--tinted-fill);
-    --rd-fill: var(--tinted-fill-b);
-    background: linear-gradient(135deg, var(--rs-fill) 0%, var(--rs-fill) 33%, var(--rd-fill) 67%, var(--rd-fill) 100%);
-}
-</style>
 
 {% for frame in site.data.ciscv-proto.frames %}
-  {%- assign rows = frame.layout | newline_to_br | strip_nelines | split: '<br />' %}
-  {%- capture cooked_string %}
-  {%- for row in rows %}
-    {%- assign columns = row | split: '│' %}
-      {%- if columns.size < 2 %}{% continue %}{% endif %}
-      {%- for blob in columns -%}
-        {%- assign bits = blob | size | plus: 1 | divided_by: 2 %}
-        {%- assign column = blob | strip %}
-        {%- if column.size < 1 %}
-          {%- if forloop.index0 == 0 %}{% continue %}{% endif %}
-          {%- assign type = 'unused' %}
-        {%- elsif column contains ',' %}
-          {%- assign type = 'template' %}
-        {%- elsif column contains 'rsd' %}
-          {%- assign type = 'rsd' %}
-        {%- elsif column contains 'im' %}
-          {%- assign type = 'imm' %}
-        {%- elsif column contains 'rs' %}
-          {%- assign type = 'rsrc' %}
-        {%- elsif column contains 'rd' %}
-          {%- assign type = 'rdst' %}
-        {%- else %}
-          {%- assign type = 'op' %}
-        {%- endif %}
-{{-''-}}{{column}}((:)){{bits}}((:)){{type}}((col)){{-''-}}
-      {%- endfor %}
-{{-''-}}((row)){{-''-}}
-  {%- endfor %}
-  {%- endcapture %}
-{% assign rows = cooked_string | split: '((row))' %}
-<table class="bitfield" id="{{ frame.name | slugify }}">
-<thead>
-<tr><th colspan="33"> {{frame.name}} </th></tr>
-</thead>
-<tr class="bitfield-spacer">
-{%- for i in (0..31) %} <th style="width:2.35%;f">{{i | times: -1 | plus: 31}}</th> {%- endfor %}
-<th style="width:24.8%">note</th>
-</tr>
-{%- for row in rows %}
-  {%- assign cols = row | split: '((col))' %}
-  {%- unless row contains 'template' %}
-  <tr class="bitfield-index">
-    {%- assign bitpos = 31 -%}
-    {%- for blob in cols %}
-      {%- assign field = blob | split: '((:))' %}
-      {%- assign width = field[1] | default: 0 %}
-      {%- assign hi = bitpos -%}
-      {%- assign lo = bitpos | minus: width | plus: 1 -%}
-      {%- assign bitpos = lo | minus: 1 -%}
-      {%- assign lop1 = lo | plus: 1 -%}
-      <th colspan="{{width}}">
-      {%- if hi != lo %}
-      <span class="bit-hi">{{hi}}</span>{%- if lop1 != hi -%}&hellip;{%- endif -%}<span class="bit-lo">{{lo}}</span>
-      {%- else %}
-      {{hi}}
-      {%- endif %}
-      </th>
-      {%- if bitpos < 0 %}{% break %}{% endif %}
-    {%- endfor %}
+### {{ frame.name }}
+{{ frame.does }}
+
+{% comment %}
+<pre>
+{{ frame.layout }}
+</pre>
+
+- {{frame.fixed | inspect}}
+{% endcomment %}
+{% assign frame_count = frame.templates.size | plus: 0 %}
+{% assign svg_height = frame_count | times: 50 | plus: 30 %}
+<svg width="100%" height="{{svg_height}}" viewbox="0 0 800 {{svg_height}}">
+{% for template in frame.templates %}
+  <use href="#header" />
+  {% assign vpos = forloop.index0 | times: 50 | plus: 42 %}
+  {% assign vcentre = vpos | plus: 18 %}
+
+  {% for field in frame.fixed %}
+    {% assign topbit = field.range[0] | plus: 0 %}
+    {% assign botbit = field.range[1] | plus: 0 %}
+    {% assign bits = topbit | minus: botbit | plus: 1 %}
+    {% assign hpos = topbit | times: -1 | plus: 31 | times: bw | plus: 82 %}
+    {% assign width = bits | times: bw %}
+    {% assign centre = width | divided_by: 2 | plus: hpos %}
+    <rect class="ins-box-{{field.type}} tintbox" x="{{hpos}}" y="{{vpos}}" width="{{width}}" height="36" />
+    <text x="{{centre}}" y="{{vcentre}}">{{field.value}}</text>
+  {% endfor %}
+
+  {% assign vpos = forloop.index0 | times: 50 | plus: 40 %}
+  {% assign vcentre = vpos | plus: 10 %}
+  {% for field in template.a.fields %}
+    {% assign topbit = field.range[0] | plus: 0 %}
+    {% assign botbit = field.range[1] | plus: 0 %}
+    {% assign bits = field.bits | plus: 0 %}
+    {% assign hpos = topbit | times: -1 | plus: 31 | times: bw | plus: 82 %}
+    {% assign width = bits | times: bw %}
+    {% assign centre = width | divided_by: 2 | plus: hpos %}
+    <rect class="ins-box-{{field.type}} tintbox" x="{{hpos}}" y="{{vpos}}" width="{{width}}" height="20" />
+    <text x="{{centre}}" y="{{vcentre}}">{{field.name}}</text>
+  {% endfor %}
+  {% if template.a.implicit %}
+  {% assign hpos = 0 %}
+  {% assign width = 40 %}
+  {% for field in template.a.implicit %}
+    {% assign centre = width | divided_by: 2 | plus: hpos %}
+    <rect class="ins-box-{{field.type}} tintbox" x="{{hpos}}" y="{{vpos}}" width="{{width}}" height="20" />
+    <text x="{{centre}}" y="{{vcentre}}">{{field.name}}</text>
+    {% assign hpos = hpos | plus: width %}
+  {% endfor %}
+  {% endif %}
+  <text x="662" y="{{vcentre}}" style="text-anchor:start;font-family=monospace;font-size:small;"> {{template.a.template}}</text>
+
+  {% assign vpos = vpos | plus: 20 %}
+  {% assign vcentre = vpos | plus: 10 %}
+  {% for field in template.b.fields %}
+    {% assign topbit = field.range[0] | plus: 0 %}
+    {% assign botbit = field.range[1] | plus: 0 %}
+    {% assign bits = field.bits | plus: 0 %}
+    {% assign hpos = topbit | times: -1 | plus: 31 | times: bw | plus: 82 %}
+    {% assign width = bits | times: bw %}
+    {% assign centre = width | divided_by: 2 | plus: hpos %}
+    <rect class="ins-box-{{field.type}} tintbox" x="{{hpos}}" y="{{vpos}}" width="{{width}}" height="20" />
+    <text x="{{centre}}" y="{{vcentre}}">{{field.name}}</text>
+    {% assign hpos = hpos | plus: width %}
+  {% endfor %}
+  {% if template.b.implicit %}
+  {% assign hpos = 0 %}
+  {% assign width = 40 %}
+  {% for field in template.b.implicit %}
+    {% assign centre = width | divided_by: 2 | plus: hpos %}
+    <rect class="ins-box-{{field.type}} tintbox" x="{{hpos}}" y="{{vpos}}" width="{{width}}" height="20" />
+    <text x="{{centre}}" y="{{vcentre}}">{{field.name}}</text>
+    {% assign hpos = hpos | plus: width %}
+  {% endfor %}
+  {% endif %}
+  <text x="662" y="{{vcentre}}" style="text-anchor:start;font-family=monospace;font-size:small;"> {{template.b.template}}</text>
+{% endfor %}
+</svg>
+
+<div style="display:flex;flex-wrap:wrap;gap:1em;">
+{% for opset in frame.opcodes %}
+{% assign at = opset.at | plus: 0 %}
+{% if opset.pairs %}
+<table class="opcodes" style="width:auto;">
+  <tr><th>slot A</th><th>slot B</th><th>p=</th></tr>
+  {% for pair in opset.pairs %}
+  <tr>
+  <td>{{pair.a.op}}</td><td>{{pair.b.op}}
+      {%- if pair.n > 1 %}<span style="font-weight:normal;">&nbsp;&times;{{ pair.n }}</span>{% endif -%}
+  </td><td>{{pair.at | plus: at}}</td>
   </tr>
-  {% endunless %}
-  <tr class="bitfield-fields">
-    {%- assign bitpos = 32 -%}
-    {%- for blob in cols %}
-      {%- assign field = blob | split: '((:))' %}
-      {%- assign name = field[0] %}
-      {%- assign width = field[1] %}
-      {%- assign kind = field[2] %}
-      {%- assign bitpos = bitpos | minus: width %}
-      <td {% if bitpos >= 0 %}colspan="{{width}}" class="tint-{{kind}}"{% else %}class="bitfield-note"{% endif %}>{{name}}</td>
-    {%- endfor %}
-  </tr>
-{%- endfor %}
+  {% endfor %}
 </table>
+{% else %}
+<table class="opcodes" style="width:auto;">
+  {% assign width = 0 %}
+  <tr style="font-size:small;text-align:center;"><th>slot B</th><th colspan="999">slot A</th></tr>
+  <tr><th></th>
+  {% for a in opset.a %}
+    {% assign width = width | plus: a.n %}
+    <th>{{a.op}}
+        {%- if a.n > 1 %}<span style="font-weight:normal;">&nbsp;&times;{{ a.n }}</span>{% endif -%}
+    </th>
+  {% endfor %} </tr>
+  {% for b in opset.b %}
+  {% assign offset = b.at | times: width | plus: at %}
+  <tr><th>{{b.op}}
+          {%- if b.n > 1 %}<span style="font-weight:normal;">&nbsp;&times;{{ b.n }}</span>{% endif -%}
+      </th>
+  {% for a in opset.a %}
+    <td>{{ offset }}</td>
+    {% assign offset = offset | plus: a.n %}
+  {% endfor %} </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endfor %}
+</div>
+
 {%- endfor %}
+
 
 ## The results
 
