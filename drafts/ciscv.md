@@ -9,10 +9,10 @@ by squashing pairs of opcodes into a single 32-bit packet rather than
 squashing individual opcodes into 16-bit packets in order to address
 issues with unaligned 32-bit instruction words.
 
-I've kept it resticted to just one third of the space used by RVC,
-leaving half the total opcode space unallocated -- assuming it won't be
-used for the remaining 2/3 of RVC, which would undermine the rationale
-below.
+This takes 1/4 of the total instruction coding space, meaning it steals
+1/3 of the space occupied by RVC.  It's assumed that the remaining 2/3
+of RVC won't be used in conjunction with this as that would undermine
+the objectives given below.
 
 ## Why?
 
@@ -20,7 +20,10 @@ below.
 * To avoid the other problems with mixed-size instructions
 * To exploit inter-opcode redundancies
 * To dress up like a CISC architecture in order to gain its powers
-* To expose macro-op fusion opportunities within a 32-bit word
+* To maintain the 2-in-1-out data flow model by executing 32-bit packets
+  sequentially as two separable instructions
+* To expose macro-op fusion opportunities within a 32-bit word when
+  executing whole packets at once
 
 Basically, I saw too many complaints about the various consequences of
 16-bit aligned instructions mixed with 32-bit aligned instructions, and
@@ -107,13 +110,10 @@ duplicated in the list of opcodes the frame supports, and the choice
 between the two (or four, or eight) copies of the same instruction
 serves as an extra bit (or two or three).
 
-For 'chain' rules, a temporary register is used, and not encoded in the
-packet at all.  This should probably be hard-coded as `x31` (which
-doesn't exist on RV32-E, so maybe `x7` instead?), but for the sake of
-implementation flexibility I would not want to promise that the
-intermediate result be written back _unless_ there's an exception within
-the packet.  Meaningt the value of the temporary register would be
-undefined after a chain packet.
+For 'chain' rules, temporary storage is used and not encoded in the
+packet at all.  Generally the implementation could decide what kind of
+storage this is, but its value has to be accessible for exception
+handling.
 
 Frame structures are signalled by the opcode field.  Each frame has a
 number of opcode pair configurations it supports, and these are
@@ -132,139 +132,54 @@ opcodes (`lb`, `lbu`, `lh`, etc..) it needs to complete the set.
 ## Decoding
 
 In its most primitive form the supposition is than an instruction
-decoder would decode the first instruction normally (with the caveat
-that the destination register is not in the usual location), while also
-preparing another normal-looking 32-bit instruction word to evaluate on
-the next cycle.
-
-If an exception occurs inside a packet then enough state must be
-preserved that execution can resume from the second instruction in the
-packet if necessary, but otherwise there's no jumping into the middle of
-a packet and that process doesn't need to be efficient.
+decoder would decode the first slot normally (with the caveat that the
+destination register is not in the usual location), while also preparing
+another normal-looking 32-bit word to feed back to the same instruction
+decoder on the subsequent cycle.
 
 Alternatively, a multi-issue implementation could ingest the packet as a
 single instruction and split it into &micro;-ops at a more convenient
 stage in the pipeline.  Or implement it as a single, fused instruction
 when possible.
 
-## Development process
+Regardless of the implementation, the execution model is _as if_ the
+packet contains two independent instructions executed sequentially, with
+the standard 2-in-1-out operand contract on each slot.  Potentially with
+some corner cases made 'undefined' for a performance advantage if
+necessary (eg., non-canonical chains, or whether the temporary register
+lands in a chain).
 
-I vibe-coded an instruction scheduler which I run over a corpus of
-assembly, which attempts to find and fuse pairable instructions
-according to rules describing what a legitimate instruction pair would
-look like; just to get a feel for what sort of pairing rules I could
-introduce.  It simply looks at register usage to determine when a result
-is no longer needed, and which instructions can move past which other
-instructions.
+At present there's no optimisation for ease of decode, other than an
+attempt to align the operand fields consistently.  The remaining ten
+bits are a naive enumeration of all the allowed permutations, with
+little organisation into bits.  That's to be addressed later, but ten
+bits is at least better than 32.
 
-This seemed easier than writing my own compiler to optimise a made-up
-instruction set which I hadn't designed yet, but it also has
-limitations.  There's no expectation for it to yield runnable code;
-merely to give a feel for how things would pack if the nits can be
-worked out.
+## Exceptions
 
-Then I randomly threw rules at it to see what would stick.
+If an exception occurs inside a packet then enough state must be
+preserved that execution can resume from the second instruction in the
+packet if necessary, but otherwise there's no jumping into the middle of
+a packet and that process doesn't need to be efficient.
 
-And I pivoted to laying out the bit patterns by hand in order to prove
-that the budgets were being met.
+One thing that needs to be recorded is which slot raised the fault and
+where we need to resume from.  This could be stored in bit 1 of the
+saved PC, giving an outward appearance of a 16-bit instruction stream
+(where we came from), but without the expectation that such addresses
+are accepted outside of exception restarts.
 
-Attempting to draw things around the standard RISC-V frames brought out
-the four-register-field pattern shown above, while sweeping up the
-remaining bits for an unregulated mix of frame selection and opcode
-selection.
+The other is the temporary value used in chain operations.
 
-Then, I did a bad thing -- I ran optimisers against an irresponsibly
-small corpus to see what could be squeezed out.
+Logically one could hard-code this temporary during instruction decode
+as `x31` (which doesn't exist on RV32-E, so maybe `x7` instead?), so
+it's automatically saved; but some implementations may not appreciate
+this constraint, and it would be preferable to regard a named register
+as undefined after chain operations in normal operation (only being
+defined when write-back is forced by an exception).
 
-Here's the tooling, such as it is: [CISC-V experiment][]
-(content-warning: unchecked AI output)
+Alternatively, just expose it in a CSR.  I'm not sure what's best for
+the most economical implementations.
 
-It's no longer human-readable.  [Claude][] has taken it its own way.
-Much of what it does is flaky and unreliable, and most of the code is
-only there as a toolkit for "what if?" queries posed to the AI.  I don't
-really want to think about working with that code by hand.
-
-But it's sufficient to get a gist of whether the ideas make sense and
-how they map to real code.
-
-### Pairing rule selection
-
-I drew inspiration from classic CISC operations, proposals for macro-op
-fusion, and things other architectures do.  And just kind of threw them
-all in there and mused openly to Claude about how that looked to me and
-asked it for feedback.
-
-Claude was not a reliable witness, and led me down many garden paths of
-faulty analyses and losses of comprehension.  But it was an exploration
-I could do on my phone on a whim, so it won on convenience.
-
-It feels like it's come out with a lot of redundancies; though often the
-apparent redundancies are just redistributions of immediate sizes to
-suit different idioms.
-
-### Biclique optimisation
-
-Some (many?) instructions pair naturally with only a limited set of
-other instructions.  Attempting to pair a free choice of any operation
-with free choice of any other operation isn't fruitful.  By cutting the
-frames into different sections with different purposes (often emulating
-different CISC instructions) it becomes easy to minimise the
-combinations which are worth making space for.
-
-### Immediate sizing
-
-This is gnarly.  You get 5 bits by default, aliasing with a register
-index.  Five bits can't fully specify a bit shift on a 64-bit target.
-Five bits is often not enough for a lot of things.  And you have to
-decide whether it's signed or not.
-
-In a lot of cases the thing to do is sacrifice another register operand
-to get a 10-bit immediate.  Implicit SP with a 10-bit offset means you
-can get to a lot of local variables.
-
-Also, the value of the immediate in one slot will often be scaled by the
-instruction choice in the other slot (eg., `addi` gets its immediate
-scaled by 4 if it's paired with `lw`), and of course memory access also
-uses its own implicit scaling.
-
-Otherwise, duplicate the opcode in the opcode list to extend the
-immediate range by one bit.
-
-Trawling through code there are patterns of step changes in immediate
-requriements.  The specific corpus is the most obvious cause of this,
-and some artefacts of the original immediate limits of the existing
-architecture, but other things appear to be a legitimate reflection of
-the way code tends to work.  I just kind of guessed.  Claude helped.  It
-did lead to a lot of redundancy, but I didn't have many better ideas, so
-immediate shaping became a big factor in the design choices.
-
-### Enumeration
-
-For the sake of a quick POC I just enumerated all the frames according
-to their population counts rounded up to powers of two, and hoped I
-wouldn't run out of space.  There's scope to do this more intelligently,
-signalling specific conditions relevant to the instruction decoder in
-specific bits of the enumeration, but I haven't put the effort in at
-this stage.
-
-### Load/store pairings
-
-I was initially very reluctant to merge load/store data operands into
-interdependent arrangements with arithmetic, because it leaves no space
-for scheduling around memory delays.  Eventually I resigned myself to
-accepting it, though, because without that there's going to be a lot
-less compression.
-
-Also, it opened up opportunities to hint at things that could be left
-out of direct ALU paths.  Things like indirect branching via memory;
-which branch prediction (if you have it) would assume it knows how to do
-without seeing the data, and the data is only there to cancel the
-prediction after the fact if it was inconsistent.
-
-Less painful was chaining with base-register operand.  In particular
-filling the gap RISC-V leaves with `rb+k*ri` address generation which,
-it turns out, can be done via temporary register without need to save
-the intermediate result.
 
 ## The encoding (provisional)
 
@@ -434,7 +349,129 @@ necessary (at least in Clang's case -- GCC finds excuses to use more
 instructions regardless).  I have some other test cases but the
 tabulation got mucky, so let's just run with the above for now.
 
+## Development process
+
+I vibe-coded an instruction scheduler which I run over a corpus of
+assembly, which attempts to find and fuse pairable instructions
+according to rules describing what a legitimate instruction pair would
+look like; just to get a feel for what sort of pairing rules I could
+introduce.  It simply looks at register usage to determine when a result
+is no longer needed, and which instructions can move past which other
+instructions.
+
+This seemed easier than writing my own compiler to optimise a made-up
+instruction set which I hadn't designed yet, but it also has
+limitations.  There's no expectation for it to yield runnable code;
+merely to give a feel for how things would pack if the nits can be
+worked out.
+
+Then I randomly threw rules at it to see what would stick.
+
+And I pivoted to laying out the bit patterns by hand in order to prove
+that the budgets were being met.
+
+Attempting to draw things around the standard RISC-V frames brought out
+the four-register-field pattern shown above, while sweeping up the
+remaining bits for an unregulated mix of frame selection and opcode
+selection.
+
+Then, I did a bad thing -- I ran optimisers against an irresponsibly
+small corpus to see what could be squeezed out.
+
+Here's the tooling, such as it is: [CISC-V experiment][]
+(content-warning: unchecked AI output)
+
+It's no longer human-readable.  [Claude][] has taken it its own way.
+Much of what it does is flaky and unreliable, and most of the code is
+only there as a toolkit for "what if?" queries posed to the AI.  I don't
+really want to think about working with that code by hand.
+
+But it's sufficient to get a gist of whether the ideas make sense and
+how they map to real code.
+
+### Pairing rule selection
+
+I drew inspiration from classic CISC operations, proposals for macro-op
+fusion, and things other architectures do.  And just kind of threw them
+all in there and mused openly to Claude about how that looked to me and
+asked it for feedback.
+
+Claude was not a reliable witness, and led me down many garden paths of
+faulty analyses and losses of comprehension.  But it was an exploration
+I could pick up on my phone on a whim, so it won on convenience.
+
+It feels like it's come out with a lot of redundancies; though often the
+apparent redundancies are just redistributions of immediate sizes to
+suit different idioms.
+
+### Biclique optimisation
+
+Some (many?) instructions pair naturally with only a limited set of
+other instructions.  Attempting to pair a free choice of any operation
+with free choice of any other operation isn't fruitful.  By cutting the
+frames into different sections with different purposes (often emulating
+different CISC instructions) it becomes easy to minimise the
+combinations which are worth making space for.  Possibly (TBD) at the
+cost of decode complexity.
+
+### Immediate sizing
+
+This is gnarly.  You get 5 bits by default, aliasing with a register
+index.  Five bits can't fully specify a bit shift on a 64-bit target.
+Five bits is often not enough for a lot of things.  And you have to
+decide whether it's signed or not.
+
+In a lot of cases the thing to do is sacrifice another register operand
+to get a 10-bit immediate.  Implicit SP with a 10-bit offset means you
+can get to a lot of local variables.
+
+Also, the value of the immediate in one slot will often be scaled by the
+instruction choice in the other slot (eg., `addi` gets its immediate
+scaled by 4 if it's paired with `lw`), and of course memory access also
+uses its own implicit scaling.
+
+Otherwise, duplicate the opcode in the opcode list to extend the
+immediate range by one bit.
+
+Trawling through code there are patterns of step changes in immediate
+requriements.  The specific corpus is the most obvious cause of this,
+and some artefacts of the original immediate limits of the existing
+architecture, but other things appear to be a legitimate reflection of
+the way code tends to work.  I just kind of guessed.  Claude helped.  It
+did lead to a lot of redundancy, but I didn't have many better ideas, so
+immediate shaping became a big factor in the design choices.
+
+### Enumeration
+
+For the sake of a quick POC I just enumerated all the frames according
+to their population counts rounded up to powers of two, and hoped I
+wouldn't run out of space.  There's scope to do this more intelligently,
+signalling specific conditions relevant to the instruction decoder in
+specific bits of the enumeration, but I haven't put the effort in at
+this stage.
+
+### Load/store pairings
+
+I was initially very reluctant to merge load/store data operands into
+interdependent arrangements with arithmetic, because it leaves no space
+for scheduling around memory delays.  Eventually I resigned myself to
+accepting it, though, because without that there's going to be a lot
+less compression.
+
+Also, it opened up opportunities to hint at things that could be left
+out of direct ALU paths.  Things like indirect branching via memory;
+which branch prediction (if you have it) would assume it knows how to do
+without seeing the data, and the data is only there to cancel the
+prediction after the fact if it was inconsistent.
+
+Less painful was chaining with base-register operand.  In particular
+filling the gap RISC-V leaves with `rb+k*ri` address generation which,
+it turns out, can be done via temporary register without need to save
+the intermediate result.
+
 ## Future work
+
+### decode complexity
 
 A major problem right now is that the enumeration of frames and opcodes
 within frames doesn't really attempt to match established conventions
@@ -449,6 +486,36 @@ field, and squeeze a signature for the transform required to turn the
 slot-B parameters into a slot-A frame in another handful of bits.  But I
 have not written (or vibed) such an allocator yet.
 
+#### how to approach that
+
+What we have right now is ten bits of "deal with it later", and 20 bits
+of operand in fairly regular positions.  1024 codepoints, only about 3/4
+populated after rounding each frame up to a power of two.
+
+What I believe is needed is to collate every codepoint by its slot-A
+operand patterns (including immediate sizes and positions) and to pack
+these bits together as a convenient decoder index.  I think Claude said
+this was doable in about three or four bits.
+
+Then, without regard to those bits, we need to sort the codepoints by
+the slot B operands in the same way, and pack these together in the same
+way, but in some different bits, so that we can begin the re-format of
+slot B into a shape the normal instruction decoder can ingest.  One
+would also want a clear signal for branches and jumps, for the
+instruction prefetch pipeline.
+
+There's no guarantee that will resolve into a sensible number of bits,
+but I asked Claude to try and it said it might get away with three more
+bits.  But it could be wrong.
+
+And in the cases where a list of opcodes contains repetitions of an
+opcode to make up extra immediate bits, that enumeration should be
+swizzled to put the redundant opcode selector at bit 30 or 31 of the
+word, so immediate decode is relatively consistent.  This seems like the
+least hard problem, but it should be done.
+
+### quality
+
 Another problem is lack of thoughtful optimisation and, conversely,
 gross overfitting to my limited test corpus.
 
@@ -462,13 +529,15 @@ That said, this adventure promotes itself as being CISC-inspired, so
 being a random bucket of overlapping things that seemed like good ideas
 is pretty on-brand.
 
+### sundries
+
 And a toolchain would be nice, too.  And an implementation.  And from
 those, feedback into what makes a better target, and back around the
 tuning loops again with that insight in mind.
 
 ## AI disclosure statement
 
-yes.
+Yep.
 
 [CISC-V experiment]: <https://github.com/sh1bot/ciscv_experiment>
 [Claude]: <https://claude.ai/>
