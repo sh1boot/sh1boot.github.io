@@ -20,6 +20,7 @@ below.
 * To avoid the other problems with mixed-size instructions
 * To exploit inter-opcode redundancies
 * To dress up like a CISC architecture in order to gain its powers
+* To expose macro-op fusion opportunities within a 32-bit word
 
 Basically, I saw too many complaints about the various consequences of
 16-bit aligned instructions mixed with 32-bit aligned instructions, and
@@ -32,8 +33,8 @@ viability.
 
 ## Packet structure
 
-Four register fields (the three standard ones, plus one more in the
-middle of `funct7`) shared between two consecutive instructions.
+Four register fields (the three standard ones, plus one more in part of
+`funct7`) shared between two consecutive instructions:
 
 {% assign bw = 18 %}
 <svg width="100%" height="52" viewbox="0 0 800 52">
@@ -98,6 +99,14 @@ destination register to save encoding space, or elide the destination
 register slot the first instruction and a source register slot of the
 second instruction and hard-code them as a temporary register.
 
+Immediates are 5-bit by default, aliasing with a register index.  When
+this is insufficient the frame may repurpose another register field to
+make a ten-bit immediate.  When that's unreasonable (eg., the index for
+bit shifts on a 64-bit platform) the immediate-consuming instruction is
+duplicated in the list of opcodes the frame supports, and the choice
+between the two (or four, or eight) copies of the same instruction
+serves as an extra bit (or two or three).
+
 For 'chain' rules, a temporary register is used, and not encoded in the
 packet at all.  This should probably be hard-coded as `x31` (which
 doesn't exist on RV32-E, so maybe `x7` instead?), but for the sake of
@@ -106,12 +115,11 @@ intermediate result be written back _unless_ there's an exception within
 the packet.  Meaningt the value of the temporary register would be
 undefined after a chain packet.
 
-Frame structures are determined from the opcode field.  Each frame has a
+Frame structures are signalled by the opcode field.  Each frame has a
 number of opcode pair configurations it supports, and these are
-enumerated and rounded up to the next power of two so that frame types
-change at round number offsets.
+enumerated and rounded up to the next power of two.
 
-Instruction pairs only allow control flow changes in the second opcode.
+Instruction pairs only allow control flow changes in the second slot.
 Branch targets are always 32-bit aligned.
 
 A frame might pose a question like "how do we implement load with base
@@ -131,54 +139,55 @@ the next cycle.
 
 If an exception occurs inside a packet then enough state must be
 preserved that execution can resume from the second instruction in the
-packet if needed, but otherwise there's no jumping into the middle of a
-packet and that process doesn't need to be efficient.
+packet if necessary, but otherwise there's no jumping into the middle of
+a packet and that process doesn't need to be efficient.
 
 Alternatively, a multi-issue implementation could ingest the packet as a
-single instruction and split it into uops at a more convenient stage in
-the pipeline.  Or implement it as a single, fused instruction when
-possible.
+single instruction and split it into &micro;-ops at a more convenient
+stage in the pipeline.  Or implement it as a single, fused instruction
+when possible.
 
 ## Development process
 
 I vibe-coded an instruction scheduler which I run over a corpus of
 assembly, which attempts to find and fuse pairable instructions
 according to rules describing what a legitimate instruction pair would
-look like, just to get a feel for what sort of pairing rules I could
-introduce.  It looks at register usage to determine when a result is no
-longer needed, and which instructions can move past which other
+look like; just to get a feel for what sort of pairing rules I could
+introduce.  It simply looks at register usage to determine when a result
+is no longer needed, and which instructions can move past which other
 instructions.
 
 This seemed easier than writing my own compiler to optimise a made-up
-instruction set which was continuously changing, but it also has a lot
-of limitations.  There's no expectation for it to yield runnable code;
-merely to give a feel for what things would look like if the nits can be
+instruction set which I hadn't designed yet, but it also has
+limitations.  There's no expectation for it to yield runnable code;
+merely to give a feel for how things would pack if the nits can be
 worked out.
 
 Then I randomly threw rules at it to see what would stick.
 
-Then I did something much more delinquent.  I ran optimisers against a
-dangerously small corpus to see what could be squeezed out.
-
-Then I pivoted to laying out the bit patterns by hand in order to prove
+And I pivoted to laying out the bit patterns by hand in order to prove
 that the budgets were being met.
 
-Attempting to draw things around the standard RISC-V frames showed that
-my plan would orbit around a set of four register/immediate fields which
-would be switched around and re-used as needed by each frame.
+Attempting to draw things around the standard RISC-V frames brought out
+the four-register-field pattern shown above, while sweeping up the
+remaining bits for an unregulated mix of frame selection and opcode
+selection.
+
+Then, I did a bad thing -- I ran optimisers against an irresponsibly
+small corpus to see what could be squeezed out.
 
 Here's the tooling, such as it is: [CISC-V experiment][]
 (content-warning: unchecked AI output)
 
-It's not really human-readable anymore.  [Claude][] has taken it its own
-way and much of what it does is flaky and unreliable and I don't want to
-think about all that.  But it's sufficient to get a gist of whether the
-ideas make sense and how they map to real code.
+It's no longer human-readable.  [Claude][] has taken it its own way.
+Much of what it does is flaky and unreliable, and most of the code is
+only there as a toolkit for "what if?" queries posed to the AI.  I don't
+really want to think about working with that code by hand.
+
+But it's sufficient to get a gist of whether the ideas make sense and
+how they map to real code.
 
 ### Pairing rule selection
-
-Not intelligently done.  Redundancies not eliminated.  Optimisations
-ad-hoc.  Very little care and attention, overall.
 
 I drew inspiration from classic CISC operations, proposals for macro-op
 fusion, and things other architectures do.  And just kind of threw them
@@ -186,8 +195,12 @@ all in there and mused openly to Claude about how that looked to me and
 asked it for feedback.
 
 Claude was not a reliable witness, and led me down many garden paths of
-faulty analyses and losses of comprehension.  But it was a process I
-could do on my phone without much attention.
+faulty analyses and losses of comprehension.  But it was an exploration
+I could do on my phone on a whim, so it won on convenience.
+
+It feels like it's come out with a lot of redundancies; though often the
+apparent redundancies are just redistributions of immediate sizes to
+suit different idioms.
 
 ### Biclique optimisation
 
@@ -197,6 +210,33 @@ with free choice of any other operation isn't fruitful.  By cutting the
 frames into different sections with different purposes (often emulating
 different CISC instructions) it becomes easy to minimise the
 combinations which are worth making space for.
+
+### Immediate sizing
+
+This is gnarly.  You get 5 bits by default, aliasing with a register
+index.  Five bits can't fully specify a bit shift on a 64-bit target.
+Five bits is often not enough for a lot of things.  And you have to
+decide whether it's signed or not.
+
+In a lot of cases the thing to do is sacrifice another register operand
+to get a 10-bit immediate.  Implicit SP with a 10-bit offset means you
+can get to a lot of local variables.
+
+Also, the value of the immediate in one slot will often be scaled by the
+instruction choice in the other slot (eg., `addi` gets its immediate
+scaled by 4 if it's paired with `lw`), and of course memory access also
+uses its own implicit scaling.
+
+Otherwise, duplicate the opcode in the opcode list to extend the
+immediate range by one bit.
+
+Trawling through code there are patterns of step changes in immediate
+requriements.  The specific corpus is the most obvious cause of this,
+and some artefacts of the original immediate limits of the existing
+architecture, but other things appear to be a legitimate reflection of
+the way code tends to work.  I just kind of guessed.  Claude helped.  It
+did lead to a lot of redundancy, but I didn't have many better ideas, so
+immediate shaping became a big factor in the design choices.
 
 ### Enumeration
 
@@ -231,13 +271,7 @@ the intermediate result.
 Here's what I came up with.  It's just a straw-man kind of thing.
 Opcodes are enumerated simply to demonstrate that they can actually be
 encoded into 32 bits.  The current assignment of the bit values is not
-how it should be done, merely how it's easily done.
-
-With a bit of massaging it appears to be possible to reduce the
-signature of each frame type down to a handful of bits in the opcode5
-field, and squeeze a signature for the transform required to turn a
-slot-B instruction into a slot-A frame in another handful of bits.  But
-I have not written (or vibed) such an allocator yet.
+how it should be done, just something expedient.
 
 Bits marked `p` below are the bits used to enumerate the opcode
 combinations available in each frame.  Unfortunately I didn't enumerate
@@ -333,7 +367,7 @@ chosen on a per-frame basis.
 {% assign at = opset.at | plus: 0 %}
 {% if opset.pairs %}
 <table class="opcodes" style="width:auto;">
-  <tr><th>slot A</th><th>slot B</th><th>p=</th></tr>
+  <tr><th>slot A</th><th>slot B</th><th></th></tr>
   {% for pair in opset.pairs %}
   <tr>
   <td>{{pair.a.op}}</td><td>{{pair.b.op}}
@@ -409,11 +443,11 @@ put rs1 and rs2 for the first instruction in the same slots, so they can
 be prepared early, but there are other details one wants to know soonish
 which could be surfaced but have not been.
 
-This is a thing that can be handled in the way that the currently-naive
-enumeration counts its way through the things that are needed.  Putting
-things in more thoughtful orders and moving the bits which distinguish
-particular features into predictable locations rather than just being
-counts assigned incrementally.
+With a bit of massaging it appears to be possible to reduce the
+signature of each frame type down to a handful of bits in the opcode
+field, and squeeze a signature for the transform required to turn the
+slot-B parameters into a slot-A frame in another handful of bits.  But I
+have not written (or vibed) such an allocator yet.
 
 Another problem is lack of thoughtful optimisation and, conversely,
 gross overfitting to my limited test corpus.
@@ -428,7 +462,9 @@ That said, this adventure promotes itself as being CISC-inspired, so
 being a random bucket of overlapping things that seemed like good ideas
 is pretty on-brand.
 
-And a toolchain would be nice, too.  And an implementation.
+And a toolchain would be nice, too.  And an implementation.  And from
+those, feedback into what makes a better target, and back around the
+tuning loops again with that insight in mind.
 
 ## AI disclosure statement
 
