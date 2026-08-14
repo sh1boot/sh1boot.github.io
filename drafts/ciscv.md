@@ -1,22 +1,30 @@
 ---
 layout: post
-title: "CISC-V: An exploratory 32-bit instruction-pair packing for RISC-V"
+title: "CISC-V: an exploratory code compression for RISC-V"
+tags: vibe-coding computer-architecture riscv compression
 svg: true
 ---
 
-After months of trying to get around to it, I finally have a straw-man level system of compressing RISC-V code
-by squashing pairs of opcodes into a single 32-bit packet rather than
-squashing individual opcodes into 16-bit packets in order to address
-issues with unaligned 32-bit instruction words.
+After months of trying to get around to it, I finally have a straw-man
+level system of [compressing RISC-V code](/cisc-v-begins/) by squashing
+pairs of opcodes into a single 32-bit packet rather than squashing
+individual opcodes into 16-bit packets in order to address issues with
+unaligned 32-bit instruction words.
 
-The intent is to enable a minimal implementation which can decode the first slot easily while simultaneously reformatting the packet to expose the B slot for interpretation by the same decoder on the next step.  But also to make things more digestible for wide multi-issue implementations.
+The intent is to enable a minimal implementation which can decode the
+first slot easily while simultaneously reformatting the packet to expose
+the B slot for interpretation by the same decoder on the next step.  But
+also to make things more digestible for wide multi-issue
+implementations.
 
-It's still not a fully defined thing.  Just a thought experiment gone a little too far.
+It's still not a fully defined thing.  Just a thought experiment gone a
+little too far.
 
 This takes 1/4 of the total instruction coding space, meaning it steals
 1/3 of the space occupied by RVC.  It's assumed that the remaining 2/3
 of RVC won't be used in conjunction with this as that would undermine
 the objectives given below.
+
 
 ## Why?
 
@@ -41,15 +49,21 @@ that the compression can work under the given constraints.
 
 ## Status
 
-This is just an exploration, not a formal RISC-V proposal.  All things are subject to change and much needs to be solidified before it can be implemented.
+This is just an exploration, not a formal RISC-V proposal.  All things
+are subject to change and much needs to be solidified before it can be
+implemented.
 
-The results here are intended to establish the viability of the compression and to give a view on mindset and intent which motivated decisions, compromises, and blind hope.
+The results here are intended to establish the viability of the
+compression and to give a view on mindset and intent which motivated
+decisions, compromises, and blind hope.
 
 
 ## Packet structure
 
-A packet comprises two instructions compressed into a 32-bit instruction word.  There are four register fields (the three standard ones, plus one more in part of
-`funct7`) which are shared between two regular RISC-V instructions:
+A packet comprises two instructions compressed into a 32-bit instruction
+word.  There are four register fields (the three standard ones, plus one
+more in part of `funct7`) which are shared between two regular RISC-V
+instructions:
 
 {% assign bw = 18 %}
 <svg width="100%" height="52" viewbox="0 0 800 52">
@@ -103,14 +117,20 @@ A packet comprises two instructions compressed into a 32-bit instruction word.  
 <text x="{{bw | times: 4.5| plus: 82}}" y="42">r_extra</text>
 </svg>
 
-The mapping of fields to different induction operands is described by a frame.  Different frames and different opcodes within each frame are currently enumerated in the ten free bits in `opcode`, `funct3`, and two bits of `funct7` (two bits of `opcode` are reserved to identify this encoding scheme).  More on "enumeration" and its decoder implications later.
+The mapping of fields to different induction operands is described by a
+frame.  Different frames and different opcodes within each frame are
+currently enumerated in the ten free bits in `opcode`, `funct3`, and two
+bits of `funct7` (two bits of `opcode` are reserved to identify this
+encoding scheme).  More on "enumeration" and its decoder implications
+later.
 
-No new instructions are introduced, but some optional instructions are included.  A frame merely compressed two consecutive instructions into one 32-bit packet.
-The first instruction (generally) has its source register fields aligned
-to the source register fields of 32-bit opcodes, but the 32-bit
-destination register field is (generally) the register written by the
-second instruction.  Other fields are recycled and repurposed according
-to the specific frame structure they follow.
+No new instructions are introduced, but some optional instructions are
+included.  A frame merely compressed two consecutive instructions into
+one 32-bit packet.  The first instruction (generally) has its source
+register fields aligned to the source register fields of 32-bit opcodes,
+but the 32-bit destination register field is (generally) the register
+written by the second instruction.  Other fields are recycled and
+repurposed according to the specific frame structure they follow.
 
 For example, a frame may designate a source register as also the
 destination register to save encoding space, or elide the destination
@@ -144,31 +164,42 @@ instruction in the second (`rbase` -> `rdest`, `rbase` -> `rs1`,
 `offset` -> `immediate`), and then unroll that across all the
 opcodes (`lb`, `lbu`, `lh`, etc..) it needs to complete the set.
 
-Typical savings come from sharing `rd` and `rs1` (as `rsd`) encoding, and from 'chain' rules where the first result is used only by the second operation before being discarded, and so neither the destination register nor its reference in the next op need to be encoded explicitly.  Implicit `sp` is used a lot as well, but that saving is usually spent on a longer offset for large stack frames.
+Typical savings come from sharing `rd` and `rs1` (as `rsd`) encoding,
+and from 'chain' rules where the first result is used only by the second
+operation before being discarded, and so neither the destination
+register nor its reference in the next op need to be encoded explicitly.
+Implicit `sp` is used a lot as well, but that saving is usually spent on
+a longer offset for large stack frames.
 
 ## Decoding and execution
 
 In the simplest implementation an instruction
 decoder would decode the first slot normally (with the caveat that the
 destination register is not in the usual location), while also preparing
-another conventional 32-bit instruction word to feed back to the same instruction
-decoder for the next decode step.
+another conventional 32-bit instruction word to feed back to the same
+instruction decoder for the next decode step.
 
-Alternatively, an implementation might ingest the packet as a
-single instruction and split it into &micro;-ops at a more convenient
-stage in the pipeline.  A more aggressively optimised implementation could fuse them into a single operation when practical.
+Alternatively, an implementation might ingest the packet as a single
+instruction and split it into &micro;-ops at a more convenient stage in
+the pipeline.  A more aggressively optimised implementation could fuse
+them into a single operation when practical.
 
 Regardless of the implementation, the execution model is _as if_ the
-packet contains two ordinary RISC-V instructions executed sequentially, each consuming its operands and producing it's normal architectural result in turn.  Potentially with
-some corner cases made illegal (or undefined encoding space) for a performance advantage if
-necessary (eg., non-canonical chains, or whether the temporary register
-lands in a chain).  Essentially slot B observes all the architectural effects of slot A, with all that that entails, and we just try to avoid (prohibit or allow no encoding for) situations where that can cause headaches.
+packet contains two ordinary RISC-V instructions executed sequentially,
+each consuming its operands and producing it's normal architectural
+result in turn.  Potentially with some corner cases made illegal (or
+undefined encoding space) for a performance advantage if necessary (eg.,
+non-canonical chains, or whether the temporary register lands in a
+chain).  Essentially slot B observes all the architectural effects of
+slot A, with all that that entails, and we just try to avoid (prohibit
+or allow no encoding for) situations where that can cause headaches.
 
 Similarly, some packets, like `rsd-alu-pair`, specify independent
-destination registers for each slot, meaning they're able to encode cases where the second slot must depend on the result of the first.  This might
-offer code density gains but it may raise
-pipeline headaches, so encoding such dependencies should probably be prohibited. 
-If it remains legal then it must still behave _as if_ sequential.
+destination registers for each slot, meaning they're able to encode
+cases where the second slot must depend on the result of the first.
+This might offer code density gains but it may raise pipeline headaches,
+so encoding such dependencies should probably be prohibited.  If it
+remains legal then it must still behave _as if_ sequential.
 
 At present there's no optimisation for ease of decode, other than an
 attempt to align the operand fields consistently.  The remaining ten
@@ -178,41 +209,60 @@ bits is at least better than 32.
 
 ## Exceptions and interrupts
 
-If an exception occurs inside a packet then enough architectural state must be
-preserved that execution can resume from the second instruction in the
-packet if necessary.  Normally there's no jumping into the middle of
-a packet and that process does not need to be efficient.
+If an exception occurs inside a packet then enough architectural state
+must be preserved that execution can resume from the second instruction
+in the packet if necessary.  Normally there's no jumping into the middle
+of a packet and that process does not need to be efficient.
 
-If the first slot did not cause the exception then architectural
-state must be updated accordingly, _as if_ the two slots execute sequentially.
+If the first slot did not cause the exception then architectural state
+must be updated accordingly, _as if_ the two slots execute sequentially.
 
-Since it needs to be recorded which instruction caused the fault,
-slot B can be chosen by bit 1 of the PC (dressing up as if we're executing
-two 16-bit instructions).  This need only be supported for restarts.  Branch and jump targets are always 32-bit aligned.
+Since it needs to be recorded which instruction caused the fault, slot B
+can be chosen by bit 1 of the PC (dressing up as if we're executing two
+16-bit instructions).  This need only be supported for restarts.  Branch
+and jump targets are always 32-bit aligned.
 
-Interrupts are assumed to follow the same protocol as exceptions.  It is hoped, but TBD, that an implementation would be able to meet the architectural model while deferring interrupts until completion of the whole packet in order to avoid complexity.
+Interrupts are assumed to follow the same protocol as exceptions.  It is
+hoped, but TBD, that an implementation would be able to meet the
+architectural model while deferring interrupts until completion of the
+whole packet in order to avoid complexity.
 
-The other obvious state needed for a restart is the temporary value used in chain operations.
+The other obvious state needed for a restart is the temporary value used
+in chain operations.
 
 Logically one could hard-code this temporary during instruction decode
 as `x31` (which doesn't exist on RV32-E, so maybe `x7` instead?) so
 it's automatically saved; but some implementations may not appreciate
 this constraint, and it would be preferable to regard such a named register
-as undefined after chain packets in normal operation.  The intermediate value should only be considered reliably written back when forced by an exception or interrupt.
+as undefined after chain packets in normal operation.  The intermediate
+value should only be considered reliably written back when forced by an
+exception or interrupt.
 
 Alternatively, just expose it in a CSR.  I'm not sure what's best for
 the most economical implementations.
 
-Another alternative, it's an instruction really doesn't want to deal with the complexity at all but already features the necessary machinery, might be to cancel the whole packet (reversing the effects of slot A if necessary) and for the exception handler to simulate the pair of instructions one at a time.
+Another alternative, it's an instruction really doesn't want to deal
+with the complexity at all but already features the necessary machinery,
+might be to cancel the whole packet (reversing the effects of slot A if
+necessary) and for the exception handler to simulate the pair of
+instructions one at a time.
 
 ## The encoding (provisional)
 
-Here's what I came up with.  Opcodes are enumerated simply to demonstrate that they can actually be
-encoded into 32 bits while the frames continue to evolve.  The current assignment of the bit values is not
-how it should be done, just something expedient.
+Here's what I came up with.  Opcodes are enumerated simply to
+demonstrate that they can actually be encoded into 32 bits while the
+frames continue to evolve.  The current assignment of the bit values is
+not how it should be done, just something expedient.
 
 Bits marked `p` below are the bits used to enumerate the opcode
-combinations available in each frame.  The values for the internet encoded by `p` bits are given in the tables following the frame structure.  It's just a provisional assignment and hasn't been tuned for a realistic decoder.
+combinations available in each frame.  The values for the integer
+encoded by `p` bits are given in the tables following the frame
+structure.  It's just a provisional assignment and hasn't been tuned for
+a realistic decoder.
+
+Where that value jumps by more than one, and where instructions are
+marked "&times;n", that's where bits of the opcode enumeration have been
+taken to extend the immediate range.
 
 ### frame layouts
 
@@ -363,15 +413,17 @@ COMBINED      1542881  338460    78.1%     72.2%  108.1%    +90729
 
 This is suboptimal because it's not using a compiler which optimises for
 the instruction set I've created.  It's also suboptimal because I'm
-using code compiled for RVC, which has register pressure that does not apply here, and so it uses more instructions than strictly
-necessary (at least in Clang's case -- GCC finds excuses to use more
+using code compiled for RVC, which has register pressure that does not
+apply here, and so it uses more instructions than strictly necessary (at
+least in Clang's case -- GCC finds excuses to use more
 instructions regardless).  I have some other test cases but the
 tabulation got mucky, so let's just run with the above for now.
 
 ## Development process
 
-I vibe-coded an instruction scheduler which scans a corpus of assembly and attempts to find and fuse pairable instructions
-according to rules describing what a legitimate instruction pair would
+I vibe-coded an instruction scheduler which scans a corpus of assembly
+and attempts to find and fuse pairable instructions according to rules
+describing what a legitimate instruction pair would
 look like; just to get a feel for what sorts of pairing rules I could
 introduce.  It simply looks at register usage to determine when a result
 is no longer needed, and which instructions can move past which other
@@ -432,9 +484,13 @@ different CISC instructions) it becomes easy to minimise the
 combinations which are worth making space for.  Possibly (TBD) at the
 cost of decode complexity.
 
-Conversely, rules like `rsd-alu-pair` avoid relationships between slots and so encoding freedom of operation order wastes nearly one bit, and removing that freedom realises more opportunities for tuning.
+Conversely, rules like `rsd-alu-pair` avoid relationships between slots
+and so encoding freedom of operation order wastes nearly one bit, and
+removing that freedom realises more opportunities for tuning.
 
-All this optimisation risks over-fitting and adding complexity to the decoder, so it must be done thoughtfully (Narrator: it has not been done thoughtfully).
+All this optimisation risks over-fitting and adding complexity to the
+decoder, so it must be done thoughtfully (Narrator: it has not been done
+thoughtfully).
 
 ### Immediate sizing
 
