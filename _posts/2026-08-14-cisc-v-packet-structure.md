@@ -223,7 +223,7 @@ Since a restart needs to distinguish which instruction caused the fault,
 bit 1 of the PC can be used to signal slot B (dressing up as if we're
 executing two 16-bit instructions).  This mechanism is only required for
 restarts and doesn't have to have optimal performance.  Normal branch
-and jump targets are always 32-bit aligned.
+and jump targets are always 32-bit aligned, and for all purposes outside of exception and interrupt handling PC can safely be assumed to be 32-bit aligned.
 
 Interrupts are assumed to follow the same protocol as exceptions.  It is
 hoped (TBD) that an implementation would be able to meet the
