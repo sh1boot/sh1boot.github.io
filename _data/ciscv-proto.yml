@@ -1189,7 +1189,7 @@ frames:
     a:
     - {at: 0, n: 1, op: "addi"}
     b:
-    - {at: 0, n: 1, op: "jr_any"}
+    - {at: 0, n: 1, op: "jr"}
     - {at: 1, n: 1, op: "ret"}
 - name: "dual-setup-pair"
   does: "Two independent small moves or constants -- argument marshalling."
@@ -1314,8 +1314,8 @@ frames:
     - {at: 0, n: 1, op: "lw", imm: {bits: 10, signed: false, field: 10}}
     - {at: 1, n: 1, op: "ld", imm: {bits: 10, signed: false, field: 10}}
     b:
-    - {at: 0, n: 1, op: "jalr_link_ra"}
-    - {at: 1, n: 1, op: "jalr_link_t1"}
+    - {at: 0, n: 1, op: "jalr ra"}
+    - {at: 1, n: 1, op: "jalr t1"}
 - name: "arg-call-pair"
   does: "Set up an argument, then call through a hard-coded base register."
   a_format: mixed
@@ -1381,7 +1381,7 @@ frames:
     opcode: "1 0 1 0 1"
     a:
       fields: [{name: imma, bits: 7, type: imm, field: [rs2, rs1], range: [24, 18]}, {name: rda, bits: 3, type: rd, field: rs1, range: [17, 15]}]
-      template: "addi_rsd rda, imma"
+      template: "addi rda, rda, imma"
     b:
       fields: [{name: 'immb[9:5]', bits: 5, type: imm, field: funct5, range: [29, 25]}, {name: 'immb[4:0]', bits: 5, type: imm, field: rd, range: [11, 7]}]
       implicit: [{name: t1, type: rs}]
@@ -1398,10 +1398,10 @@ frames:
     - {at: 4, n: 1, op: "ld", imm: {bits: 7, signed: false, field: 7}}
     - {at: 5, n: 1, op: "sw", imm: {bits: 5, signed: false, field: 7}}
     - {at: 6, n: 1, op: "sd", imm: {bits: 5, signed: false, field: 7}}
-    - {at: 7, n: 1, op: "addi_rsd"}
+    - {at: 7, n: 1, op: "addi"}
     b:
-    - {at: 0, n: 1, op: "jalr_ra", imm: {bits: 10, scale: 4, field: 10}}
-    - {at: 1, n: 1, op: "jr_t1", imm: {bits: 10, scale: 4, field: 10}}
+    - {at: 0, n: 1, op: "jalr ra", imm: {bits: 10, scale: 4, field: 10}}
+    - {at: 1, n: 1, op: "jr t1", imm: {bits: 10, scale: 4, field: 10}}
 - name: "setup-jump-pair"
   does: "Set up an argument or return value, then transfer control."
   a_format: mixed
@@ -1484,8 +1484,8 @@ frames:
     - {at: 3, n: 1, op: "ld"}
     b:
     - {at: 0, n: 1, op: "ret"}
-    - {at: 1, n: 1, op: "jalr_link_ra"}
-    - {at: 2, n: 1, op: "jr_any"}
+    - {at: 1, n: 1, op: "jalr ra"}
+    - {at: 2, n: 1, op: "jr"}
   - select: "100bb"
     at: 16
     n: 4
@@ -1493,8 +1493,8 @@ frames:
     - {at: 0, n: 1, op: "li"}
     b:
     - {at: 0, n: 1, op: "ret"}
-    - {at: 1, n: 1, op: "jalr_link_ra"}
-    - {at: 2, n: 1, op: "jr_any"}
+    - {at: 1, n: 1, op: "jalr ra"}
+    - {at: 2, n: 1, op: "jr"}
   - select: "101aa"
     at: 20
     n: 4
@@ -1566,6 +1566,6 @@ frames:
     - {at: 15, n: 1, op: "xor"}
     b:
     - {at: 0, n: 1, op: "ret"}
-    - {at: 1, n: 1, op: "jalr_link_ra"}
-    - {at: 2, n: 1, op: "jr_any"}
+    - {at: 1, n: 1, op: "jalr ra"}
+    - {at: 2, n: 1, op: "jr"}
     - {at: 3, n: 1, op: "j"}
