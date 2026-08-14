@@ -32,8 +32,8 @@ the objectives given below.
 * To avoid the other problems with mixed-size instructions
 * To exploit inter-opcode redundancies
 * To dress up like a CISC architecture in order to gain its powers
-* To maintain the 2-in-1-out data flow model by executing 32-bit packets
-  sequentially as two separable instructions
+* To maintain the conventional 2-source, 1-destination data flow model
+  by executing 32-bit packets sequentially as two separate instructions
 * To expose macro-op fusion opportunities within a 32-bit word when
   executing whole packets at once
 
@@ -117,7 +117,7 @@ instructions:
 <text x="{{bw | times: 4.5| plus: 82}}" y="42">r_extra</text>
 </svg>
 
-The mapping of fields to different induction operands is described by a
+The mapping of fields to different instruction operands is described by a
 frame.  Different frames and different opcodes within each frame are
 currently enumerated in the ten free bits in `opcode`, `funct3`, and two
 bits of `funct7` (two bits of `opcode` are reserved to identify this
@@ -186,20 +186,19 @@ them into a single operation when practical.
 
 Regardless of the implementation, the execution model is _as if_ the
 packet contains two ordinary RISC-V instructions executed sequentially,
-each consuming its operands and producing it's normal architectural
-result in turn.  Potentially with some corner cases made illegal (or
-undefined encoding space) for a performance advantage if necessary (eg.,
-non-canonical chains, or whether the temporary register lands in a
-chain).  Essentially slot B observes all the architectural effects of
-slot A, with all that that entails, and we just try to avoid (prohibit
-or allow no encoding for) situations where that can cause headaches.
+each consuming its operands and producing its normal architectural
+result in turn.  Potentially with some corner cases made illegal for a
+performance advantage (eg., non-canonical chains).  Essentially slot B
+observes all the architectural effects of slot A, with all that that
+entails, and we just try to avoid (prohibit or allow no encoding for)
+situations where that can cause headaches.
 
-Similarly, some packets, like `rsd-alu-pair`, specify independent
+Similarly, some packets, like `rsd-alu-pair`, specify separate
 destination registers for each slot, meaning they're able to encode
-cases where the second slot must depend on the result of the first.
-This might offer code density gains but it may raise pipeline headaches,
-so encoding such dependencies should probably be prohibited.  If it
-remains legal then it must still behave _as if_ sequential.
+cases where the second slot must use the result of the first.  This
+might offer code density gains but could raise pipeline headaches, so
+encoding such dependencies should probably be prohibited.  If it remains
+legal then it must still behave _as if_ sequential.
 
 At present there's no optimisation for ease of decode, other than an
 attempt to align the operand fields consistently.  The remaining ten
@@ -217,13 +216,14 @@ of a packet and that process does not need to be efficient.
 If the first slot did not cause the exception then architectural state
 must be updated accordingly, _as if_ the two slots execute sequentially.
 
-Since it needs to be recorded which instruction caused the fault, slot B
-can be chosen by bit 1 of the PC (dressing up as if we're executing two
-16-bit instructions).  This need only be supported for restarts.  Branch
+Since it needs to be recorded which instruction caused the fault, bit 1
+of the PC can be used to signal slot B (dressing up as if we're
+executing two 16-bit instructions).  This mechanism is only required for
+restarts and doesn't have to have optimal performance.  Normal branch
 and jump targets are always 32-bit aligned.
 
 Interrupts are assumed to follow the same protocol as exceptions.  It is
-hoped, but TBD, that an implementation would be able to meet the
+hoped (TBD) that an implementation would be able to meet the
 architectural model while deferring interrupts until completion of the
 whole packet in order to avoid complexity.
 
@@ -241,11 +241,12 @@ exception or interrupt.
 Alternatively, just expose it in a CSR.  I'm not sure what's best for
 the most economical implementations.
 
-Another alternative, it's an instruction really doesn't want to deal
-with the complexity at all but already features the necessary machinery,
-might be to cancel the whole packet (reversing the effects of slot A if
-necessary) and for the exception handler to simulate the pair of
+Another alternative for exceptions, if an implementation doesn't
+want to deal with the complexity at all and has the necessary machinery,
+could be to cancel the whole packet (reversing the effects of slot A
+where necessary) and for the exception handler to simulate the pair of
 instructions one at a time.
+
 
 ## The encoding (provisional)
 
@@ -512,7 +513,7 @@ Otherwise, duplicate the opcode in the opcode list to extend the
 immediate range by one bit.
 
 Trawling through code there are patterns of step changes in immediate
-requirements.  The specific corpus is an obvious cause of this,
+requirements.  The specific corpus is an obvious source of this effect,
 and some artefacts of the original immediate limits of the existing
 architecture, but other things appear to be a legitimate reflection of
 the way code tends to work.  I just kind of guessed.  Claude helped.  It
