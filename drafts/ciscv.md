@@ -457,7 +457,8 @@ small corpus to see what could be squeezed out.
 Here's the tooling, such as it is: [CISC-V experiment][]
 (content-warning: unchecked AI output)
 
-It's no longer human-readable.  [Claude][] has taken it its own way.
+It's no longer human-readable.  [Claude][] has taken things in its own
+direction.
 Much of what it does is flaky and unreliable, and most of the code is
 only there as a toolkit for "what if?" queries posed to the AI.  I don't
 really want to think about working with that code by hand.
@@ -544,13 +545,13 @@ less compression.
 
 Also, it opened up opportunities to hint at things that could be left
 out of direct ALU paths.  Things like indirect branching via memory;
-which branch prediction (if you have it) would assume it knows how to do
-without seeing the data, and the data is only there to cancel the
-prediction after the fact if it was inconsistent.
+where branch prediction (when present) typically goes ahead with its
+decision without seeing the data, and the data is only there to cancel
+the prediction after the fact if it was inconsistent.
 
-Less painful was chaining with base-register operand.  In particular
+Chaining with a base-register operand was less painful.  In particular
 filling the gap RISC-V leaves with `rb+k*ri` address generation which,
-it turns out, can be done via temporary register without need to save
+it turns out, can be done via temporary register without needing to save
 the intermediate result.
 
 ## Future work
