@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "CISC-V: an exploratory code compression for RISC-V"
-tags: vibe-coding computer-architecture riscv compression
+tags: computer-architecture riscv compression vibe-coding
 svg: true
 redirect_from:
  - /drafts/ciscv/
