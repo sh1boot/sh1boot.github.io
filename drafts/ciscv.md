@@ -11,10 +11,10 @@ pairs of opcodes into a single 32-bit packet rather than squashing
 individual opcodes into 16-bit packets in order to address issues with
 unaligned 32-bit instruction words.
 
-The intent is to enable a minimal implementation which can decode the
-first slot easily while simultaneously reformatting the packet to expose
-the B slot for interpretation by the same decoder on the next step.  But
-also to make things more digestible for wide multi-issue
+The intent is to make a minimal implementation possible which can decode
+the first slot easily while simultaneously reformatting the packet to
+expose the B slot for interpretation by the same decoder on the next
+step.  But also to make things more digestible for wide multi-issue
 implementations.
 
 It's still not a fully defined thing.  Just a thought experiment gone a
@@ -118,17 +118,17 @@ instructions:
 </svg>
 
 The mapping of fields to different instruction operands is described by a
-frame.  Different frames and different opcodes within each frame are
+frame.  Different frames and different opcode pairs within each frame are
 currently enumerated in the ten free bits in `opcode`, `funct3`, and two
 bits of `funct7` (two bits of `opcode` are reserved to identify this
 encoding scheme).  More on "enumeration" and its decoder implications
 later.
 
-No new instructions are introduced, but some optional instructions are
+No new instruction semantics are introduced; some optional instructions are
 included.  A frame merely compressed two consecutive instructions into
 one 32-bit packet.  The first instruction (generally) has its source
 register fields aligned to the source register fields of 32-bit opcodes,
-but the 32-bit destination register field is (generally) the register
+but the usual destination register field is (generally) the register
 written by the second instruction.  Other fields are recycled and
 repurposed according to the specific frame structure they follow.
 
@@ -139,20 +139,23 @@ second instruction and hard-code them as a temporary register.
 
 Immediates are 5-bit by default, aliasing with a register index.  When
 this is insufficient the frame may repurpose another register field to
-make a ten-bit immediate.  When that's unreasonable (eg., the index for
+make a ten-bit immediate.  When ten bits is too many (e.g., the index for
 bit shifts on a 64-bit platform) the immediate-consuming instruction is
 duplicated in the list of opcodes the frame supports, and the choice
 between the two (or four, or eight) copies of the same instruction
 serves as an extra bit (or two or three).
 
 For chain rules, temporary storage is used and not encoded in the
-packet at all.  Generally the implementation could decide what kind of
-storage this is, but its value has to be accessible for exception
-handling.
+packet at all.  It's left to the implementation to decide what kind of
+path this data takes, with the caveat that it must be exposed
+architecturally for exceptions.  The possibility is held open for
+the decoder to hard-code the temporary register as `x31` or `x7` if this
+does not impede optimisation (see [Exceptions and
+interrupts](#exceptions-and-interrupts)).
 
 Frame structures are signalled by the opcode field.  Each frame has a
 number of opcode pair configurations it supports, and these are
-enumerated and rounded up to the next power of two.
+enumerated and rounded up to a power of two.
 
 Instruction pairs only allow control flow changes in the second slot.
 Branch targets are always 32-bit aligned.
@@ -184,14 +187,14 @@ instruction and split it into &micro;-ops at a more convenient stage in
 the pipeline.  A more aggressively optimised implementation could fuse
 them into a single operation when practical.
 
-Regardless of the implementation, the execution model is _as if_ the
-packet contains two ordinary RISC-V instructions executed sequentially,
-each consuming its operands and producing its normal architectural
-result in turn.  Potentially with some corner cases made illegal for a
-performance advantage (eg., non-canonical chains).  Essentially slot B
-observes all the architectural effects of slot A, with all that that
-entails, and we just try to avoid (prohibit or allow no encoding for)
-situations where that can cause headaches.
+Regardless of the implementation a valid packet has the architectural
+effect of two ordinary RISC-V instructions executed sequentially, each
+consuming its operands and producing its normal architectural
+result in turn, with slot B observing the effects of slot A.  Some
+combinations may have to be excluded from permitted encodings if they
+have problematic implications in high-performance implementations.  The
+intent is to capture such cases explicitly if they're common but not to
+leave them as performance landmines if they're rare.
 
 Similarly, some packets, like `rsd-alu-pair`, specify separate
 destination registers for each slot, meaning they're able to encode
@@ -208,16 +211,14 @@ bits is at least better than 32.
 
 ## Exceptions and interrupts
 
-If an exception occurs inside a packet then enough architectural state
-must be preserved that execution can resume from the second instruction
-in the packet if necessary.  Normally there's no jumping into the middle
-of a packet and that process does not need to be efficient.
+If an exception occurs inside a packet then the architectural state
+must be properly resolved such that execution can resume at the
+appropriate slot _within_ a packet, as needed.  If the first slot did
+not cause the exception then architectural state must be updated
+accordingly, _as if_ the two slots execute sequentially.
 
-If the first slot did not cause the exception then architectural state
-must be updated accordingly, _as if_ the two slots execute sequentially.
-
-Since it needs to be recorded which instruction caused the fault, bit 1
-of the PC can be used to signal slot B (dressing up as if we're
+Since a restart needs to distinguish which instruction caused the fault,
+bit 1 of the PC can be used to signal slot B (dressing up as if we're
 executing two 16-bit instructions).  This mechanism is only required for
 restarts and doesn't have to have optimal performance.  Normal branch
 and jump targets are always 32-bit aligned.
@@ -233,10 +234,10 @@ in chain operations.
 Logically one could hard-code this temporary during instruction decode
 as `x31` (which doesn't exist on RV32-E, so maybe `x7` instead?) so
 it's automatically saved; but some implementations may not appreciate
-this constraint, and it would be preferable to regard such a named register
-as undefined after chain packets in normal operation.  The intermediate
-value should only be considered reliably written back when forced by an
-exception or interrupt.
+this constraint, and it would be preferable for such a named register
+to not be guaranteed to retain a particular value after chain packets in
+normal operation.  The intermediate value should only be considered
+reliably written back when forced by an exception or interrupt.
 
 Alternatively, just expose it in a CSR.  I'm not sure what's best for
 the most economical implementations.
@@ -257,13 +258,17 @@ not how it should be done, just something expedient.
 
 Bits marked `p` below are the bits used to enumerate the opcode
 combinations available in each frame.  The values for the integer
-encoded by `p` bits are given in the tables following the frame
+stored in the `p` bits are given in the tables following the frame
 structure.  It's just a provisional assignment and hasn't been tuned for
 a realistic decoder.
 
-Where that value jumps by more than one, and where instructions are
+Where the enumeration jumps by more than one, and where instructions are
 marked "&times;n", that's where bits of the opcode enumeration have been
-taken to extend the immediate range.
+taken to extend the immediate range.  The plan, here, is to align the
+bits which choose between duplicate opcodes to always land in the same
+positions in every frame, so that immediates decode consistently
+(give or take masking to the proper length).
+
 
 ### frame layouts
 
@@ -505,7 +510,7 @@ to get a 10-bit immediate.  Implicit SP with a 10-bit offset means you
 can get to a lot of local variables.
 
 Also, the value of the immediate in one slot will often be scaled by the
-instruction choice in the other slot (eg., `addi` gets its immediate
+instruction choice in the other slot (e.g., `addi` gets its immediate
 scaled by 4 if it's paired with `lw`), and of course memory access also
 uses its own implicit scaling.
 
@@ -568,8 +573,9 @@ have not written (or vibed) such an allocator yet.
 #### how to approach that
 
 What we have right now is ten bits of "deal with it later", and 20 bits
-of operand in fairly regular positions.  1024 codepoints, only about 3/4
-populated after rounding each frame up to a power of two.
+corresponding to operand fields in fairly regular positions.  1024
+codepoints, only about 3/4 populated after rounding each frame up to a
+power of two.
 
 What I believe is needed is to collate every codepoint by its slot-A
 operand patterns (including immediate sizes and positions) and to pack
@@ -585,7 +591,7 @@ instruction prefetch pipeline.
 
 There's no guarantee that will resolve into a sensible number of bits,
 but I asked Claude to try and it said it might get away with three more
-bits.  But it could be wrong.
+bits, but I haven't verified.
 
 And in the cases where a list of opcodes contains repetitions of an
 opcode to make up extra immediate bits, that enumeration should be
