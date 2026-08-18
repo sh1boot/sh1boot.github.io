@@ -52,6 +52,8 @@ might solve it, and now I'm at the stage which I present here, which I
 hope is good enough to get the general idea across and demonstrate
 that the compression can work under the given constraints.
 
+If you're coming to this from the point of view of out-of-order wide multi-issue pipelines then I'm hoping you'll be able to (mostly) just chuck whole 32-bit packets through the front end as single instructions and then do the usual &micro;-op fission in the usual way.  Control flow (mostly) only changes between whole packets.
+
 
 ## Status
 
