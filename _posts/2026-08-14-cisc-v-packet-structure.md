@@ -30,6 +30,9 @@ the objectives given below.
 
 ## Why?
 
+To make compressed code less of an impediment to high-end cores,
+while offering a couple of side benefits.  In particular:
+
 * To avoid the problems of unaligned 32-bit instructions
 * To avoid the other problems with mixed-size instructions
 * To exploit inter-opcode redundancies
