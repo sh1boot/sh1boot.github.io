@@ -36,6 +36,7 @@ while offering a couple of side benefits.  In particular:
 * To avoid the problems of unaligned 32-bit instructions
 * To avoid the other problems with mixed-size instructions
 * To exploit inter-opcode redundancies
+* To use much less opcode space
 * To dress up like a CISC architecture in order to gain its powers
 * To maintain the conventional 2-source, 1-destination data flow model
   by executing 32-bit packets sequentially as two separate instructions
