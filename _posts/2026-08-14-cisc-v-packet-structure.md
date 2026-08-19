@@ -54,7 +54,7 @@ might solve it, and now I'm at the stage which I present here, which I
 hope is good enough to get the general idea across and demonstrate
 that the compression can work under the given constraints.
 
-If you're coming to this from the point of view of out-of-order wide multi-issue pipelines then I'm hoping you'll be able to (mostly) just chuck whole 32-bit packets through the front end as single instructions and then do &micro;-op fission in the usual way.  Control flow (mostly) only changes between whole packets.
+If you're coming to this from the point of view of out-of-order wide multi-issue pipelines then I'm hoping you'll be able to just chuck whole 32-bit packets through the front end as single instructions and then do &micro;-op fission in the usual way.  Control flow only changes between whole packets.
 
 
 ## Status
@@ -221,6 +221,7 @@ bits are a naive enumeration of all the allowed permutations, with
 little organisation into bits.  That's to be addressed later, but ten
 bits is at least better than 32.
 
+
 ## Exceptions and interrupts
 
 If an exception occurs inside a packet then the architectural state
@@ -259,6 +260,11 @@ want to deal with the complexity at all and has the necessary machinery,
 could be to cancel the whole packet (reversing the effects of slot A
 where necessary) and for the exception handler to simulate the pair of
 instructions one at a time.
+
+
+## Breakpoints
+
+I assume these can be handled much the same way as exceptions, in the case of hardware breakpoints, or with a couple more rounds of rewriting in-place using standard 32-bit instructions.
 
 
 ## The encoding (provisional)
