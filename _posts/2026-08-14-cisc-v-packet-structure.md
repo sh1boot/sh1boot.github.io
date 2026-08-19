@@ -16,8 +16,10 @@ unaligned 32-bit instruction words.
 The intent is to make a minimal implementation possible which can decode
 the first slot easily while simultaneously reformatting the packet to
 expose the B slot for interpretation by the same decoder on the next
-step.  But also to make things more digestible for wide multi-issue
+step.  But also to make compressed code more digestible for wide, multi-issue
 implementations.
+
+Not to imply that performance cores _want_ compressed code.  Merely that if they're stuck with it as a compatibility constraint then it shouldn't be so painful.
 
 It's still not a fully defined thing.  Just a thought experiment gone a
 little too far.
@@ -31,7 +33,7 @@ the objectives given below.
 ## Why?
 
 To make compressed code less of an impediment to high-end cores,
-while offering a couple of side benefits.  In particular:
+while teasing a couple of side benefits.  In particular:
 
 * To avoid the problems of unaligned 32-bit instructions
 * To avoid the other problems with mixed-size instructions
@@ -64,6 +66,8 @@ implemented.
 The results here are intended to establish the viability of the
 compression and to give a view on mindset and intent which motivated
 decisions, compromises, and blind hope.
+
+Most of this document focuses on the cheap end, and how it might minimise the cost of implementation.  Performance cores just get the occasional hint here and there about shortcuts they might take to avoid pain.
 
 
 ## Packet structure
