@@ -59,7 +59,7 @@ function githead() {
       hash="$(<"$gitdir/$ref")" || hash="$(git rev-parse --short HEAD)"
     fi
   } 2> /dev/null
-  print -r "${hash:+ ${hash::12}}"
+  print -r "${hash:+ ${hash:0:12}}"
   return 0
 }
 
@@ -173,7 +173,7 @@ function githead() {
       hash="$(<"$gitdir/$ref")" || hash="$(git rev-parse --short HEAD)"
     fi
   } 2> /dev/null
-  print -r "${hash:+ ${hash::12}}"
+  print -r "${hash:+ ${hash:0:12}}"
   return 0
 }
 ```
