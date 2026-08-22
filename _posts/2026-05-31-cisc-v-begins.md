@@ -31,7 +31,7 @@ On the plus side, at least I have the name, now: CISC-V
 
 And as we all know, naming is half the battle.
 
-# Instruction-packet-based compression
+## Instruction-packet-based compression
 
 While strict alignment could be imposed on an existing 16-bit
 instruction compression scheme, that gives up coding space to express
@@ -72,9 +72,9 @@ such return addresses can be restricted to appropriate instructions
 and/or privilege levels.  Or difficult restarts can just be emulated in
 software.
 
-## Decoding models
+### Decoding models
 
-### Baby steps
+#### Baby steps
 
 Rather than decoding four bytes starting at the 16-bit address and
 advancing either two or four bytes accordingly, we always examine a
@@ -93,7 +93,7 @@ of what this model would do.  Here we risk producing those gnarly
 situations that cause high-performance implementations to do pipeline
 flushes, so try very hard to avoid this.
 
-### Omnomnomnom!
+#### Omnomnomnom!
 
 If you have the sort of implementation which likes to pick up dozens of
 opcodes at once and throw them all down the pipeline in parallel to be
@@ -111,7 +111,7 @@ What could possibly go wrong?  I don't know, so I assume it's fine.
 As a secondary benefit, it creates opportunities to _not_ break some
 instructions, and to treat some packets as pre-fused macro-ops.
 
-## Exceptions
+### Exceptions
 
 A restartable exception may be triggered within an instruction pair, and
 the architecture has to allow for this.
@@ -129,7 +129,7 @@ to land the result in a register, this data still has to be exposed for
 save, restore, and inspection by an exception handler. So a temporary
 register must be available.
 
-# The experiment
+## The experiment
 
 I vibe-coded a tool to try to maximise pairs of instructions by
 reordering instructions in ways that were functionally equivalent (in
@@ -157,7 +157,7 @@ What I did get, though, was a better feel for what pairing rules are
 actually useful if the compiler were to put things in an order that
 exploited them.
 
-# Pairing types
+## Pairing types
 
 The rules I found which most often identify pairable instructions are:
 
@@ -173,7 +173,7 @@ The rules I found which most often identify pairable instructions are:
   value; which is then discarded)
 * arithmetic chains
 
-## Chain rules
+### Chain rules
 
 Chains are where the second instruction depends on the first, and in the
 experiments that I did the result of the first must also be discarded
@@ -248,7 +248,7 @@ Similarly, could explicitly-coded double-indirection (load-load-discard)
 suggest data prediction optimisations where they're not otherwise
 warranted?
 
-## two-operand arithmetic rules
+### two-operand arithmetic rules
 
 The best-known code size optimisation is to encode three-operand
 instructions with two operands by re-using the first source as the
@@ -278,7 +278,7 @@ Another special case here would be `addi sp, imm`, where the immediate
 here has to be a multiple of 16, so it can reach further, which is not a
 case which applies to `addi rd, sp, imm`.
 
-## two-in-two-out rules
+### two-in-two-out rules
 
 There's a group of operations which are often paired implicitly in CISC
 architectures, like `mul`/`mulh` or `div`/`rem`, and it's potentially
@@ -300,7 +300,7 @@ category, with a small wrinkle that the second instruction does the same
 thing but takes the immediate with an extra offset (the data size of the
 memory operation).
 
-# The compressible instruction sets
+## The compressible instruction sets
 
 I simply haven't had enough time to decide what to put in my straw-man
 proposal, yet. And I've run out of time to work it out.  I blame AI.
@@ -310,7 +310,7 @@ than its RVC build (if my vibe-coded analysis tool is to be trusted),
 but when I tried the same on a compiled Godot binary results were much,
 much poorer.  I blame C++ for that.
 
-# Instruction encoding
+## Instruction encoding
 
 I've avoided dealing with this.  What I do instead is count up the
 number of bits I need to encode all the fields, and then count the
