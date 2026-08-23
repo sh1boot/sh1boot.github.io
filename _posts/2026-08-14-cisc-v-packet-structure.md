@@ -109,7 +109,6 @@ instructions:
 <stop class="ins-box-rd" offset="70%" />
 </LinearGradient>
 <g id="header" style="font-weight:bold;">
-<text x="2" y="13" style="text-anchor:start;">implicit</text>
 <rect x="{{bw | times:  0 | plus: 82}}" y="1" width="{{bw | times: 7}}" height="24" class="ins-box-selector tintbox" />
 <text x="{{bw | times: 3.5| plus: 82}}" y="13">funct7</text>
 <rect x="{{bw | times:  7 | plus: 82}}" y="1" width="{{bw | times: 5}}" height="24" class="ins-box-rs tintbox" />
@@ -122,6 +121,10 @@ instructions:
 <text x="{{bw | times:22.5| plus: 82}}" y="13">rd</text>
 <rect x="{{bw | times: 25 | plus: 82}}" y="1" width="{{bw | times: 7}}" height="24" class="ins-box-selector tintbox" />
 <text x="{{bw | times:28.5| plus: 82}}" y="13">opcode</text>
+</g>
+<g id="header-impl" style="font-weight:bold;">
+<use href="#header" />
+<text x="2" y="13" style="text-anchor:start;">implicit</text>
 </g>
 </defs>
 <use href="#header" />
@@ -305,7 +308,7 @@ positions in every frame, so that immediates decode consistently
 {% assign svg_height = frame_count | times: 50 | plus: 30 %}
 <svg width="100%" height="{{svg_height}}" viewbox="0 0 800 {{svg_height}}">
 {% for template in frame.templates %}
-  <use href="#header" />
+  <use href="#header-impl" />
   {% assign vpos = forloop.index0 | times: 50 | plus: 42 %}
   {% assign vcentre = vpos | plus: 18 %}
 
@@ -410,6 +413,13 @@ positions in every frame, so that immediates decode consistently
 {% endif %}
 {% endfor %}
 </div>
+
+{%- if frame.notes %}
+#### Notes and observations (mostly AI)
+{%- for note in frame.notes %}
+* {{note}}
+{%- endfor %}
+{%- endif %}
 
 {%- endfor %}
 
