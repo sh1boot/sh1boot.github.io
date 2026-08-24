@@ -69,7 +69,7 @@ decisions, compromises, and blind hope.
 
 Most of this document focuses on the cheap end, and how it might minimise the cost of implementation.  Performance cores just get the occasional hint here and there about shortcuts they might take to avoid pain.
 
-Some features here fall in the "totally unacceptable" category, and that's OK.  they just fill in gaps and highlight what needs further work.  Some things have turned out to be less untenable than I expected.
+Some features here fall in the "totally unacceptable" category, and that's OK.  They just fill in gaps and highlight what needs further work.  Some things have turned out to be less untenable than I expected.
 
 
 ## Packet structure
