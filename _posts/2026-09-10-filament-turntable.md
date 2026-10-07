@@ -40,4 +40,9 @@ soften the filament, but I don't like the idea of leaving
 dubiously-rigged heaters unattended for long periods of time.  So I
 probably won't get around to experimenting further.
 
-So that's all I've got on that idea.
+The next plan is to try winding the twisted filament onto another spool,
+where it can relax into its new shape and hopefully distribute the twist
+more evenly along itself as it does so.  Then I can see what kind of
+result I get from that.
+
+If I ever get around to that.
