@@ -31,6 +31,15 @@ _actually_ wanted.
 Other times I've just had a tab in my browser open for so long that it
 feels like it's become a part of my life:
 
+* [Computer latency: 1977-2017](https://danluu.com/input-lag/)
+: I keep coming back to this because computers seem to get slower and
+slower, and I struggle with that.  I have to keep explaining to kids
+that the computer is not as fast as they are, and that they need to give
+it extra time to see if it understood before they start clicking the
+same button over and over trying to get it to react.  Computers used to
+be a lot more responsive, but as they got faster they also got _so much
+slower_.
+
 * <https://gcc.gnu.org/onlinedocs/gccint/Named-Address-Spaces.html>
 : Because useful or whatever.
 
