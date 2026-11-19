@@ -4,27 +4,65 @@ layout: post
 tags: windows parenting
 ---
 Restricting a Windows user to a single application can be helpful to remove
-distractions.  Ideally this would be achieved with Kiosk mode, but this is
-often not practical and it requires specific versions of Windows.  As an
-alternative you can use AppLocker plus a couple of registry hacks to keep one
-account on the straight and narrow, while still being able to use the computer
-as other users for everyday stuff.
+distractions and misadventure.  This could, in theory, be achieved with Kiosk
+mode, but this mode really only works well as a full-time kiosk and it requires
+specific versions of Windows.  The alternative I ended up diving into is using
+AppLocker and a couple of registry tweaks.  This means you can still use it as
+a personal laptop in the normal way, but also safely hand it to a child to run
+one specific task without doing any harm.
 
 There are administrative tools to do these things, but I don't know how they
 work or where to get them.  That's what put me off for so long because I do not
-want to learn to be a Windows admin.  So here's what I did instead:
+want to learn to be a Windows admin.
 
-First, create a dedicated user for the application. That's in **Settings**
-(`Win+I`), **Accounts** > **Other users**.  You want to add just a local user,
-which requires you to choose **I don't have this person's sign-in information**
-so you get the option **Add a user without a Microsoft account**.
+Here's the process I followed.
+
+First, create a dedicated user for the application.
+
+That's in **Settings** (`Win+I`), **Accounts** > **Other users**.  You want to
+add just a local user, which requires you to choose **I don't have this person's
+sign-in information** so you get the option **Add a user without a Microsoft
+account**.
+
+TODO: screenshots.
+
 
 Next, sign in as that user and set a user picture in **Settings** under
-**Accounts** > **Your Info**. Also go to **Accounts** > **Sign-in options** and
-disable **Use my sign-in info to automatically finish setting up after an
-update**.
+**Accounts** > **Your Info**.
 
-Now for the registry tweaks.
+Also go to **Accounts** > **Sign-in options** and disable **Use my sign-in info
+to automatically finish setting up after an update**.
+
+TODO: screenshots.
+
+You also want to run up the app in question.  Complete any sign-in processes or
+anything like that, and generally just make sure it works and that it's fully
+initialised.  This can often involve a web browser session which we hope will
+not normally be needed.  If you want to lock this down to just one website that
+certainly is possible, but it's out of scope here.
+
+Now for the registry tweaks...
+
+No, wait, forget the registry tweaks.  I wrote an app:
+<https://github.com/sh1bot/RestrictedShell>
+
+The problem I had with what I was doing in the registry is that it bypasses
+`explorer.exe` (necessary to stop other apps launching), but in doing so there's
+no process present to handle the multimedia keys like volume up and down.  If
+you can't hear, or if it's too loud, there's nothing you can do about that.
+
+So I ~~wrote~~ vibe-coded a small shim which launches the target app, instead,
+and then hangs around watching for those multimedia keys and manipulating the
+volume as directed.  It's not clear to me what else `explorer.exe` does that's
+useful, but occasionally I find another oversight and add it in.
+
+And I ~~wrote~~ vibe-coded an installer as a PowerShell script -- but Windows
+hates PowerShell scripts so you have to do a funny little dance to get it to
+run.  That installer lets you pick the executable and the user icon to assign to
+the user, and set a couple of other options.
+
+If you don't want to run my app (and good on you for being security-conscious),
+the registry edits follow:
 
 Hit `Win+R` for the run box, enter `regedit` as the command, but use
 **Ctrl-Shift-Enter** rather than just **Enter**, to run it as admistrator. Some
