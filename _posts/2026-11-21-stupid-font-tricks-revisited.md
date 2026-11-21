@@ -5,6 +5,11 @@ tags: graphics fonts vibe-coding
 redirect_from:
   - /drafts/stupid-font-tricks/
 ---
+Following on from my previous "[stupid font tricks][]" post, I went down a
+handful of rabbit holes, including the design of the [non-binary LFSRs][] which
+would be needed to generate the patterns.  More recently I got an AI to start
+[hacking][DEImoji] on [Noto Emoji][] to make this actually happen.
+
 [stupid font tricks]: </stupid-font-tricks> 
 [non-binary LFSRs]: </non-binary-linear-feedback-shift-registers>
 [Noto Emoji]: <https://github.com/googlefonts/noto-emoji>
@@ -25,11 +30,6 @@ redirect_from:
     font-size: 2em;
   }
 </style>
-
-Following on from my previous "[stupid font tricks][]" post, I went down a
-handful of rabbit holes, including the design of the [non-binary LFSRs][] which
-would be needed to generate the patterns.  More recently I got an AI to start
-[hacking][DEImoji] on [Noto Emoji][] to make this actually happen.
 
 Neither ChatGPT nor I are great graphic artists; but AI is a top-notch
 plagiarist, so that was useful.
