@@ -10,27 +10,6 @@ handful of rabbit holes, including the design of the [non-binary LFSRs][] which
 would be needed to generate the patterns.  More recently I got an AI to start
 [hacking][DEImoji] on [Noto Emoji][] to make this actually happen.
 
-[stupid font tricks]: </stupid-font-tricks> 
-[non-binary LFSRs]: </non-binary-linear-feedback-shift-registers>
-[Noto Emoji]: <https://github.com/googlefonts/noto-emoji>
-[DEImoji]: <https://github.com/sh1bot/DEImoji>
-[HarfBuzz]: <https://github.com/harfbuzz/harfbuzz>
-
-<style>
-  @font-face {
-    font-family: "DEImoji";
-    src: url("https://sh1bot.github.io/DEImoji/fonts/DEImoji-COLRv1.woff2")
-         format("woff2");
-    font-display: swap;
-  }
-
-  .deimoji {
-    font-family: "DEImoji", sans-serif;
-    font-feature-settings: "calt" 1, "kern" 1;
-    font-size: 2em;
-  }
-</style>
-
 Neither ChatGPT nor I are great graphic artists; but AI is a top-notch
 plagiarist, so that was useful.
 
@@ -44,7 +23,7 @@ effects in a lot of software just through manipulation of the font itself.
 
 ### Core ideas
 #### random clustering
-<p class="deimoji" style="text-align:center;">🪦🪦🪦🪦🪦🪦🪦🪦🪦🪦🪦🪦</p>
+<p class="deimoji">🪦🪦🪦🪦🪦🪦🪦🪦🪦🪦🪦🪦</p>
 
 For a long string of the same glyph, randomly ligate either two or three of the
 characters.  This allows some depth to a cluster, where some instances can be
@@ -60,7 +39,7 @@ are like that).  31 is prime, so it has the desirable property of making it
 co-prime to any other generator I'm likely to contemplate in the short term.
 
 #### Random skin-tone
-<p class="deimoji" style="text-align:center;">✊✊✊✊✊✊✊✊✊✊✊✊</p>
+<p class="deimoji">✊✊✊✊✊✊✊✊✊✊✊✊</p>
 
 Since many emoji can be modified with a skin tone, of which there are five (you
 can't really include Simpsons-yellow, because that stands out too much; as does
@@ -71,7 +50,7 @@ It doesn't have to be _used_ as skin tone, though.  It's just a modifier, and it
 can make any random modification, even if it's just "more permutations".
 
 #### Random gender
-<p class="deimoji" style="text-align:center;">🧑🧑🧑🧑🧑🧑🧑🧑🧑🧑🧑🧑</p>
+<p class="deimoji">🧑🧑🧑🧑🧑🧑🧑🧑🧑🧑🧑🧑</p>
 
 Same deal as above; you can add male and female modifiers, or not.  Call that
 base three, because the no-annotation option does work in this instance.
@@ -88,6 +67,7 @@ on the pre-existing combining rules.  And more permutations is just more work
 and more storage, and there's plenty of that already.
 
 #### More permutations
+<p class="deimoji">🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟</p>
 As mentioned, not all emoji can change skin colour or gender or hair colour.
 But that doesn't prohibit the use of the combining markers to generate other
 variations.
@@ -96,14 +76,6 @@ Zombies, for example, have their own skin tone.  So what I can do instead is
 just make a bunch of random zombies with different looks, and mix them up into
 five variants of pairs, and five variants of trios.  Then the random mix of
 pairs and trios helps to break up the regularity even further.
-
-A zombie horde:
-<p class="deimoji" style="text-align:center;">
-🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟
-<br/>🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟
-<br/>🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟
-</p>
-
 
 ### Where things get difficult
 #### Longer generators
@@ -175,4 +147,31 @@ I fiddled with this a bit and then decided that it wasn't worth the complexity,
 and I defer to my previous solution.  Just don't do that.  Keep strings
 sensibly sized.
 
-<p class="deimoji" style="text-align:center;">🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻</p>
+<p class="deimoji">🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻</p>
+<p class="deimoji">🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉</p>
+<p class="deimoji">🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥</p>
+<p class="deimoji">💰💰💰💰💰💰💰💰💰💰💰💰</p>
+<p class="deimoji">🎆🎆🎆🎆🎆🎆🎆🎆🎆🎆🎆🎆</p>
+
+
+[stupid font tricks]: </stupid-font-tricks>
+[non-binary LFSRs]: </non-binary-linear-feedback-shift-registers>
+[Noto Emoji]: <https://github.com/googlefonts/noto-emoji>
+[DEImoji]: <https://github.com/sh1bot/DEImoji>
+[HarfBuzz]: <https://harfbuzz.github.io/>
+
+<style>
+  @font-face {
+    font-family: "DEImoji";
+    src: url("https://sh1bot.github.io/DEImoji/fonts/DEImoji-COLRv1.woff2")
+         format("woff2");
+    font-display: swap;
+  }
+
+  .deimoji {
+    text-align: center;
+    font-family: "DEImoji", sans-serif;
+    font-feature-settings: "calt" 1, "kern" 1;
+    font-size: 2em;
+  }
+</style>
