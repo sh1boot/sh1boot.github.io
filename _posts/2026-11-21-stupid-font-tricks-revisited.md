@@ -21,15 +21,15 @@ contextual substitutions which give you the control to program all sorts of
 silliness which modern font rendering engines support, so you can get these
 effects in a lot of software just through manipulation of the font itself.
 
-### Core ideas
-#### random clustering
+## Core ideas
+### random clustering
 <p class="deimoji">🪦🪦🪦🪦🪦🪦🪦🪦🪦🪦🪦🪦</p>
 
 For a long string of the same glyph, randomly ligate either two or three of the
-characters.  This allows some depth to a cluster, where some instances can be
-moved back a bit.
+characters.  This allows the addition of some depth to a cluster of the same
+glyph, where some instances can be moved back in the field a bit.
 
-In the implementation I have so far, I use a binary, five-position LFSR.  That
+In the implementation I have so far, I use a binary, five-tap LFSR.  That
 is, depending on the last five decisions made in this class the next decision
 will be whether to combine two or three of the same codepoint into a single
 glyph.
@@ -38,52 +38,89 @@ five taps means the period is 31 (leaving out the all-zeroes case because LFSRs
 are like that).  31 is prime, so it has the desirable property of making it
 co-prime to any other generator I'm likely to contemplate in the short term.
 
-#### Random skin-tone
-<p class="deimoji">✊✊✊✊✊✊✊✊✊✊✊✊</p>
+### Random skin-tone
+<p class="deimoji">🦶🦶🦶🦶🦶🦶🦶🦶🦶🦶🦶🦶</p>
 
 Since many emoji can be modified with a skin tone, of which there are five (you
 can't really include Simpsons-yellow, because that stands out too much; as does
-zombie-green).  So a base-five, four position LFSR inserts skin tone modifiers
+zombie-green).  So a base-five, four-tap LFSR inserts skin tone modifiers
 against every emoji.  Whether they need it or not.
 
 It doesn't have to be _used_ as skin tone, though.  It's just a modifier, and it
 can make any random modification, even if it's just "more permutations".
 
-#### Random gender
+### Random gender
 <p class="deimoji">🧑🧑🧑🧑🧑🧑🧑🧑🧑🧑🧑🧑</p>
 
-Same deal as above; you can add male and female modifiers, or not.  Call that
-base three, because the no-annotation option does work in this instance.
+Same deal as above; you can add male and female modifiers, or not.  Make that
+base three because the not-specified option in Noto provides a perfectly good
+option as well.
 
-#### A stupid project name
+### Random hair colour and age
+<p class="deimoji">🧓🧒👶🧓🧒👶🧓🧒👶🧓🧒👶</p>
+
+I skipped these because it wasn't going to affect many emoji by default.  And
+more permutations is just more work and more storage and more problems; and
+I already had enough of all those things.
+
+### A stupid project name
 The idea of imposing an even distribution of skin tones and genders across all
 emoji is what puts the "DEI" into the "DEImoji" project name.
 
-Not to coment on anybody's politics or ideals, of course.  It's just maths.
+Not to coment on anybody's politics or ideals, of course.  It's just maths, and
+the original plan was working its way up to the next step, before I decided to
+make fun of how I got there.
 
-#### Random hair colour and age
-I skipped these because it wasn't going to affect many of the emoji by leaning
-on the pre-existing combining rules.  And more permutations is just more work
-and more storage, and there's plenty of that already.
-
-#### More permutations
+### Disconnecting LFSRs from skin and gender modifiers
 <p class="deimoji">🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟</p>
-As mentioned, not all emoji can change skin colour or gender or hair colour.
-But that doesn't prohibit the use of the combining markers to generate other
-variations.
 
-Zombies, for example, have their own skin tone.  So what I can do instead is
-just make a bunch of random zombies with different looks, and mix them up into
-five variants of pairs, and five variants of trios.  Then the random mix of
+As mentioned already, not all emoji can change skin colour or gender or hair
+colour.  But that doesn't prohibit the use of the combining markers to generate
+other variations.
+
+Zombies, for example, have their own skin tone.  So what can be done instead is
+to just make a bunch of random zombies with different looks, and mix them up
+into five variants of pairs, and five variants of trios.  Then the random mix of
 pairs and trios helps to break up the regularity even further.
 
-### Where things get difficult
-#### Longer generators
+<p class="deimoji">
+🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟<br />
+🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟<br />
+🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟<br />
+🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟<br />
+🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟<br />
+🧟🧟🧟🧟🧟🧟🧟🧟🧟🧟</p>
+
+This is what I had in mind at the outset; that I could make a horde of zombies
+look more varied by throwing random modifiers at them, thereby avoiding all the
+extra work of making a lot of different zombies by myself.  But the combining
+rules just weren't there.  I would have had to do it the hard way; but then I
+got the idea to make AI do it for me.
+
+## Where things get difficult
+### It's actually a bad idea
+Just like it would be nonsense to add [random diacritics][Zalgo] to latin
+letters when nobody asked for them, forcing a skin tone or gender onto a Unicode
+codepoint that was entered without those, and in some cases defined to reject
+them, is a failure to let the user write what they meant to write.  It adds
+spurious detail to their message.
+
+That's always been a risk in Unicode, where different fonts draw the same
+codepoint in different ways leading to different interpretations.  It's a whole
+lot worse when the differences are already codified explicitly in the standard,
+and then those explicit differences are added despite the author's intent.
+
+A much more appropriate implementation would just distribute a generic
+"random-variant-X" modifier across the string and then combine or discard as
+appropriate.  Yellow people would stay yellow, but their clothes might change
+colour instead.
+
+### Longer generators
 The longer you make a generator, the harder it is to seed.  This means that it's
 likely to start with the same pattern and carry on with the same pattern, and
 then the string will end before feedback can make it interesting.
 
-#### PRNG seeding
+### PRNG seeding
 My original plan was that I would scan a bunch of surrounding text to establish
 some kind of randomised starting state for the LFSRs.  This fell through almost
 immediately.  What I soon realised is that an emoji font is the fallback font
@@ -103,18 +140,19 @@ this way you get to make the best use of everything that is available.
 Different length strings of the same character can start differently, and
 continue differently, even if same-length strings must always be the same.
 
-#### RTL PRNG seeding
-To achieve this it's possible to make a right-to-left rule set, which iterates
-from the end of the string back to the beginning, which can integrate characters
-in the string into a running hash which then gets stored at the start of the
-string.  The result of that pass can then be used by the PRNGs to go directly to
-a starting state which integrates influence from the entire string.  Any
-variation anywhere in the string can lead to a different starting condition.
+### RTL PRNG seeding
+To achieve whole-string seeding it's possible to make a right-to-left rule set,
+which iterates from the end of the string back to the beginning, which can
+integrate characters in the string into a running hash which then gets stored at
+the start of the string.  The result of that pass can then be used by the PRNGs
+to go directly to a starting state which integrates influence from the entire
+string.  Any variation anywhere in the string can lead to a different starting
+condition.
 
 But the string still ends when the font changes.  So a space or a period or an
 obscure glyph that the main emoji font doesn't support resets the whole game.
 
-#### Performance
+### Performance
 Normally these are very short strings (unfortunate for variety) and the rules
 are linear, so it's not a grossly disproportionate cost.  However, with a very
 long string these rules can interact badly with line wrapping.
@@ -137,7 +175,7 @@ quadratic time starts to become a risk for very long strings.
 
 So... just don't do that, I guess?
 
-#### Improving performance
+### Improving performance
 It is possible, but quite fiddly, to limit the length of the readahead.  You can
 use forward rules to drop periodic barriers which interrupt the entropy sweeps.
 The challenge is to define such a rule in a way that doesn't itself straddle the
@@ -159,6 +197,7 @@ sensibly sized.
 [Noto Emoji]: <https://github.com/googlefonts/noto-emoji>
 [DEImoji]: <https://github.com/sh1bot/DEImoji>
 [HarfBuzz]: <https://harfbuzz.github.io/>
+[Zalgo]: <https://en.wikipedia.org/wiki/Zalgo_text>
 
 <style>
   @font-face {

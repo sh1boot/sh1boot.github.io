@@ -4,6 +4,7 @@ title: Some not-even-half-baked thoughts
 tags: hidden-tags
 categories: index
 sitemap: false
+regenerate: true
 ---
 {%- assign drafts = site.pages | where_exp: "item", "item.dir contains '/drafts/'" -%}
 {%- for item in drafts -%}
